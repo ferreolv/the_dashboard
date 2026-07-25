@@ -588,15 +588,20 @@
   .tile.editing .sizebadge{pointer-events:none;background:transparent!important;box-shadow:none!important;padding:0!important;font-size:10px;opacity:.5}
   /* Push-ups: compact & centered; buttons flex to the tile's width (looks right even at 1×1) */
   .tile[data-tileid="pushups"] .content{container-type:inline-size}
-  .pushWrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;width:100%}
-  .pushCount{font-weight:800;font-size:clamp(24px,16cqi,40px);line-height:1;color:var(--accentDark)}
+  .pushWrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;height:100%;width:100%}
+  .pushCount{font-weight:800;font-size:clamp(22px,15cqi,34px);line-height:1;color:var(--accentDark)}
   .tile.completed .pushCount{color:#fff}
   .pushBtns{display:flex;gap:6px;width:100%;justify-content:center}
-  .pushBtns .puBtn{flex:1 1 0;min-width:0;min-height:34px!important;padding:6px 4px;font-size:clamp(11px,5cqi,13px)}
+  .pushBtns .puBtn{flex:1 1 0;min-width:0;min-height:32px!important;padding:5px 4px;font-size:clamp(11px,5cqi,13px)}
   .pushBtns .puReset{flex:0 0 auto;width:34px}
   /* Timer duration steppers (replaces manual typing) */
   .timerSteppers{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
   .timerSteppers .puBtn{flex:1 1 0;min-width:0;min-height:34px!important;padding:6px 4px}
+  /* Scroll affordance: fade whichever edge has more content, so overflow reads as "scroll for more" and never a hard cut — adapts to any tile & window size */
+  .tile .content{padding-bottom:2px}
+  .tile .tbody.moreBelow{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent)}
+  .tile .tbody.moreAbove.moreBelow{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent)}
+  .tile .tbody.moreAbove:not(.moreBelow){-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px);mask-image:linear-gradient(to bottom,transparent,#000 16px)}
 </style>
 </head>
 <body>
@@ -1039,7 +1044,7 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:2}, habits:{c:2,r:2}, agenda:{c:3,r:2}, note:{c:3,r:2}, weather:{c:3,r:1}, timer:{c:3,r:1}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:3}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, note:{c:3,r:2}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
 const V2_ORDER=["goals","habits","agenda","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
@@ -1047,10 +1052,12 @@ const NEED_V2_LAYOUT=load("designVersion",0)<2;
 function Tile({id,label,done,size,cols,edit,lifted,topright,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
   const span={ gridColumn:`span ${Math.min(size.c,cols)}`, gridRow:`span ${size.r}` };
+  const tbodyRef=useRef(null);
+  useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
     <section data-tileid={id} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && <div className="topright">{topright}</div>}
-      <div className={"tbody"} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
         <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
@@ -1065,7 +1072,10 @@ function App(){
   const [showSettings,setShowSettings]=useState(false);
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; return [...s,...ALL.filter(x=>!s.includes(x))]; });
-  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",2); return DEFSIZE; } return {...DEFSIZE,...load("sizes",{})}; });
+  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",3); return DEFSIZE; }
+    let s={...DEFSIZE,...load("sizes",{})};
+    if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
+    return s; });
   const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); return Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; });
   const [tileSets,setTileSets]=useState(()=>load("activeTileHistory",{}));
   const [lifted,setLifted]=useState(null);
