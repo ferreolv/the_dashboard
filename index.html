@@ -585,7 +585,18 @@
   /* Arrange mode: drag the whole tile to move; only the bottom-right corner resizes */
   .tile.editing{cursor:grab}
   .tile.editing:active{cursor:grabbing}
-  .tile.editing .sizebadge{pointer-events:none}
+  .tile.editing .sizebadge{pointer-events:none;background:transparent!important;box-shadow:none!important;padding:0!important;font-size:10px;opacity:.5}
+  /* Push-ups: compact & centered; buttons flex to the tile's width (looks right even at 1×1) */
+  .tile[data-tileid="pushups"] .content{container-type:inline-size}
+  .pushWrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;width:100%}
+  .pushCount{font-weight:800;font-size:clamp(24px,16cqi,40px);line-height:1;color:var(--accentDark)}
+  .tile.completed .pushCount{color:#fff}
+  .pushBtns{display:flex;gap:6px;width:100%;justify-content:center}
+  .pushBtns .puBtn{flex:1 1 0;min-width:0;min-height:34px!important;padding:6px 4px;font-size:clamp(11px,5cqi,13px)}
+  .pushBtns .puReset{flex:0 0 auto;width:34px}
+  /* Timer duration steppers (replaces manual typing) */
+  .timerSteppers{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
+  .timerSteppers .puBtn{flex:1 1 0;min-width:0;min-height:34px!important;padding:6px 4px}
 </style>
 </head>
 <body>
@@ -1063,9 +1074,9 @@ function App(){
   const [notes,setNotes]=useState(()=>load("notes",{}));
   const [showJournal,setShowJournal]=useState(false);
   const [spanishSince]=useState(()=>{ let v=load("spanishSince",null); if(!v){ v=todayKey; save("spanishSince",v); } return v; });
-  const [habits,setHabits]=useState(()=>{ const v=load("habits",null); if(!v){ const n=[{id:uid(),name:"🚿 Shower"},{id:uid(),name:"🏋️ Squats"},{id:uid(),name:"🗺️ Travel notes"},{id:uid(),name:"📖 Read"}]; save("habits",n); return n; }
-    const old=v.length===3&&v.every(h=>["Cold shower","Read","Sport"].includes(h.name)); if(!old) return v;
-    const n=v.map(h=>({...h,name:h.name==="Cold shower"?"🚿 Shower":h.name==="Sport"?"🏋️ Squats":"📖 Read"})).concat({id:uid(),name:"🗺️ Travel notes"}); save("habits",n); return n; });
+  const [habits,setHabits]=useState(()=>{ const mk=()=>[{id:uid(),name:"🚿 Cold shower"},{id:uid(),name:"📖 Read"}]; const v=load("habits",null); if(!v){ const n=mk(); save("habits",n); return n; }
+    const OLD=["🚿 Shower","🏋️ Squats","🗺️ Travel notes","📖 Read"]; if(Array.isArray(v)&&v.length===4&&v.every((h,i)=>h.name===OLD[i])){ const n=mk(); save("habits",n); return n; }
+    return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
@@ -1569,7 +1580,7 @@ function App(){
   ) : null;
 
   const widgets={
-    goals: T("goals","Goals · plan ahead",goalsLit,null,<>
+    goals: T("goals","Goals",goalsLit,null,<>
       {[0,1,2,3].map(i=>{ const k=addDays(todayKey,i); const list=goalsFor(k); const isToday=i===0; return (
         <div key={k} style={{marginBottom:i<3?12:0}} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();try{const d=JSON.parse(e.dataTransfer.getData("text/plain"));moveGoal(d.day,k,d.id);}catch(_){}}}>
           <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:5}}>
@@ -1584,18 +1595,18 @@ function App(){
           <GoalInput compact={!isToday} placeholder={isToday?"Add a goal for today…":"Plan…"} onAdd={text=>setGoalsDay(k,[...goalsFor(k),{id:uid(),text,done:false}])} />
         </div>
       ); })}</>),
-    spanish: T("spanish","Español · speaking",!!rToday.spanish, null,<>
+    spanish: T("spanish","Español",!!rToday.spanish, null,<>
       <SpanishCard sp={view.spanish} busy={genBusy} done={!!rToday.spanish} onLearned={learnSpanish} />
       <RetryNote tileKey="spanish"/></>),
-    note: T("note","Note du jour",(notes[todayKey]||"").trim()!=="",null,
+    note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
       <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
-    word: T("word","Mot du jour",!!rToday.word, null,<>
+    word: T("word","Mot",!!rToday.word, null,<>
       <WordCard word={view.word} busy={genBusy} onLearned={learnWord} />
       <RetryNote tileKey="word"/></>),
-    worth: T("worth","Worth knowing · lesson",!!rToday.worth, null,<>
+    worth: T("worth","Worth",!!rToday.worth, null,<>
       <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} />
       <RetryNote tileKey="worth"/></>),
-    music: T("music","One song",!!rToday.music, null,<>
+    music: T("music","Song",!!rToday.music, null,<>
       {view.music ? (<div>
         <div style={{fontSize:17,fontWeight:700,lineHeight:1.2}}>{view.music.title}</div>
         <div style={{fontSize:13,marginTop:1,opacity:0.9}}>{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
@@ -1608,20 +1619,20 @@ function App(){
         {!view.music.url && <p className="samplehint">Couldn't confirm a direct link — the button opens a search instead.</p>}
       </div>) : <Note>{genBusy?"Finding today's discovery…":"Not generated yet — tap ✦ Generate today."}</Note>}
       <RetryNote tileKey="music"/></>),
-    weather: T("weather","Weather · Sydney",!!rToday.weather, null,<>
+    weather: T("weather","Weather",!!rToday.weather, null,<>
       <WeatherCard data={weather} busy={genBusy} />
       <RetryNote tileKey="weather"/></>, ()=>toggleRitual("weather")),
-    pushups: T("pushups","Push-ups · today",pToday>0,null,
-      <div style={{display:"flex",alignItems:"center",gap:12}}>
-        <span style={{font:"800 30px/1 'Nunito',sans-serif"}}>{pToday}</span>
-        <div style={{display:"flex",gap:6,flex:1}}>
+    pushups: T("pushups","Push-ups",pToday>0,null,
+      <div className="pushWrap">
+        <div className="pushCount">{pToday}</div>
+        <div className="pushBtns">
           <button className="puBtn" onClick={()=>addPush(10)}>+10</button>
           <button className="puBtn" onClick={()=>addPush(5)}>+5</button>
           <button className="puBtn" onClick={()=>addPush(1)}>+1</button>
-          <button className="puBtn" style={{flex:"none",width:34}} onClick={()=>setPushExact(0)}>↺</button>
+          <button className="puBtn puReset" onClick={()=>setPushExact(0)}>↺</button>
         </div>
       </div>),
-    habits: T("habits","Daily habits",habitsLit,null,<>
+    habits: T("habits","Habits",habitsLit,null,<>
       <div className="hgrid">
         {habits.map(h=>{ const on=!!hToday[h.id],parts=h.name.split(" "),hasIcon=/[^\w]/.test(parts[0]),icon=hasIcon?parts.shift():"",label=parts.join(" ")||h.name; return (
           <button key={h.id} className={"hsq"+(on?" on":"")} onClick={()=>toggleHabit(h.id)}>
@@ -1631,7 +1642,7 @@ function App(){
         ); })}
         <HabitAdd onAdd={name=>persistHabits([...habits,{id:uid(),name}])} />
       </div></>),
-    world: T("world","World briefing · today",!!rToday.world, null,<>
+    world: T("world","World",!!rToday.world, null,<>
       {(!view.world || view.world.length===0) && <Note>{genBusy?"Reading the wire…":"Not generated yet — tap ✦ Generate today."}</Note>}
       <div style={{display:"flex",flexDirection:"column",gap:12}}>
         {(view.world||[]).map((n,i)=>(<div key={i}>
@@ -1643,7 +1654,7 @@ function App(){
       <RetryNote tileKey="world"/></>),
     recall: T("recall","Recall",!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
-    weekly: T("weekly","Weekly review",!!rToday.weekly,null,
+    weekly: T("weekly","Weekly",!!rToday.weekly,null,
       <div className="wrev">
         <div className="wrevSection chartSec">
           <div className="wrevTitle">Push-ups · last 14 days</div>
@@ -1670,22 +1681,22 @@ function App(){
         onImport={importVcf} />, ()=>toggleRitual("birthday")),
     timer: T("timer","Timer",timerFired,null,
       <TimerCard duration={timerDuration} end={timerEnd} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onReset={resetTimer} />),
-    agenda: T("agenda","Calendar reminders",false,null,
+    agenda: T("agenda","Reminders",false,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
         onAddEvent={addEvent} onRemoveEvent={removeEvent} />),
-    brain: T("brain","Second brain",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
+    brain: T("brain","Brain",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
       <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
-    academic: T("academic","Academic · study",!!rToday.academic,null,<>
+    academic: T("academic","Study",!!rToday.academic,null,<>
       <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} />
       <RetryNote tileKey="academic"/></>),
-    brainflex: T("brainflex","Use your brain",!!rToday.brainflex,null,<>
+    brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
       <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
       <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onSubmitInitial={philoSubmitInitial} onSend={philoSend} />
       <RetryNote tileKey="philo"/></>),
-    people: T("people","People met",people.some(p=>p.date===todayKey),null,
+    people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
   };
 
@@ -1873,7 +1884,7 @@ function NoteCard({saved,onSave,onView}){
   useEffect(()=>{ if(!dirty) return; const t=setTimeout(()=>onSave(draft),650); return ()=>clearTimeout(t); },[draft,saved]);
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-      <textarea className="notearea" placeholder="A thought, a souvenir, something to remember from today…" value={draft} onChange={e=>setDraft(e.target.value)} />
+      <textarea className="notearea" placeholder="Something to remember…" value={draft} onChange={e=>setDraft(e.target.value)} />
       <div style={{display:"flex",gap:8,marginTop:8,alignItems:"center"}}>
         <button className={"pill"+(dirty?" primary":"")} disabled={!dirty} onClick={()=>onSave(draft)}>{dirty?"Saving…":"Saved ✓"}</button>
         <button className="link" onClick={onView}>View all notes →</button>
@@ -1981,31 +1992,28 @@ function BirthdaysCard({birthdays,today,celebrated,onCelebrate,onAdd,onRemove,on
 }
 
 function TimerCard({duration,end,fired,now,onSetDuration,onStart,onReset}){
-  const [edit,setEdit]=useState(false);
-  const [v,setV]=useState(()=>`${Math.floor(duration/60)}:${pad(duration%60)}`);
-  useEffect(()=>{ setV(`${Math.floor(duration/60)}:${pad(duration%60)}`); },[duration]);
   const diffMs=Math.max(0,(end||0)-now.getTime());
   const h=Math.floor(diffMs/3600000), m=Math.floor((diffMs%3600000)/60000);
   const running=end>now.getTime()&&!fired;
-  const commit=()=>{ const match=v.match(/^(\d{1,2}):(\d{2})$/); if(match) onSetDuration(Number(match[1])*60+Math.min(59,Number(match[2]))); setEdit(false); };
+  const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
   return (
     <div>
       <div className={"timerRow"+(fired?" timerHit":"")}>
         <span className="timerBig">{fired?"Done":running?`${h}h ${pad(m)}m`:`${Math.floor(duration/60)}h ${pad(duration%60)}m`}</span>
         <span className="muted" style={{fontSize:12}}>{running?"remaining":"duration"}</span>
       </div>
-      {!edit ? (<div style={{display:"flex",gap:9,marginTop:11}}>
-        <button className="pill primary" onClick={running?onReset:onStart}>{running?"Stop":"Start"}</button>
-        <button className="link" onClick={()=>setEdit(true)}>Change duration</button>
-        {(running||fired) && <button className="link" onClick={onReset}>Reset</button>}
-      </div>
-      ) : (
-        <div className="timerSet">
-          <input className="timerInput" value={v} onChange={e=>setV(e.target.value)} placeholder="7:30" />
-          <button className="pill primary" onClick={commit}>Set</button>
-          <button className="link" onClick={()=>setEdit(false)}>Cancel</button>
+      {!running && !fired && (
+        <div className="timerSteppers">
+          <button className="puBtn" onClick={()=>adjust(-60)}>−1h</button>
+          <button className="puBtn" onClick={()=>adjust(-15)}>−15m</button>
+          <button className="puBtn" onClick={()=>adjust(15)}>+15m</button>
+          <button className="puBtn" onClick={()=>adjust(60)}>+1h</button>
         </div>
       )}
+      <div style={{display:"flex",gap:9,marginTop:11}}>
+        <button className="pill primary" onClick={running?onReset:onStart}>{running?"Stop":"Start"}</button>
+        {(running||fired) && <button className="link" onClick={onReset}>Reset</button>}
+      </div>
     </div>
   );
 }
@@ -2114,7 +2122,7 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
   if(!hasCourses) return (
     <div>
       <Note>Paste your class or course notes and this tile studies from them daily — built for broad chapter understanding, not isolated facts.</Note>
-      <button className="link" style={{marginTop:6}} onClick={onOpenEditor}>+ Add course material →</button>
+      <button className="pill primary" style={{marginTop:8}} onClick={onOpenEditor}>📄 Add study files</button>
     </div>
   );
   if(!academic) return <Note>{busy?"Preparing today's study capsule…":"Not generated yet — tap ✦ Generate today."}</Note>;
@@ -2127,7 +2135,7 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
       <p style={{fontSize:13.2,lineHeight:1.55,margin:"8px 0 0"}}>{academic.explain}</p>
       {academic.bigPicture && <div className="examLink">🎯 {academic.bigPicture}</div>}
       {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} />)}
-      <button className="link" style={{marginTop:9,fontSize:11.5}} onClick={onOpenEditor}>Manage course material →</button>
+      <button className="pill" style={{marginTop:10}} onClick={onOpenEditor}>📄 Manage files</button>
     </div>
   );
 }
