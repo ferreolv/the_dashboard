@@ -120,15 +120,16 @@
   .iconbtn:hover { filter:brightness(1.1); }
   .iconbtn.warn { background:#DC2626; border-color:#DC2626; color:#fff; }
 
-  .draghandle { position:absolute; top:9px; right:9px; z-index:5; width:27px; height:23px; border-radius:7px; cursor:grab; touch-action:none;
-    background:var(--btnbg); border:1px solid var(--btnbd);
-    display:grid; grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(3,1fr); place-items:center; gap:2px; padding:5px 8px; }
+  .draghandle { position:absolute; top:8px; left:8px; right:auto; z-index:5; width:36px; height:30px; border-radius:10px; cursor:grab; touch-action:none;
+    background:rgba(255,255,255,.92); border:1px solid var(--line); box-shadow:0 5px 15px rgba(23,24,44,.10);
+    display:grid; grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(3,1fr); place-items:center; gap:3px; padding:7px 11px; }
   .draghandle:active { cursor:grabbing; }
-  .draghandle .gd { width:3px; height:3px; border-radius:99px; background:var(--ink); opacity:.5; }
-  .resizeH { position:absolute; right:2px; bottom:2px; z-index:7; width:34px; height:34px; cursor:nwse-resize; touch-action:none;
-    display:flex; align-items:flex-end; justify-content:flex-end; padding:0 6px 6px 0; }
-  .resizeH::after { content:""; width:18px; height:18px; border-right:3px solid var(--ink); border-bottom:3px solid var(--ink); border-bottom-right-radius:5px; opacity:0.65; }
-  .sizebadge { position:absolute; left:11px; bottom:9px; z-index:6; font:700 10px/1 'Nunito',monospace; color:var(--ink); opacity:0.6; }
+  .draghandle .gd { width:3.5px; height:3.5px; border-radius:99px; background:#85889a; opacity:.9; }
+  .resizeH { position:absolute; right:7px; bottom:7px; z-index:7; width:30px; height:30px; cursor:nwse-resize; touch-action:none;
+    display:flex; align-items:flex-end; justify-content:flex-end; border-radius:10px; padding:0 6px 6px 0;
+    background:rgba(255,255,255,.92); border:1px solid var(--line); box-shadow:0 5px 15px rgba(23,24,44,.10); }
+  .resizeH::after { content:""; width:15px; height:15px; border-right:3px solid #85889a; border-bottom:3px solid #85889a; border-bottom-right-radius:4px; opacity:0.85; }
+  .sizebadge { position:absolute; left:11px; bottom:9px; z-index:6; font:700 10px/1 'Nunito',monospace; color:var(--ink); opacity:0.55; }
 
   .tick { width:19px; height:19px; flex:none; border:1.6px solid var(--tickbd); border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-size:11px; color:var(--tickmark); cursor:pointer; font-weight:800; background:transparent; transition:all .18s; }
   .tick.on { background:var(--tickfill); border-color:var(--tickfill); }
@@ -570,6 +571,14 @@
   .tile .genSpin{width:34px;height:34px;border-radius:50%;border:3.5px solid color-mix(in srgb,var(--accent) 20%,transparent);border-top-color:var(--accent);animation:genspin .8s linear infinite}
   .tile.completed .genSpin{border-color:rgba(255,255,255,.30);border-top-color:#fff}
   @keyframes genspin{to{transform:rotate(360deg)}}
+  /* Button labels never spill: action pills stay on one line (ellipsis if too long), quiz options wrap cleanly; both shrink on small/mobile tiles */
+  .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:100%;line-height:1.15}
+  .tile .qopt{white-space:normal;overflow-wrap:anywhere;height:auto;min-height:40px;line-height:1.25;text-align:center;padding:9px 14px;border-radius:16px!important}
+  .tile .qopts,.tile .tabbar,.tile .targets{flex-wrap:wrap}
+  @media(max-width:760px){
+    .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn{min-height:36px!important;padding:8px 12px;font-size:12px}
+    .tile .qopt{font-size:12px;min-height:36px}
+  }
 </style>
 </head>
 <body>
@@ -1022,9 +1031,8 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,onTap,onMoveStart,on
   const span={ gridColumn:`span ${Math.min(size.c,cols)}`, gridRow:`span ${size.r}` };
   return (
     <section data-tileid={id} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}}>
-      <div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div>
       {topright && !edit && <div className="topright">{topright}</div>}
-      <div className={"tbody"} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="draghandle" title="Drag to move" onPointerDown={(e)=>onMoveStart(e,id)}>
           {[0,1,2,3,4,5].map(i=><span key={i} className="gd"/>)}
