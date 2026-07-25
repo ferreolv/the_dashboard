@@ -597,8 +597,16 @@
   /* Timer duration steppers (replaces manual typing) */
   .timerSteppers{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
   .timerSteppers .puBtn{flex:1 1 0;min-width:0;min-height:34px!important;padding:6px 4px}
-  /* Scroll affordance: fade whichever edge has more content, so overflow reads as "scroll for more" and never a hard cut — adapts to any tile & window size */
-  .tile .content{padding-bottom:2px}
+  /* Breathing room + scroll affordance. The extra bottom padding lives INSIDE the scroll area, so
+     when content overflows the fade sits over padding (empty space) rather than the last row — the
+     final element always reads in full, and short content keeps clearance from the rounded border.
+     Adapts to any tile & window size. */
+  .tile .content{padding-bottom:20px}
+  .tile[data-tileid="timer"] .content,.tile[data-tileid="pushups"] .content,.tile[data-tileid="birthdays"] .content,.tile:has(.emptyState) .content{padding-bottom:0}
+  /* Weather pins its title over the top edge and its split layout fills the tile, so reserve that
+     height to keep the top row clear of the label. Timer/push-ups/birthdays center short content that
+     never reaches the top, so they need no reservation (adding one only steals space on 1×1 tiles). */
+  .tile[data-tileid="weather"]:not(:has(.emptyState)) .tbody{padding-top:22px}
   .tile .tbody.moreBelow{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent)}
   .tile .tbody.moreAbove.moreBelow{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent)}
   .tile .tbody.moreAbove:not(.moreBelow){-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px);mask-image:linear-gradient(to bottom,transparent,#000 16px)}
