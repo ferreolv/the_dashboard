@@ -1,0 +1,65 @@
+# Compact project context
+
+## Product
+
+One personal application with two intentionally separate experiences:
+
+1. **Dashboard**: daily command centre for goals, habits, reminders, notes, weather, timer, personal knowledge, review, and configurable tiles.
+2. **Learn**: adaptive general-knowledge game combining retrieval, personalisation, mastery, and a shared knowledge graph.
+
+They share intelligence and storage, not their full interfaces.
+
+## Current implementation
+
+- Live standalone application: `index.html`.
+- React 18 and Babel are loaded from CDNs; no build step is currently required.
+- Data persists in browser `localStorage` with `fefe_` keys.
+- Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
+- JSON backup and restore are available in Settings.
+- Existing saved data must survive code and architecture changes.
+
+## Current dashboard capabilities
+
+- Configurable tile library with date-aware active-tile history.
+- Active tiles determine daily progress and perfect-day requirements.
+- Goals, habits, reminders, notes, weather, timer, learning content, Recall, Academic, Second Brain, Philosophy, People Met, and weekly review.
+- AI-generated content uses a user-provided Anthropic API key.
+- Second Brain stores a recursively rendered knowledge tree and can globally reorganise note placement.
+
+## Durable design preferences
+
+- Dashboard uses a softly atmospheric pastel canvas so transparent clear-glass tiles visibly refract the background. Resting tile surfaces stay translucent white glass (never hue-filled), but each tile commits hard to ONE vivid hue that shows up in a thick coloured border, the label/heading, the body text, the glow, and chunky interactive objects. Typeface is Nunito (rounded, neutral-playful).
+- Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
+- Learn deliberately keeps a more expressive game-like visual world than the dashboard.
+- Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
+- No visible scrollbars; scrolling must still work.
+- Never underline interface text.
+- Inputs must always inherit readable contrast from their tile.
+- Minimal note-like writing: few words, little filler.
+- No unnecessary application branding or invented product name in the UI.
+- Preserve colour identity, tactile completion reward, and individual character without inconsistency.
+
+## Learn direction
+
+- A dedicated Learn page now exists; the dashboard contains one compact Today's Knowledge Quest launcher.
+- Academic uploads and Second Brain entries automatically populate `fefe_learnDB` through source-keyed concepts and challenges.
+- Existing source material is imported safely on first launch; deleting a source removes its generated knowledge objects.
+- Review scheduling uses a local FSRS-style stability/difficulty model targeting 90% retention.
+- Learn v2 has three finite modes: Sugar Rush (6), Knowledge Quest (12), and Mega Boss (10 with lives).
+- Confidence calibration, combos, boss damage, XP, levels, loot, runs, and best-combo stats add game depth without changing the memory schedule.
+- Learn runs now mix multiple mechanics: choice, nested-knowledge connections, sentence reconstruction, and date-based timeline questions when source material supports them.
+- Mega Boss can create one AI-remixed round per day from the user's own knowledge; the result is cached and local adaptive play remains the fallback.
+- The Learn lobby renders top-level knowledge branches as a playful visual memory galaxy.
+- Learn now uses a self-contained, curated general-knowledge Core Atlas by default. Academic and Second Brain data remain preserved but no longer feed game sessions.
+- The launch atlas covers stable foundations across science, history, geography, economics, ideas & arts, technology, ecology and health; cards carry an organisation/source trail.
+- Any optional AI boss remix is constrained to this curated atlas, never personal imports.
+- Learn tracks its own five-minute daily streak, XP, sessions, and mastery. This does not alter perfect-day scoring.
+- App pages support direct hash routes: `#/dashboard`, `#/library`, and `#/learn`.
+- Learn sessions should mix new concepts, due retrieval, connections, and games.
+- Prefer finite knowledge runs with conscious continuation over harmful infinite-scroll mechanics.
+- Recall and Second Brain should become shared infrastructure.
+- Creator video/community features are later-stage due to moderation, sourcing, copyright, and quality costs.
+
+## Working convention
+
+Prefix requests with `DASHBOARD:`, `LEARN:`, `SHARED:`, or `APP:`. This lets Codex inspect only the relevant module and reduces future context usage.

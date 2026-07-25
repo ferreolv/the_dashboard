@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PERSONAL DASHBOARD — glass field
+     Design DNA:
+       • Every tile is CLEAR WHITE GLASS. Colour lives only on the
+         accents (icon, title, borders, buttons, chips).
+       • Each tile owns ONE hue, set via  --main / --ink / --rgb.
+       • When a task is completed the tile itself fills with its
+         hue — still glassy — and every accent flips to white.
+     A single .done class drives the whole colour flip in CSS, so
+     each tile's markup only has to worry about its own layout.
+     ============================================================ */
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --font:'Nunito',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+    --ink-strong:#2a2340;
+    --ink-soft:#6b6480;
+    --ink-faint:#9a92b0;
+    --radius:26px;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+    color:var(--ink-strong);
+    min-height:100vh;
+  }
+  a{text-decoration:none;color:inherit}
+  input,button{font-family:inherit}
+  input{outline:none}
+  ::selection{background:rgba(124,58,255,.24)}
+
+  /* ---- backdrop ---------------------------------------------------- */
+  .bg{
+    position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(circle at 12% 12%, #ffe9d6, transparent 42%),
+      radial-gradient(circle at 88% 16%, #e4ddff, transparent 44%),
+      radial-gradient(circle at 78% 92%, #d6f0ff, transparent 48%),
+      linear-gradient(150deg, #f6f1ff 0%, #eef4ff 55%, #fdeef6 100%);
+  }
+  .shell{max-width:1320px;margin:0 auto;padding:28px 24px 90px}
+
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+
+  /* ================================================================
+     TOP NAV
+     ================================================================ */
+  .nav{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+  .seg{display:flex;gap:5px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(120,110,160,.2);border-radius:999px;padding:6px}
+  .seg a{padding:9px 22px;border-radius:999px;font-weight:600;font-size:14px;color:var(--ink-soft);cursor:pointer;transition:.25s}
+  .seg a:not(.active):hover{background:rgba(120,110,160,.12)}
+  .seg a.active{background:#7c3aff;color:#fff;font-weight:700;box-shadow:0 6px 16px rgba(124,58,255,.35)}
+  .nav-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .nav-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid rgba(120,110,160,.22);background:rgba(255,255,255,.55);color:#5c5670;transition:.25s}
+  .nav-btn:hover{background:rgba(255,255,255,.9);transform:translateY(-1px)}
+  .nav-btn.primary{background:#ffab00;color:#fff;border:none;box-shadow:0 6px 16px rgba(255,171,0,.38)}
+  .nav-btn.primary:hover{transform:translateY(-2px)}
+
+  /* ================================================================
+     HEADER
+     ================================================================ */
+  .head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:24px}
+  .date-label{font-weight:700;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint)}
+  .greet{font-weight:700;font-size:clamp(34px,6vw,54px);line-height:1;letter-spacing:-.02em}
+  .greet .wave{display:inline-block;animation:floaty 3s ease-in-out infinite}
+  .subtitle{font-size:16px;color:var(--ink-soft);max-width:520px}
+  .stats{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .ring{position:relative;width:66px;height:66px}
+  .ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:15px}
+  .ring circle{transition:stroke-dashoffset .7s cubic-bezier(.2,.7,.3,1)}
+  .stat{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:rgba(255,255,255,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(120,110,160,.2);border-radius:20px;padding:11px 20px;min-width:78px}
+  .stat b{font-size:20px}
+  .stat small{font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+
+  /* ================================================================
+     QUEST BANNER  (violet, informational)
+     ================================================================ */
+  .quest{
+    --main:#7c3aff;--ink:#5a2fd0;--rgb:124,58,255;
+    max-width:820px;margin:0 auto 30px;display:flex;align-items:center;gap:20px;
+    padding:20px 24px;border-radius:24px;
+    background:rgba(255,255,255,.44);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1.5px solid rgba(var(--rgb),.4);box-shadow:0 14px 34px rgba(var(--rgb),.14);
+  }
+  .quest-ic{width:54px;height:54px;flex:none;border-radius:16px;background:var(--main);color:#fff;display:grid;place-items:center;font-size:24px;box-shadow:0 8px 20px rgba(var(--rgb),.4)}
+  .quest-body{flex:1;min-width:0}
+  .quest-title{font-weight:700;font-size:16px;color:var(--ink)}
+  .quest-sub{font-size:13px;color:#7a6fa0;margin-top:2px}
+  .quest-bar{height:8px;border-radius:99px;background:rgba(var(--rgb),.18);overflow:hidden;margin-top:11px;max-width:380px}
+  .quest-bar i{display:block;height:100%;width:20%;background:var(--main);border-radius:99px}
+
+  /* ================================================================
+     MASONRY FIELD
+     ================================================================ */
+  .field{column-width:384px;column-gap:22px}
+  .cell{break-inside:avoid;margin-bottom:22px}
+
+  /* ---- THE TILE --------------------------------------------------- */
+  .tile{
+    position:relative;border-radius:var(--radius);padding:26px;
+    display:flex;flex-direction:column;
+    background:linear-gradient(155deg, rgba(255,255,255,.62), rgba(255,255,255,.28));
+    backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);
+    border:3px solid rgba(var(--rgb),.6);
+    box-shadow:0 16px 40px rgba(var(--rgb),.24), inset 0 1px 1px rgba(255,255,255,.85), inset 0 -1px 2px rgba(var(--rgb),.24);
+    color:var(--ink);
+    transition:background .55s ease, border-color .55s ease, box-shadow .55s ease, transform .25s cubic-bezier(.2,.7,.3,1);
+  }
+  .tile:hover{transform:translateY(-4px);box-shadow:0 24px 54px rgba(var(--rgb),.32), inset 0 1px 1px rgba(255,255,255,.85), inset 0 -1px 2px rgba(var(--rgb),.26)}
+  .tile.done{
+    background:linear-gradient(155deg, rgba(var(--rgb),.6), rgba(var(--rgb),.34));
+    border-color:rgba(255,255,255,.55);
+    box-shadow:0 22px 50px rgba(var(--rgb),.34), inset 0 1px 1px rgba(255,255,255,.7), inset 0 -1px 2px rgba(var(--rgb),.4);
+    color:rgba(255,255,255,.92);
+  }
+  .center{align-items:center;text-align:center}
+
+  /* ---- tile header ------------------------------------------------ */
+  .thead{display:flex;align-items:center;gap:11px;margin-bottom:18px;width:100%}
+  .tic{width:38px;height:38px;flex:none;border-radius:13px;display:grid;place-items:center;font-size:18px;background:var(--main);box-shadow:0 5px 14px rgba(var(--rgb),.45);transition:background .5s,box-shadow .5s}
+  .tile.done .tic{background:rgba(255,255,255,.28);box-shadow:none}
+  .ttitle{font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--main);transition:color .5s}
+  .tile.done .ttitle{color:#fff}
+  .tbadge{margin-left:auto;font-weight:700;font-size:11px;padding:6px 13px;border-radius:999px;background:rgba(var(--rgb),.16);color:var(--ink);border:1.5px solid rgba(var(--rgb),.45);transition:.5s;white-space:nowrap}
+  .tile.done .tbadge{background:rgba(255,255,255,.24);color:#fff;border-color:rgba(255,255,255,.45)}
+
+  /* ---- shared accent atoms --------------------------------------- */
+  .ink{color:var(--ink);transition:color .5s}
+  .tile.done .ink{color:#fff}
+  .vivid{color:var(--main);transition:color .5s}
+  .tile.done .vivid{color:#fff}
+  .muted{color:var(--ink);opacity:.72;transition:opacity .5s}
+  .tile.done .muted{color:#fff;opacity:.86}
+
+  .divider{height:1.5px;background:rgba(var(--rgb),.34);margin:16px 0;width:100%}
+  .tile.done .divider{background:rgba(255,255,255,.32)}
+
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;font-weight:700;font-size:11px;background:rgba(var(--rgb),.18);color:var(--ink);border:1.5px solid rgba(var(--rgb),.5);transition:.5s}
+  .tile.done .chip{background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.42)}
+
+  .panel{width:100%;padding:16px;border-radius:16px;background:rgba(var(--rgb),.13);border:1.5px solid rgba(var(--rgb),.4);transition:.5s}
+  .tile.done .panel{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32)}
+
+  /* buttons */
+  .btn{font-weight:700;font-size:13.5px;border:none;cursor:pointer;border-radius:999px;padding:13px 26px;transition:.3s cubic-bezier(.2,.7,.3,1);display:inline-flex;align-items:center;gap:7px}
+  .btn.solid{background:var(--main);color:#fff;box-shadow:0 10px 24px rgba(var(--rgb),.5)}
+  .btn.solid:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(var(--rgb),.58)}
+  .tile.done .btn.solid{background:#fff;color:var(--ink);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+  .btn.ghost{background:rgba(var(--rgb),.14);color:var(--ink);border:2px solid rgba(var(--rgb),.55)}
+  .btn.ghost:hover{background:rgba(var(--rgb),.22)}
+  .tile.done .btn.ghost{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.5)}
+
+  .addbtn{width:46px;height:46px;flex:none;border-radius:50%;font-size:22px;display:grid;place-items:center;border:none;cursor:pointer;background:var(--main);color:#fff;box-shadow:0 8px 18px rgba(var(--rgb),.5);transition:.3s}
+  .addbtn:hover{transform:scale(1.08)}
+  .tile.done .addbtn{background:#fff;color:var(--ink)}
+
+  .field-in{flex:1;min-width:0;padding:13px 18px;border-radius:999px;border:2px solid rgba(var(--rgb),.4);background:rgba(var(--rgb),.1);color:var(--ink);font-size:14px;font-weight:500;transition:.5s}
+  .field-in::placeholder{color:rgba(var(--rgb),.7)}
+  .tile.done .field-in{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff}
+  .tile.done .field-in::placeholder{color:rgba(255,255,255,.7)}
+
+  .row{display:flex;align-items:center;gap:10px;width:100%}
+  .wrap{flex-wrap:wrap}
+
+  /* ---- GOALS ------------------------------------------------------ */
+  .check-row{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:16px;background:rgba(var(--rgb),.16);border:2.5px solid rgba(var(--rgb),.6);cursor:pointer;transition:.4s;width:100%}
+  .check-row:hover{background:rgba(var(--rgb),.24)}
+  .tile.done .check-row{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4)}
+  .check-box{width:28px;height:28px;flex:none;border-radius:9px;display:grid;place-items:center;background:rgba(var(--rgb),.16);border:2.5px solid rgba(var(--rgb),.6);color:var(--ink);font-weight:800;font-size:15px;transition:.4s}
+  .tile.done .check-box{background:#fff;border-color:#fff;color:var(--ink)}
+  .check-label{font-weight:600;font-size:15px;color:var(--ink);transition:.4s}
+  .tile.done .check-label{color:#fff;text-decoration:line-through;text-decoration-thickness:2px}
+  .day-row{display:flex;align-items:center;gap:12px;width:100%}
+  .day-tag{font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);width:56px;flex:none;transition:.5s}
+  .tile.done .day-tag{color:rgba(255,255,255,.9)}
+
+  /* ---- HABITS ----------------------------------------------------- */
+  .habits{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;width:100%;margin:4px 0 4px}
+  .habit{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;width:64px}
+  .habit-c{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:28px;border:3px solid rgba(var(--rgb),.7);background:rgba(var(--rgb),.18);color:var(--ink);transition:.35s cubic-bezier(.2,.7,.3,1)}
+  .habit:hover .habit-c{transform:translateY(-3px)}
+  .habit:active .habit-c{transform:scale(.92)}
+  .habit.on .habit-c{background:var(--main);border-color:var(--main);color:#fff;box-shadow:0 10px 22px rgba(var(--rgb),.42)}
+  .tile.done .habit-c{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.15);color:#fff}
+  .tile.done .habit.on .habit-c{background:#fff;color:var(--ink);border-color:#fff;box-shadow:0 10px 22px rgba(0,0,0,.16)}
+  .habit-n{font-weight:600;font-size:12.5px;color:var(--ink);transition:.5s}
+  .tile.done .habit-n{color:#fff}
+  .habit-m{font-weight:700;font-size:10px;color:var(--main)}
+  .tile.done .habit-m{color:rgba(255,255,255,.88)}
+
+  /* ---- QUIZ options ---------------------------------------------- */
+  .opts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
+  .opt{padding:11px 18px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;border:2.5px solid rgba(var(--rgb),.7);background:rgba(var(--rgb),.16);color:var(--ink);transition:.3s}
+  .opt:hover{background:rgba(var(--rgb),.26)}
+  .tile.done .opt{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff}
+  .opt.correct{background:var(--main);color:#fff;border-color:var(--main);box-shadow:0 8px 20px rgba(var(--rgb),.4)}
+  .tile.done .opt.correct{background:#fff;color:var(--ink);border-color:#fff}
+  .opt.wrong{background:rgba(255,255,255,.9);color:#c0392b;border-color:#fff;opacity:.9}
+  .opt.dim{opacity:.4;pointer-events:none}
+
+  /* ---- WEEKLY chart ---------------------------------------------- */
+  .spark{width:100%;height:64px;display:block}
+  .life-row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;max-width:300px;margin:0 auto}
+
+  /* ================================================================
+     RESPONSIVE
+     ================================================================ */
+  @media(max-width:640px){
+    .shell{padding:20px 16px 70px}
+    .quest{flex-direction:column;text-align:center}
+    .quest-body{text-align:center}
+    .quest-bar{margin-left:auto;margin-right:auto}
+    .nav{gap:10px}
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<div class="shell">
+
+  <!-- ============ NAV ============ -->
+  <div class="nav">
+    <div class="seg">
+      <a class="active">Today</a>
+      <a>Library</a>
+      <a>Learn</a>
+    </div>
+    <div class="nav-actions">
+      <div class="nav-btn primary">✦ Generate</div>
+      <div class="nav-btn">⚙ Settings</div>
+      <div class="nav-btn">▦ Arrange</div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <div class="head">
+    <div class="date-label" id="dateLabel">—</div>
+    <h1 class="greet" id="greet">Bonjour, Fefe <span class="wave" id="greetEmoji">🌅</span></h1>
+    <div class="subtitle" id="subtitle">Your day, at a glance. Tap anything to bring it to life.</div>
+    <div class="stats">
+      <div class="ring">
+        <svg width="66" height="66" viewBox="0 0 66 66">
+          <circle cx="33" cy="33" r="26" fill="none" stroke="rgba(120,110,160,.2)" stroke-width="7"/>
+          <circle id="ringArc" cx="33" cy="33" r="26" fill="none" stroke="#7c3aff" stroke-width="7"
+                  stroke-linecap="round" stroke-dasharray="163.36" stroke-dashoffset="163.36"
+                  transform="rotate(-90 33 33)"/>
+        </svg>
+        <span class="pct" id="ringPct">0%</span>
+      </div>
+      <div class="stat"><b>🔥 3</b><small>Day streak</small></div>
+      <div class="stat"><b>🏆 1</b><small>Perfect</small></div>
+      <div class="stat"><b id="clock">--:--</b><small>Sydney</small></div>
+    </div>
+  </div>
+
+  <!-- ============ QUEST BANNER ============ -->
+  <div class="quest">
+    <div class="quest-ic">✦</div>
+    <div class="quest-body">
+      <div class="quest-title">Today's knowledge quest</div>
+      <div class="quest-sub">5 min to protect your learning streak · 51 challenges ready</div>
+      <div class="quest-bar"><i></i></div>
+    </div>
+    <div class="btn solid" style="--main:#7c3aff;--ink:#5a2fd0;--rgb:124,58,255">Start →</div>
+  </div>
+
+  <!-- ============ MASONRY FIELD ============ -->
+  <div class="field">
+
+    <!-- GOALS · amber -->
+    <div class="cell">
+      <div class="tile" id="tileGoal" style="--main:#ffab00;--ink:#a86a00;--rgb:255,171,0">
+        <div class="thead"><div class="tic">🎯</div><div class="ttitle">Goals</div><div class="tbadge">Plan ahead</div></div>
+        <div class="check-row" id="goalRow">
+          <div class="check-box" id="goalBox"></div>
+          <div class="check-label">Ship dashboard redesign</div>
+        </div>
+        <div class="row" style="margin:14px 0 18px">
+          <input class="field-in" placeholder="Add a goal for today…">
+          <button class="addbtn">+</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;width:100%" id="planDays"></div>
+      </div>
+    </div>
+
+    <!-- HABITS · cyan -->
+    <div class="cell">
+      <div class="tile center" id="tileHabits" style="--main:#00c7e0;--ink:#0a7a8c;--rgb:0,199,224">
+        <div class="thead"><div class="tic">✅</div><div class="ttitle">Daily habits</div><div class="tbadge" id="habitCount">0 / 4</div></div>
+        <div class="habits" id="habitList"></div>
+        <button class="btn ghost" style="margin-top:16px">+ Add habit</button>
+      </div>
+    </div>
+
+    <!-- WEATHER · sky (informational) -->
+    <div class="cell">
+      <div class="tile center" style="--main:#1a84ff;--ink:#1467d1;--rgb:26,132,255">
+        <div class="thead"><div class="tic">🌤️</div><div class="ttitle">Weather · Sydney</div></div>
+        <div style="font-size:62px;animation:floaty 4s ease-in-out infinite">☀️</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:6px">
+          <span class="vivid" style="font-weight:700;font-size:58px;line-height:1">15°</span>
+          <span class="ink" style="font-weight:600;font-size:18px">Clear</span>
+        </div>
+        <div class="muted" style="font-weight:500;font-size:14px;margin-top:6px">H 18° · L 9° · feels 14°</div>
+        <div class="chip" style="margin-top:16px;font-size:13px;padding:9px 16px">⛅ Tomorrow · 18° / 9°</div>
+      </div>
+    </div>
+
+    <!-- ONE SONG · pink -->
+    <div class="cell">
+      <div class="tile" id="tileSong" style="--main:#ff2d8e;--ink:#cc1f6e;--rgb:255,45,142">
+        <div class="thead"><div class="tic">🎵</div><div class="ttitle">One song</div><div class="tbadge">Baroque</div></div>
+        <div class="vivid" style="font-weight:700;font-size:22px;line-height:1.2">Harpsichord Concerto No. 1</div>
+        <div class="muted" style="font-weight:500;font-size:14px;margin-top:4px">George Frideric Handel · 1738</div>
+        <div class="muted" style="font-size:13.5px;line-height:1.6;margin-top:14px">
+          A virtuosic keyboard showcase that cast the harpsichord as soloist decades before the piano concerto existed.
+        </div>
+        <div class="divider"></div>
+        <div class="row wrap" style="gap:10px">
+          <a class="btn ghost">Apple Music ↗</a>
+          <button class="btn solid" id="songBtn" style="margin-left:auto">○ Listened</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOT DU JOUR · green -->
+    <div class="cell">
+      <div class="tile" id="tileMot" style="--main:#14c85a;--ink:#0d9847;--rgb:20,200,90">
+        <div class="thead"><div class="tic">📖</div><div class="ttitle">Mot du jour</div></div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span class="vivid" style="font-weight:700;font-size:30px">propitious</span>
+          <span class="chip">adj</span>
+        </div>
+        <div class="muted" style="font-size:13px;margin-top:4px">/prəˈpɪʃəs/</div>
+        <div class="ink" style="font-weight:500;font-size:14.5px;line-height:1.5;margin-top:12px">Favourable or advantageous; presenting good prospects.</div>
+        <div class="panel" style="margin-top:14px">
+          <span class="ink" style="font-weight:700;font-size:14px">propice</span>
+          <span class="muted" style="font-size:13px"> — favorable ou avantageux ; de bon augure.</span>
+        </div>
+        <div class="divider"></div>
+        <div class="ink" style="font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Quiz · closest word?</div>
+        <div class="opts" id="motOpts" data-correct="1">
+          <span class="opt">helpful</span><span class="opt">lucky</span><span class="opt">timely</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOCUS · orange -->
+    <div class="cell">
+      <div class="tile center" id="tileFocus" style="--main:#ff6a00;--ink:#cf5410;--rgb:255,106,0">
+        <div class="thead"><div class="tic">⏱️</div><div class="ttitle">Focus</div><div class="tbadge">Pomodoro</div></div>
+        <div class="vivid" id="focusTime" style="font-weight:700;font-size:56px;line-height:1;letter-spacing:.01em">25:00</div>
+        <div class="muted" style="font-weight:500;font-size:12px;margin:8px 0 20px">Deep work · 25 min block</div>
+        <div class="row" style="justify-content:center;gap:10px">
+          <button class="btn solid" id="focusStart" style="padding:12px 30px">▶ Start</button>
+          <button class="btn ghost" id="focusReset">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BIRTHDAYS · coral (informational) -->
+    <div class="cell">
+      <div class="tile center" style="--main:#ff3b5c;--ink:#d42744;--rgb:255,59,92">
+        <div class="thead"><div class="tic">🎂</div><div class="ttitle">Birthdays</div></div>
+        <div style="font-size:48px;margin:6px 0 10px">🎉</div>
+        <div class="ink" style="font-weight:700;font-size:17px">No birthdays today</div>
+        <div class="muted" style="font-size:13px;margin-top:4px">Next up · Léa in 12 days</div>
+        <a class="btn ghost" style="margin-top:16px">All birthdays &amp; import →</a>
+      </div>
+    </div>
+
+    <!-- ESPAÑOL · violet -->
+    <div class="cell">
+      <div class="tile" id="tileEs" style="--main:#7c3aff;--ink:#5a2fd0;--rgb:124,58,255">
+        <div class="thead"><div class="tic">🗣️</div><div class="ttitle">Español · speaking</div></div>
+        <div class="panel">
+          <span class="ink" style="font-weight:700;font-size:13.5px">hay que</span>
+          <span class="muted" style="font-size:13.5px;line-height:1.6"> vs <b>deber</b> — both mean <em>must / should</em>, but <b>hay que</b> is general &amp; impersonal, <b>deber</b> is direct &amp; personal.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px;width:100%;margin:16px 0">
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:600;font-size:14px">estar en forma</span><span class="muted" style="font-size:13px">to be in shape</span></div>
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:600;font-size:14px">llevar una vida sana</span><span class="muted" style="font-size:13px">to live healthily</span></div>
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:600;font-size:14px">el estrés</span><span class="muted" style="font-size:13px">stress</span></div>
+        </div>
+        <div class="ink" style="font-weight:500;font-size:13.5px;text-align:center;margin-bottom:14px">Si quieres <b>______</b>, debes dormir bien y hacer ejercicio.</div>
+        <div class="opts" id="esOpts" data-correct="0">
+          <span class="opt">llevar una vida sana</span><span class="opt">estar en forma</span><span class="opt">reducir el estrés</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORLD BRIEFING · indigo (informational) -->
+    <div class="cell">
+      <div class="tile" style="--main:#4f5bff;--ink:#3843d4;--rgb:79,91,255">
+        <div class="thead"><div class="tic">🌍</div><div class="ttitle">World briefing · today</div></div>
+        <div class="ink" style="font-weight:600;font-size:15px">US &amp; Saudi Arabia finalise nuclear pact</div>
+        <div class="muted" style="font-size:13px;line-height:1.6;margin-top:3px">A landmark deal opens the Saudi nuclear programme to American firms — a major geopolitical shift.</div>
+        <div class="divider"></div>
+        <div class="ink" style="font-weight:600;font-size:15px">Houthis escalate Red Sea attacks</div>
+        <div class="muted" style="font-size:13px;line-height:1.6;margin-top:3px">Strikes on oil tankers and a maritime embargo are disrupting global shipping routes.</div>
+        <div class="divider"></div>
+        <div class="ink" style="font-weight:600;font-size:15px">Ukraine replaces top commander</div>
+        <div class="muted" style="font-size:13px;line-height:1.6;margin-top:3px">A mid-war leadership shake-up hints at internal tension over strategy at a critical moment.</div>
+      </div>
+    </div>
+
+    <!-- WEEKLY REVIEW · emerald (informational) -->
+    <div class="cell">
+      <div class="tile" style="--main:#06d18f;--ink:#0a9a6b;--rgb:6,209,143">
+        <div class="thead"><div class="tic">📊</div><div class="ttitle">Weekly review</div></div>
+        <div class="panel">
+          <div class="ink" style="font-weight:600;font-size:14px">Push-ups · last 14 days</div>
+          <div class="muted" style="font-size:12px;margin-bottom:8px">5 total · ~0 / day avg</div>
+          <svg class="spark" viewBox="0 0 260 64" preserveAspectRatio="none">
+            <polyline points="0,58 60,58 120,58 180,58 210,8 240,58 260,58" fill="none"
+                      stroke="var(--main)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="210" cy="8" r="4" fill="var(--main)"/>
+          </svg>
+          <div class="life-row muted" style="font-size:10px"><span>2w ago</span><span>1w</span><span>today</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px;width:100%;margin-top:16px">
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:500;font-size:13px">🚿 Shower</span><span class="chip">🔥 2</span></div>
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:500;font-size:13px">🏋️ Squats</span><span class="chip">🔥 2</span></div>
+          <div class="row" style="justify-content:space-between"><span class="ink" style="font-weight:500;font-size:13px">📖 Read</span><span class="chip">🔥 2</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /field -->
+</div><!-- /shell -->
+
+<script>
+(function(){
+  "use strict";
+  var C = 163.36; // ring circumference (2·π·26)
+
+  /* ---------- state ---------- */
+  var st = { goal:false, song:false, mot:false, es:false, focus:false,
+             habits:[false,false,false,false] };
+  var HABITS = [
+    {emoji:'🚿', name:'Shower', streak:2},
+    {emoji:'🏋️', name:'Squats', streak:2},
+    {emoji:'🗺️', name:'Travel', streak:2},
+    {emoji:'📖', name:'Read',   streak:2}
+  ];
+  var TOTAL = 9; // goal + 4 habits + song + mot + es + focus
+
+  /* ---------- confetti ---------- */
+  var COLS = ['#ffab00','#00c7e0','#ff2d8e','#14c85a','#ff6a00','#7c3aff','#ff3b5c','#4f5bff'];
+  function burst(x, y){
+    if (x == null){ x = innerWidth/2; y = innerHeight/3; }
+    for (var i=0;i<26;i++){
+      var d = document.createElement('div'), c = COLS[i%COLS.length];
+      d.style.cssText = 'position:fixed;left:'+x+'px;top:'+y+'px;width:11px;height:11px;'+
+        'border-radius:'+(i%2?'3px':'50%')+';background:'+c+';z-index:9999;pointer-events:none;'+
+        'transition:transform .9s cubic-bezier(.15,.7,.3,1),opacity .9s ease';
+      document.body.appendChild(d);
+      var ang = Math.random()*Math.PI*2, dist = 70+Math.random()*150;
+      (function(el){ requestAnimationFrame(function(){
+        el.style.transform = 'translate('+Math.cos(ang)*dist+'px,'+(Math.sin(ang)*dist+60)+'px) rotate('+Math.random()*440+'deg)';
+        el.style.opacity = '0';
+      }); setTimeout(function(){ el.remove(); }, 950); })(d);
+    }
+  }
+  function evXY(e){ return e && e.clientX!=null ? [e.clientX, e.clientY] : [null,null]; }
+
+  /* ---------- progress ---------- */
+  function done(){
+    var n = (st.goal?1:0)+(st.song?1:0)+(st.mot?1:0)+(st.es?1:0)+(st.focus?1:0);
+    for (var i=0;i<st.habits.length;i++) if (st.habits[i]) n++;
+    return n;
+  }
+  function updateProgress(){
+    var n = done(), pct = Math.round(n/TOTAL*100);
+    document.getElementById('ringArc').style.strokeDashoffset = (C*(1-n/TOTAL)).toFixed(2);
+    document.getElementById('ringPct').textContent = pct+'%';
+    document.getElementById('subtitle').textContent = (n===TOTAL)
+      ? "Everything's lit — perfect day 🎉"
+      : "Your day, at a glance. Tap anything to bring it to life.";
+  }
+
+  function setDone(tile, on, e){
+    tile.classList.toggle('done', on);
+    if (on){ var p = evXY(e); burst(p[0], p[1]); }
+    updateProgress();
+  }
+
+  /* ---------- GOALS ---------- */
+  var goalRow = document.getElementById('goalRow'), tileGoal = document.getElementById('tileGoal');
+  goalRow.addEventListener('click', function(e){
+    st.goal = !st.goal;
+    document.getElementById('goalBox').textContent = st.goal ? '✓' : '';
+    setDone(tileGoal, st.goal, e);
+  });
+
+  // upcoming-days planner (today + next 2)
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var planWrap = document.getElementById('planDays'), base = new Date();
+  for (var k=0;k<3;k++){
+    var dt = new Date(base); dt.setDate(base.getDate()+k);
+    var lbl = (k===0?'Today':DOW[dt.getDay()])+' '+dt.getDate();
+    var row = document.createElement('div'); row.className = 'day-row';
+    row.innerHTML = '<span class="day-tag">'+lbl+'</span>'+
+      '<input class="field-in" style="padding:11px 15px" placeholder="Plan…">'+
+      '<button class="addbtn" style="width:40px;height:40px;font-size:19px">+</button>';
+    planWrap.appendChild(row);
+  }
+
+  /* ---------- HABITS ---------- */
+  var list = document.getElementById('habitList'),
+      tileHabits = document.getElementById('tileHabits'),
+      countEl = document.getElementById('habitCount');
+  HABITS.forEach(function(h, i){
+    var el = document.createElement('div'); el.className = 'habit';
+    el.innerHTML = '<div class="habit-c">'+h.emoji+'</div>'+
+                   '<div class="habit-n">'+h.name+'</div>'+
+                   '<div class="habit-m">🔥 '+h.streak+'</div>';
+    el.addEventListener('click', function(e){
+      st.habits[i] = !st.habits[i];
+      el.classList.toggle('on', st.habits[i]);
+      el.querySelector('.habit-c').textContent = st.habits[i] ? '✓' : h.emoji;
+      el.querySelector('.habit-m').textContent = st.habits[i] ? 'done' : '🔥 '+h.streak;
+      var n = st.habits.filter(Boolean).length, all = n===HABITS.length;
+      countEl.textContent = all ? '🎉 all done' : n+' / '+HABITS.length;
+      var p = evXY(e);
+      if (st.habits[i]) burst(p[0], p[1]);
+      tileHabits.classList.toggle('done', all);
+      updateProgress();
+    });
+    list.appendChild(el);
+  });
+
+  /* ---------- SONG ---------- */
+  var songBtn = document.getElementById('songBtn'), tileSong = document.getElementById('tileSong');
+  songBtn.addEventListener('click', function(e){
+    st.song = !st.song;
+    songBtn.textContent = st.song ? '✓ Listened' : '○ Listened';
+    setDone(tileSong, st.song, e);
+  });
+
+  /* ---------- QUIZ (mot / español) ---------- */
+  function wireQuiz(wrapId, tileId, stateKey){
+    var wrap = document.getElementById(wrapId), tile = document.getElementById(tileId),
+        correct = +wrap.getAttribute('data-correct'),
+        opts = wrap.querySelectorAll('.opt');
+    opts.forEach(function(opt, i){
+      opt.addEventListener('click', function(e){
+        if (st[stateKey]) return;           // already solved
+        if (i === correct){
+          st[stateKey] = true;
+          opt.classList.add('correct');
+          opts.forEach(function(o,j){ if (j!==correct) o.classList.add('dim'); });
+          setDone(tile, true, e);
+        } else {
+          opt.classList.add('wrong','dim'); // wrong choice is struck out, retry allowed
+        }
+      });
+    });
+  }
+  wireQuiz('motOpts','tileMot','mot');
+  wireQuiz('esOpts','tileEs','es');
+
+  /* ---------- FOCUS timer ---------- */
+  var tileFocus = document.getElementById('tileFocus'),
+      timeEl = document.getElementById('focusTime'),
+      startBtn = document.getElementById('focusStart'),
+      resetBtn = document.getElementById('focusReset'),
+      left = 1500, running = false, timer = null;
+  function fmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+  function renderFocus(){
+    timeEl.textContent = fmt(left);
+    var vivid = running || left===0;
+    tileFocus.classList.toggle('done', vivid);
+    startBtn.textContent = left===0 ? '✓ Done' : running ? '❚❚ Pause' : '▶ Start';
+    updateProgress();
+  }
+  startBtn.addEventListener('click', function(){
+    if (left===0) return;
+    running = !running;
+    if (running){
+      timer = setInterval(function(){
+        left--;
+        if (left<=0){ left=0; running=false; clearInterval(timer); st.focus=true; burst(); }
+        renderFocus();
+      }, 1000);
+    } else { clearInterval(timer); }
+    renderFocus();
+  });
+  resetBtn.addEventListener('click', function(){
+    clearInterval(timer); running=false; left=1500; st.focus=false;
+    tileFocus.classList.remove('done'); renderFocus();
+  });
+
+  /* ---------- header clock / date / greeting ---------- */
+  var DAYS = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  var MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  function tick(){
+    var d = new Date();
+    document.getElementById('clock').textContent =
+      String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  }
+  function initHeader(){
+    var d = new Date(), hr = d.getHours();
+    document.getElementById('dateLabel').textContent = DAYS[d.getDay()]+' '+d.getDate()+' '+MONTHS[d.getMonth()];
+    var g = hr<12 ? ['Bonjour, Fefe','🌅'] : hr<18 ? ['Bon aprèm, Fefe','☀️'] : ['Bonsoir, Fefe','🌙'];
+    document.getElementById('greet').firstChild.textContent = g[0]+' ';
+    document.getElementById('greetEmoji').textContent = g[1];
+    tick(); setInterval(tick, 1000*15);
+  }
+
+  initHeader();
+  renderFocus();
+  updateProgress();
+})();
+</script>
+</body>
+</html>

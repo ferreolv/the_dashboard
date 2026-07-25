@@ -1,0 +1,16 @@
+# Local data backups & snapshots — never publish personal dashboard data
+backups/
+*.zip
+fefe-dashboard-backup-*.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+.vscode/
+.idea/
+
+# Temp
+*.tmp
+*.log
