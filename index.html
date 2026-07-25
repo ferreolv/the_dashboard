@@ -571,14 +571,21 @@
   .tile .genSpin{width:34px;height:34px;border-radius:50%;border:3.5px solid color-mix(in srgb,var(--accent) 20%,transparent);border-top-color:var(--accent);animation:genspin .8s linear infinite}
   .tile.completed .genSpin{border-color:rgba(255,255,255,.30);border-top-color:#fff}
   @keyframes genspin{to{transform:rotate(360deg)}}
-  /* Button labels never spill: action pills stay on one line (ellipsis if too long), quiz options wrap cleanly; both shrink on small/mobile tiles */
-  .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:100%;line-height:1.15}
+  /* Title sits at the top of the tile and scrolls away with the content (stack vertically, don't pin) */
+  .tile .tbody{flex-direction:column}
+  .tile .tbody>.content{flex:1 1 auto;min-height:0}
+  /* Buttons & links keep each label on ONE line at natural width (never clipped); button ROWS wrap so nothing overflows on small/mobile tiles */
+  .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn,.tile .link{white-space:nowrap;line-height:1.15}
+  .tile .content div[style*="display:flex"],.tile .content div[style*="display: flex"],.tile .qopts,.tile .tabbar,.tile .targets{flex-wrap:wrap}
   .tile .qopt{white-space:normal;overflow-wrap:anywhere;height:auto;min-height:40px;line-height:1.25;text-align:center;padding:9px 14px;border-radius:16px!important}
-  .tile .qopts,.tile .tabbar,.tile .targets{flex-wrap:wrap}
   @media(max-width:760px){
-    .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn{min-height:36px!important;padding:8px 12px;font-size:12px}
-    .tile .qopt{font-size:12px;min-height:36px}
+    .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn,.tile .link{font-size:12px}
+    .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn{min-height:36px!important;padding:8px 12px}
   }
+  /* Arrange mode: drag the whole tile to move; only the bottom-right corner resizes */
+  .tile.editing{cursor:grab}
+  .tile.editing:active{cursor:grabbing}
+  .tile.editing .sizebadge{pointer-events:none}
 </style>
 </head>
 <body>
@@ -1030,15 +1037,12 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,onTap,onMoveStart,on
   const t=themeVars(id,done);
   const span={ gridColumn:`span ${Math.min(size.c,cols)}`, gridRow:`span ${size.r}` };
   return (
-    <section data-tileid={id} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}}>
+    <section data-tileid={id} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && <div className="topright">{topright}</div>}
       <div className={"tbody"} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
-        <div className="draghandle" title="Drag to move" onPointerDown={(e)=>onMoveStart(e,id)}>
-          {[0,1,2,3,4,5].map(i=><span key={i} className="gd"/>)}
-        </div>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
-        <div className="resizeH" onPointerDown={(e)=>onResizeStart(e,id)} />
+        <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
       </>}
     </section>
   );
