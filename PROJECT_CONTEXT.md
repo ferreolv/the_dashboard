@@ -22,7 +22,7 @@ They share intelligence and storage, not their full interfaces.
 
 - Configurable tile library with date-aware active-tile history.
 - Active tiles determine daily progress and perfect-day requirements.
-- Goals, habits, reminders, notes, weather, timer, learning content, Recall, Academic, Second Brain, Philosophy, People Met, and weekly review.
+- Goals, habits, task reminders, positive event countdowns, notes, weather, timer, learning content, Recall, Academic, Second Brain, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
 - Second Brain stores a recursively rendered knowledge tree and can globally reorganise note placement.
 
@@ -30,6 +30,9 @@ They share intelligence and storage, not their full interfaces.
 
 - Dashboard uses a softly atmospheric pastel canvas so transparent clear-glass tiles visibly refract the background. Resting tile surfaces stay translucent white glass (never hue-filled), but each tile commits hard to ONE vivid hue that shows up in a thick coloured border, the label/heading, the body text, the glow, and chunky interactive objects. Typeface is Nunito (rounded, neutral-playful).
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
+- Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
+- A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
+- Reminders are practical recurring or one-off tasks and expose a checkbox when due. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

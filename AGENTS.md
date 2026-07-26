@@ -27,3 +27,8 @@ If no label is supplied, infer the narrowest scope from the request. Do not insp
 - Shared owns user profile, recall scheduling, knowledge graph, persistence, backup, and common UI primitives.
 - Do not turn every Learn capability into a dashboard tile.
 
+## Publishing
+
+- After completing and validating a user-requested change to the live dashboard, commit only the relevant project files and push the completed commit to `origin/main` before the final response.
+- Do not leave finished dashboard changes only in the local working tree or require the user to publish them through GitHub Desktop.
+- Never publish incomplete or unvalidated work. If committing or pushing fails, keep the local changes intact and report the failure clearly.

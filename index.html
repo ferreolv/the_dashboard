@@ -610,6 +610,150 @@
   .tile .tbody.moreBelow{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent)}
   .tile .tbody.moreAbove.moreBelow{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent)}
   .tile .tbody.moreAbove:not(.moreBelow){-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px);mask-image:linear-gradient(to bottom,transparent,#000 16px)}
+  /* Responsive tile contract: each widget adapts to its own dimensions, not only to the viewport. */
+  .tile{container-name:tile;container-type:inline-size}
+  .tile,.tile *{min-width:0}
+  .tile .tbody{display:flex;flex-direction:column;overscroll-behavior:contain}
+  .tile .tbody>.content{display:flex;flex:1 1 auto;height:auto;min-height:0}
+  .tile .tilehead,
+  .tile[data-tileid="weather"] .tilehead,
+  .tile[data-tileid="timer"] .tilehead,
+  .tile[data-tileid="pushups"] .tilehead,
+  .tile[data-tileid="birthdays"] .tilehead{
+    position:static;inset:auto;z-index:auto;display:flex;justify-content:flex-start;
+    min-height:20px;margin:0 0 11px;pointer-events:auto;text-align:left
+  }
+  .tile:has(.emptyState) .tilehead,
+  .tile[data-tileid="weather"]:has(.emptyState) .tilehead{
+    display:flex;justify-content:flex-start;margin:0 0 11px
+  }
+  .tile:has(.emptyState) .tilehead>span{flex-direction:row}
+  .tile:has(.emptyState) .tbody{display:block;text-align:left}
+  .tile[data-tileid="weather"]:not(:has(.emptyState)) .tbody{padding-top:0}
+  .tile button,.tile a,.tile input,.tile textarea,.tile select{max-width:100%}
+  .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,
+  .tile .tileRetryBtn,.tile .link,.tile .tab,.tile .savebtn{
+    width:fit-content;max-width:100%;height:auto;min-height:34px;
+    white-space:normal;overflow-wrap:break-word;word-break:normal;text-wrap:balance;
+    line-height:1.2;text-align:center;justify-content:center
+  }
+  .tile .tick,.tile .del,.tile .addbtn,.tile .chatSend{flex:none;white-space:nowrap}
+  .tile .content div[style*="display:flex"],
+  .tile .content div[style*="display: flex"],
+  .tile .addrow,.tile .trow,.tile .agRow,.tile .bankEntry,
+  .tile .qopts,.tile .tabbar,.tile .targets{max-width:100%;flex-wrap:wrap}
+  .tile .content div[style*="display:flex"]>*,
+  .tile .content div[style*="display: flex"]>*{min-width:0}
+  .tile .qopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(132px,100%),1fr))}
+  .tile .qopt{width:100%}
+  .tile .tabbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(108px,100%),1fr))}
+  .tile .tabbar .tab{width:100%}
+  .tile .hgrid{grid-template-columns:repeat(auto-fit,minmax(min(76px,100%),1fr))}
+  .tile .timerSteppers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(64px,100%),1fr))}
+  .tile .timerSteppers .puBtn{width:100%}
+  .tile .timerBig{font-size:clamp(25px,12cqi,38px);overflow-wrap:anywhere}
+  .tile .agRow{align-items:flex-start}
+  .tile .agBody{flex:1 1 130px}
+  .tile .agWhen{margin-left:auto}
+  .tile .goalDay{margin-bottom:10px}
+  .tile .goalDay:last-child{margin-bottom:0}
+  .tile .goalDayHead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:5px}
+  .tile .goalDay .trow>span:nth-child(2){flex:1 1 120px;overflow-wrap:anywhere}
+  .tile .goalInputRow .addinput{flex:1 1 120px}
+  .tile .musicActions,.tile .noteActions,.tile .timerActions{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap
+  }
+  .tile .peopleAddRow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+  .tile .birthdayAddRow{display:grid;grid-template-columns:minmax(88px,1fr) 42px 42px auto}
+  .tile .peopleAddRow .addbtn,.tile .birthdayAddRow .addbtn{width:36px}
+  .tile[data-cols="1"]{padding:14px}
+  .tile[data-cols="1"] .tilehead{margin-bottom:9px}
+  .tile[data-cols="1"] .hgrid{grid-template-columns:repeat(auto-fit,minmax(min(66px,100%),1fr))}
+  .tile[data-rows="1"]{padding-top:12px;padding-bottom:12px}
+  .tile[data-rows="1"] .tilehead{margin-bottom:5px}
+  .tile[data-rows="1"] .content{padding-bottom:8px}
+  .tile[data-tileid="timer"] .content{align-items:stretch;justify-content:flex-start;text-align:left}
+  .tile[data-tileid="pushups"][data-rows="1"] .content{padding-bottom:0}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{gap:3px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushCount{font-size:22px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{gap:5px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puBtn{min-height:26px!important;padding:2px 3px;font-size:11px}
+  /* Reminders are practical task rows; due tasks become checkboxes. */
+  .taskAgenda{display:flex;flex-direction:column;gap:7px}
+  .taskIntro{margin:0 0 3px;color:var(--dim);font-size:12px;line-height:1.4}
+  .taskAgenda .agRow{margin:0;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);border-radius:13px;background:rgba(255,255,255,.34)}
+  .taskAgenda .agRow:last-child{border-bottom:1px solid color-mix(in srgb,var(--accent) 20%,transparent)}
+  .taskRow.done{opacity:.66}
+  .taskRow.done .agName{text-decoration:line-through}
+  .taskCheck{width:21px;height:21px;flex:none;display:grid;place-items:center;padding:0;border:1.6px solid var(--accent);border-radius:6px;background:transparent;color:#fff;font:900 12px/1 'Nunito',sans-serif;cursor:pointer}
+  .taskCheck.on{background:var(--accent)}
+  .taskAgenda .agSub{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:3px}
+  .agKind{display:inline-flex;padding:3px 6px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accentDark);font-size:8px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+  .taskAddLink{margin-top:3px}
+  .taskAddForm{margin-top:3px;padding:10px;border:1px dashed color-mix(in srgb,var(--accent) 42%,transparent);border-radius:14px;background:rgba(255,255,255,.26)}
+  /* Events are deliberately celebratory: one large countdown, then a light future rail. */
+  .positiveEvents{display:flex;flex-direction:column;gap:10px}
+  .eventHero{position:relative;overflow:hidden;padding:13px 14px 14px;border:2px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
+  .eventHero::after{content:"";position:absolute;right:-28px;bottom:-44px;width:126px;height:126px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,transparent);pointer-events:none}
+  .eventHeroTop{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .eventType{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accentDark);font-size:9px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+  .eventCountdown{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;margin-top:11px}
+  .eventCountdown strong{font-size:clamp(34px,16cqi,58px);line-height:.88;letter-spacing:-.065em;color:var(--accentDark)}
+  .eventCountdown span{max-width:72px;color:var(--dim);font-size:10.5px;font-weight:850;line-height:1.1;text-transform:uppercase}
+  .eventTitle{position:relative;z-index:1;margin-top:10px;font-size:17px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
+  .eventDate{position:relative;z-index:1;margin-top:3px;color:var(--dim);font-size:11.5px;font-weight:750}
+  .eventList{display:flex;flex-direction:column;gap:6px}
+  .eventMini{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:8px 9px;border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);border-radius:13px;background:rgba(255,255,255,.30)}
+  .eventMiniIcon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--accent) 10%,#fff);font-size:16px}
+  .eventMiniBody{display:flex;flex-direction:column;min-width:0}
+  .eventMiniBody b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+  .eventMiniBody small{margin-top:1px;color:var(--dim);font-size:9.5px}
+  .eventMiniCount{padding:5px 7px;border-radius:999px;background:var(--accent);color:#fff;font-size:9.5px;font-weight:900;white-space:nowrap}
+  .eventEmpty{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:2px dashed color-mix(in srgb,var(--accent) 32%,transparent);border-radius:22px;background:rgba(255,255,255,.28)}
+  .eventEmptyGlyph{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:var(--accent);color:#fff;font-size:18px}
+  .eventEmpty b{margin-top:4px;font-size:15px;line-height:1.25}
+  .eventEmpty>span:last-child{color:var(--dim);font-size:11.5px;line-height:1.4}
+  .eventAddToggle{width:100%;min-height:38px;padding:8px 12px;border:1.5px dashed color-mix(in srgb,var(--accent) 52%,transparent);border-radius:15px;background:rgba(255,255,255,.28);color:var(--accentDark);font:850 11.5px/1.2 'Nunito',sans-serif;white-space:normal;cursor:pointer}
+  .eventAddForm{display:flex;flex-direction:column;gap:7px;padding:10px;border:1.5px dashed color-mix(in srgb,var(--accent) 44%,transparent);border-radius:15px;background:rgba(255,255,255,.28)}
+  .eventFormRow{display:grid;grid-template-columns:minmax(92px,.8fr) minmax(125px,1.25fr) auto;gap:7px}
+  .eventTypeSelect{width:100%;padding-left:8px;padding-right:8px}
+  @container tile (max-width:360px){
+    .tile .weatherSplit{grid-template-columns:1fr;height:auto}
+    .tile .qopts{grid-template-columns:1fr}
+    .tile .peopleAddRow{grid-template-columns:1fr auto}
+    .tile .peopleAddRow .addinput:first-child{grid-column:1/-1}
+    .tile .birthdayAddRow{grid-template-columns:minmax(0,1fr) minmax(42px,64px) minmax(42px,64px) auto}
+    .tile .goalDay .trow>span:nth-child(2){flex-basis:90px}
+    .tile .noteActions,.tile .timerActions,.tile .musicActions{align-items:stretch}
+    .tile .noteActions>*,.tile .timerActions>*,.tile .musicActions>*{flex:1 1 auto}
+    .eventFormRow{grid-template-columns:1fr auto}
+    .eventTypeSelect{grid-column:1/-1}
+    .eventMini{grid-template-columns:auto minmax(0,1fr) auto}
+    .eventMiniCount{grid-column:2}
+    .eventMini .del{grid-column:3;grid-row:1/3}
+  }
+  @container tile (max-width:240px){
+    .tile{padding:12px}
+    .tile .tilehead{margin-bottom:8px}
+    .tile .lbl{font-size:10px}
+    .tile .ldot{width:18px;height:18px}
+    .tile .hgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .tile .qopts,.tile .tabbar,.tile .timerSteppers{grid-template-columns:1fr}
+    .tile .pushBtns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+    .tile .pushBtns .puBtn,.tile .pushBtns .puReset{width:100%}
+    .tile .peopleAddRow,.tile .birthdayAddRow{grid-template-columns:1fr 1fr}
+    .tile .peopleAddRow .addinput,.tile .birthdayAddRow .addinput:first-child{grid-column:1/-1}
+    .tile .peopleAddRow .addbtn,.tile .birthdayAddRow .addbtn{grid-column:1/-1;width:100%}
+    .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,
+    .tile .tileRetryBtn,.tile .link,.tile .tab,.tile .savebtn{width:100%}
+  }
+  @media(max-width:639px){
+    .grid{grid-auto-rows:auto}
+    .tile{height:auto;min-height:0}
+    .tile .tbody{flex:none;overflow:visible;max-height:none;-webkit-mask-image:none!important;mask-image:none!important}
+    .tile .content{flex:none;height:auto;min-height:0;padding-bottom:0}
+    .tile .notearea{min-height:120px}
+  }
 </style>
 </head>
 <body>
@@ -640,6 +784,7 @@ const COL = {
   birthdays:{p:"#FFE3F0", v:"#FF4FA3", d:"#AC2A6C"},
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
+  events:   {p:"#EAE5FF", v:"#7357F6", d:"#4931AE"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
   academic: {p:"#E0F4E5", v:"#2CC05E", d:"#1C7440"},
   brainflex:{p:"#FFF0D8", v:"#FF9A2E", d:"#B0560F"},
@@ -1052,18 +1197,21 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, note:{c:3,r:2}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:3,r:2}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
-const V2_ORDER=["goals","habits","agenda","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["goals","habits","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
+const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
+const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 
 function Tile({id,label,done,size,cols,edit,lifted,topright,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
-  const span={ gridColumn:`span ${Math.min(size.c,cols)}`, gridRow:`span ${size.r}` };
+  const tileCols=Math.min(size.c,cols);
+  const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
   const tbodyRef=useRef(null);
   useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
-    <section data-tileid={id} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
+    <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && <div className="topright">{topright}</div>}
       <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
@@ -1079,12 +1227,12 @@ function App(){
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","learn"].includes(route)?route:"dashboard"; });
   const [showSettings,setShowSettings]=useState(false);
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; return [...s,...ALL.filter(x=>!s.includes(x))]; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; const merged=[...s,...ALL.filter(x=>!s.includes(x))]; if(EVENTS_TILE_INTRODUCED) return merged; const placed=placeEventsAfterReminders(merged); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",3); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); return Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")){ next=[...next,"events"]; save("activeTiles",next); } if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>load("activeTileHistory",{}));
   const [lifted,setLifted]=useState(null);
 
@@ -1185,7 +1333,7 @@ function App(){
   });
   const persistLearn=v=>{ const next=normalizeLearnDB(typeof v==="function"?v(learnDB):v); setLearnDB(next); save("learnDB",next); };
 
-  /* agenda: recurring reminders + one-off events */
+  /* reminders: recurring chores + one-off tasks */
   const [agendaRecurring,setAgendaRecurring]=useState(()=>{
     let v=load("agendaRecurring",null);
     if(!v){ const sept=new Date(); const anchor=new Date(sept.getFullYear()-(sept.getMonth()>=8?0:1),8,1);
@@ -1197,6 +1345,12 @@ function App(){
   const persistRecurring=v=>{ setAgendaRecurring(v); save("agendaRecurring",v); };
   const [agendaEvents,setAgendaEvents]=useState(()=>load("agendaEvents",[]));
   const persistEvents=v=>{ setAgendaEvents(v); save("agendaEvents",v); };
+  const [agendaChecks,setAgendaChecks]=useState(()=>load("agendaChecks",{}));
+  const persistAgendaChecks=v=>{ setAgendaChecks(v); save("agendaChecks",v); };
+
+  /* positive events: future experiences to anticipate, never tasks */
+  const [positiveEvents,setPositiveEvents]=useState(()=>load("positiveEvents",[]));
+  const persistPositiveEvents=v=>{ setPositiveEvents(v); save("positiveEvents",v); };
 
   /* philosophy chat (today's conversation only — the daily question itself lives in `daily.philo`) */
   const [philoChat,setPhiloChat]=useState(()=>load("philoChat:"+todayKey,{initial:"",messages:[]}));
@@ -1368,12 +1522,18 @@ function App(){
   const gradeRecall=(item,ok)=>{ persistRecall(recallList.map(x=>x.id===item.id?{...reschedule(x,ok), seen:(x.seen||1)+1}:x)); };
   const restoreRecall=item=>{ persistRecall(recallList.map(x=>x.id===item.id?item:x)); };
 
-  /* ---- agenda: recurring reminders + one-off dated events ---- */
+  /* ---- reminders: recurring chores + one-off dated tasks ---- */
   const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>r.id===id?{...r,lastDone:todayKey}:r)); };
   const addRecurring=(label,days)=>{ persistRecurring([...agendaRecurring,{id:uid(),label,everyDays:days,lastDone:todayKey}]); };
   const removeRecurring=id=>{ persistRecurring(agendaRecurring.filter(r=>r.id!==id)); };
   const addEvent=(label,date)=>{ persistEvents([...agendaEvents,{id:uid(),label,date}]); };
   const removeEvent=id=>{ persistEvents(agendaEvents.filter(e=>e.id!==id)); };
+  const toggleEventDone=id=>{ persistEvents(agendaEvents.map(e=>e.id===id?{...e,doneDate:e.doneDate===todayKey?null:todayKey}:e)); };
+  const toggleAgendaCheck=id=>{ const day={...(agendaChecks[todayKey]||{}),[id]:!(agendaChecks[todayKey]&&agendaChecks[todayKey][id])}; persistAgendaChecks({...agendaChecks,[todayKey]:day}); };
+
+  /* ---- positive events: sport, concerts, holidays and plans worth anticipating ---- */
+  const addPositiveEvent=(label,date,type)=>{ persistPositiveEvents([...positiveEvents,{id:uid(),label,date,type:type||"other"}]); };
+  const removePositiveEvent=id=>{ persistPositiveEvents(positiveEvents.filter(e=>e.id!==id)); };
 
   /* ---- second brain: file one learned thing, never inventing new content ---- */
   const addBankEntry=async(raw)=>{
@@ -1600,8 +1760,8 @@ function App(){
   const widgets={
     goals: T("goals","Goals",goalsLit,null,<>
       {[0,1,2,3].map(i=>{ const k=addDays(todayKey,i); const list=goalsFor(k); const isToday=i===0; return (
-        <div key={k} style={{marginBottom:i<3?12:0}} onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();try{const d=JSON.parse(e.dataTransfer.getData("text/plain"));moveGoal(d.day,k,d.id);}catch(_){}}}>
-          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:5}}>
+        <div key={k} className="goalDay" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();try{const d=JSON.parse(e.dataTransfer.getData("text/plain"));moveGoal(d.day,k,d.id);}catch(_){}}}>
+          <div className="goalDayHead">
             <span className="lbl" style={isToday?{color:"var(--ink)",fontSize:11}:null}>{planDl(k)}</span>
             {list.length>0 && <span className="muted" style={{fontSize:11}}>{list.filter(g=>g.done).length}/{list.length}</span>}
           </div>
@@ -1630,7 +1790,7 @@ function App(){
         <div style={{fontSize:13,marginTop:1,opacity:0.9}}>{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
         {view.music.genre && <div style={{marginTop:5}}><span className="lbl">{view.music.genre}</span></div>}
         <p className="muted" style={{fontSize:12.5,margin:"7px 0 9px",lineHeight:1.4}}>{view.music.why}</p>
-        <div style={{display:"flex",gap:7,flexWrap:"wrap",alignItems:"center"}}>
+        <div className="musicActions">
           <a className="pill" target="_blank" rel="noreferrer" href={view.music.url || `https://music.apple.com/search?term=${encodeURIComponent(view.music.title+" "+view.music.artist)}`}>Apple Music ↗</a>
           <button className={"mark"+(rToday.music?" on":"")} onClick={()=>toggleRitual("music")}><span className={"tick sm"+(rToday.music?" on":"")}>{rToday.music?"✓":""}</span>{rToday.music?"Heard":"Listened"}</button>
         </div>
@@ -1701,8 +1861,11 @@ function App(){
       <TimerCard duration={timerDuration} end={timerEnd} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onReset={resetTimer} />),
     agenda: T("agenda","Reminders",false,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
+        checks={agendaChecks[todayKey]||{}}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
-        onAddEvent={addEvent} onRemoveEvent={removeEvent} />),
+        onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} onToggleCheck={toggleAgendaCheck} />),
+    events: T("events","Events",false,null,
+      <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     brain: T("brain","Brain",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
       <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
@@ -1879,7 +2042,7 @@ function LearnHub({db,onChange,onExit}){
 
 /* inputs */
 function GoalInput({onAdd,placeholder,compact}){ const [v,setV]=useState(""); const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); } };
-  return <div className="addrow" style={compact?{opacity:.85}:null}><input className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onClick={s}>+</button></div>; }
+  return <div className="addrow goalInputRow" style={compact?{opacity:.85}:null}><input className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onClick={s}>+</button></div>; }
 function HabitAdd({onAdd}){
   const [open,setOpen]=useState(false); const [v,setV]=useState("");
   const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); setOpen(false); } };
@@ -1893,7 +2056,7 @@ function HabitAdd({onAdd}){
 }
 function BirthdayInput({onAdd}){ const [name,setName]=useState(""); const [day,setDay]=useState(""); const [month,setMonth]=useState("");
   const s=()=>{ const d=Number(day),m=Number(month); if(name.trim()&&d>=1&&d<=31&&m>=1&&m<=12){ onAdd({name:name.trim(),day:d,month:m}); setName(""); setDay(""); setMonth(""); } };
-  return (<div className="addrow"><input className="addinput" style={{flex:2}} placeholder="Name" value={name} onChange={e=>setName(e.target.value)} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="DD" value={day} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="MM" value={month} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" onClick={s}>+</button></div>); }
+  return (<div className="addrow birthdayAddRow"><input className="addinput" style={{flex:2}} placeholder="Name" value={name} onChange={e=>setName(e.target.value)} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="DD" value={day} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="MM" value={month} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" onClick={s}>+</button></div>); }
 
 function NoteCard({saved,onSave,onView}){
   const [draft,setDraft]=useState(saved);
@@ -1903,7 +2066,7 @@ function NoteCard({saved,onSave,onView}){
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <textarea className="notearea" placeholder="Something to remember…" value={draft} onChange={e=>setDraft(e.target.value)} />
-      <div style={{display:"flex",gap:8,marginTop:8,alignItems:"center"}}>
+      <div className="noteActions" style={{marginTop:8}}>
         <button className={"pill"+(dirty?" primary":"")} disabled={!dirty} onClick={()=>onSave(draft)}>{dirty?"Saving…":"Saved ✓"}</button>
         <button className="link" onClick={onView}>View all notes →</button>
       </div>
@@ -2028,7 +2191,7 @@ function TimerCard({duration,end,fired,now,onSetDuration,onStart,onReset}){
           <button className="puBtn" onClick={()=>adjust(60)}>+1h</button>
         </div>
       )}
-      <div style={{display:"flex",gap:9,marginTop:11}}>
+      <div className="timerActions" style={{marginTop:11}}>
         <button className="pill primary" onClick={running?onReset:onStart}>{running?"Stop":"Start"}</button>
         {(running||fired) && <button className="link" onClick={onReset}>Reset</button>}
       </div>
@@ -2036,36 +2199,40 @@ function TimerCard({duration,end,fired,now,onSetDuration,onStart,onReset}){
   );
 }
 
-function AgendaCard({recurring,events,birthdays,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent}){
+function AgendaCard({recurring,events,birthdays,checks,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,onToggleCheck}){
   const [showAdd,setShowAdd]=useState(false);
   const rows=[];
   recurring.forEach(r=>{
     const due=addDays(r.lastDone,r.everyDays); const d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, label:r.label, days:d, sub:d<0?`overdue by ${-d}d`:`every ${r.everyDays}d`, onDone:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, sub:d<0?`Overdue by ${-d}d`:`Every ${r.everyDays} days`, canCheck:d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
-    const d=daysBetween(todayKey,e.date); if(d<-1) return;
-    rows.push({ id:e.id, label:e.label, days:d, sub:e.date, onRemove:()=>onRemoveEvent(e.id) });
+    if(e.doneDate&&e.doneDate<todayKey) return;
+    const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":e.date, canCheck:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   birthdays.forEach(b=>{
-    const nb=nextBirthday([b]); if(nb && nb.days<=14) rows.push({ id:"gift-"+b.id, label:"🎁 Gift for "+b.name, days:nb.days, sub:nb.days===0?"today":`birthday in ${nb.days}d` });
+    const nb=nextBirthday([b]), id="gift-"+b.id;
+    if(nb && nb.days<=14) rows.push({ id, kind:"One-off", label:"🎁 Gift for "+b.name, days:nb.days, done:!!checks[id], sub:checks[id]?"Completed today":nb.days===0?"Birthday today":`Birthday in ${nb.days}d`, canCheck:nb.days===0, onCheck:()=>onToggleCheck(id) });
   });
-  rows.sort((a,b)=>a.days-b.days);
+  rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days);
   const shown=rows.slice(0,7);
   return (
-    <div>
-      {shown.length===0 && <Note>Nothing on the radar. Add a reminder or an upcoming date below.</Note>}
+    <div className="taskAgenda">
+      <p className="taskIntro">Recurring chores and one-off things to do.</p>
+      {shown.length===0 && <Note>No tasks on the radar.</Note>}
       {shown.map(r=>(
-        <div key={r.id} className="agRow">
-          <span className={"agDot"+(r.days<=0?" due":"")}/>
-          <div className="agBody"><div className="agName">{r.label}</div><div className="agSub">{r.sub}</div></div>
-          <span className={"agWhen"+(r.days<0?" due":"")}>{r.days<0?`${-r.days}d over`:r.days===0?"today":`${r.days}d`}</span>
-          {r.onDone && <button className="del" title="Mark done — resets the clock" onClick={r.onDone}>↺</button>}
-          {r.onRemove && <button className="del" onClick={r.onRemove}>×</button>}
+        <div key={r.id} className={"agRow taskRow"+(r.done?" done":"")}>
+          {r.canCheck
+            ? <button className={"taskCheck"+(r.done?" on":"")} aria-label={(r.done?"Undo ":"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>{r.done?"✓":""}</button>
+            : <span className="agDot"/>}
+          <div className="agBody"><div className="agName">{r.label}</div><div className="agSub"><span className="agKind">{r.kind}</span>{r.sub}</div></div>
+          <span className={"agWhen"+(r.days<0&&!r.done?" due":"")}>{r.done?"done":r.days<0?`${-r.days}d over`:r.days===0?"today":`${r.days}d`}</span>
+          {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
       ))}
       {!showAdd ? (
-        <button className="link" style={{marginTop:9}} onClick={()=>setShowAdd(true)}>+ Add reminder or date →</button>
+        <button className="link taskAddLink" onClick={()=>setShowAdd(true)}>+ Add task →</button>
       ) : (
         <AgendaAddForm onAddRecurring={onAddRecurring} onAddEvent={onAddEvent} onClose={()=>setShowAdd(false)} />
       )}
@@ -2073,27 +2240,81 @@ function AgendaCard({recurring,events,birthdays,onMarkDone,onAddRecurring,onRemo
   );
 }
 function AgendaAddForm({onAddRecurring,onAddEvent,onClose}){
-  const [mode,setMode]=useState("event");
+  const [mode,setMode]=useState("oneoff");
   const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [days,setDays]=useState("");
   const submit=()=>{ const t=label.trim(); if(!t) return;
-    if(mode==="event"){ if(!date) return; onAddEvent(t,date); } else { const n=Number(days); if(!n||n<1) return; onAddRecurring(t,n); }
+    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date); } else { const n=Number(days); if(!n||n<1) return; onAddRecurring(t,n); }
     onClose(); };
   return (
-    <div style={{marginTop:9}}>
+    <div className="taskAddForm">
       <div className="tabbar">
-        <button className={"tab"+(mode==="event"?" on":"")} onClick={()=>setMode("event")}>One-off date</button>
-        <button className={"tab"+(mode==="recurring"?" on":"")} onClick={()=>setMode("recurring")}>Recurring</button>
+        <button className={"tab"+(mode==="oneoff"?" on":"")} onClick={()=>setMode("oneoff")}>One-off task</button>
+        <button className={"tab"+(mode==="recurring"?" on":"")} onClick={()=>setMode("recurring")}>Recurring task</button>
       </div>
-      <div className="addrow"><input className="addinput" placeholder={mode==="event"?"e.g. Marathon, lunch with a friend…":"e.g. Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} /></div>
+      <div className="addrow"><input className="addinput" placeholder={mode==="oneoff"?"e.g. Renew passport":"e.g. Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} /></div>
       <div className="addrow" style={{marginTop:7}}>
-        {mode==="event"
-          ? <input className="addinput" type="date" value={date} onChange={e=>setDate(e.target.value)} />
+        {mode==="oneoff"
+          ? <input className="addinput" type="date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
           : <input className="addinput" type="number" min="1" placeholder="Every N days" value={days} onChange={e=>setDays(e.target.value)} />}
         <button className="addbtn" onClick={submit}>+</button>
       </div>
       <button className="link" style={{marginTop:7}} onClick={onClose}>Cancel</button>
     </div>
   );
+}
+
+const POSITIVE_EVENT_TYPES={
+  sport:{label:"Sport",icon:"🏟️"},
+  concert:{label:"Concert",icon:"🎵"},
+  holiday:{label:"Holiday",icon:"✈️"},
+  plan:{label:"Plan",icon:"✨"},
+  other:{label:"Event",icon:"🎉"}
+};
+function positiveEventDate(key){
+  const [y,m,d]=key.split("-").map(Number);
+  const options={weekday:"short",day:"numeric",month:"short"}; if(y!==new Date().getFullYear())options.year="numeric";
+  return new Date(y,m-1,d).toLocaleDateString("en-GB",options);
+}
+function PositiveEventsCard({events,onAdd,onRemove}){
+  const [showAdd,setShowAdd]=useState(false);
+  const upcoming=(events||[]).filter(event=>event&&typeof event.date==="string").map(event=>({...event,days:daysBetween(todayKey,event.date)})).filter(event=>Number.isFinite(event.days)&&event.days>=0).sort((a,b)=>a.days-b.days||String(a.label||"").localeCompare(String(b.label||"")));
+  const next=upcoming[0], later=upcoming.slice(1,6);
+  const typeFor=event=>POSITIVE_EVENT_TYPES[event.type]||POSITIVE_EVENT_TYPES.other;
+  return (
+    <div className="positiveEvents">
+      {!next && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>Give future you something to look forward to.</b><span>Sport, concerts, holidays—anything good.</span></div>}
+      {next && <div className="eventHero">
+        <div className="eventHeroTop"><span className="eventType">{typeFor(next).icon} {typeFor(next).label}</span><button className="del" aria-label={"Delete "+next.label} onClick={()=>onRemove(next.id)}>×</button></div>
+        <div className="eventCountdown"><strong>{next.days===0?"TODAY":next.days}</strong><span>{next.days===0?"It’s here":next.days===1?"day to go":"days to go"}</span></div>
+        <div className="eventTitle">{next.label}</div>
+        <div className="eventDate">{positiveEventDate(next.date)}</div>
+      </div>}
+      {later.length>0 && <div className="eventList">{later.map(event=><div className="eventMini" key={event.id}>
+        <span className="eventMiniIcon">{typeFor(event).icon}</span>
+        <span className="eventMiniBody"><b>{event.label}</b><small>{positiveEventDate(event.date)}</small></span>
+        <span className="eventMiniCount">{event.days===0?"Today":event.days+"d"}</span>
+        <button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button>
+      </div>)}</div>}
+      {!showAdd
+        ? <button className="eventAddToggle" onClick={()=>setShowAdd(true)}>+ Something exciting</button>
+        : <PositiveEventForm onAdd={(label,date,type)=>{onAdd(label,date,type);setShowAdd(false);}} onClose={()=>setShowAdd(false)} />}
+    </div>
+  );
+}
+function PositiveEventForm({onAdd,onClose}){
+  const [label,setLabel]=useState(""), [date,setDate]=useState(""), [type,setType]=useState("plan");
+  const submit=()=>{ const clean=label.trim(); if(!clean||!date)return; onAdd(clean,date,type); };
+  return <div className="eventAddForm">
+    <input className="addinput" autoFocus placeholder="What are you looking forward to?" value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} />
+    <div className="eventFormRow">
+      <select className="addinput eventTypeSelect" aria-label="Event type" value={type} onChange={e=>setType(e.target.value)}>
+        {Object.entries(POSITIVE_EVENT_TYPES).map(([key,item])=><option key={key} value={key}>{item.icon} {item.label}</option>)}
+      </select>
+      <input className="addinput" type="date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} />
+      <button className="addbtn" aria-label="Add event" onClick={submit}>+</button>
+    </div>
+    <button className="link" onClick={onClose}>Cancel</button>
+  </div>;
 }
 function CourseAddForm({onAdd}){
   const [name,setName]=useState(""); const [content,setContent]=useState("");
@@ -2114,7 +2335,7 @@ function PeopleMetCard({people,onAdd,onRemove}){
   const [place,setPlace]=useState(""); const [name,setName]=useState(""); const [desc,setDesc]=useState("");
   const submit=()=>{ if(!place.trim()||!name.trim())return; onAdd({place:place.trim(),name:name.trim(),desc:desc.trim()}); setName(""); setDesc(""); };
   const places=[...new Set(people.map(p=>p.place))];
-  return <div><div className="addrow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div>{people.filter(p=>p.place===pl).map(p=><div className="bankEntry" key={p.id}><span><b>{p.name}</b>{p.desc?` · ${p.desc}`:""}</span><button className="del" onClick={()=>onRemove(p.id)}>×</button></div>)}</div>)}</div></div>;
+  return <div><div className="addrow peopleAddRow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div>{people.filter(p=>p.place===pl).map(p=><div className="bankEntry" key={p.id}><span><b>{p.name}</b>{p.desc?` · ${p.desc}`:""}</span><button className="del" onClick={()=>onRemove(p.id)}>×</button></div>)}</div>)}</div></div>;
 }
 
 function BrainBankCard({bank,busy,onAdd,onOpenBrowser}){
