@@ -1,6 +1,6 @@
-# Learn module
+# Learn app
 
-The Culture G learning experience is live in the standalone runtime while the safe module extraction remains pending.
+The memorising game is a separate standalone application at `learn/index.html`. It links back to the Dashboard, but does not load Dashboard or Library code.
 
 Current ownership:
 
@@ -13,7 +13,8 @@ Current ownership:
 ## Runtime contract
 
 - Storage key: `fefe_learnDB`
-- Schema version: `2` (v1 data is normalized in place)
+- Schema version: `3` (older data is normalized in place)
+- Dashboard read model: `fefe_learnSummary` (`date`, `seconds`, `minutes`, `streak`, `due`, `updatedAt`)
 - Inputs: self-contained curated Core Atlas (personal Academic and Second Brain data are not used for gameplay)
 - Outputs: 6/10/12-card game modes, review history, daily seconds, calibrated confidence, combos, boss victories, XP, mastery, and learning streak
 - Scheduler: stability/difficulty updates with a 90% target-retention interval
@@ -36,6 +37,4 @@ Current ownership:
 
 The launch atlas is an offline, source-labelled collection of stable mechanisms and foundational ideas—not generated trivia. Optional AI boss remixes are constrained to its existing cards and fall back to local play if unavailable.
 
-The implementation currently lives in `index.html` to preserve the established file origin and browser data. Extract it here only as part of a tested runtime migration.
-
-It must consume shared mastery and recall contracts rather than reaching into dashboard state.
+The game owns and updates its database directly. Dashboard reads only the summary contract and never reaches into the game engine. Both entries keep the established `fefe_` namespace, so existing progress survives the split when served from the same origin.

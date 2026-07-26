@@ -2,18 +2,20 @@
 
 ## Product
 
-One personal application with two intentionally separate experiences:
+Two intentionally separate personal applications:
 
 1. **Dashboard**: daily command centre for goals, habits, reminders, notes, weather, timer, personal knowledge, review, and configurable tiles.
 2. **Learn**: adaptive general-knowledge game combining retrieval, personalisation, mastery, and a shared knowledge graph.
 
-They share intelligence and storage, not their full interfaces.
+They share a small storage contract and navigation, not a runtime or interface.
 
 ## Current implementation
 
-- Live standalone application: `index.html`.
+- Dashboard + Library entry: `index.html`.
+- Learn game entry: `learn/index.html`.
 - React 18 and Babel are loaded from CDNs; no build step is currently required.
 - Data persists in browser `localStorage` with `fefe_` keys.
+- Learn owns `fefe_learnDB` and publishes the lightweight `fefe_learnSummary` read model used by the Dashboard quest launcher.
 - Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
 - JSON backup and restore are available in Settings.
 - Existing saved data must survive code and architecture changes.
@@ -45,9 +47,8 @@ They share intelligence and storage, not their full interfaces.
 
 ## Learn direction
 
-- A dedicated Learn page now exists; the dashboard contains one compact Today's Knowledge Quest launcher.
-- Academic uploads and Second Brain entries automatically populate `fefe_learnDB` through source-keyed concepts and challenges.
-- Existing source material is imported safely on first launch; deleting a source removes its generated knowledge objects.
+- Learn is a separate standalone app at `learn/index.html`; the dashboard contains one compact Today's Knowledge Quest launcher and does not load the Learn engine.
+- Academic uploads and Second Brain entries stay in Dashboard + Library and do not populate Learn gameplay.
 - Review scheduling uses a local FSRS-style stability/difficulty model targeting 90% retention.
 - Learn v2 has three finite modes: Sugar Rush (6), Knowledge Quest (12), and Mega Boss (10 with lives).
 - Confidence calibration, combos, boss damage, XP, levels, loot, runs, and best-combo stats add game depth without changing the memory schedule.
@@ -58,7 +59,7 @@ They share intelligence and storage, not their full interfaces.
 - The launch atlas covers stable foundations across science, history, geography, economics, ideas & arts, technology, ecology and health; cards carry an organisation/source trail.
 - Any optional AI boss remix is constrained to this curated atlas, never personal imports.
 - Learn tracks its own five-minute daily streak, XP, sessions, and mastery. This does not alter perfect-day scoring.
-- App pages support direct hash routes: `#/dashboard`, `#/library`, and `#/learn`.
+- Dashboard pages support direct hash routes `#/dashboard` and `#/library`; Learn uses the separate `learn/` path.
 - Learn sessions should mix new concepts, due retrieval, connections, and games.
 - Prefer finite knowledge runs with conscious continuation over harmful infinite-scroll mechanics.
 - Recall and Second Brain should become shared infrastructure.
