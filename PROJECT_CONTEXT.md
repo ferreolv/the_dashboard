@@ -32,6 +32,7 @@ They share intelligence and storage, not their full interfaces.
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
 - A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
+- Arrange and resize affordances stay on the right edge of every tile. Habit controls remain true circles at every responsive size.
 - Reminders are practical recurring or one-off tasks and expose a checkbox when due. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.

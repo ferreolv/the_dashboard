@@ -754,6 +754,21 @@
     .tile .content{flex:none;height:auto;min-height:0;padding-bottom:0}
     .tile .notearea{min-height:120px}
   }
+  /* Arrange controls belong together on the tile's right edge. */
+  .tile .draghandle{left:auto;right:8px}
+  .tile .sizebadge{left:auto;right:46px;bottom:10px;text-align:right}
+  .tile .resizeH{left:auto;right:7px}
+  /* Habits remain true circles at every tile and viewport size. */
+  .tile[data-tileid="habits"] .hgrid{align-items:start}
+  .tile[data-tileid="habits"] .hsq{
+    width:100%;height:auto;min-height:0;aspect-ratio:1/1!important;border-radius:50%!important
+  }
+  /* Study setup is normal tile content, so its title stays in the standard header position. */
+  .tile[data-tileid="academic"] .tilehead{justify-content:flex-start;text-align:left}
+  .tile[data-tileid="academic"] .content{align-items:stretch;justify-content:flex-start;text-align:left}
+  .academicSetup{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+  .academicSetupGlyph{width:42px;height:42px;display:grid;place-items:center;border:2px solid color-mix(in srgb,var(--accent) 40%,#fff);border-radius:50%;background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.46));font-size:20px}
+  .academicSetup p{max-width:44ch;margin:0;color:var(--dim);font-size:12.8px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -2359,9 +2374,10 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
   const [n,setN]=useState(0);
   useEffect(()=>{ setN(0); },[academic && academic.concept]);
   if(!hasCourses) return (
-    <div>
-      <Note>Paste your class or course notes and this tile studies from them daily — built for broad chapter understanding, not isolated facts.</Note>
-      <button className="pill primary" style={{marginTop:8}} onClick={onOpenEditor}>📄 Add study files</button>
+    <div className="academicSetup">
+      <span className="academicSetupGlyph" aria-hidden="true">📚</span>
+      <p>Paste your class or course notes and this tile studies from them daily — built for broad chapter understanding, not isolated facts.</p>
+      <button className="pill primary" onClick={onOpenEditor}>📄 Add study files</button>
     </div>
   );
   if(!academic) return <Note>{busy?"Preparing today's study capsule…":"Not generated yet — tap ✦ Generate today."}</Note>;
