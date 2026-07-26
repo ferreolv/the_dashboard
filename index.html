@@ -755,9 +755,9 @@
     .tile .notearea{min-height:120px}
   }
   /* Arrange controls belong together on the tile's right edge. */
-  .tile .draghandle{left:auto;right:8px}
-  .tile .sizebadge{left:auto;right:46px;bottom:10px;text-align:right}
-  .tile .resizeH{left:auto;right:7px}
+  .tile .draghandle{position:absolute!important;z-index:8;top:8px;left:auto!important;right:8px!important}
+  .tile .sizebadge{position:absolute!important;z-index:8;left:auto!important;right:46px!important;bottom:10px;text-align:right}
+  .tile .resizeH{position:absolute!important;z-index:9;left:auto!important;right:7px!important;bottom:7px!important}
   /* Habits remain true circles at every tile and viewport size. */
   .tile[data-tileid="habits"] .hgrid{align-items:start}
   .tile[data-tileid="habits"] .hsq{
