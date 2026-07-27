@@ -655,7 +655,7 @@
   .agKind{display:inline-flex;padding:3px 6px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accentDark);font-size:8px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
   .taskAddLink{margin-top:3px}
   .taskAddForm{margin-top:3px;padding:10px;border:1px dashed color-mix(in srgb,var(--accent) 42%,transparent);border-radius:14px;background:rgba(255,255,255,.26)}
-  /* Events are deliberately celebratory: one large countdown, then a light future rail. */
+  /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
   .eventHero{position:relative;overflow:hidden;padding:13px 14px 14px;border:2px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
   .eventHero::after{content:"";position:absolute;right:-28px;bottom:-44px;width:126px;height:126px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,transparent);pointer-events:none}
@@ -666,13 +666,7 @@
   .eventCountdown span{max-width:72px;color:var(--dim);font-size:10.5px;font-weight:850;line-height:1.1;text-transform:uppercase}
   .eventTitle{position:relative;z-index:1;margin-top:10px;font-size:17px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
   .eventDate{position:relative;z-index:1;margin-top:3px;color:var(--dim);font-size:11.5px;font-weight:750}
-  .eventList{display:flex;flex-direction:column;gap:6px}
-  .eventMini{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:8px 9px;border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);border-radius:13px;background:rgba(255,255,255,.30)}
-  .eventMiniIcon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--accent) 10%,#fff);font-size:16px}
-  .eventMiniBody{display:flex;flex-direction:column;min-width:0}
-  .eventMiniBody b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
-  .eventMiniBody small{margin-top:1px;color:var(--dim);font-size:9.5px}
-  .eventMiniCount{padding:5px 7px;border-radius:999px;background:var(--accent);color:#fff;font-size:9.5px;font-weight:900;white-space:nowrap}
+  .eventList{display:flex;flex-direction:column;gap:10px}
   .eventEmpty{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:2px dashed color-mix(in srgb,var(--accent) 32%,transparent);border-radius:22px;background:rgba(255,255,255,.28)}
   .eventEmptyGlyph{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:var(--accent);color:#fff;font-size:18px}
   .eventEmpty b{margin-top:4px;font-size:15px;line-height:1.25}
@@ -692,9 +686,6 @@
     .tile .noteActions>*,.tile .timerActions>*,.tile .musicActions>*{flex:1 1 auto}
     .eventFormRow{grid-template-columns:1fr auto}
     .eventTypeSelect{grid-column:1/-1}
-    .eventMini{grid-template-columns:auto minmax(0,1fr) auto}
-    .eventMiniCount{grid-column:2}
-    .eventMini .del{grid-column:3;grid-row:1/3}
   }
   @container tile (max-width:240px){
     .tile{padding:12px}
@@ -816,44 +807,30 @@
     padding:2px 4px;font-size:10.5px;line-height:1;white-space:nowrap!important
   }
   .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puReset{width:100%!important}
-  /* Birthday summary becomes one compact row instead of stacking into the title. */
-  .birthdaysSummary{display:flex;flex-direction:column;gap:8px;width:100%}
-  .birthdaySummaryCopy{min-width:0}
-  .birthdayTodaySummary{display:flex;flex-direction:column;align-items:flex-start}
-  .birthdayStatus{font-size:15px;font-weight:800;line-height:1.15}
-  .birthdayNext{margin-top:4px;font-size:12.5px;line-height:1.3}
-  .birthdayOpen{align-self:flex-start;margin-top:0!important}
-  .tile[data-tileid="birthdays"][data-rows="1"] .content{justify-content:center;overflow:hidden;text-align:left}
-  .birthdayOpenCompact{display:none}
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdaysSummary{
-    display:flex;flex-direction:row;align-items:center;gap:7px;width:100%
+  /* Birthdays stay glanceable; the full list lives in a separate manager overlay. */
+  .birthdaysSummary{
+    display:flex;width:100%;height:100%;min-height:72px;align-items:center;justify-content:center;
+    border:0;background:transparent;color:var(--ink);font:inherit;text-align:center;cursor:pointer
   }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdaySummaryCopy{
-    flex:1 1 auto;width:0;min-width:0;overflow:hidden
-  }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{
-    display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
-    font-size:12px;white-space:nowrap
-  }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayNext{
-    margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px
-  }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpen{
-    flex:0 0 auto;width:auto!important;min-width:48px;min-height:28px!important;
-    padding:5px 9px!important;font-size:9.5px;white-space:nowrap!important
-  }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpenFull{display:none}
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpenCompact{display:inline}
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodaySummary{gap:3px}
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayEmoji,
+  .birthdayTodaySummary{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
+  .birthdayTodayEmoji{font-size:42px;line-height:1}
+  .birthdayTodayName{max-width:100%;margin-top:7px;overflow:hidden;text-overflow:ellipsis;font-size:18px;font-weight:900;line-height:1.1}
+  .birthdayTodayMessage{margin-top:4px;font-size:11.5px}
+  .birthdayStatus{font-size:15px;font-weight:900;line-height:1.15}
+  .birthdayNext{margin-top:5px;font-size:11.5px;line-height:1.25}
+  .birthdayManager{width:min(620px,100%)}
+  .birthdayManagerList{margin-top:10px}
+  .tile[data-tileid="birthdays"][data-rows="1"]{padding:10px 13px}
+  .tile[data-tileid="birthdays"][data-rows="1"] .tbody{display:block}
+  .tile[data-tileid="birthdays"][data-rows="1"] .tilehead{display:none}
+  .tile[data-tileid="birthdays"][data-rows="1"] .content{height:100%;padding:0;overflow:hidden;text-align:center}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdaysSummary{min-height:100%}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodaySummary{flex-direction:row;gap:10px;width:100%}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayEmoji{flex:none;font-size:38px}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayName{margin-top:0;font-size:14px;white-space:nowrap}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayMessage{display:none}
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayName{
-    max-width:100%;margin-top:0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    font-size:12.5px!important
-  }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayCelebrate{
-    min-height:27px!important;margin-top:0!important;padding:4px 8px!important;font-size:9.5px
-  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{font-size:13px}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayNext{font-size:9.5px;white-space:nowrap}
   /* Library is a catalogue: clean widget previews grouped by availability, with actions in-foot. */
   .libraryShelves{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
   .libraryShelf{min-width:0}
@@ -867,6 +844,15 @@
   .libraryTileFooter::before{content:"";display:block;width:100%;height:1px;margin-bottom:9px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
   .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
   .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
+  .tile:has(.libraryRemoveToday){overflow:visible}
+  .tile:has(.libraryRemoveToday)>.topright{top:-13px;right:-13px}
+  .libraryRemoveToday{
+    display:grid!important;place-items:center;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
+    padding:0!important;border:2px solid var(--accent)!important;border-radius:50%!important;
+    background:rgba(255,255,255,.92)!important;color:var(--accent)!important;
+    box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12));font-size:18px!important;font-weight:900!important;line-height:1!important
+  }
+  .libraryRemoveToday:hover{transform:scale(1.08)}
   .birthdayEmpty{display:flex;align-items:center;gap:9px;margin:8px 0;padding:10px 11px;border:1px dashed color-mix(in srgb,var(--accent) 36%,transparent);border-radius:14px;background:rgba(255,255,255,.24);color:var(--dim);font-size:11.5px;line-height:1.35}
   .birthdayEmpty span{font-size:20px;line-height:1}
   .plainEmpty{width:100%;padding:12px 13px;border:1px dashed color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;background:rgba(255,255,255,.22);color:var(--dim);font-size:11.5px;line-height:1.4;text-align:left}
@@ -1459,9 +1445,11 @@ function App(){
   /* duration timer: default 7h30 from whenever Start is pressed */
   const [timerDuration,setTimerDuration]=useState(()=>load("timerDuration",450));
   const [timerEnd,setTimerEnd]=useState(()=>load("timerEnd",0));
-  const persistTimerDuration=v=>{ setTimerDuration(v); save("timerDuration",v); };
-  const startTimer=()=>{ const end=Date.now()+timerDuration*60000; setTimerEnd(end); save("timerEnd",end); setTimerFired(false); };
-  const resetTimer=()=>{ setTimerEnd(0); save("timerEnd",0); setTimerFired(false); };
+  const [timerRemaining,setTimerRemaining]=useState(()=>load("timerRemaining",0));
+  const persistTimerDuration=v=>{ setTimerDuration(v); save("timerDuration",v); setTimerRemaining(0); save("timerRemaining",0); };
+  const startTimer=()=>{ const end=Date.now()+(timerRemaining>0?timerRemaining:timerDuration*60000); setTimerEnd(end); save("timerEnd",end); setTimerRemaining(0); save("timerRemaining",0); setTimerFired(false); };
+  const pauseTimer=()=>{ if(timerEnd<=Date.now())return; const remaining=timerEnd-Date.now(); setTimerRemaining(remaining); save("timerRemaining",remaining); setTimerEnd(0); save("timerEnd",0); };
+  const resetTimer=()=>{ setTimerEnd(0); save("timerEnd",0); setTimerRemaining(0); save("timerRemaining",0); setTimerFired(false); };
   const [timerFired,setTimerFired]=useState(false);
 
   /* which of today's generated tiles are missing/failed, so they can be retried individually */
@@ -1475,6 +1463,7 @@ function App(){
   useEffect(()=>{
     if(timerEnd>0 && now.getTime()>=timerEnd && !timerFired){
       setTimerFired(true);
+      setTimerRemaining(0); save("timerRemaining",0);
       try{
         const Ctx=window.AudioContext||window.webkitAudioContext;
         const ctx=new Ctx(); const o=ctx.createOscillator(); const g=ctx.createGain();
@@ -1845,8 +1834,9 @@ function App(){
   const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
-    const libraryAction=page==="library"?<div className="libraryTileFooter"><button className={"libraryTileAction"+(onDaily?" on":"")} title={onDaily?"Remove from Today":"Add to Today"} onClick={e=>{e.stopPropagation();setTileActive(id,!onDaily);}}>{onDaily?"Remove from Today":"+ Add to Today"}</button></div>:null;
-    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?null:topright} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
+    const libraryAction=page==="library"&&!onDaily?<div className="libraryTileFooter"><button className="libraryTileAction" title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+ Add to Today</button></div>:null;
+    const libraryRemove=page==="library"&&onDaily?<button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>:null;
+    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryRemove:topright} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
   };
   /* dropped into any daily-generated tile; only renders once that key is known to have failed */
   const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
@@ -1947,14 +1937,13 @@ function App(){
           <div className="flameGrid">{habits.map(h=>{ const st=habitStreak(h.id); return <div key={h.id} className="flameCard"><div className="flameName">{h.name}</div><div className="flameCount">🔥 {st}</div><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>ice cover</button></div>; })}</div>
         </div>
       </div>, ()=>toggleRitual("weekly")),
-    birthdays: T("birthdays","Birthdays",!!rToday.birthday,null,
-      <BirthdaysCard birthdays={birthdays} today={todayBdays} celebrated={!!rToday.birthday}
-        onCelebrate={()=>toggleRitual("birthday")}
+    birthdays: T("birthdays","Birthdays",false,null,
+      <BirthdaysCard birthdays={birthdays} today={todayBdays}
         onAdd={b=>persistBirthdays([...birthdays,{id:uid(),...b}])}
         onRemove={id=>persistBirthdays(birthdays.filter(x=>x.id!==id))}
-        onImport={importVcf} />, ()=>toggleRitual("birthday")),
+        onImport={importVcf} />),
     timer: T("timer","Timer",timerFired,null,
-      <TimerCard duration={timerDuration} end={timerEnd} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onReset={resetTimer} />),
+      <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
     agenda: T("agenda","Reminders",false,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         checks={agendaChecks[todayKey]||{}}
@@ -2208,56 +2197,50 @@ function nextBirthday(list){
     const days=Math.round((d-base)/86400000); if(days<bd){ bd=days; best={...b,days}; } });
   return best;
 }
-function BirthdaysCard({birthdays,today,celebrated,onCelebrate,onAdd,onRemove,onImport}){
+function BirthdaysCard({birthdays,today,onAdd,onRemove,onImport}){
   const [open,setOpen]=useState(false);
   const fileRef=useRef(null);
   const has=today.length>0; const next=nextBirthday(birthdays);
-  if(!open) return (
-    <div className="birthdaysSummary">
-      <div className="birthdaySummaryCopy">{has ? (<div className="birthdayTodaySummary">
-        <div className="birthdayTodayEmoji" style={{fontSize:30,lineHeight:1}}>🎂</div>
-        <div className="birthdayTodayName" style={{fontSize:18,fontWeight:800,marginTop:6,lineHeight:1.15}}>{today.map(b=>b.name).join(", ")}</div>
-        <div className="muted birthdayTodayMessage" style={{fontSize:12.5,marginTop:3}}>Birthday today — send a message.</div>
-        <button className={"mark birthdayCelebrate"+(celebrated?" on":"")} style={{marginTop:10}} onClick={(e)=>{e.stopPropagation(); onCelebrate();}}><span className={"tick sm"+(celebrated?" on":"")}>{celebrated?"✓":""}</span>{celebrated?"Celebrated":"Mark celebrated"}</button>
-      </div>) : (<div>
-        <div className="birthdayStatus">No birthdays today</div>
-        {next && <div className="muted birthdayNext">Next: {next.name} · {pad(next.day)}/{pad(next.month)} · {next.days===0?"today":next.days===1?"tomorrow":"in "+next.days+" days"}</div>}
-      </div>)}</div>
-      <button className="link birthdayOpen" onClick={(e)=>{e.stopPropagation(); setOpen(true);}}><span className="birthdayOpenFull">All birthdays &amp; import →</span><span className="birthdayOpenCompact">Open →</span></button>
-    </div>
-  );
   return (
-    <div onClick={(e)=>e.stopPropagation()}>
-      <div style={{display:"flex",gap:7,marginBottom:8,flexWrap:"wrap",alignItems:"center"}}>
-        <button className="pill" onClick={()=>fileRef.current&&fileRef.current.click()}>↧ Import (.vcf)</button>
-        <button className="link" onClick={()=>setOpen(false)}>Done</button>
-        <input ref={fileRef} type="file" accept=".vcf,.vcard,text/vcard,text/x-vcard,text/directory,*/*" style={{display:"none"}} onChange={e=>{ onImport(e.target.files&&e.target.files[0]); e.target.value=""; }} />
-      </div>
-      <BirthdayInput onAdd={onAdd} />
-      <div style={{marginTop:5}}>
-        {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Import your contacts or add someone by hand.</div></div>}
-        {[...birthdays].sort((a,b)=>a.month-b.month||a.day-b.day).map(b=>(<div key={b.id} className="trow">
-          <span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span>
-          <span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span>
-          <button className="del" onClick={()=>onRemove(b.id)}>×</button>
-        </div>))}
-      </div>
-    </div>
+    <>
+      <button className="birthdaysSummary" aria-label="Open birthday list and import" title="Open birthday list" onClick={e=>{e.stopPropagation();setOpen(true);}}>
+        {has ? <div className="birthdayTodaySummary">
+          <div className="birthdayTodayEmoji">🎂</div>
+          <div><div className="birthdayTodayName">{today.map(b=>b.name).join(", ")}</div><div className="muted birthdayTodayMessage">Birthday today</div></div>
+        </div> : <div>
+          <div className="birthdayStatus">No birthday today</div>
+          {next && <div className="muted birthdayNext">Next: {next.name} on {pad(next.day)}/{pad(next.month)}</div>}
+        </div>}
+      </button>
+      {open&&ReactDOM.createPortal(<div className="ovl" onClick={()=>setOpen(false)}>
+        <div className="ovlcard birthdayManager" onClick={e=>e.stopPropagation()}>
+          <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Birthdays</h3><div style={{display:"flex",gap:7,flexWrap:"wrap",justifyContent:"flex-end"}}><button className="pill" onClick={()=>fileRef.current&&fileRef.current.click()}>Import contacts</button><button className="ghostbtn" onClick={()=>setOpen(false)}>Close</button></div></div>
+          <input ref={fileRef} type="file" accept=".vcf,.vcard,text/vcard,text/x-vcard,text/directory,*/*" style={{display:"none"}} onChange={e=>{ onImport(e.target.files&&e.target.files[0]); e.target.value=""; }} />
+          <BirthdayInput onAdd={onAdd} />
+          <div className="birthdayManagerList">
+            {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Import your contacts or add someone by hand.</div></div>}
+            {[...birthdays].sort((a,b)=>a.month-b.month||a.day-b.day).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
+          </div>
+        </div>
+      </div>,document.body)}
+    </>
   );
 }
 
-function TimerCard({duration,end,fired,now,onSetDuration,onStart,onReset}){
+function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPause,onReset}){
   const diffMs=Math.max(0,(end||0)-now.getTime());
-  const h=Math.floor(diffMs/3600000), m=Math.floor((diffMs%3600000)/60000);
   const running=end>now.getTime()&&!fired;
+  const paused=remaining>0&&!running&&!fired;
+  const shownMs=running?diffMs:paused?remaining:duration*60000;
+  const h=Math.floor(shownMs/3600000), m=Math.floor((shownMs%3600000)/60000);
   const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
   return (
     <div>
       <div className={"timerRow"+(fired?" timerHit":"")}>
-        <span className="timerBig">{fired?"Done":running?`${h}h ${pad(m)}m`:`${Math.floor(duration/60)}h ${pad(duration%60)}m`}</span>
-        <span className="muted" style={{fontSize:12}}>{running?"remaining":"duration"}</span>
+        <span className="timerBig">{fired?"Done":`${h}h ${pad(m)}m`}</span>
+        <span className="muted" style={{fontSize:12}}>{running?"remaining":paused?"paused":"duration"}</span>
       </div>
-      {!running && !fired && (
+      {!running && !paused && !fired && (
         <div className="timerSteppers">
           <button className="puBtn" onClick={()=>adjust(-60)}>−1h</button>
           <button className="puBtn" onClick={()=>adjust(-15)}>−15m</button>
@@ -2266,8 +2249,8 @@ function TimerCard({duration,end,fired,now,onSetDuration,onStart,onReset}){
         </div>
       )}
       <div className="timerActions" style={{marginTop:11}}>
-        <button className="pill primary" onClick={running?onReset:onStart}>{running?"Stop":"Start"}</button>
-        {(running||fired) && <button className="link" onClick={onReset}>Reset</button>}
+        <button className="pill primary" onClick={running?onPause:onStart}>{running?"Stop":paused?"Resume":"Start"}</button>
+        {(running||paused||fired) && <button className="link" onClick={onReset}>Reset</button>}
       </div>
     </div>
   );
@@ -2350,22 +2333,16 @@ function positiveEventDate(key){
 function PositiveEventsCard({events,onAdd,onRemove}){
   const [showAdd,setShowAdd]=useState(false);
   const upcoming=(events||[]).filter(event=>event&&typeof event.date==="string").map(event=>({...event,days:daysBetween(todayKey,event.date)})).filter(event=>Number.isFinite(event.days)&&event.days>=0).sort((a,b)=>a.days-b.days||String(a.label||"").localeCompare(String(b.label||"")));
-  const next=upcoming[0], later=upcoming.slice(1,6);
+  const shown=upcoming.slice(0,8);
   const typeFor=event=>POSITIVE_EVENT_TYPES[event.type]||POSITIVE_EVENT_TYPES.other;
   return (
     <div className="positiveEvents">
-      {!next && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>Give future you something to look forward to.</b><span>Sport, concerts, holidays—anything good.</span></div>}
-      {next && <div className="eventHero">
-        <div className="eventHeroTop"><span className="eventType">{typeFor(next).icon} {typeFor(next).label}</span><button className="del" aria-label={"Delete "+next.label} onClick={()=>onRemove(next.id)}>×</button></div>
-        <div className="eventCountdown"><strong>{next.days===0?"TODAY":next.days}</strong><span>{next.days===0?"It’s here":next.days===1?"day to go":"days to go"}</span></div>
-        <div className="eventTitle">{next.label}</div>
-        <div className="eventDate">{positiveEventDate(next.date)}</div>
-      </div>}
-      {later.length>0 && <div className="eventList">{later.map(event=><div className="eventMini" key={event.id}>
-        <span className="eventMiniIcon">{typeFor(event).icon}</span>
-        <span className="eventMiniBody"><b>{event.label}</b><small>{positiveEventDate(event.date)}</small></span>
-        <span className="eventMiniCount">{event.days===0?"Today":event.days+"d"}</span>
-        <button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button>
+      {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>Give future you something to look forward to.</b><span>Sport, concerts, holidays—anything good.</span></div>}
+      {shown.length>0 && <div className="eventList">{shown.map(event=><div className="eventHero" key={event.id}>
+        <div className="eventHeroTop"><span className="eventType">{typeFor(event).icon} {typeFor(event).label}</span><button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button></div>
+        <div className="eventCountdown"><strong>{event.days===0?"TODAY":event.days}</strong><span>{event.days===0?"It’s here":event.days===1?"day to go":"days to go"}</span></div>
+        <div className="eventTitle">{event.label}</div>
+        <div className="eventDate">{positiveEventDate(event.date)}</div>
       </div>)}</div>}
       {!showAdd
         ? <button className="eventAddToggle" onClick={()=>setShowAdd(true)}>+ Something exciting</button>
