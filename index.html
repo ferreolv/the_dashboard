@@ -657,14 +657,14 @@
   .taskAddForm{margin-top:3px;padding:10px;border:1px dashed color-mix(in srgb,var(--accent) 42%,transparent);border-radius:14px;background:rgba(255,255,255,.26)}
   /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
-  .eventHero{position:relative;overflow:hidden;padding:13px 14px 14px;border:2px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
+  .eventHero{position:relative;overflow:hidden;padding:10px 12px 11px;border:2px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
   .eventHero::after{content:"";position:absolute;right:-28px;bottom:-44px;width:126px;height:126px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,transparent);pointer-events:none}
   .eventHeroTop{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .eventType{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accentDark);font-size:9px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
-  .eventCountdown{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;margin-top:11px}
-  .eventCountdown strong{font-size:clamp(34px,16cqi,58px);line-height:.88;letter-spacing:-.065em;color:var(--accentDark)}
+  .eventCountdown{position:relative;z-index:1;display:flex;align-items:baseline;gap:7px;margin-top:8px}
+  .eventCountdown strong{font-size:clamp(30px,13cqi,48px);line-height:.88;letter-spacing:-.055em;color:var(--accentDark)}
   .eventCountdown span{max-width:72px;color:var(--dim);font-size:10.5px;font-weight:850;line-height:1.1;text-transform:uppercase}
-  .eventTitle{position:relative;z-index:1;margin-top:10px;font-size:17px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
+  .eventTitle{position:relative;z-index:1;margin-top:7px;font-size:15.5px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
   .eventDate{position:relative;z-index:1;margin-top:3px;color:var(--dim);font-size:11.5px;font-weight:750}
   .eventList{display:flex;flex-direction:column;gap:10px}
   .eventEmpty{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:2px dashed color-mix(in srgb,var(--accent) 32%,transparent);border-radius:22px;background:rgba(255,255,255,.28)}
@@ -747,23 +747,29 @@
   /* Song and weather typography scale with the tile, rather than the browser. */
   .musicTitle{font-size:clamp(18px,7cqi,25px);font-weight:900;line-height:1.08;letter-spacing:-.025em;overflow-wrap:anywhere}
   .musicArtist{margin-top:4px;font-size:clamp(12px,4.2cqi,14px);font-weight:700;line-height:1.25}
-  .tile[data-tileid="weather"] .weatherSplit{height:auto;min-height:0;grid-template-columns:minmax(0,1.25fr) minmax(82px,.75fr);gap:clamp(7px,3cqi,14px);container-type:inline-size}
-  .weatherNow{display:flex;align-items:center;gap:clamp(7px,3cqi,12px);min-width:0}
+  .tile[data-tileid="weather"] .content{height:100%}
+  .tile[data-tileid="weather"] .weatherSplit{height:100%;min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(7px,3cqi,14px);container-type:inline-size}
+  .weatherNow{display:flex;align-items:center;justify-content:center;gap:clamp(7px,3cqi,12px);min-width:0}
   .weatherEmoji{flex:none;font-size:clamp(28px,13cqi,46px);line-height:1}
   .weatherReading{display:flex;align-items:baseline;gap:clamp(4px,2cqi,8px);flex-wrap:wrap}
   .weatherReading .wbig{font-size:clamp(29px,14cqi,44px);line-height:.95}
   .weatherLabel{font-size:clamp(10px,4.2cqi,13.5px);font-weight:750;line-height:1.15}
   .weatherMeta{margin-top:3px;font-size:clamp(9.5px,3.8cqi,12px);line-height:1.25}
-  .tile[data-tileid="weather"] .wtomorrow{gap:2px;padding-left:clamp(7px,3cqi,14px);min-height:0}
-  .weatherTomorrowEmoji{font-size:clamp(17px,7cqi,23px);line-height:1}
-  .weatherTomorrowTemps{font-size:clamp(9.5px,3.6cqi,12px);line-height:1.2}
-  .weatherTomorrowLabel{font-size:clamp(9px,3.5cqi,11.5px);line-height:1.15}
+  .tile[data-tileid="weather"] .wtomorrow{
+    align-items:center;gap:3px;min-height:0;padding:8px 10px;border:1.5px solid color-mix(in srgb,var(--accent) 28%,transparent);
+    border-radius:16px;background:color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.28));text-align:center
+  }
+  .weatherTomorrowEmoji{font-size:clamp(24px,10cqi,36px);line-height:1}
+  .weatherTomorrowTemps{font-size:clamp(11px,4.2cqi,14px);font-weight:850;line-height:1.2}
+  .weatherTomorrowLabel{font-size:clamp(9.5px,3.8cqi,12px);line-height:1.15}
   .tile[data-tileid="weather"][data-rows="1"] .weatherSplit{align-items:center}
   @container tile (max-width:300px){
-    .tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr}
-    .tile[data-tileid="weather"] .wtomorrow{display:grid;grid-template-columns:auto auto 1fr;align-items:center;border-left:0;border-top:1px solid var(--hair);padding:7px 0 0}
-    .tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}
-    .weatherTomorrowLabel{text-align:right}
+    .tile[data-tileid="weather"]:not([data-rows="1"]) .weatherSplit{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+    .tile[data-tileid="weather"][data-rows="1"] .weatherEmoji{font-size:25px}
+    .tile[data-tileid="weather"][data-rows="1"] .weatherReading .wbig{font-size:27px}
+    .tile[data-tileid="weather"][data-rows="1"] .weatherLabel,.tile[data-tileid="weather"][data-rows="1"] .weatherMeta,.tile[data-tileid="weather"][data-rows="1"] .weatherTomorrowLabel{display:none}
+    .tile[data-tileid="weather"][data-rows="1"] .wtomorrow{padding:5px}
+    .tile[data-tileid="weather"][data-rows="1"] .weatherTomorrowEmoji{font-size:23px}
   }
   /* Compact tiles have two explicit, non-overlapping rows: header, then content.
      The inner body owns any necessary scrolling, so the rounded outer border never masks controls. */
@@ -825,8 +831,7 @@
   .birthdayManager{width:min(620px,100%)}
   .birthdayManagerList{margin-top:10px}
   .tile[data-tileid="birthdays"][data-rows="1"]{padding:10px 13px}
-  .tile[data-tileid="birthdays"][data-rows="1"] .tbody{display:block}
-  .tile[data-tileid="birthdays"][data-rows="1"] .tilehead{display:none}
+  .tile[data-tileid="birthdays"][data-rows="1"] .tbody{display:grid}
   .tile[data-tileid="birthdays"][data-rows="1"] .content{height:100%;padding:0;overflow:hidden;text-align:center}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdaysSummary{min-height:100%}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodaySummary{flex-direction:row;gap:10px;width:100%}
@@ -900,6 +905,9 @@
   .taskAgenda .taskRow.later{border-style:dashed;background:rgba(255,255,255,.20);opacity:.72}
   .taskAgenda .taskRow.dueNow{border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.46));box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 12%,transparent)}
   .taskAgenda .taskRow.done{border-color:color-mix(in srgb,var(--accent) 16%,transparent);background:rgba(255,255,255,.18);opacity:.58}
+  .tile.completed .taskAgenda .taskRow{border-color:rgba(255,255,255,.38)!important;background:rgba(255,255,255,.14)!important}
+  .tile.completed .taskAgenda .taskRow.done{opacity:.82}
+  .tile.completed .taskAgenda .agWhen{color:#fff!important;border-color:rgba(255,255,255,.42)!important;background:rgba(255,255,255,.16)!important}
   .tile button.taskMain{
     display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;justify-content:center;
     width:auto;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0!important;
@@ -916,6 +924,24 @@
   .taskAgenda .taskRow.done .agWhen{color:var(--dim);background:rgba(255,255,255,.32)}
   @media(max-width:430px){
     .habitAddFields{grid-template-columns:64px minmax(0,1fr)}
+  }
+  /* Flat utility tiles put the value on the left and controls on the right; other shapes stack. */
+  .timerWrap{display:flex;flex-direction:column;justify-content:center;width:100%;height:100%}
+  .timerControls{display:flex;flex-direction:column}
+  .timerActions{margin-top:11px}
+  @container tile (min-width:430px){
+    .tile[data-tileid="timer"] .timerWrap{display:grid;grid-template-columns:minmax(120px,.72fr) minmax(280px,1.28fr);align-items:center;gap:14px}
+    .tile[data-tileid="timer"] .timerControls{flex-direction:row;align-items:center;justify-content:flex-end;gap:8px}
+    .tile[data-tileid="timer"] .timerSteppers{flex:1 1 auto;margin-top:0;grid-template-columns:repeat(4,minmax(48px,1fr))}
+    .tile[data-tileid="timer"] .timerActions{flex:none;margin-top:0}
+    .tile[data-tileid="timer"] .timerRow{justify-content:flex-start}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{flex-direction:row!important;align-items:center!important;gap:12px}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:0 0 23%;width:auto;font-size:30px}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto}
+  }
+  @container tile (max-width:300px){
+    .tile[data-tileid="pushups"]:not([data-rows="1"]) .pushBtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .tile[data-tileid="pushups"]:not([data-rows="1"]) .pushBtns .puReset{width:100%}
   }
 </style>
 </head>
@@ -1820,6 +1846,11 @@ function App(){
   const greeting=lateNight?"Still up":now.getHours()<12?"Bonjour":now.getHours()<18?"Bon aprèm":"Bonsoir";
   const goalsLit=goals.length>0 && goals.every(g=>g.done);
   const habitsLit=habits.length>0 && habits.every(h=>hToday[h.id]);
+  const agendaTodayStates=[];
+  agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,addDays(r.lastDone,r.everyDays))<=0; if(done||due)agendaTodayStates.push(done); });
+  agendaEvents.forEach(e=>{ const done=e.doneDate===todayKey, due=!e.doneDate&&e.date<=todayKey; if(done||due)agendaTodayStates.push(done); });
+  todayBdays.forEach(b=>agendaTodayStates.push(!!(agendaChecks[todayKey]||{})["gift-"+b.id]));
+  const agendaLit=agendaTodayStates.length>0&&agendaTodayStates.every(Boolean);
   const activeNow=new Set(activeTiles);
   const scoredRituals=ritualScoreIds.filter(id=>activeNow.has(id));
   const litTotal=scoredRituals.length+(activeNow.has("habits")?habits.length:0)+(activeNow.has("goals")?goals.length:0);
@@ -1948,7 +1979,7 @@ function App(){
         onImport={importVcf} />),
     timer: T("timer","Timer",timerFired,null,
       <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
-    agenda: T("agenda","Reminders",false,null,
+    agenda: T("agenda","Reminders",agendaLit,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         checks={agendaChecks[todayKey]||{}}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
@@ -2239,22 +2270,24 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   const h=Math.floor(shownMs/3600000), m=Math.floor((shownMs%3600000)/60000);
   const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
   return (
-    <div>
+    <div className="timerWrap">
       <div className={"timerRow"+(fired?" timerHit":"")}>
         <span className="timerBig">{fired?"Done":`${h}h ${pad(m)}m`}</span>
         <span className="muted" style={{fontSize:12}}>{running?"remaining":paused?"paused":"duration"}</span>
       </div>
-      {!running && !paused && !fired && (
-        <div className="timerSteppers">
-          <button className="puBtn" onClick={()=>adjust(-60)}>−1h</button>
-          <button className="puBtn" onClick={()=>adjust(-15)}>−15m</button>
-          <button className="puBtn" onClick={()=>adjust(15)}>+15m</button>
-          <button className="puBtn" onClick={()=>adjust(60)}>+1h</button>
+      <div className="timerControls">
+        {!running && !paused && !fired && (
+          <div className="timerSteppers">
+            <button className="puBtn" onClick={()=>adjust(-60)}>−1h</button>
+            <button className="puBtn" onClick={()=>adjust(-15)}>−15m</button>
+            <button className="puBtn" onClick={()=>adjust(15)}>+15m</button>
+            <button className="puBtn" onClick={()=>adjust(60)}>+1h</button>
+          </div>
+        )}
+        <div className="timerActions">
+          <button className="pill primary" onClick={running?onPause:onStart}>{running?"Stop":paused?"Resume":"Start"}</button>
+          {(running||paused||fired) && <button className="link" onClick={onReset}>Reset</button>}
         </div>
-      )}
-      <div className="timerActions" style={{marginTop:11}}>
-        <button className="pill primary" onClick={running?onPause:onStart}>{running?"Stop":paused?"Resume":"Start"}</button>
-        {(running||paused||fired) && <button className="link" onClick={onReset}>Reset</button>}
       </div>
     </div>
   );
