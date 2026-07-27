@@ -774,6 +774,70 @@
     .tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}
     .weatherTomorrowLabel{text-align:right}
   }
+  /* Compact tiles have two explicit, non-overlapping rows: header, then content.
+     The inner body owns any necessary scrolling, so the rounded outer border never masks controls. */
+  .tile .tbody{box-sizing:border-box;width:100%;max-width:100%}
+  .tile .content{box-sizing:border-box;padding-left:2px;padding-right:2px;scroll-padding-block:8px}
+  .tile[data-rows="1"]{padding:9px 13px 10px}
+  .tile[data-rows="1"] .tbody{
+    display:grid;grid-template-rows:auto minmax(0,1fr);gap:3px;
+    height:100%;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;
+    -webkit-mask-image:none!important;mask-image:none!important
+  }
+  .tile[data-rows="1"] .tbody::-webkit-scrollbar{display:none}
+  .tile[data-rows="1"] .tilehead{
+    align-self:stretch;min-height:18px;margin:0!important;overflow:hidden
+  }
+  .tile[data-rows="1"] .tilehead>span{min-width:0}
+  .tile[data-rows="1"] .ldot{width:18px;height:18px}
+  .tile[data-rows="1"] .ldot::after{inset:6px}
+  .tile[data-rows="1"] .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px}
+  .tile[data-rows="1"] .content{
+    width:100%;height:auto;min-height:0;padding:0 2px 2px;
+    overflow:visible
+  }
+  /* Push-ups uses a compact poster layout that always clears the lower border. */
+  .tile[data-tileid="pushups"][data-rows="1"] .content{overflow:hidden}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{
+    display:grid;grid-template-rows:auto auto;align-content:center;gap:4px;height:100%;padding:1px 0 2px
+  }
+  .tile[data-tileid="pushups"][data-rows="1"] .pushCount{font-size:20px;line-height:.95}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{align-self:end;gap:5px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puBtn{
+    min-height:27px!important;height:27px;padding:2px 4px;font-size:10.5px;line-height:1
+  }
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puReset{width:31px}
+  /* Birthday summary becomes one compact row instead of stacking into the title. */
+  .birthdaysSummary{display:flex;flex-direction:column;gap:8px;width:100%}
+  .birthdaySummaryCopy{min-width:0}
+  .birthdayTodaySummary{display:flex;flex-direction:column;align-items:flex-start}
+  .birthdayStatus{font-size:15px;font-weight:800;line-height:1.15}
+  .birthdayNext{margin-top:4px;font-size:12.5px;line-height:1.3}
+  .birthdayOpen{align-self:flex-start;margin-top:0!important}
+  .tile[data-tileid="birthdays"][data-rows="1"] .content{justify-content:center;overflow:hidden;text-align:left}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdaysSummary{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px
+  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{font-size:12.5px;white-space:nowrap}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayNext{
+    margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px
+  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpen{
+    min-height:28px!important;padding:5px 9px!important;font-size:9.5px;white-space:nowrap!important
+  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodaySummary{gap:3px}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayEmoji,
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayMessage{display:none}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayName{
+    max-width:100%;margin-top:0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:12.5px!important
+  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayCelebrate{
+    min-height:27px!important;margin-top:0!important;padding:4px 8px!important;font-size:9.5px
+  }
+  @container tile (max-width:250px){
+    .tile[data-tileid="birthdays"][data-rows="1"] .birthdayImportWords{display:none}
+  }
 </style>
 </head>
 <body>
@@ -2070,17 +2134,17 @@ function BirthdaysCard({birthdays,today,celebrated,onCelebrate,onAdd,onRemove,on
   const fileRef=useRef(null);
   const has=today.length>0; const next=nextBirthday(birthdays);
   if(!open) return (
-    <div>
-      {has ? (<div>
-        <div style={{fontSize:30,lineHeight:1}}>🎂</div>
-        <div style={{fontSize:18,fontWeight:800,marginTop:6,lineHeight:1.15}}>{today.map(b=>b.name).join(", ")}</div>
-        <div className="muted" style={{fontSize:12.5,marginTop:3}}>Birthday today — send a message.</div>
-        <button className={"mark"+(celebrated?" on":"")} style={{marginTop:10}} onClick={(e)=>{e.stopPropagation(); onCelebrate();}}><span className={"tick sm"+(celebrated?" on":"")}>{celebrated?"✓":""}</span>{celebrated?"Celebrated":"Mark celebrated"}</button>
+    <div className="birthdaysSummary">
+      <div className="birthdaySummaryCopy">{has ? (<div className="birthdayTodaySummary">
+        <div className="birthdayTodayEmoji" style={{fontSize:30,lineHeight:1}}>🎂</div>
+        <div className="birthdayTodayName" style={{fontSize:18,fontWeight:800,marginTop:6,lineHeight:1.15}}>{today.map(b=>b.name).join(", ")}</div>
+        <div className="muted birthdayTodayMessage" style={{fontSize:12.5,marginTop:3}}>Birthday today — send a message.</div>
+        <button className={"mark birthdayCelebrate"+(celebrated?" on":"")} style={{marginTop:10}} onClick={(e)=>{e.stopPropagation(); onCelebrate();}}><span className={"tick sm"+(celebrated?" on":"")}>{celebrated?"✓":""}</span>{celebrated?"Celebrated":"Mark celebrated"}</button>
       </div>) : (<div>
-        <div style={{fontSize:15,fontWeight:700}}>No birthdays today</div>
-        {next && <div className="muted" style={{fontSize:12.5,marginTop:4}}>Next: {next.name} · {pad(next.day)}/{pad(next.month)} · {next.days===0?"today":next.days===1?"tomorrow":"in "+next.days+" days"}</div>}
-      </div>)}
-      <div><button className="link" style={{marginTop:12}} onClick={(e)=>{e.stopPropagation(); setOpen(true);}}>All birthdays & import →</button></div>
+        <div className="birthdayStatus">No birthdays today</div>
+        {next && <div className="muted birthdayNext">Next: {next.name} · {pad(next.day)}/{pad(next.month)} · {next.days===0?"today":next.days===1?"tomorrow":"in "+next.days+" days"}</div>}
+      </div>)}</div>
+      <button className="link birthdayOpen" onClick={(e)=>{e.stopPropagation(); setOpen(true);}}>All birthdays<span className="birthdayImportWords"> &amp; import</span> →</button>
     </div>
   );
   return (
