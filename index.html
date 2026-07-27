@@ -932,6 +932,10 @@
   .taskAgenda .taskRow.dueNow .agWhen{background:var(--accent);color:#fff}
   .taskAgenda .taskRow.later .agWhen{border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);color:var(--dim);background:transparent}
   .taskAgenda .taskRow.done .agWhen{color:var(--dim);background:rgba(255,255,255,.32)}
+  /* Note is a compact writing card: hidden scrollbar, writing left, actions stacked right. */
+  .tile[data-tileid="note"] .notearea{min-height:0;overflow:auto;scrollbar-width:none}
+  .tile[data-tileid="note"] .notearea::-webkit-scrollbar{display:none}
+  .noteCard{display:flex;flex-direction:column;height:100%;min-height:0}
   @media(max-width:430px){
     .habitAddFields{grid-template-columns:64px minmax(0,1fr)}
   }
@@ -943,12 +947,23 @@
   .tile[data-tileid="timer"][data-rows="1"] .timerBig{font-size:clamp(24px,9cqi,32px)}
   @container tile (min-width:330px){
     .tile[data-tileid="timer"] .timerWrap{display:grid;grid-template-columns:minmax(112px,.72fr) minmax(180px,1.28fr);align-items:center;gap:10px}
-    .tile[data-tileid="timer"] .timerControls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-self:center;gap:4px 6px;width:100%}
-    .tile[data-tileid="timer"] .timerSteppers,.tile[data-tileid="timer"] .timerActions{display:contents}
+    .tile[data-tileid="timer"] .timerControls{display:flex;flex-direction:column;align-self:center;gap:5px;width:100%}
+    .tile[data-tileid="timer"] .timerSteppers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0}
+    .tile[data-tileid="timer"] .timerActions{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:6px;margin:0}
     .tile[data-tileid="timer"] .timerControls button{width:100%;min-height:28px!important;padding:3px 7px!important;font-size:10.5px}
     .tile[data-tileid="timer"] .timerRow{justify-content:flex-start}
-    .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{flex-direction:row!important;align-items:center!important;gap:12px}
-    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:0 0 23%;width:auto;font-size:30px}
+    .tile[data-tileid="note"][data-rows="1"] .noteCard{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:8px}
+    .tile[data-tileid="note"][data-rows="1"] .noteActions{flex-direction:column;align-items:stretch;margin-top:0!important;gap:4px}
+    .tile[data-tileid="note"][data-rows="1"] .noteActions button{width:100%;min-height:27px!important;padding:3px 8px!important;font-size:9.5px}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{flex-direction:row!important;align-items:stretch!important;gap:9px}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{display:grid;place-items:center;flex:0 0 32%;width:auto;font-size:clamp(34px,10cqi,46px)}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto;align-self:stretch;height:100%}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puBtn{height:100%!important;min-height:0!important}
+  }
+  @container tile (max-width:329px){
+    .tile[data-tileid="note"][data-rows="1"] .notearea{min-height:58px}
+    .tile[data-tileid="note"][data-rows="1"] .noteActions{margin-top:5px!important}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:1 1 auto;font-size:30px}
     .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto}
   }
   @container tile (max-width:300px){
@@ -1334,7 +1349,7 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:3,r:2}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
 const V2_ORDER=["goals","habits","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
@@ -1365,9 +1380,10 @@ function App(){
   const [showSettings,setShowSettings]=useState(false);
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; const merged=[...s,...ALL.filter(x=>!s.includes(x))]; if(EVENTS_TILE_INTRODUCED) return merged; const placed=placeEventsAfterReminders(merged); save("widgetOrder",placed); return placed; });
-  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",3); return DEFSIZE; }
+  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
+    if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     return s; });
   const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")){ next=[...next,"events"]; save("activeTiles",next); } if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>load("activeTileHistory",{}));
@@ -2175,7 +2191,7 @@ function NoteCard({saved,onSave,onView}){
   const dirty=(draft||"")!==(saved||"");
   useEffect(()=>{ if(!dirty) return; const t=setTimeout(()=>onSave(draft),650); return ()=>clearTimeout(t); },[draft,saved]);
   return (
-    <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div className="noteCard">
       <textarea className="notearea" placeholder="Something to remember…" value={draft} onChange={e=>setDraft(e.target.value)} />
       <div className="noteActions" style={{marginTop:8}}>
         <button className={"pill"+(dirty?" primary":"")} disabled={!dirty} onClick={()=>onSave(draft)}>{dirty?"Saving…":"Saved ✓"}</button>
