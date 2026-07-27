@@ -849,12 +849,8 @@
   .libraryShelfCount{flex:none;padding:6px 9px;border:1px solid rgba(39,43,64,.09);border-radius:999px;background:rgba(255,255,255,.64);color:#74798a;font-size:9.5px;font-weight:850}
   .libraryGrid{max-width:none;margin:0}
   .libraryShelfEmpty{padding:22px;border:2px dashed rgba(68,72,95,.13);border-radius:20px;color:#7c8090;background:rgba(255,255,255,.28);font-size:12px;text-align:center}
-  .libraryTileFooter{width:100%;margin-top:auto;padding-top:12px}
-  .libraryTileFooter::before{content:"";display:block;width:100%;height:1px;margin-bottom:9px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
-  .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
-  .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
   .tile.cornerOutside{overflow:visible}
-  .tile>.libraryRemoveToday{
+  .tile>.libraryRemoveToday,.tile>.libraryAddToday{
     position:absolute!important;z-index:12;top:-14px!important;right:-14px!important;bottom:auto!important;left:auto!important;
     display:grid!important;place-items:center;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
     margin:0!important;
@@ -862,7 +858,7 @@
     background:rgba(255,255,255,.92)!important;color:var(--accent)!important;
     box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12));font-size:18px!important;font-weight:900!important;line-height:1!important
   }
-  .libraryRemoveToday:hover{transform:scale(1.08)}
+  .libraryRemoveToday:hover,.libraryAddToday:hover{transform:scale(1.08)}
   .birthdayEmpty{display:flex;align-items:center;gap:9px;margin:8px 0;padding:10px 11px;border:1px dashed color-mix(in srgb,var(--accent) 36%,transparent);border-radius:14px;background:rgba(255,255,255,.24);color:var(--dim);font-size:11.5px;line-height:1.35}
   .birthdayEmpty span{font-size:20px;line-height:1}
   .plainEmpty{width:100%;padding:12px 13px;border:1px dashed color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;background:rgba(255,255,255,.22);color:var(--dim);font-size:11.5px;line-height:1.4;text-align:left}
@@ -964,8 +960,15 @@
   @container tile (max-width:329px){
     .tile[data-tileid="note"][data-rows="1"] .notearea{min-height:58px}
     .tile[data-tileid="note"][data-rows="1"] .noteActions{margin-top:5px!important}
-    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:1 1 auto;font-size:30px}
-    .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{align-items:center!important}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:1 1 auto;width:100%;font-size:30px;text-align:center}
+    .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto;align-self:center!important;width:min(100%,260px)!important;margin-inline:auto!important}
+    .tile[data-tileid="timer"][data-rows="1"] .timerWrap{position:relative;display:grid;grid-template-columns:minmax(64px,.72fr) minmax(0,1.28fr);align-items:center;gap:7px}
+    .tile[data-tileid="timer"][data-rows="1"] .timerControls{grid-column:2;display:flex;justify-content:center;margin:0}
+    .tile[data-tileid="timer"][data-rows="1"] .timerSteppers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 4px;margin:0}
+    .tile[data-tileid="timer"][data-rows="1"] .timerControls button{width:100%;min-height:24px!important;padding:2px 4px!important;font-size:8.5px}
+    .tile[data-tileid="timer"][data-rows="1"] .timerWrap.isIdle .timerActions{position:absolute;left:0;bottom:0;width:64px;margin:0}
+    .tile[data-tileid="timer"][data-rows="1"] .timerWrap:not(.isIdle) .timerActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin:0}
   }
   @container tile (max-width:300px){
     .tile[data-tileid="pushups"]:not([data-rows="1"]) .pushBtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1406,6 +1409,8 @@ function App(){
   const [people,setPeople]=useState(()=>load("peopleMet",[]));
   const [recallList,setRecallList]=useState(()=>load("recall",[]));
   const [keyField,setKeyField]=useState(()=>getKey());
+  const [profileName]=useState(()=>load("profileName","Fefe"));
+  const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
   const [syncId,setSyncIdState]=useState(()=>getSyncId());
   const [syncField,setSyncField]=useState("");
   const [syncBusy,setSyncBusy]=useState(false);
@@ -1831,7 +1836,7 @@ function App(){
     drag.current=null;
   };
 
-  const saveSettings=()=>{ localStorage.setItem("fefe_apiKey",keyField.trim()); try{ localStorage.removeItem("fefe_daily:"+todayKey);}catch(e){} location.reload(); };
+  const saveSettings=()=>{ save("profileName",nameField.trim()||"Fefe"); localStorage.setItem("fefe_apiKey",keyField.trim()); try{ localStorage.removeItem("fefe_daily:"+todayKey);}catch(e){} location.reload(); };
   const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
   const importVcf=(file)=>{ if(!file) return; const r=new FileReader();
     r.onload=()=>{ try{
@@ -1898,9 +1903,10 @@ function App(){
   const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
-    const libraryAction=page==="library"&&!onDaily?<div className="libraryTileFooter"><button className="libraryTileAction" title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+ Add to Today</button></div>:null;
-    const libraryRemove=page==="library"&&onDaily?<button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>:null;
-    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryRemove:topright} cornerOutside={!!libraryRemove} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
+    const libraryCorner=page==="library"?(onDaily
+      ? <button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>
+      : <button className="libraryAddToday" aria-label={`Add ${label} to Today`} title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+</button>):null;
+    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{children}</Tile>;
   };
   /* dropped into any daily-generated tile; only renders once that key is known to have failed */
   const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
@@ -2048,7 +2054,7 @@ function App(){
       <header className="dashboardHero">
         <div className="heroCopy">
           <div className="heroEyebrow">{page==="library"?"Your workspace":now.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</div>
-          <h1>{page==="library"?"Tile library":`${greeting}, Fefe`}</h1>
+          <h1>{page==="library"?"Tile library":`${greeting}, ${profileName}`}</h1>
           <p className="heroStatus">{page==="library"?"Explore, test and curate what belongs on your daily dashboard.":genBusy?"Preparing today's content…":contentReady?"Everything is ready when you are.":getKey()?"Your dashboard is ready to generate.":"Add your API key in Settings to enable daily content."}</p>
           {lateNight&&page==="dashboard"&&<div className="bedtime">Past midnight. Today rolls over at 1am.</div>}
         </div>
@@ -2064,6 +2070,8 @@ function App(){
         <div className="settings">
           <h3>Settings</h3>
           <p>Everything here is stored only in this browser.</p>
+          <div className="lab">Your name</div>
+          <div className="srow"><input className="sinput" autoComplete="name" placeholder="Your name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
           <div className="lab">Anthropic API key — powers the word, lesson, song & world tiles</div>
           <div className="srow"><input className="sinput" type="password" placeholder="sk-ant-…" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
           <div className="lab">Sync across devices</div>
@@ -2300,7 +2308,7 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   const h=Math.floor(shownMs/3600000), m=Math.floor((shownMs%3600000)/60000);
   const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
   return (
-    <div className="timerWrap">
+    <div className={"timerWrap "+(running?"isRunning":paused?"isPaused":fired?"isFired":"isIdle")}>
       <div className={"timerRow"+(fired?" timerHit":"")}>
         <span className="timerBig">{fired?"Done":`${h}h ${pad(m)}m`}</span>
       </div>
