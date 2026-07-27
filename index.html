@@ -1934,7 +1934,7 @@ function App(){
       <RetryNote tileKey="spanish"/></>),
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
       <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
-    word: T("word","Mot",!!rToday.word, null,<>
+    word: T("word","Word",!!rToday.word, null,<>
       <WordCard word={view.word} busy={genBusy} onLearned={learnWord} />
       <RetryNote tileKey="word"/></>),
     worth: T("worth","Knowledge",!!rToday.worth, null,<>
