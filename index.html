@@ -854,7 +854,7 @@
   .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
   .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
   .tile.cornerOutside{overflow:visible}
-  .tile.cornerOutside>.topright{top:-10px!important;right:-10px!important;left:auto!important}
+  .tile.cornerOutside>.topright{top:-14px!important;right:-14px!important;left:auto!important}
   .libraryRemoveToday{
     display:grid!important;place-items:center;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
     padding:0!important;border:2px solid var(--accent)!important;border-radius:50%!important;
@@ -909,7 +909,15 @@
   .tile.completed .taskAgenda .taskRow.done{opacity:.82}
   .tile.completed .taskAgenda .agWhen{color:#fff!important;border-color:rgba(255,255,255,.42)!important;background:rgba(255,255,255,.16)!important}
   .tile.completed button.taskMain[aria-pressed="true"]{border:0!important;background:transparent!important;color:#fff!important;box-shadow:none!important}
-  .emptyAgendaComplete{width:100%!important;margin-bottom:2px;padding:7px 10px!important;border-style:dashed!important;font-size:10px}
+  .taskAgenda:has(.agendaClearSpace){min-height:100%}
+  .tile button.agendaClearSpace,.tile.completed button.agendaClearSpace{
+    flex:1 1 32px;width:100%;min-height:32px!important;margin:0;padding:0!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+    color:transparent!important;cursor:pointer;transform:none!important
+  }
+  .tile button.agendaClearSpace:hover,.tile.completed button.agendaClearSpace:hover{border:0!important;background:transparent!important;box-shadow:none!important;transform:none!important}
+  .tile button.agendaClearSpace:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+  .tile.completed button.agendaClearSpace:focus-visible{outline-color:#fff}
   .tile button.taskMain{
     display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;justify-content:center;
     width:auto;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0!important;
@@ -2278,7 +2286,6 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
     <div className="timerWrap">
       <div className={"timerRow"+(fired?" timerHit":"")}>
         <span className="timerBig">{fired?"Done":`${h}h ${pad(m)}m`}</span>
-        <span className="muted" style={{fontSize:12}}>{running?"remaining":paused?"paused":"duration"}</span>
       </div>
       <div className="timerControls">
         {!running && !paused && !fired && (
@@ -2318,7 +2325,6 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
   const shown=rows.slice(0,7);
   return (
     <div className="taskAgenda">
-      {noDueToday && <button className={"emptyAgendaComplete"+(emptyDone?" on":"")} aria-pressed={emptyDone} onClick={onToggleEmpty}>{emptyDone?"Today clear ✓":"Nothing due · mark today clear"}</button>}
       {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
         <div key={r.id} className={"agRow taskRow"+state}>
@@ -2329,6 +2335,7 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
           {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
       );})}
+      {noDueToday && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
       {!showAdd ? (
         <button className="link taskAddLink" onClick={()=>setShowAdd(true)}>+ Add task →</button>
       ) : (
