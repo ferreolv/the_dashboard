@@ -854,9 +854,10 @@
   .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
   .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
   .tile.cornerOutside{overflow:visible}
-  .tile.cornerOutside>.topright{top:-14px!important;right:-14px!important;left:auto!important}
-  .libraryRemoveToday{
+  .tile>.libraryRemoveToday{
+    position:absolute!important;z-index:12;top:-14px!important;right:-14px!important;bottom:auto!important;left:auto!important;
     display:grid!important;place-items:center;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
+    margin:0!important;
     padding:0!important;border:2px solid var(--accent)!important;border-radius:50%!important;
     background:rgba(255,255,255,.92)!important;color:var(--accent)!important;
     box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12));font-size:18px!important;font-weight:900!important;line-height:1!important
@@ -1364,7 +1365,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,
   useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
     <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
-      {topright && !edit && <div className="topright">{topright}</div>}
+      {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
       <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
