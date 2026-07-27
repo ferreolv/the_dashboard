@@ -44,7 +44,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
-- Dashboard Recall uses a fixed review ladder of 1, 3, 7, 16, 35, and 90 days: correct answers advance one level, incorrect answers step back one level, and at most eight due items are shown per session.
+- Dashboard Recall uses FSRS-6 at 90% desired retention with the standard four ratings (Again, Hard, Good, Easy), presented as emoji-first reactions after each quiz answer. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

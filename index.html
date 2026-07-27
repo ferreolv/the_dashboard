@@ -184,6 +184,16 @@
   .reviewItem { padding-bottom:10px; margin-bottom:10px; border-bottom:1px solid var(--hair); }
   .reviewItem:last-child { border-bottom:none; margin-bottom:0; }
   .rtitle { font-size:11px; color:var(--dim); margin:0 0 6px; font-weight:700; }
+  .recallRatings { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:11px; }
+  .recallRating { min-width:0; min-height:68px!important; padding:7px 5px!important; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; border-radius:18px!important; }
+  .recallRating .face { font-size:24px; line-height:1; filter:drop-shadow(0 3px 5px rgba(63,24,89,.12)); transition:transform .18s ease; }
+  .recallRating:hover .face { transform:scale(1.12) rotate(-3deg); }
+  .recallRating .ratingName { font-size:9.5px; line-height:1.05; font-weight:850; }
+  .recallRating .ratingWhen { font-size:8.5px; line-height:1; color:var(--dim); font-weight:750; white-space:nowrap; }
+  .recallRating.suggested { border-color:var(--accent)!important; box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 18%,transparent)!important; }
+  .recallScheduled { display:flex; align-items:center; gap:8px; width:fit-content; max-width:100%; margin-top:10px; padding:7px 11px; border:1px solid var(--fieldbd); border-radius:999px; background:var(--field); font-size:11px; font-weight:750; color:var(--dim); }
+  .recallScheduled .face { font-size:18px; line-height:1; }
+  .recallHint { margin:9px 0 0; color:var(--dim); font-size:10.5px; line-height:1.3; text-align:center; }
 
   .puBtn { background:var(--btnbg); border:1px solid var(--btnbd); color:var(--ink); border-radius:9px; padding:7px 0; flex:1; cursor:pointer; font-weight:700; font-size:13px; font-family:inherit; transition:filter .15s; }
   .puBtn:hover { filter:brightness(1.08); }
@@ -678,6 +688,8 @@
   @container tile (max-width:360px){
     .tile .weatherSplit{grid-template-columns:1fr;height:auto}
     .tile .qopts{grid-template-columns:1fr}
+    .tile .recallRatings{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .tile .recallRating{min-height:58px!important}
     .tile .peopleAddRow{grid-template-columns:1fr auto}
     .tile .peopleAddRow .addinput:first-child{grid-column:1/-1}
     .tile .birthdayAddRow{grid-template-columns:minmax(0,1fr) minmax(42px,64px) minmax(42px,64px) auto}
@@ -1257,9 +1269,98 @@ async function extractCourseFile(file){
   throw new Error("Use PDF, TXT, Markdown or CSV. DOCX support can be added next.");
 }
 
-/* spaced repetition */
-const INTERVALS=[1,3,7,16,35,90];
-const reschedule=(f,ok)=>{ const level=ok?Math.min(f.level+1,INTERVALS.length-1):Math.max(0,f.level-1); return {...f, level, nextReview:addDays(todayKey,INTERVALS[level])}; };
+/* FSRS-6 spaced repetition — default parameters, 90% desired retention. */
+const LEGACY_RECALL_INTERVALS=[1,3,7,16,35,90];
+const FSRS_W=[0.212,1.2931,2.3065,8.2956,6.4133,0.8334,3.0194,0.001,1.8722,0.1666,0.796,1.4835,0.0614,0.2629,1.6483,0.6014,1.8729,0.5425,0.0912,0.0658,0.1542];
+const FSRS_RETENTION=.9;
+const FSRS_RATINGS=[
+  {value:1,name:"Again",face:"😵"},
+  {value:2,name:"Hard",face:"😕"},
+  {value:3,name:"Good",face:"🙂"},
+  {value:4,name:"Easy",face:"😄"}
+];
+const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
+const initialStability=rating=>Math.max(.01,FSRS_W[rating-1]);
+const initialDifficulty=rating=>clamp(FSRS_W[4]-Math.exp(FSRS_W[5]*(rating-1))+1,1,10);
+const nextDifficulty=(difficulty,rating)=>{
+  const damped=difficulty-FSRS_W[6]*(rating-3)*(10-difficulty)/9;
+  return clamp(FSRS_W[7]*initialDifficulty(4)+(1-FSRS_W[7])*damped,1,10);
+};
+const fsrsRetrievability=(elapsed,stability)=>{
+  const factor=Math.pow(.9,-1/FSRS_W[20])-1;
+  return Math.pow(1+factor*Math.max(0,elapsed)/Math.max(.01,stability),-FSRS_W[20]);
+};
+const fsrsInterval=stability=>{
+  const factor=Math.pow(.9,-1/FSRS_W[20])-1;
+  return clamp(Math.round(stability/factor*(Math.pow(FSRS_RETENTION,-1/FSRS_W[20])-1)),1,36500);
+};
+const recallStateFor=item=>{
+  if(item.fsrs&&item.fsrs.version===6) return item.fsrs;
+  const legacyLevel=clamp(Number(item.level)||0,0,LEGACY_RECALL_INTERVALS.length-1);
+  const legacyInterval=LEGACY_RECALL_INTERVALS[legacyLevel];
+  return {
+    version:6,
+    state:"review",
+    stability:legacyInterval,
+    difficulty:initialDifficulty(3),
+    reps:Math.max(1,Number(item.seen)||1),
+    lapses:0,
+    lastReview:addDays(item.nextReview||todayKey,-legacyInterval),
+    scheduledDays:legacyInterval,
+    desiredRetention:FSRS_RETENTION,
+    migratedFrom:"fixed-ladder"
+  };
+};
+const newRecallItem=data=>({
+  ...data,
+  level:0,
+  seen:1,
+  nextReview:addDays(todayKey,1),
+  fsrs:{version:6,state:"new",stability:0,difficulty:0,reps:0,lapses:0,lastReview:null,scheduledDays:1,desiredRetention:FSRS_RETENTION}
+});
+const scheduleRecall=(item,rating,reviewDate=todayKey)=>{
+  const old=recallStateFor(item);
+  const isNew=old.state==="new"||!old.stability;
+  const elapsed=isNew?0:Math.max(0,daysBetween(old.lastReview||reviewDate,reviewDate));
+  const retrievability=isNew?1:fsrsRetrievability(elapsed,old.stability);
+  let stability,difficulty;
+  if(isNew){
+    stability=initialStability(rating);
+    difficulty=initialDifficulty(rating);
+  }else{
+    difficulty=nextDifficulty(old.difficulty,rating);
+    if(elapsed===0){
+      let increase=Math.exp(FSRS_W[17]*(rating-3+FSRS_W[18]))*Math.pow(old.stability,-FSRS_W[19]);
+      if(rating>=3) increase=Math.max(1,increase);
+      stability=old.stability*increase;
+    }else if(rating===1){
+      stability=Math.min(
+        FSRS_W[11]*Math.pow(difficulty,-FSRS_W[12])*(Math.pow(old.stability+1,FSRS_W[13])-1)*Math.exp(FSRS_W[14]*(1-retrievability)),
+        old.stability
+      );
+    }else{
+      const hardPenalty=rating===2?FSRS_W[15]:1;
+      const easyBonus=rating===4?FSRS_W[16]:1;
+      stability=old.stability*(1+Math.exp(FSRS_W[8])*(11-difficulty)*Math.pow(old.stability,-FSRS_W[9])*(Math.exp(FSRS_W[10]*(1-retrievability))-1)*hardPenalty*easyBonus);
+    }
+  }
+  stability=clamp(stability,.01,36500);
+  const scheduledDays=fsrsInterval(stability);
+  const fsrs={
+    version:6,
+    state:"review",
+    stability,
+    difficulty,
+    reps:(old.reps||0)+1,
+    lapses:(old.lapses||0)+(rating===1?1:0),
+    lastReview:reviewDate,
+    scheduledDays,
+    desiredRetention:FSRS_RETENTION
+  };
+  const review={date:reviewDate,rating,elapsedDays:elapsed,scheduledDays,stability,difficulty,retrievability};
+  return {...item,fsrs,seen:(item.seen||1)+1,nextReview:addDays(reviewDate,scheduledDays),reviewLog:[...(item.reviewLog||[]),review]};
+};
+const humanInterval=days=>days===1?"tomorrow":days<7?`in ${days} days`:days<14?"in 1 week":days<60?`in ${Math.round(days/7)} weeks`:days<730?`in ${Math.round(days/30)} months`:`in ${Math.round(days/365)} years`;
 
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
 function weekCount(log,id){ let c=0; for(let d=0;d<7;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) c++; } return c; }
@@ -1568,7 +1669,13 @@ function App(){
   const persistHabits=v=>{ setHabits(v); save("habits",v); };
   const persistBirthdays=v=>{ setBirthdays(v); save("birthdays",v); };
   const persistPeople=v=>{ setPeople(v); save("peopleMet",v); };
-  const persistRecall=v=>{ setRecallList(v); save("recall",v); };
+  const persistRecall=v=>{
+    if(typeof v==="function"){
+      setRecallList(previous=>{ const next=v(previous); save("recall",next); return next; });
+      return;
+    }
+    setRecallList(v); save("recall",v);
+  };
   const toggleHabit=id=>{ const day={...hToday,[id]:!hToday[id]}; const m={...habitLog,[todayKey]:day}; setHabitLog(m); save("habitLog",m); };
   const setRitual=k=>{ if(rToday[k]) return; const day={...rToday,[k]:true}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
   const unsetRitual=k=>{ const day={...rToday,[k]:false}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
@@ -1645,8 +1752,8 @@ function App(){
   if(typeof window!=="undefined") window.__fefeGenerate=generateToday;
 
   /* recall scheduling — store alt prompts so review looks different each time */
-  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) persistRecall([...recallList,{ id:uid(), type:"word", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } }]); };
-  const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; persistRecall([...recallList,{ id:uid(), type:"lesson", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } }]); } };
+  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) persistRecall([...recallList,newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
+  const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; persistRecall([...recallList,newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
   const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(recallList.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
   /* Spanish feeds recall harder than the others on purpose — both quiz questions AND each
      vocab word (using the day's other vocab as natural decoys) — so a day of Spanish doesn't
@@ -1655,24 +1762,24 @@ function App(){
     setRitual("spanish");
     if(!sp || recallList.some(x=>x.type==="spanish"&&x.addedOn===todayKey)) return;
     const additions=[];
-    (sp.quiz||[]).forEach(q=>{ if(!q) return; additions.push({ id:uid(), type:"spanish", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:"Español · "+sp.tema, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }); });
+    (sp.quiz||[]).forEach(q=>{ if(!q) return; additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Español · "+sp.tema, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } })); });
     const vocab=sp.vocab||[];
     vocab.forEach((v,i)=>{
       const decoys=vocab.filter((_,j)=>j!==i).map(x=>x.en);
       const base=[v.en,...decoys].slice(0,3); while(base.length<3) base.push("—");
       const order=[0,1,2].sort(()=>Math.random()-0.5);
       const options=order.map(idx=>base[idx]); const answer=order.indexOf(0);
-      additions.push({ id:uid(), type:"spanish", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:"Vocab · "+sp.tema, quiz:{ prompts:[`¿Qué significa “${v.es}”?`], options, answer, explain:`“${v.es}” = ${v.en}.` } });
+      additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Vocab · "+sp.tema, quiz:{ prompts:[`¿Qué significa “${v.es}”?`], options, answer, explain:`“${v.es}” = ${v.en}.` } }));
     });
     if(additions.length) persistRecall([...recallList,...additions]);
   };
   const learnAcademic=a=>{ setRitual("academic"); if(a&&a.quiz&&a.quiz.length && !recallList.some(x=>x.type==="academic"&&x.addedOn===todayKey)){
-    const additions=a.quiz.filter(Boolean).map(q=>({ id:uid(), type:"academic", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:(a.courseName?a.courseName+" · ":"")+a.concept, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }));
+    const additions=a.quiz.filter(Boolean).map(q=>newRecallItem({ id:uid(), type:"academic", addedOn:todayKey, title:(a.courseName?a.courseName+" · ":"")+a.concept, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }));
     if(additions.length) persistRecall([...recallList,...additions]);
   } };
-  const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall([...recallList,{ id:uid(), type:"brain-bank", addedOn:todayKey, level:0, seen:1, nextReview:addDays(todayKey,INTERVALS[0]), title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } }]); };
-  const gradeRecall=(item,ok)=>{ persistRecall(recallList.map(x=>x.id===item.id?{...reschedule(x,ok), seen:(x.seen||1)+1}:x)); };
-  const restoreRecall=item=>{ persistRecall(recallList.map(x=>x.id===item.id?item:x)); };
+  const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall([...recallList,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
+  const gradeRecall=(item,rating)=>{ const scheduled=scheduleRecall(item,rating); persistRecall(list=>list.map(x=>x.id===item.id?scheduled:x)); return scheduled; };
+  const restoreRecall=item=>{ persistRecall(list=>list.map(x=>x.id===item.id?item:x)); };
 
   /* ---- reminders: recurring chores + one-off dated tasks ---- */
   const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>r.id===id?{...r,lastDone:todayKey}:r)); };
@@ -2232,18 +2339,44 @@ function SpanishCard({sp,busy,done,onLearned}){
 function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
   const [snap]=useState(()=>due);
   const [answered,setAnswered]=useState({});
+  const [quizResult,setQuizResult]=useState({});
   useEffect(()=>{ if(snap.length===0) onComplete(); /* eslint-disable-next-line */ },[]);
-  const handle=(item,ok)=>{ onGrade(item,ok); setAnswered(a=>{ const n={...a,[item.id]:true}; if(Object.keys(n).length>=snap.length) onComplete(); return n; }); };
-  const undo=item=>{ onRestore(item); onIncomplete(); setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; }); };
-  if(snap.length===0) return <PlainEmpty>Nothing due. Words and lessons you finish return here as quick quizzes on a 1/3/7/16-day schedule, so they stick.</PlainEmpty>;
+  const handleAnswer=(item,correct)=>setQuizResult(results=>({...results,[item.id]:correct}));
+  const rate=(item,rating)=>{
+    const scheduled=onGrade(item,rating);
+    setAnswered(a=>{ const n={...a,[item.id]:scheduled}; if(Object.keys(n).length>=snap.length) onComplete(); return n; });
+  };
+  const undo=item=>{
+    if(answered[item.id]){ onRestore(item); onIncomplete(); }
+    setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; });
+    setQuizResult(results=>{ const n={...results}; delete n[item.id]; return n; });
+  };
+  if(snap.length===0) return <PlainEmpty>Nothing due. Finished words and lessons return when FSRS predicts they need refreshing.</PlainEmpty>;
   return <div>{snap.map(item=>{
     const prompts=(item.quiz.prompts&&item.quiz.prompts.length)?item.quiz.prompts:[item.quiz.prompt||""];
     const seen=item.seen||1;
     const prompt=prompts[(seen)%prompts.length]||prompts[0];
+    const hasResult=Object.prototype.hasOwnProperty.call(quizResult,item.id);
+    const scheduled=answered[item.id];
     return (<div key={item.id} className="reviewItem">
       <p className="rtitle">{item.title}</p>
       {item.meta && <p className="muted" style={{fontSize:11.5,margin:"-4px 0 8px"}}>{item.meta}</p>}
-      <Quiz prompt={prompt} options={item.quiz.options} answer={item.quiz.answer} explain={item.quiz.explain} onDone={ok=>handle(item,ok)} onUndo={()=>undo(item)} />
+      <Quiz prompt={prompt} options={item.quiz.options} answer={item.quiz.answer} explain={item.quiz.explain} onDone={correct=>handleAnswer(item,correct)} onUndo={()=>undo(item)} />
+      {hasResult&&!scheduled&&<>
+        <p className="recallHint">How did that memory feel?</p>
+        <div className="recallRatings" role="group" aria-label="Rate this memory">
+          {FSRS_RATINGS.map(choice=>{
+            const preview=scheduleRecall(item,choice.value);
+            const suggested=choice.value===(quizResult[item.id]?3:1);
+            return <button type="button" key={choice.value} className={"recallRating"+(suggested?" suggested":"")} aria-label={`${choice.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(item,choice.value)}>
+              <span className="face" aria-hidden="true">{choice.face}</span>
+              <span className="ratingName">{choice.name}</span>
+              <span className="ratingWhen">{humanInterval(preview.fsrs.scheduledDays)}</span>
+            </button>;
+          })}
+        </div>
+      </>}
+      {scheduled&&<div className="recallScheduled"><span className="face" aria-hidden="true">{FSRS_RATINGS[scheduled.reviewLog[scheduled.reviewLog.length-1].rating-1].face}</span><span>Back {humanInterval(scheduled.fsrs.scheduledDays)}</span></div>}
     </div>);
   })}</div>;
 }
