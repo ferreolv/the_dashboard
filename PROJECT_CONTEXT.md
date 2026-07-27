@@ -43,6 +43,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Flat Timer tiles reserve a separate title row, keep the time on the left, keep adjustment/Stop/Resume/Reset controls on the right, and show no state-caption text. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
+- Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

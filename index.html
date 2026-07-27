@@ -1409,7 +1409,7 @@ function App(){
   const [people,setPeople]=useState(()=>load("peopleMet",[]));
   const [recallList,setRecallList]=useState(()=>load("recall",[]));
   const [keyField,setKeyField]=useState(()=>getKey());
-  const [profileName]=useState(()=>load("profileName","Fefe"));
+  const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
   const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
   const [syncId,setSyncIdState]=useState(()=>getSyncId());
   const [syncField,setSyncField]=useState("");
@@ -1836,7 +1836,7 @@ function App(){
     drag.current=null;
   };
 
-  const saveSettings=()=>{ save("profileName",nameField.trim()||"Fefe"); localStorage.setItem("fefe_apiKey",keyField.trim()); try{ localStorage.removeItem("fefe_daily:"+todayKey);}catch(e){} location.reload(); };
+  const saveSettings=()=>{ const nextName=nameField.trim()||"Fefe"; save("profileName",nextName); setProfileName(nextName); setNameField(nextName); localStorage.setItem("fefe_apiKey",keyField.trim()); };
   const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
   const importVcf=(file)=>{ if(!file) return; const r=new FileReader();
     r.onload=()=>{ try{
@@ -2099,7 +2099,7 @@ function App(){
           <p className="hint" style={{marginTop:6}}>Download a portable copy before major dashboard updates. Backups contain your dashboard data, but never your API key or sync credentials.</p>
           <p className="hint" style={{marginTop:12}}>Birthdays: export your contacts as a vCard (.vcf), then use “All birthdays & import” on the Birthdays tile.</p>
           <div className="srow" style={{marginTop:14}}>
-            <button className="savebtn" onClick={saveSettings}>Save & refresh</button>
+            <button className="savebtn" onClick={saveSettings}>Save</button>
             <button className="ghostbtn" onClick={resetLayout}>Reset layout</button>
             <button className="ghostbtn" onClick={()=>setShowSettings(false)}>Close</button>
           </div>
