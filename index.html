@@ -854,6 +854,37 @@
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayCelebrate{
     min-height:27px!important;margin-top:0!important;padding:4px 8px!important;font-size:9.5px
   }
+  /* Library is a catalogue: clean widget previews grouped by availability, with actions in-foot. */
+  .libraryShelves{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+  .libraryShelf{min-width:0}
+  .libraryShelfHead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 2px 12px}
+  .libraryShelfHead h2{margin:0;color:#292c40;font-size:19px;line-height:1.15;letter-spacing:-.025em}
+  .libraryShelfHead p{max-width:640px;margin:4px 0 0;color:#777c8d;font-size:11.5px;line-height:1.4}
+  .libraryShelfCount{flex:none;padding:6px 9px;border:1px solid rgba(39,43,64,.09);border-radius:999px;background:rgba(255,255,255,.64);color:#74798a;font-size:9.5px;font-weight:850}
+  .libraryGrid{max-width:none;margin:0}
+  .libraryShelfEmpty{padding:22px;border:2px dashed rgba(68,72,95,.13);border-radius:20px;color:#7c8090;background:rgba(255,255,255,.28);font-size:12px;text-align:center}
+  .libraryTileFooter{width:100%;margin-top:auto;padding-top:12px}
+  .libraryTileFooter::before{content:"";display:block;width:100%;height:1px;margin-bottom:9px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
+  .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
+  .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
+  .birthdayEmpty{display:flex;align-items:center;gap:9px;margin:8px 0;padding:10px 11px;border:1px dashed color-mix(in srgb,var(--accent) 36%,transparent);border-radius:14px;background:rgba(255,255,255,.24);color:var(--dim);font-size:11.5px;line-height:1.35}
+  .birthdayEmpty span{font-size:20px;line-height:1}
+  .plainEmpty{width:100%;padding:12px 13px;border:1px dashed color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;background:rgba(255,255,255,.22);color:var(--dim);font-size:11.5px;line-height:1.4;text-align:left}
+  /* Push-up chart labels wrap as a legend row and never extend beyond the chart card. */
+  .chartSec{min-width:0;overflow:hidden}
+  .pushChartLegend{display:flex;align-items:center;gap:4px 10px;flex-wrap:wrap;max-width:100%}
+  .pushChartLegend span{min-width:0;white-space:nowrap}
+  .chartSec .bars{width:100%;max-width:100%;min-width:0;gap:clamp(2px,1.2cqi,5px)}
+  .chartSec .barcol{min-width:0;overflow:hidden}
+  .chartSec .barval{max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:clamp(7px,2.7cqi,10px)}
+  .chartSec .wrevAxis{display:grid;grid-template-columns:1fr 1fr 1fr;width:100%;max-width:100%;gap:4px;letter-spacing:0}
+  .chartSec .wrevAxis span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .chartSec .wrevAxis span:nth-child(2){text-align:center}
+  .chartSec .wrevAxis span:last-child{text-align:right}
+  @container tile (max-width:360px){
+    .libraryShelfHead{align-items:flex-start}
+    .pushChartLegend{font-size:10px}
+  }
 </style>
 </head>
 <body>
@@ -1155,6 +1186,7 @@ const Note=({children})=>{
   if(busy) return <div className="emptyState genState" role="status" aria-label="Generating today's content"><span className="genSpin" aria-hidden="true"></span></div>;
   return <button type="button" className="emptyState genState genBtn" title="Generate today" onClick={()=>{ try{ window.__fefeGenerate && window.__fefeGenerate(); }catch(e){} }}><span className="genGlyph">✦</span><span className="genCap">Generate</span></button>;
 };
+const PlainEmpty=({children})=><div className="plainEmpty">{children}</div>;
 const AppIcon=({name})=>{ const paths={sparkle:<><path d="M12 3l1.15 3.1L16 7.5l-2.85 1.4L12 12l-1.15-3.1L8 7.5l2.85-1.4L12 3Z"/><path d="M5 13l.8 2.2L8 16l-2.2.8L5 19l-.8-2.2L2 16l2.2-.8L5 13Z"/><path d="M18 12l.65 1.35L20 14l-1.35.65L18 16l-.65-1.35L16 14l1.35-.65L18 12Z"/></>,settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.6v-.1A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3V9.6h.1A1.7 1.7 0 0 0 4.6 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.5 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.17.35.38.68.68.94.3.26.68.4 1.08.42H21v4h-.1A1.7 1.7 0 0 0 19.4 15Z"/></>,layout:<><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M9 10h12"/></>,check:<path d="m5 12 4 4L19 6"/>}; return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>; };
 function buildMindTree(topics){ const root={children:{},entries:[]}; Object.entries(topics||{}).forEach(([path,list])=>{ let node=root; path.split(" › ").filter(Boolean).forEach(part=>{ node.children[part]=node.children[part]||{children:{},entries:[]}; node=node.children[part]; }); (list||[]).forEach(e=>node.entries.push({...e,_topic:path})); }); return root; }
 function MindNode({name,node,depth,onRemove}){ const colours=["#6257e7","#0891b2","#059669","#db2777","#ea580c"],accent=colours[depth%colours.length]; return <div className="mindNode" style={{"--depth":depth,"--mindAccent":accent}}><div className="mindNodeHead"><span className="mindNodeDot"/><span>{name}</span></div>{node.entries.length>0&&<div className="mindEntries">{node.entries.map(e=><div className="mindEntry" key={e.id}><span>{e.text}</span><button className="del" aria-label="Delete note" onClick={()=>onRemove(e._topic,e.id)}>×</button></div>)}</div>}{Object.entries(node.children).sort(([a],[b])=>a.localeCompare(b)).map(([child,childNode])=><MindNode key={child} name={child} node={childNode} depth={depth+1} onRemove={onRemove}/>)}</div>; }
@@ -1357,20 +1389,6 @@ function App(){
   const persistBank=v=>{ setBrainBank(v); save("brainBank",v); };
   const [showBankBrowser,setShowBankBrowser]=useState(false);
   const [bankBusy,setBankBusy]=useState(false);
-
-  /* Learn now owns its complete game database. The dashboard reads only this small,
-     stable summary contract, so opening Today never loads the game engine. */
-  const readLearnSummary=()=>{
-    const stored=load("learnSummary",null);
-    if(stored&&stored.date===todayKey)return stored;
-    const raw=load("learnDB",{})||{}, sessions=raw.sessions||{}, seconds=((sessions[todayKey]||{}).seconds||0);
-    const cards=(raw.generalCards&&raw.generalCards.length?raw.generalCards:raw.cards)||[];
-    let streak=0, start=seconds>=300?0:1;
-    for(let i=start;i<500;i++){const day=addDays(todayKey,-i);if(((sessions[day]||{}).seconds||0)>=300)streak++;else break;}
-    return {date:todayKey,seconds,minutes:Math.floor(seconds/60),streak,due:cards.filter(c=>!c.fsrs||!c.fsrs.due||c.fsrs.due<=todayKey).length};
-  };
-  const [learnSummary,setLearnSummary]=useState(readLearnSummary);
-  useEffect(()=>{const refresh=()=>setLearnSummary(readLearnSummary());window.addEventListener("focus",refresh);window.addEventListener("storage",refresh);return()=>{window.removeEventListener("focus",refresh);window.removeEventListener("storage",refresh)}},[]);
 
   /* reminders: recurring chores + one-off tasks */
   const [agendaRecurring,setAgendaRecurring]=useState(()=>{
@@ -1781,14 +1799,12 @@ function App(){
   const pushTotal14=push14.reduce((a,b)=>a+b,0); const pushAvg14=Math.round(pushTotal14/14);
   let goalsHit7=0; for(let i=0;i<7;i++){ (goalsLog[addDays(todayKey,-i)]||[]).forEach(g=>{ if(g.done) goalsHit7++; }); }
   const learned7=recallList.filter(f=>f.addedOn>=addDays(todayKey,-6)).length;
-  const learnMinutesToday=learnSummary.minutes||0, learnDone=learnMinutesToday>=5, learnStreak=learnSummary.streak||0;
-  const learnDue=learnSummary.due||0;
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=k.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-GB",{weekday:"short",day:"numeric"}); };
   const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
-    const manage=page==="library"?<button className={"tileManage"+(onDaily?" on":"")} title={onDaily?"Remove from the daily dashboard":"Add to the daily dashboard"} onClick={e=>{e.stopPropagation();setTileActive(id,!onDaily);}}>{onDaily?"✓ Daily":"+ Add"}</button>:topright;
-    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={manage} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{children}</Tile>;
+    const libraryAction=page==="library"?<div className="libraryTileFooter"><button className={"libraryTileAction"+(onDaily?" on":"")} title={onDaily?"Remove from Today":"Add to Today"} onClick={e=>{e.stopPropagation();setTileActive(id,!onDaily);}}>{onDaily?"Remove from Today":"+ Add to Today"}</button></div>:null;
+    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?null:topright} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
   };
   /* dropped into any daily-generated tile; only renders once that key is known to have failed */
   const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
@@ -1874,7 +1890,7 @@ function App(){
       <div className="wrev">
         <div className="wrevSection chartSec">
           <div className="wrevTitle">Push-ups · last 14 days</div>
-          <div className="wrevMeta"><b>{pushTotal14}</b> total · ~{pushAvg14}/day avg</div>
+          <div className="wrevMeta pushChartLegend"><span><b>{pushTotal14}</b> total</span><span>~{pushAvg14}/day avg</span></div>
           <PushBars values={push14} />
           <div className="wrevAxis"><span>2w ago</span><span>1w</span><span>today</span></div>
         </div>
@@ -1925,7 +1941,6 @@ function App(){
         <div className="topnav">
           <button className={"navbtn"+(page==="dashboard"?" active":"")} onClick={()=>openPage("dashboard")}>Today</button>
           <button className={"navbtn"+(page==="library"?" active":"")} onClick={()=>openPage("library")}>Library</button>
-          <button className="navbtn" onClick={()=>location.href="learn/"}>Learn ↗</button>
         </div>
         <div className="topActions">
           <button className="actionBtn primary" onClick={generateToday} disabled={genBusy}><AppIcon name="sparkle"/><span>{genBusy?"Generating":contentReady?"Refresh":"Generate"}</span></button>
@@ -1948,11 +1963,6 @@ function App(){
           <div className="metric"><span className="heroClock">{pad(now.getHours())}:{pad(now.getMinutes())}</span><span className="metricLabel">Sydney</span></div>
         </div>
       </header>
-
-      {page==="dashboard"&&<button className="questStrip" onClick={()=>location.href="learn/"} aria-label="Open today's knowledge quest">
-        <span className="questGlyph">✦</span><span className="questCopy"><span className="questTitle">Today’s knowledge quest</span><span className="questMeta">{learnDone?`Streak secured · ${learnStreak} day${learnStreak===1?"":"s"}`:`${Math.max(0,5-learnMinutesToday)} min to protect your learning streak`} · {learnDue} challenge{learnDue===1?"":"s"} ready</span></span>
-        <span className="questProgress"><span style={{width:Math.min(100,learnMinutesToday/5*100)+"%"}}/></span>
-      </button>}
 
       {showSettings && (
         <div className="settings">
@@ -1994,9 +2004,20 @@ function App(){
 
       {page==="dashboard" && edit && <div className="edithint">✦ Drag a tile to move it · drag the bottom-right corner to resize · tap “Done” when finished.</div>}
 
-      <div className="grid" ref={gridRef} style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>
-        {(page==="library"?order:order.filter(id=>activeNow.has(id))).filter(id=>widgets[id]).map(id=>widgets[id])}
-      </div>
+      {page==="library" ? (
+        <div className="libraryShelves">
+          <section className="libraryShelf">
+            <div className="libraryShelfHead"><div><h2>Not on Today</h2><p>Explore the widgets that are resting outside your daily dashboard.</p></div><span className="libraryShelfCount">{order.filter(id=>!activeNow.has(id)&&widgets[id]).length} widgets</span></div>
+            {order.some(id=>!activeNow.has(id)&&widgets[id]) ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>!activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Every widget is currently on Today.</div>}
+          </section>
+          <section className="libraryShelf">
+            <div className="libraryShelfHead"><div><h2>On Today</h2><p>Your current daily set, shown here without corner stickers.</p></div><span className="libraryShelfCount">{order.filter(id=>activeNow.has(id)&&widgets[id]).length} widgets</span></div>
+            <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div>
+          </section>
+        </div>
+      ) : (
+        <div className="grid" ref={gridRef} style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div>
+      )}
 
       {showJournal && (
         <div className="ovl" onClick={()=>setShowJournal(false)}>
@@ -2110,7 +2131,7 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
   useEffect(()=>{ if(snap.length===0) onComplete(); /* eslint-disable-next-line */ },[]);
   const handle=(item,ok)=>{ onGrade(item,ok); setAnswered(a=>{ const n={...a,[item.id]:true}; if(Object.keys(n).length>=snap.length) onComplete(); return n; }); };
   const undo=item=>{ onRestore(item); onIncomplete(); setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; }); };
-  if(snap.length===0) return <Note>Nothing due. Words and lessons you finish return here as quick quizzes on a 1/3/7/16-day schedule, so they stick.</Note>;
+  if(snap.length===0) return <PlainEmpty>Nothing due. Words and lessons you finish return here as quick quizzes on a 1/3/7/16-day schedule, so they stick.</PlainEmpty>;
   return <div>{snap.map(item=>{
     const prompts=(item.quiz.prompts&&item.quiz.prompts.length)?item.quiz.prompts:[item.quiz.prompt||""];
     const seen=item.seen||1;
@@ -2172,7 +2193,7 @@ function BirthdaysCard({birthdays,today,celebrated,onCelebrate,onAdd,onRemove,on
       </div>
       <BirthdayInput onAdd={onAdd} />
       <div style={{marginTop:5}}>
-        {birthdays.length===0 && <Note>Import your contacts, or add people by hand.</Note>}
+        {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Import your contacts or add someone by hand.</div></div>}
         {[...birthdays].sort((a,b)=>a.month-b.month||a.day-b.day).map(b=>(<div key={b.id} className="trow">
           <span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span>
           <span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span>
@@ -2231,7 +2252,7 @@ function AgendaCard({recurring,events,birthdays,checks,onMarkDone,onAddRecurring
   return (
     <div className="taskAgenda">
       <p className="taskIntro">Recurring chores and one-off things to do.</p>
-      {shown.length===0 && <Note>No tasks on the radar.</Note>}
+      {shown.length===0 && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>(
         <div key={r.id} className={"agRow taskRow"+(r.done?" done":"")}>
           {r.canCheck

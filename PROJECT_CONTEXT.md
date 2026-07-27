@@ -15,7 +15,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Learn game entry: `learn/index.html`.
 - React 18 and Babel are loaded from CDNs; no build step is currently required.
 - Data persists in browser `localStorage` with `fefe_` keys.
-- Learn owns `fefe_learnDB` and publishes the lightweight `fefe_learnSummary` read model used by the Dashboard quest launcher.
+- Learn owns `fefe_learnDB`; Dashboard does not load or display Learn navigation or progress.
 - Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
 - JSON backup and restore are available in Settings.
 - Existing saved data must survive code and architecture changes.
@@ -48,7 +48,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 
 ## Learn direction
 
-- Learn is a separate standalone app at `learn/index.html`; the dashboard contains one compact Today's Knowledge Quest launcher and does not load the Learn engine.
+- Learn is a separate standalone app at `learn/index.html`; Dashboard intentionally contains no Learn menu or launcher.
 - Academic uploads and Second Brain entries stay in Dashboard + Library and do not populate Learn gameplay.
 - Review scheduling uses a local FSRS-style stability/difficulty model targeting 90% retention.
 - Learn v2 has three finite modes: Sugar Rush (6), Knowledge Quest (12), and Mega Boss (10 with lives).
