@@ -657,16 +657,16 @@
   .taskAddForm{margin-top:3px;padding:10px;border:1px dashed color-mix(in srgb,var(--accent) 42%,transparent);border-radius:14px;background:rgba(255,255,255,.26)}
   /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
-  .eventHero{position:relative;overflow:hidden;padding:10px 12px 11px;border:2px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
+  .eventHero{position:relative;overflow:hidden;padding:8px 10px 9px;border:1.5px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
   .eventHero::after{content:"";position:absolute;right:-28px;bottom:-44px;width:126px;height:126px;border-radius:50%;background:color-mix(in srgb,var(--accent) 14%,transparent);pointer-events:none}
   .eventHeroTop{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .eventType{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accentDark);font-size:9px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
-  .eventCountdown{position:relative;z-index:1;display:flex;align-items:baseline;gap:7px;margin-top:8px}
-  .eventCountdown strong{font-size:clamp(30px,13cqi,48px);line-height:.88;letter-spacing:-.055em;color:var(--accentDark)}
+  .eventCountdown{position:relative;z-index:1;display:flex;align-items:baseline;gap:6px;margin-top:6px}
+  .eventCountdown strong{font-size:clamp(26px,11cqi,42px);line-height:.9;letter-spacing:-.05em;color:var(--accentDark)}
   .eventCountdown span{max-width:72px;color:var(--dim);font-size:10.5px;font-weight:850;line-height:1.1;text-transform:uppercase}
-  .eventTitle{position:relative;z-index:1;margin-top:7px;font-size:15.5px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
+  .eventTitle{position:relative;z-index:1;margin-top:5px;font-size:14.5px;font-weight:900;line-height:1.18;overflow-wrap:anywhere}
   .eventDate{position:relative;z-index:1;margin-top:3px;color:var(--dim);font-size:11.5px;font-weight:750}
-  .eventList{display:flex;flex-direction:column;gap:10px}
+  .eventList{display:flex;flex-direction:column;gap:8px}
   .eventEmpty{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:2px dashed color-mix(in srgb,var(--accent) 32%,transparent);border-radius:22px;background:rgba(255,255,255,.28)}
   .eventEmptyGlyph{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:var(--accent);color:#fff;font-size:18px}
   .eventEmpty b{margin-top:4px;font-size:15px;line-height:1.25}
@@ -853,8 +853,8 @@
   .libraryTileFooter::before{content:"";display:block;width:100%;height:1px;margin-bottom:9px;background:color-mix(in srgb,var(--accent) 18%,transparent)}
   .tile button.libraryTileAction{width:100%;min-height:34px!important;padding:7px 12px!important;border-style:dashed!important;font-size:10.5px}
   .tile button.libraryTileAction.on{border-style:solid!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.28))!important}
-  .tile:has(.libraryRemoveToday){overflow:visible}
-  .tile:has(.libraryRemoveToday)>.topright{top:-13px;right:-13px}
+  .tile.cornerOutside{overflow:visible}
+  .tile.cornerOutside>.topright{top:-10px!important;right:-10px!important;left:auto!important}
   .libraryRemoveToday{
     display:grid!important;place-items:center;width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
     padding:0!important;border:2px solid var(--accent)!important;border-radius:50%!important;
@@ -908,6 +908,8 @@
   .tile.completed .taskAgenda .taskRow{border-color:rgba(255,255,255,.38)!important;background:rgba(255,255,255,.14)!important}
   .tile.completed .taskAgenda .taskRow.done{opacity:.82}
   .tile.completed .taskAgenda .agWhen{color:#fff!important;border-color:rgba(255,255,255,.42)!important;background:rgba(255,255,255,.16)!important}
+  .tile.completed button.taskMain[aria-pressed="true"]{border:0!important;background:transparent!important;color:#fff!important;box-shadow:none!important}
+  .emptyAgendaComplete{width:100%!important;margin-bottom:2px;padding:7px 10px!important;border-style:dashed!important;font-size:10px}
   .tile button.taskMain{
     display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;justify-content:center;
     width:auto;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0!important;
@@ -929,11 +931,13 @@
   .timerWrap{display:flex;flex-direction:column;justify-content:center;width:100%;height:100%}
   .timerControls{display:flex;flex-direction:column}
   .timerActions{margin-top:11px}
-  @container tile (min-width:430px){
-    .tile[data-tileid="timer"] .timerWrap{display:grid;grid-template-columns:minmax(120px,.72fr) minmax(280px,1.28fr);align-items:center;gap:14px}
-    .tile[data-tileid="timer"] .timerControls{flex-direction:row;align-items:center;justify-content:flex-end;gap:8px}
-    .tile[data-tileid="timer"] .timerSteppers{flex:1 1 auto;margin-top:0;grid-template-columns:repeat(4,minmax(48px,1fr))}
-    .tile[data-tileid="timer"] .timerActions{flex:none;margin-top:0}
+  .tile[data-tileid="timer"][data-rows="1"] .content{padding-top:4px}
+  .tile[data-tileid="timer"][data-rows="1"] .timerBig{font-size:clamp(24px,9cqi,32px)}
+  @container tile (min-width:330px){
+    .tile[data-tileid="timer"] .timerWrap{display:grid;grid-template-columns:minmax(112px,.72fr) minmax(180px,1.28fr);align-items:center;gap:10px}
+    .tile[data-tileid="timer"] .timerControls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-self:center;gap:4px 6px;width:100%}
+    .tile[data-tileid="timer"] .timerSteppers,.tile[data-tileid="timer"] .timerActions{display:contents}
+    .tile[data-tileid="timer"] .timerControls button{width:100%;min-height:28px!important;padding:3px 7px!important;font-size:10.5px}
     .tile[data-tileid="timer"] .timerRow{justify-content:flex-start}
     .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{flex-direction:row!important;align-items:center!important;gap:12px}
     .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:0 0 23%;width:auto;font-size:30px}
@@ -1329,14 +1333,14 @@ const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 
-function Tile({id,label,done,size,cols,edit,lifted,topright,onTap,onMoveStart,onResizeStart,children}){
+function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
   const tileCols=Math.min(size.c,cols);
   const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
   const tbodyRef=useRef(null);
   useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
-    <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
+    <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && <div className="topright">{topright}</div>}
       <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
@@ -1850,7 +1854,7 @@ function App(){
   agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,addDays(r.lastDone,r.everyDays))<=0; if(done||due)agendaTodayStates.push(done); });
   agendaEvents.forEach(e=>{ const done=e.doneDate===todayKey, due=!e.doneDate&&e.date<=todayKey; if(done||due)agendaTodayStates.push(done); });
   todayBdays.forEach(b=>agendaTodayStates.push(!!(agendaChecks[todayKey]||{})["gift-"+b.id]));
-  const agendaLit=agendaTodayStates.length>0&&agendaTodayStates.every(Boolean);
+  const agendaLit=!!rToday.agenda||(agendaTodayStates.length>0&&agendaTodayStates.every(Boolean));
   const activeNow=new Set(activeTiles);
   const scoredRituals=ritualScoreIds.filter(id=>activeNow.has(id));
   const litTotal=scoredRituals.length+(activeNow.has("habits")?habits.length:0)+(activeNow.has("goals")?goals.length:0);
@@ -1871,7 +1875,7 @@ function App(){
     const onDaily=activeNow.has(id);
     const libraryAction=page==="library"&&!onDaily?<div className="libraryTileFooter"><button className="libraryTileAction" title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+ Add to Today</button></div>:null;
     const libraryRemove=page==="library"&&onDaily?<button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>:null;
-    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryRemove:topright} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
+    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryRemove:topright} cornerOutside={!!libraryRemove} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}><>{children}{libraryAction}</></Tile>;
   };
   /* dropped into any daily-generated tile; only renders once that key is known to have failed */
   const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
@@ -1982,6 +1986,7 @@ function App(){
     agenda: T("agenda","Reminders",agendaLit,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         checks={agendaChecks[todayKey]||{}}
+        noDueToday={agendaTodayStates.length===0} emptyDone={!!rToday.agenda} onToggleEmpty={()=>toggleRitual("agenda")}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
         onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} onToggleCheck={toggleAgendaCheck} />),
     events: T("events","Events",false,null,
@@ -2293,7 +2298,7 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
-function AgendaCard({recurring,events,birthdays,checks,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,onToggleCheck}){
+function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,onToggleCheck}){
   const [showAdd,setShowAdd]=useState(false);
   const rows=[];
   recurring.forEach(r=>{
@@ -2313,7 +2318,8 @@ function AgendaCard({recurring,events,birthdays,checks,onMarkDone,onAddRecurring
   const shown=rows.slice(0,7);
   return (
     <div className="taskAgenda">
-      {shown.length===0 && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
+      {noDueToday && <button className={"emptyAgendaComplete"+(emptyDone?" on":"")} aria-pressed={emptyDone} onClick={onToggleEmpty}>{emptyDone?"Today clear ✓":"Nothing due · mark today clear"}</button>}
+      {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
         <div key={r.id} className={"agRow taskRow"+state}>
           <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
