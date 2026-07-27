@@ -797,16 +797,25 @@
     overflow:visible
   }
   /* Push-ups uses a compact poster layout that always clears the lower border. */
-  .tile[data-tileid="pushups"][data-rows="1"] .content{overflow:hidden}
+  .tile[data-tileid="pushups"][data-rows="1"] .content{
+    display:block!important;width:100%!important;overflow:hidden;container-type:normal!important
+  }
   .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{
-    display:grid;grid-template-rows:auto auto;align-content:center;gap:4px;height:100%;padding:1px 0 2px
+    display:flex!important;flex-direction:column;align-items:stretch!important;justify-content:center;
+    gap:4px;width:100%!important;height:100%;padding:1px 0 2px
   }
-  .tile[data-tileid="pushups"][data-rows="1"] .pushCount{font-size:20px;line-height:.95}
-  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{align-self:end;gap:5px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushCount{
+    width:100%;font-size:20px;line-height:.95;text-align:center
+  }
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{
+    display:grid!important;grid-template-columns:repeat(4,minmax(32px,1fr));
+    align-self:stretch!important;gap:5px;width:100%!important
+  }
   .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puBtn{
-    min-height:27px!important;height:27px;padding:2px 4px;font-size:10.5px;line-height:1
+    width:100%!important;min-width:32px!important;min-height:27px!important;height:27px;
+    padding:2px 4px;font-size:10.5px;line-height:1;white-space:nowrap!important
   }
-  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puReset{width:31px}
+  .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puReset{width:100%!important}
   /* Birthday summary becomes one compact row instead of stacking into the title. */
   .birthdaysSummary{display:flex;flex-direction:column;gap:8px;width:100%}
   .birthdaySummaryCopy{min-width:0}
@@ -815,16 +824,26 @@
   .birthdayNext{margin-top:4px;font-size:12.5px;line-height:1.3}
   .birthdayOpen{align-self:flex-start;margin-top:0!important}
   .tile[data-tileid="birthdays"][data-rows="1"] .content{justify-content:center;overflow:hidden;text-align:left}
+  .birthdayOpenCompact{display:none}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdaysSummary{
-    display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px
+    display:flex;flex-direction:row;align-items:center;gap:7px;width:100%
   }
-  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{font-size:12.5px;white-space:nowrap}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdaySummaryCopy{
+    flex:1 1 auto;width:0;min-width:0;overflow:hidden
+  }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{
+    display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+    font-size:12px;white-space:nowrap
+  }
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayNext{
     margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px
   }
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpen{
-    min-height:28px!important;padding:5px 9px!important;font-size:9.5px;white-space:nowrap!important
+    flex:0 0 auto;width:auto!important;min-width:48px;min-height:28px!important;
+    padding:5px 9px!important;font-size:9.5px;white-space:nowrap!important
   }
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpenFull{display:none}
+  .tile[data-tileid="birthdays"][data-rows="1"] .birthdayOpenCompact{display:inline}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodaySummary{gap:3px}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayEmoji,
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayMessage{display:none}
@@ -834,9 +853,6 @@
   }
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayCelebrate{
     min-height:27px!important;margin-top:0!important;padding:4px 8px!important;font-size:9.5px
-  }
-  @container tile (max-width:250px){
-    .tile[data-tileid="birthdays"][data-rows="1"] .birthdayImportWords{display:none}
   }
 </style>
 </head>
@@ -2144,7 +2160,7 @@ function BirthdaysCard({birthdays,today,celebrated,onCelebrate,onAdd,onRemove,on
         <div className="birthdayStatus">No birthdays today</div>
         {next && <div className="muted birthdayNext">Next: {next.name} · {pad(next.day)}/{pad(next.month)} · {next.days===0?"today":next.days===1?"tomorrow":"in "+next.days+" days"}</div>}
       </div>)}</div>
-      <button className="link birthdayOpen" onClick={(e)=>{e.stopPropagation(); setOpen(true);}}>All birthdays<span className="birthdayImportWords"> &amp; import</span> →</button>
+      <button className="link birthdayOpen" onClick={(e)=>{e.stopPropagation(); setOpen(true);}}><span className="birthdayOpenFull">All birthdays &amp; import →</span><span className="birthdayOpenCompact">Open →</span></button>
     </div>
   );
   return (
