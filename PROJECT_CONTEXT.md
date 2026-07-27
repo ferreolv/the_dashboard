@@ -28,6 +28,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Goals, habits, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
+- The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
 
 ## Durable design preferences
 
