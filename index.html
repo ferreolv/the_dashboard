@@ -238,6 +238,30 @@
   @keyframes rise { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:none;} }
   @keyframes spin { to { transform: rotate(360deg);} }
 
+  /* ---- guided breathing ---- */
+  .breathCard { min-height:100%; display:grid; grid-template-columns:minmax(104px,.9fr) minmax(0,1.1fr); align-items:center; gap:clamp(9px,4cqi,16px); }
+  .breathStage { position:relative; min-height:132px; display:grid; place-items:center; }
+  .breathProgress { position:relative; width:clamp(98px,38cqi,140px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; background:conic-gradient(var(--accent) var(--breath-progress,0deg),color-mix(in srgb,var(--accent) 13%,transparent) 0); transition:background .2s linear; }
+  .breathProgress::before { content:""; position:absolute; width:calc(clamp(98px,38cqi,140px) - 7px); aspect-ratio:1; border-radius:50%; background:color-mix(in srgb,var(--bg) 74%,white); opacity:.96; }
+  .breathOrb { position:relative; z-index:1; width:clamp(68px,27cqi,100px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; color:#fff; background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 42%,white),var(--accent) 58%,var(--accentDark)); box-shadow:0 14px 32px color-mix(in srgb,var(--accent) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.66); transform:scale(.68); transition-property:transform,box-shadow; transition-timing-function:cubic-bezier(.4,0,.2,1); }
+  .breathOrb::before,.breathOrb::after { content:""; position:absolute; inset:-9px; border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent); border-radius:50%; opacity:.72; }
+  .breathOrb::after { inset:-18px; opacity:.34; }
+  .breathOrb.inhale { transform:scale(1); box-shadow:0 18px 38px color-mix(in srgb,var(--accent) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.72); }
+  .breathOrb.exhale,.breathOrb.idle { transform:scale(.68); }
+  .breathCount { font-size:clamp(20px,8cqi,30px); line-height:1; font-weight:900; letter-spacing:-.04em; }
+  .breathCopy { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
+  .breathPhase { font-size:clamp(20px,7cqi,30px); line-height:1; font-weight:900; letter-spacing:-.035em; color:var(--ink); }
+  .breathCue { color:var(--dim); font-size:11.5px; line-height:1.25; font-weight:750; }
+  .breathRecipe { display:flex; align-items:center; flex-wrap:wrap; gap:5px; margin-top:2px; }
+  .breathRecipe span { display:inline-flex; align-items:center; min-height:24px; padding:4px 8px; border:1px solid var(--fieldbd); border-radius:999px; background:var(--field); color:var(--dim); font-size:9.5px; line-height:1; font-weight:850; white-space:nowrap; }
+  .breathRounds { display:flex; align-items:center; gap:5px; margin:4px 0 1px; }
+  .breathRound { width:7px; height:7px; border-radius:50%; background:color-mix(in srgb,var(--accent) 18%,transparent); transition:transform .2s ease,background .2s ease; }
+  .breathRound.current { transform:scale(1.45); background:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 13%,transparent); }
+  .breathRound.done { background:var(--accent); }
+  .breathActions { display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin-top:4px; }
+  .breathActions .pill { min-width:82px; justify-content:center; }
+  .breathDone { font-size:11px; line-height:1.3; color:var(--dim); font-weight:800; }
+
   /* ---- quiz retry ---- */
   .qretry { display:inline-block; background:none; border:none; color:var(--dim); font:700 10.5px/1 'Nunito',monospace; text-decoration:underline; cursor:pointer; padding:0; margin-top:9px; }
   .qretry:hover { color:var(--ink); }
@@ -700,6 +724,8 @@
     .tile .noteActions>*,.tile .timerActions>*,.tile .musicActions>*{flex:1 1 auto}
     .eventFormRow{grid-template-columns:1fr auto}
     .eventTypeSelect{grid-column:1/-1}
+    .breathCard{grid-template-columns:minmax(88px,.8fr) minmax(0,1.2fr)}
+    .breathStage{min-height:112px}
   }
   @container tile (max-width:240px){
     .tile{padding:12px}
@@ -715,7 +741,33 @@
     .tile .peopleAddRow .addbtn,.tile .birthdayAddRow .addbtn{grid-column:1/-1;width:100%}
     .tile .pill,.tile .mark,.tile .puBtn,.tile .ghostbtn,.tile .pillBtn,
     .tile .tileRetryBtn,.tile .link,.tile .tab,.tile .savebtn{width:100%}
+    .breathCard{grid-template-columns:74px minmax(0,1fr);gap:7px}
+    .breathStage{min-height:82px}
+    .breathProgress{width:72px}
+    .breathProgress::before{width:65px}
+    .breathOrb{width:52px}
+    .breathPhase{font-size:17px}
+    .breathCue{font-size:9.5px}
+    .breathRecipe span{padding:3px 6px;font-size:8px}
+    .breathActions .pill{min-width:0}
   }
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCard{grid-template-columns:56px minmax(0,1fr);gap:7px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathStage{min-height:50px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress{width:48px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress::before{width:43px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathOrb{width:34px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathOrb::before{inset:-4px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathOrb::after{display:none}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCount{font-size:14px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCopy{gap:1px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathPhase{font-size:14px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCue{font-size:8px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathRecipe{display:none}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathRounds{margin:1px 0}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathRound{width:5px;height:5px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathActions{margin:1px 0 0}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathActions .pill,.tile[data-tileid="breathing"][data-rows="1"] .breathActions .link{min-height:22px!important;padding:2px 8px!important;font-size:8.5px}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathDone{display:none}
   @media(max-width:639px){
     .grid{grid-auto-rows:auto}
     .tile{height:auto;min-height:0}
@@ -1017,6 +1069,7 @@ const COL = {
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
   birthdays:{p:"#FFE3F0", v:"#FF4FA3", d:"#AC2A6C"},
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
+  breathing:{p:"#DCF7F6", v:"#0DB9B1", d:"#08736E"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
   events:   {p:"#EAE5FF", v:"#7357F6", d:"#4931AE"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
@@ -1025,7 +1078,7 @@ const COL = {
   philo:    {p:"#EEE8FF", v:"#8A5CFF", d:"#543AAE"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
 };
-const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","brain","academic","brainflex","philo","people"]);
+const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","brainflex","philo","people"]);
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
@@ -1456,12 +1509,14 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
-const V2_ORDER=["goals","habits","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["goals","habits","breathing","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
+const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
+const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
@@ -1486,14 +1541,14 @@ function App(){
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library"].includes(route)?route:"dashboard"; });
   const [showSettings,setShowSettings]=useState(false);
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; const merged=[...s,...ALL.filter(x=>!s.includes(x))]; if(EVENTS_TILE_INTRODUCED) return merged; const placed=placeEventsAfterReminders(merged); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")){ next=[...next,"events"]; save("activeTiles",next); } if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); return next; });
-  const [tileSets,setTileSets]=useState(()=>load("activeTileHistory",{}));
+  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); return next; });
+  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>id!=="breathing")}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
   const [goalsLog,setGoalsLog]=useState(()=>load("goalsLog",{}));
@@ -1959,7 +2014,7 @@ function App(){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","music","world"];
+  const ritualScoreIds=["word","worth","spanish","music","world","breathing"];
   const ritualOK=k=>{ const r=ritualLog[k]||{}, active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:!!r[id]); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
@@ -2123,6 +2178,8 @@ function App(){
         onImport={importVcf} />),
     timer: T("timer","Timer",timerFired,null,
       <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
+    breathing: T("breathing","Breathing",!!rToday.breathing,null,
+      <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} />),
     agenda: T("agenda","Reminders",agendaLit,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         checks={agendaChecks[todayKey]||{}}
@@ -2432,6 +2489,71 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove,onImport}){
         </div>
       </div>,document.body)}
     </>
+  );
+}
+
+function BreathingCard({done,onComplete}){
+  const TOTAL_MS=60000, CYCLE_MS=10000, INHALE_MS=4000;
+  const [startedAt,setStartedAt]=useState(null);
+  const [clock,setClock]=useState(Date.now());
+  const [finished,setFinished]=useState(done);
+  const completeRef=useRef(onComplete);
+  const completedRef=useRef(false);
+  completeRef.current=onComplete;
+  useEffect(()=>{ if(done)setFinished(true); },[done]);
+  useEffect(()=>{
+    if(!startedAt)return;
+    const advance=()=>{
+      const current=Date.now();
+      if(current-startedAt>=TOTAL_MS){
+        if(completedRef.current)return;
+        completedRef.current=true;
+        setClock(startedAt+TOTAL_MS);
+        setStartedAt(null);
+        setFinished(true);
+        completeRef.current();
+        try{ navigator.vibrate&&navigator.vibrate([55,45,55]); }catch(e){}
+        return;
+      }
+      setClock(current);
+    };
+    advance();
+    const timer=setInterval(advance,100);
+    return ()=>clearInterval(timer);
+  },[startedAt]);
+  const running=startedAt!==null;
+  const elapsed=running?Math.min(TOTAL_MS,Math.max(0,clock-startedAt)):0;
+  const cycleIndex=running?Math.min(5,Math.floor(elapsed/CYCLE_MS)):finished?6:0;
+  const withinCycle=elapsed%CYCLE_MS;
+  const inhaling=running&&withinCycle<INHALE_MS;
+  const phaseRemaining=running?Math.max(1,Math.ceil(((inhaling?INHALE_MS:CYCLE_MS)-withinCycle)/1000)):null;
+  const begin=()=>{ const time=Date.now(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
+  const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
+  const phase=running?(inhaling?"Inhale":"Exhale"):finished||done?"Complete":"Ready";
+  const cue=running?(inhaling?"through your nose":"gently and slowly"):finished||done?"Six calm rounds finished":"4 seconds in · 6 seconds out";
+  return (
+    <div className="breathCard">
+      <div className="breathStage">
+        <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="60" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
+          <div className={"breathOrb "+(running?(inhaling?"inhale":"exhale"):"idle")} style={{transitionDuration:running?(inhaling?"4s":"6s"):"700ms"}}>
+            <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"6"}</span>
+          </div>
+        </div>
+      </div>
+      <div className="breathCopy">
+        <div className="breathPhase" aria-live="polite">{phase}</div>
+        <div className="breathCue">{cue}</div>
+        {!running&&<div className="breathRecipe" aria-label="Inhale for 4 seconds, exhale for 6 seconds, repeat 6 times"><span>Nose · 4s</span><span>Gentle · 6s</span><span>× 6</span></div>}
+        <div className="breathRounds" aria-label={`${running?cycleIndex:finished||done?6:0} of 6 rounds complete`}>
+          {Array.from({length:6},(_,i)=><span key={i} className={"breathRound"+(i<cycleIndex?" done":running&&i===cycleIndex?" current":"")} />)}
+        </div>
+        <div className="breathActions">
+          {!running&&<button type="button" className="pill primary" onClick={begin}>{finished||done?"Again":"Start"}</button>}
+          {running&&<button type="button" className="link" onClick={stop}>Stop</button>}
+          {!running&&(finished||done)&&<span className="breathDone">1 minute</span>}
+        </div>
+      </div>
+    </div>
   );
 }
 
