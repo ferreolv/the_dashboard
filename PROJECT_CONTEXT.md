@@ -25,9 +25,9 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Configurable tile library with date-aware active-tile history.
 - Active tiles determine daily progress and perfect-day requirements.
 - Habits may use an emoji, text label, or both; emoji-only habits remain valid.
-- Goals, habits, task reminders, positive event countdowns, notes, weather, timer, learning content, Recall, Academic, Second Brain, Philosophy, People Met, and weekly review.
+- Goals, habits, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
-- Second Brain stores a recursively rendered knowledge tree and can globally reorganise note placement.
+- Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 
 ## Durable design preferences
 
@@ -36,7 +36,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
 - A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
 - Arrange and resize affordances stay on the right edge of every tile. Habit controls remain true circles at every responsive size.
-- Reminders are practical recurring or one-off tasks and expose a checkbox when due. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
+- Reminders are practical recurring or one-off tasks: later items stay subdued, due items become prominent, and completed items are crossed through without checkbox UI. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

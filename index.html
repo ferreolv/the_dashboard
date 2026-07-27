@@ -885,6 +885,48 @@
     .libraryShelfHead{align-items:flex-start}
     .pushChartLegend{font-size:10px}
   }
+  /* Hover keeps each widget's colour identity; borders never flash white. */
+  .tile:not(.editing):hover{
+    border-color:var(--accent)!important;
+    box-shadow:0 11px 26px color-mix(in srgb,var(--accent) 16%,rgba(55,45,88,.08)),inset 0 1px 1px rgba(255,255,255,.72)!important
+  }
+  /* Habit creation lives in a lightweight overlay, leaving the circular grid untouched. */
+  .habitAddOverlay{z-index:260;display:grid;place-items:center;padding:18px}
+  .habitAddModal{width:min(390px,100%);padding:22px;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 28px 80px rgba(30,35,60,.24);backdrop-filter:blur(24px)}
+  .habitAddModal h3{margin:0;color:#202334;font-size:20px;letter-spacing:-.03em}
+  .habitAddModal p{margin:5px 0 16px;color:#777c8e;font-size:12px;line-height:1.4}
+  .habitAddFields{display:grid;grid-template-columns:76px minmax(0,1fr);gap:9px}
+  .habitModalInput{width:100%;height:46px;padding:0 13px;border:1.5px solid #dfe2eb;border-radius:14px;background:#fff;color:#26293a;font:700 13px/1 'Nunito',sans-serif;outline:none}
+  .habitModalInput:focus{border-color:#0fc087;box-shadow:0 0 0 4px rgba(15,192,135,.10)}
+  .habitModalEmoji{text-align:center;font-size:24px}
+  .habitAddActions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}
+  .habitModalCancel,.habitModalSave{min-height:38px;padding:8px 14px;border-radius:999px;font:800 11.5px/1 'Nunito',sans-serif;cursor:pointer}
+  .habitModalCancel{border:1px solid #dfe2eb;background:#fff;color:#626779}
+  .habitModalSave{border:1px solid #0fc087;background:#0fc087;color:#fff}
+  .habitModalSave:disabled{opacity:.4;cursor:default}
+  /* Reminders use simple text rows: later, due now, or crossed-through complete. */
+  .taskAgenda{gap:6px}
+  .taskAgenda .taskRow{display:flex;align-items:center;gap:8px;padding:8px 9px!important;transition:background .18s,border-color .18s,opacity .18s}
+  .taskAgenda .taskRow.later{border-style:dashed;background:rgba(255,255,255,.20);opacity:.72}
+  .taskAgenda .taskRow.dueNow{border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.46));box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 12%,transparent)}
+  .taskAgenda .taskRow.done{border-color:color-mix(in srgb,var(--accent) 16%,transparent);background:rgba(255,255,255,.18);opacity:.58}
+  .tile button.taskMain{
+    display:flex;flex:1 1 auto;flex-direction:column;align-items:flex-start;justify-content:center;
+    width:auto;min-width:0;min-height:0;padding:0!important;border:0!important;border-radius:0!important;
+    background:transparent!important;color:inherit!important;text-align:left;box-shadow:none!important;
+    transform:none!important;cursor:pointer
+  }
+  .tile button.taskMain:disabled{cursor:default;opacity:1}
+  .taskMain .agName{max-width:100%;font-size:12.5px;font-weight:850;line-height:1.25;overflow-wrap:anywhere}
+  .taskMain .agSub{margin-top:2px;color:var(--dim);font-size:9.5px;line-height:1.25}
+  .taskRow.done .agName{text-decoration:line-through 2px;text-decoration-color:currentColor}
+  .taskAgenda .agWhen{flex:none;margin-left:auto;padding:4px 7px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
+  .taskAgenda .taskRow.dueNow .agWhen{background:var(--accent);color:#fff}
+  .taskAgenda .taskRow.later .agWhen{border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);color:var(--dim);background:transparent}
+  .taskAgenda .taskRow.done .agWhen{color:var(--dim);background:rgba(255,255,255,.32)}
+  @media(max-width:430px){
+    .habitAddFields{grid-template-columns:64px minmax(0,1fr)}
+  }
 </style>
 </head>
 <body>
@@ -989,7 +1031,7 @@ const genWord=(avoid)=>callClaude("You output ONLY valid minified JSON, no markd
 const genMusic=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Recommend ONE song that is critically or technically excellent yet UNDERRATED — something most people don't know but that a musicologist or serious critic would admire (craft, innovation, influence, musicianship). Deliberately vary widely across genres, eras and cultures every time (e.g. modal jazz, West African highlife, ambient, post-punk, bossa nova, baroque, experimental electronic, Appalachian folk, dub). Real, findable track. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ")||"none"}. Shape:{"title":"","artist":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, {max:350}).then(extractJSON);
 const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. Select intrinsically useful material whose importance follows naturally from accurate explanation, never from a forced analogy or post-hoc connection. Quiz questions should require a small inference using only material taught in the lesson; do not introduce a new fact or concept.",
-  `Write a short daily LESSON in story format. Goal: over many days, make the reader knowledgeable about EVERYTHING — rotate freely across ALL domains (hard sciences, mathematics, medicine, economics, finance, geopolitics, geography, world history, philosophy, psychology, art, architecture, music theory, literature, linguistics, law, technology, engineering, astronomy, ecology, anthropology…). CALIBRATE DIFFICULTY: assume a smart, curious 24-year-old business student who reads the news — skip what such a person already knows (no famous facts everyone learned at school), but stay broadly useful, never niche trivia. The sweet spot: important mechanisms, events, and concepts an educated adult plausibly hasn't mastered. Choose a domain clearly different from these recent lessons: ${(avoid||[]).join(" | ")||"none"}. Exactly 2 short paragraphs (~110 words total) separated by \\n\\n, vivid and concrete. Then a one-line memorable insight and a 2-question quiz. Shape:{"title":"","category":"","story":"","insight":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]},{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]}]}. Quiz rules: WRONG options must be plausibly close and internally consistent with the topic so the answer is not obvious — no absurd or off-topic distractors. Each "explain" one sentence; "answer" is the correct option index. "alt_prompts" are 2 alternative rewordings of the same question, used later for spaced recall.`, {max:1050}).then(extractJSON);
+  `Write a short daily LESSON in story format. Goal: over many days, make the reader knowledgeable about EVERYTHING — rotate freely across ALL domains (hard sciences, mathematics, medicine, economics, finance, geopolitics, geography, world history, philosophy, psychology, art, architecture, music theory, literature, linguistics, law, technology, engineering, astronomy, ecology, anthropology…). CALIBRATE DIFFICULTY: assume a smart, curious 24-year-old business student who reads the news — skip what such a person already knows (no famous facts everyone learned at school), but stay broadly useful, never niche trivia. The sweet spot: important mechanisms, events, and concepts an educated adult plausibly hasn't mastered. Choose a domain clearly different from these recent lessons: ${(avoid||[]).join(" | ")||"none"}. Exactly 2 short paragraphs (~110 words total) separated by \\n\\n, vivid and concrete. Then a one-line memorable insight and a 2-question quiz. Shape:{"title":"","category":"","story":"","insight":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]},{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]}]}. Quiz rules: make each question genuinely difficult through close conceptual distinctions or a small inference using only the lesson. Every prompt is at most 18 words. Every option is a parallel phrase of 2–5 words and at most 28 characters. Wrong options must be plausible and closely related, never absurd or off-topic. Each "explain" one sentence; "answer" is the correct option index. "alt_prompts" are 2 alternative rewordings of the same question, used later for spaced recall.`, {max:1050}).then(extractJSON);
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:650}).then(extractJSON);
 
@@ -1835,7 +1877,7 @@ function App(){
     word: T("word","Mot",!!rToday.word, null,<>
       <WordCard word={view.word} busy={genBusy} onLearned={learnWord} />
       <RetryNote tileKey="word"/></>),
-    worth: T("worth","Worth",!!rToday.worth, null,<>
+    worth: T("worth","Knowledge",!!rToday.worth, null,<>
       <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} />
       <RetryNote tileKey="worth"/></>),
     music: T("music","Song",!!rToday.music, null,<>
@@ -1920,7 +1962,7 @@ function App(){
         onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} onToggleCheck={toggleAgendaCheck} />),
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
-    brain: T("brain","Brain",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
+    brain: T("brain","Memory",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
       <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
       <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} />
@@ -2036,7 +2078,7 @@ function App(){
       {showBankBrowser && (
         <div className="ovl" onClick={()=>setShowBankBrowser(false)}>
           <div className="ovlcard" onClick={e=>e.stopPropagation()}>
-            <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Second brain</h3><div style={{display:"flex",gap:8}}><button className="ghostbtn" disabled={bankBusy||!Object.keys(brainBank.topics||{}).length} onClick={reorganizeBank}>{bankBusy?"Reorganising…":"Reorganise map"}</button><button className="ghostbtn" onClick={()=>setShowBankBrowser(false)}>Close</button></div></div>
+            <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Memory</h3><div style={{display:"flex",gap:8}}><button className="ghostbtn" disabled={bankBusy||!Object.keys(brainBank.topics||{}).length} onClick={reorganizeBank}>{bankBusy?"Reorganising…":"Reorganise map"}</button><button className="ghostbtn" onClick={()=>setShowBankBrowser(false)}>Close</button></div></div>
             {Object.keys(brainBank.topics||{}).length===0 && <p className="hint">Nothing filed yet — add what you learn from the tile on the board.</p>}
             <MindMap topics={brainBank.topics||{}} onRemove={(topic,id)=>{ const list=(brainBank.topics[topic]||[]).filter(x=>x.id!==id); const nt={...brainBank.topics}; if(list.length)nt[topic]=list;else delete nt[topic]; persistBank({topics:nt}); }}/>
           </div>
@@ -2072,19 +2114,19 @@ function HabitAdd({onAdd}){
   const [open,setOpen]=useState(false), [emoji,setEmoji]=useState(""), [label,setLabel]=useState("");
   const close=()=>{ setOpen(false); setEmoji(""); setLabel(""); };
   const s=()=>{ const value=[emoji.trim(),label.trim()].filter(Boolean).join(" "); if(value){ onAdd(value); close(); } };
-  if(!open) return <button className="hsq plus" onClick={()=>setOpen(true)}>＋</button>;
-  return (
-    <form className="hsq editing2 habitEditor" onSubmit={e=>{e.preventDefault();s();}}>
-      <input autoFocus className="hinput habitEmojiInput" aria-label="Habit emoji" placeholder="😊" maxLength="8" value={emoji} onChange={e=>setEmoji(e.target.value)}
-        onKeyDown={e=>{if(e.key==="Escape")close();}} />
-      <input className="hinput habitNameInput" aria-label="Habit name" placeholder="Name (optional)" value={label} onChange={e=>setLabel(e.target.value)}
-        onKeyDown={e=>{if(e.key==="Escape")close();}} />
-      <div className="habitEditorActions">
-        <button type="submit" className="habitEditorSave" aria-label="Add habit" disabled={!emoji.trim()&&!label.trim()}>✓</button>
-        <button type="button" className="habitEditorCancel" aria-label="Cancel" onClick={close}>×</button>
-      </div>
-    </form>
-  );
+  useEffect(()=>{ if(!open)return; const esc=e=>e.key==="Escape"&&close(); window.addEventListener("keydown",esc); return()=>window.removeEventListener("keydown",esc); },[open]);
+  return <><button className="hsq plus" aria-label="Add habit" onClick={()=>setOpen(true)}>＋</button>{open&&ReactDOM.createPortal(
+    <div className="ovl habitAddOverlay" onClick={close}>
+      <form className="habitAddModal" onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();s();}}>
+        <h3>Add a habit</h3><p>Choose an emoji, a name, or both.</p>
+        <div className="habitAddFields">
+          <input autoFocus className="habitModalInput habitModalEmoji" aria-label="Habit emoji" placeholder="😊" maxLength="8" value={emoji} onChange={e=>setEmoji(e.target.value)} />
+          <input className="habitModalInput" aria-label="Habit name" placeholder="Habit name (optional)" value={label} onChange={e=>setLabel(e.target.value)} />
+        </div>
+        <div className="habitAddActions"><button type="button" className="habitModalCancel" onClick={close}>Cancel</button><button type="submit" className="habitModalSave" disabled={!emoji.trim()&&!label.trim()}>Add habit</button></div>
+      </form>
+    </div>,document.body
+  )}</>;
 }
 function BirthdayInput({onAdd}){ const [name,setName]=useState(""); const [day,setDay]=useState(""); const [month,setMonth]=useState("");
   const s=()=>{ const d=Number(day),m=Number(month); if(name.trim()&&d>=1&&d<=31&&m>=1&&m<=12){ onAdd({name:name.trim(),day:d,month:m}); setName(""); setDay(""); setMonth(""); } };
@@ -2235,34 +2277,32 @@ function AgendaCard({recurring,events,birthdays,checks,onMarkDone,onAddRecurring
   const [showAdd,setShowAdd]=useState(false);
   const rows=[];
   recurring.forEach(r=>{
-    const due=addDays(r.lastDone,r.everyDays); const d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, sub:d<0?`Overdue by ${-d}d`:`Every ${r.everyDays} days`, canCheck:d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    const done=r.lastDone===todayKey, due=addDays(r.lastDone,r.everyDays), d=daysBetween(todayKey,due);
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:!done&&d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":e.date, canCheck:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":e.date, canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   birthdays.forEach(b=>{
     const nb=nextBirthday([b]), id="gift-"+b.id;
-    if(nb && nb.days<=14) rows.push({ id, kind:"One-off", label:"🎁 Gift for "+b.name, days:nb.days, done:!!checks[id], sub:checks[id]?"Completed today":nb.days===0?"Birthday today":`Birthday in ${nb.days}d`, canCheck:nb.days===0, onCheck:()=>onToggleCheck(id) });
+    if(nb && nb.days<=14) rows.push({ id, kind:"One-off", label:"🎁 Gift for "+b.name, days:nb.days, done:!!checks[id], sub:checks[id]?"Completed today":nb.days===0?"Birthday today":`Birthday in ${nb.days}d`, canToggle:nb.days===0||!!checks[id], onCheck:()=>onToggleCheck(id) });
   });
   rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days);
   const shown=rows.slice(0,7);
   return (
     <div className="taskAgenda">
-      <p className="taskIntro">Recurring chores and one-off things to do.</p>
       {shown.length===0 && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
-      {shown.map(r=>(
-        <div key={r.id} className={"agRow taskRow"+(r.done?" done":"")}>
-          {r.canCheck
-            ? <button className={"taskCheck"+(r.done?" on":"")} aria-label={(r.done?"Undo ":"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>{r.done?"✓":""}</button>
-            : <span className="agDot"/>}
-          <div className="agBody"><div className="agName">{r.label}</div><div className="agSub"><span className="agKind">{r.kind}</span>{r.sub}</div></div>
-          <span className={"agWhen"+(r.days<0&&!r.done?" due":"")}>{r.done?"done":r.days<0?`${-r.days}d over`:r.days===0?"today":`${r.days}d`}</span>
+      {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
+        <div key={r.id} className={"agRow taskRow"+state}>
+          <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
+            <span className="agName">{r.label}</span><span className="agSub">{r.sub}</span>
+          </button>
+          <span className="agWhen">{r.done?"done":r.days<0?`${-r.days}d late`:r.days===0?"due today":`in ${r.days}d`}</span>
           {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
-      ))}
+      );})}
       {!showAdd ? (
         <button className="link taskAddLink" onClick={()=>setShowAdd(true)}>+ Add task →</button>
       ) : (
