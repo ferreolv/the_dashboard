@@ -24,6 +24,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 
 - Configurable tile library with date-aware active-tile history.
 - Active tiles determine daily progress and perfect-day requirements.
+- Habits may use an emoji, text label, or both; emoji-only habits remain valid.
 - Goals, habits, task reminders, positive event countdowns, notes, weather, timer, learning content, Recall, Academic, Second Brain, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
 - Second Brain stores a recursively rendered knowledge tree and can globally reorganise note placement.

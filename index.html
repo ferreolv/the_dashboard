@@ -733,6 +733,47 @@
   .academicSetup{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
   .academicSetupGlyph{width:42px;height:42px;display:grid;place-items:center;border:2px solid color-mix(in srgb,var(--accent) 40%,#fff);border-radius:50%;background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.46));font-size:20px}
   .academicSetup p{max-width:44ch;margin:0;color:var(--dim);font-size:12.8px;line-height:1.5}
+  /* Generating is a content state, never a layout mode: the title remains the first row. */
+  .tile:has(.genState){justify-content:flex-start}
+  .tile:has(.genState) .tbody{display:flex;flex:1 1 auto;flex-direction:column;width:100%;text-align:left}
+  .tile:has(.genState) .tilehead{flex:none;align-self:stretch;justify-content:flex-start}
+  .tile:has(.genState) .content{flex:1 1 auto;align-items:stretch;justify-content:center;text-align:center}
+  /* Bordered controls always retain a real comfort zone around their label. */
+  .tile .pill,.tile .mark,.tile .ghostbtn,.tile .pillBtn,.tile .tileRetryBtn,
+  .tile .link,.tile .tab,.tile .savebtn,.tile .qretry,.tile .eventAddToggle{
+    box-sizing:border-box;padding:8px 15px!important;line-height:1.25!important;
+    white-space:normal!important;overflow-wrap:anywhere;text-wrap:balance
+  }
+  .tile .taskAddLink{display:inline-flex;align-items:center;align-self:flex-start}
+  /* Habit creation has separate emoji and label fields; either field can stand alone. */
+  .tile[data-tileid="habits"] .habitEditor{gap:5px;padding:9px!important;cursor:default}
+  .tile .habitEmojiInput{width:42px!important;max-width:70%!important;flex:none;padding:3px!important;text-align:center!important;font-size:22px!important;line-height:1!important}
+  .tile .habitNameInput{width:86%!important;flex:none;padding:4px 7px!important;text-align:center!important;font-size:11px!important}
+  .tile .habitEditorActions{display:flex!important;justify-content:center;gap:5px;width:auto!important}
+  .tile button.habitEditorSave,.tile button.habitEditorCancel{
+    width:29px;min-width:29px;min-height:29px!important;height:29px;padding:0!important;font-size:12px
+  }
+  /* Song and weather typography scale with the tile, rather than the browser. */
+  .musicTitle{font-size:clamp(18px,7cqi,25px);font-weight:900;line-height:1.08;letter-spacing:-.025em;overflow-wrap:anywhere}
+  .musicArtist{margin-top:4px;font-size:clamp(12px,4.2cqi,14px);font-weight:700;line-height:1.25}
+  .tile[data-tileid="weather"] .weatherSplit{height:auto;min-height:0;grid-template-columns:minmax(0,1.25fr) minmax(82px,.75fr);gap:clamp(7px,3cqi,14px);container-type:inline-size}
+  .weatherNow{display:flex;align-items:center;gap:clamp(7px,3cqi,12px);min-width:0}
+  .weatherEmoji{flex:none;font-size:clamp(28px,13cqi,46px);line-height:1}
+  .weatherReading{display:flex;align-items:baseline;gap:clamp(4px,2cqi,8px);flex-wrap:wrap}
+  .weatherReading .wbig{font-size:clamp(29px,14cqi,44px);line-height:.95}
+  .weatherLabel{font-size:clamp(10px,4.2cqi,13.5px);font-weight:750;line-height:1.15}
+  .weatherMeta{margin-top:3px;font-size:clamp(9.5px,3.8cqi,12px);line-height:1.25}
+  .tile[data-tileid="weather"] .wtomorrow{gap:2px;padding-left:clamp(7px,3cqi,14px);min-height:0}
+  .weatherTomorrowEmoji{font-size:clamp(17px,7cqi,23px);line-height:1}
+  .weatherTomorrowTemps{font-size:clamp(9.5px,3.6cqi,12px);line-height:1.2}
+  .weatherTomorrowLabel{font-size:clamp(9px,3.5cqi,11.5px);line-height:1.15}
+  .tile[data-tileid="weather"][data-rows="1"] .weatherSplit{align-items:center}
+  @container tile (max-width:300px){
+    .tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr}
+    .tile[data-tileid="weather"] .wtomorrow{display:grid;grid-template-columns:auto auto 1fr;align-items:center;border-left:0;border-top:1px solid var(--hair);padding:7px 0 0}
+    .tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}
+    .weatherTomorrowLabel{text-align:right}
+  }
 </style>
 </head>
 <body>
@@ -1097,14 +1138,14 @@ function WeatherCard({data,busy}){
   const [tlab,temoji]=t?(WMO[t.code]||["—","🌡️"]):["",""];
   return (
     <div className="weatherSplit">
-      <div style={{display:"flex",alignItems:"center",gap:12}}>
-        <span style={{fontSize:38}}>{emoji}</span>
+      <div className="weatherNow">
+        <span className="weatherEmoji">{emoji}</span>
         <div>
-          <div style={{display:"flex",alignItems:"baseline",gap:8}}><span className="wbig">{data.temp}°</span><span className="muted" style={{fontSize:13.5}}>{label}</span></div>
-          <div className="muted" style={{fontSize:12,marginTop:2}}>Sydney · H {data.hi}° · L {data.lo}°</div>
+          <div className="weatherReading"><span className="wbig">{data.temp}°</span><span className="muted weatherLabel">{label}</span></div>
+          <div className="muted weatherMeta">Sydney · H {data.hi}° · L {data.lo}°</div>
         </div>
       </div>
-      {t && <div className="wtomorrow"><span className="lbl">Tomorrow</span><span style={{fontSize:20}}>{temoji}</span><span style={{fontSize:12}}>H {t.hi}° · L {t.lo}°</span><span className="muted" style={{fontSize:11.5}}>{tlab}</span></div>}
+      {t && <div className="wtomorrow"><span className="lbl">Tomorrow</span><span className="weatherTomorrowEmoji">{temoji}</span><span className="weatherTomorrowTemps">H {t.hi}° · L {t.lo}°</span><span className="muted weatherTomorrowLabel">{tlab}</span></div>}
     </div>
   );
 }
@@ -1703,8 +1744,8 @@ function App(){
       <RetryNote tileKey="worth"/></>),
     music: T("music","Song",!!rToday.music, null,<>
       {view.music ? (<div>
-        <div style={{fontSize:17,fontWeight:700,lineHeight:1.2}}>{view.music.title}</div>
-        <div style={{fontSize:13,marginTop:1,opacity:0.9}}>{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
+        <div className="musicTitle">{view.music.title}</div>
+        <div className="musicArtist">{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
         {view.music.genre && <div style={{marginTop:5}}><span className="lbl">{view.music.genre}</span></div>}
         <p className="muted" style={{fontSize:12.5,margin:"7px 0 9px",lineHeight:1.4}}>{view.music.why}</p>
         <div className="musicActions">
@@ -1729,9 +1770,9 @@ function App(){
       </div>),
     habits: T("habits","Habits",habitsLit,null,<>
       <div className="hgrid">
-        {habits.map(h=>{ const on=!!hToday[h.id],parts=h.name.split(" "),hasIcon=/[^\w]/.test(parts[0]),icon=hasIcon?parts.shift():"",label=parts.join(" ")||h.name; return (
+        {habits.map(h=>{ const on=!!hToday[h.id],parts=h.name.trim().split(/\s+/),hasIcon=/[\p{Extended_Pictographic}\p{Emoji_Presentation}]/u.test(parts[0]||""),icon=hasIcon?parts.shift():"",label=hasIcon?parts.join(" "):h.name; return (
           <button key={h.id} className={"hsq"+(on?" on":"")} onClick={()=>toggleHabit(h.id)}>
-            {icon&&<span className="hicon">{icon}</span>}<span className="hname">{label}</span>
+            {icon&&<span className="hicon">{icon}</span>}{label&&<span className="hname">{label}</span>}
             <span className="hdel" onClick={(e)=>{e.stopPropagation(); persistHabits(habits.filter(x=>x.id!==h.id));}}>×</span>
           </button>
         ); })}
@@ -1927,14 +1968,21 @@ function App(){
 function GoalInput({onAdd,placeholder,compact}){ const [v,setV]=useState(""); const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); } };
   return <div className="addrow goalInputRow" style={compact?{opacity:.85}:null}><input className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onClick={s}>+</button></div>; }
 function HabitAdd({onAdd}){
-  const [open,setOpen]=useState(false); const [v,setV]=useState("");
-  const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); setOpen(false); } };
+  const [open,setOpen]=useState(false), [emoji,setEmoji]=useState(""), [label,setLabel]=useState("");
+  const close=()=>{ setOpen(false); setEmoji(""); setLabel(""); };
+  const s=()=>{ const value=[emoji.trim(),label.trim()].filter(Boolean).join(" "); if(value){ onAdd(value); close(); } };
   if(!open) return <button className="hsq plus" onClick={()=>setOpen(true)}>＋</button>;
   return (
-    <div className="hsq editing2">
-      <input autoFocus className="hinput" placeholder="Habit…" value={v} onChange={e=>setV(e.target.value)}
-        onKeyDown={e=>{ if(e.key==="Enter") s(); if(e.key==="Escape") setOpen(false); }} onBlur={()=>{ if(v.trim()) s(); else setOpen(false); }} />
-    </div>
+    <form className="hsq editing2 habitEditor" onSubmit={e=>{e.preventDefault();s();}}>
+      <input autoFocus className="hinput habitEmojiInput" aria-label="Habit emoji" placeholder="😊" maxLength="8" value={emoji} onChange={e=>setEmoji(e.target.value)}
+        onKeyDown={e=>{if(e.key==="Escape")close();}} />
+      <input className="hinput habitNameInput" aria-label="Habit name" placeholder="Name (optional)" value={label} onChange={e=>setLabel(e.target.value)}
+        onKeyDown={e=>{if(e.key==="Escape")close();}} />
+      <div className="habitEditorActions">
+        <button type="submit" className="habitEditorSave" aria-label="Add habit" disabled={!emoji.trim()&&!label.trim()}>✓</button>
+        <button type="button" className="habitEditorCancel" aria-label="Cancel" onClick={close}>×</button>
+      </div>
+    </form>
   );
 }
 function BirthdayInput({onAdd}){ const [name,setName]=useState(""); const [day,setDay]=useState(""); const [month,setMonth]=useState("");
