@@ -18,6 +18,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Learn owns `fefe_learnDB`; Dashboard does not load or display Learn navigation or progress.
 - Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
 - JSON backup and restore are available in Settings.
+- Settings lives on its own top-level dashboard page at `#/settings`.
 - Existing saved data must survive code and architecture changes.
 
 ## Current dashboard capabilities
@@ -42,12 +43,15 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Reminders are practical recurring or one-off tasks: later items stay subdued, due items become prominent, and completed items are crossed through without checkbox UI. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
 - In the Library, both Add-to-Today “+” and Remove-from-Today “×” are direct, absolutely positioned tile children centred half-inside/half-outside the top-right corner; neither action appears in the tile body or title wrapper. Compact Birthdays shows only today’s cake/name or the next birthday; its complete list and import controls live in a separate overlay.
 - Timer Stop pauses and preserves the remaining time for Resume; Reset alone starts it over. Every positive Event uses the same full countdown-card hierarchy rather than a primary/secondary split.
+- Birthday import lives in Settings with a short tutorial; the Birthdays tile stays focused on the compact summary and hidden full list.
 - Compact utility tiles retain their title and adapt to tile shape: wide Timer and Push-ups layouts move controls to the right, Weather gives Tomorrow equal visual weight, completed due Reminders receive the tile’s full-colour completion state, and Event cards stay comparatively compact.
 - Flat Timer tiles reserve a separate title row, keep the time on the left, keep adjustment/Stop/Resume/Reset controls on the right, and show no state-caption text. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
+- Tiles resting outside Today should not generate or surface fresh AI-loaded daily content in the Library; they stay lightweight until re-added to Today.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
 - Dashboard Recall uses FSRS-6 at 90% desired retention with the standard four ratings (Again, Hard, Good, Easy), presented as emoji-first reactions after each quiz answer. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
+- A saved location profile (city + timezone) drives the dashboard clock and weather tile.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.
@@ -71,7 +75,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - The launch atlas covers stable foundations across science, history, geography, economics, ideas & arts, technology, ecology and health; cards carry an organisation/source trail.
 - Any optional AI boss remix is constrained to this curated atlas, never personal imports.
 - Learn tracks its own five-minute daily streak, XP, sessions, and mastery. This does not alter perfect-day scoring.
-- Dashboard pages support direct hash routes `#/dashboard` and `#/library`; Learn uses the separate `learn/` path.
+- Dashboard pages support direct hash routes `#/dashboard`, `#/library`, and `#/settings`; Learn uses the separate `learn/` path.
 - Learn sessions should mix new concepts, due retrieval, connections, and games.
 - Prefer finite knowledge runs with conscious continuation over harmful infinite-scroll mechanics.
 - Recall and Second Brain should become shared infrastructure.
