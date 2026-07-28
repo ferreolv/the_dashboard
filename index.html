@@ -256,11 +256,11 @@
   .breathStage { position:relative; min-height:132px; display:grid; place-items:center; }
   .breathProgress { position:relative; width:clamp(98px,38cqi,140px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; background:conic-gradient(var(--accent) var(--breath-progress,0deg),color-mix(in srgb,var(--accent) 13%,transparent) 0); transition:background .2s linear; }
   .breathProgress::before { content:""; position:absolute; width:calc(clamp(98px,38cqi,140px) - 7px); aspect-ratio:1; border-radius:50%; background:color-mix(in srgb,var(--bg) 74%,white); opacity:.96; }
-  .breathOrb { position:relative; z-index:1; width:clamp(68px,27cqi,100px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; color:#fff; background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 42%,white),var(--accent) 58%,var(--accentDark)); box-shadow:0 14px 32px color-mix(in srgb,var(--accent) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.66); transform:scale(.68); transition-property:transform,box-shadow; transition-timing-function:cubic-bezier(.4,0,.2,1); }
+  .breathOrb { position:relative; z-index:1; width:clamp(68px,27cqi,100px); aspect-ratio:1; display:grid; place-items:center; border-radius:50%; color:#fff; background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 46%,white),var(--accent) 58%,var(--accentDark)); box-shadow:0 14px 32px color-mix(in srgb,var(--accent) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.66); transform:scale(var(--breath-scale,.78)); transition:transform .1s linear, box-shadow .1s linear; }
   .breathOrb::before,.breathOrb::after { content:""; position:absolute; inset:-9px; border:1.5px solid color-mix(in srgb,var(--accent) 38%,transparent); border-radius:50%; opacity:.72; }
   .breathOrb::after { inset:-18px; opacity:.34; }
-  .breathOrb.inhale { transform:scale(1); box-shadow:0 18px 38px color-mix(in srgb,var(--accent) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.72); }
-  .breathOrb.exhale,.breathOrb.idle { transform:scale(.68); }
+  .breathOrb.inhale,.breathOrb.exhale { box-shadow:0 18px 38px color-mix(in srgb,var(--accent) calc(18% + var(--breath-amount,0) * 22%),transparent),inset 0 1px 0 rgba(255,255,255,.72); }
+  .breathOrb.idle { box-shadow:0 12px 24px color-mix(in srgb,var(--accent) 18%,transparent),inset 0 1px 0 rgba(255,255,255,.66); }
   .breathCount { font-size:clamp(20px,8cqi,30px); line-height:1; font-weight:900; letter-spacing:-.04em; }
   .breathCopy { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
   .breathPhase { font-size:clamp(20px,7cqi,30px); line-height:1; font-weight:900; letter-spacing:-.035em; color:var(--ink); }
@@ -2903,6 +2903,9 @@ function BreathingCard({done,onComplete}){
   const cycleIndex=running?Math.min(5,Math.floor(elapsed/CYCLE_MS)):finished?6:0;
   const withinCycle=elapsed%CYCLE_MS;
   const inhaling=running&&withinCycle<INHALE_MS;
+  const phaseProgress=running?(inhaling?withinCycle/INHALE_MS:(withinCycle-INHALE_MS)/(CYCLE_MS-INHALE_MS)):0;
+  const breathAmount=running?(inhaling?phaseProgress:1-phaseProgress):(finished||done?1:0);
+  const breathScale=running?(0.72+breathAmount*0.34):(finished||done?1.02:0.8);
   const phaseRemaining=running?Math.max(1,Math.ceil(((inhaling?INHALE_MS:CYCLE_MS)-withinCycle)/1000)):null;
   const begin=()=>{ const time=Date.now(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
   const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
@@ -2912,7 +2915,7 @@ function BreathingCard({done,onComplete}){
     <div className="breathCard">
       <div className="breathStage">
         <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="60" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
-          <div className={"breathOrb "+(running?(inhaling?"inhale":"exhale"):"idle")} style={{transitionDuration:running?(inhaling?"4s":"6s"):"700ms"}}>
+          <div className={"breathOrb "+(running?(inhaling?"inhale":"exhale"):"idle")} style={{"--breath-scale":breathScale,"--breath-amount":breathAmount}}>
             <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"6"}</span>
           </div>
         </div>
