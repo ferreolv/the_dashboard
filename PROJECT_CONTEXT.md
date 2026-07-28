@@ -30,6 +30,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 - The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
 - Breathing is a guided one-minute daily widget: six rounds of a 4-second nasal inhale and 6-second gentle exhale, shown through an expanding/contracting visual, phase countdown, and round progress.
+- GMAT is a dashboard tile plus focused overlay workspace. It provides original adaptive Quant, Verbal, and Data Insights sprints; records accuracy, pacing, confidence and error causes; schedules broad skills with FSRS; tracks exam date, weekly minutes and official mock scores; and never presents its local practice as official material or invents a predicted GMAT score.
 
 ## Durable design preferences
 

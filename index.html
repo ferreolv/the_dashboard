@@ -307,6 +307,144 @@
   .bigtextarea:focus { border-color:#4F46E5; }
   .examLink { font-style:italic; background:var(--field); border-left:3px solid var(--lbl); border-radius:8px; padding:8px 11px; font-size:12.6px; line-height:1.5; margin-top:8px; color:var(--ink); }
 
+  /* ---- GMAT adaptive sprint ---- */
+  .gmatTile { height:100%; min-height:0; display:flex; flex-direction:column; gap:9px; }
+  .gmatFocus { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 13px; border:1.5px solid color-mix(in srgb,var(--accent) 34%,transparent); border-radius:17px; background:linear-gradient(135deg,rgba(255,255,255,.62),color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.28))); }
+  .gmatFocus::after { content:""; position:absolute; right:-26px; bottom:-38px; width:106px; height:106px; border-radius:50%; background:color-mix(in srgb,var(--accent) 12%,transparent); pointer-events:none; }
+  .gmatFocusCopy { position:relative; z-index:1; min-width:0; }
+  .gmatKicker { color:var(--dim); font-size:9px; line-height:1; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+  .gmatFocusName { margin-top:4px; font-size:clamp(15px,5.5cqi,20px); line-height:1.08; font-weight:900; letter-spacing:-.02em; overflow-wrap:anywhere; }
+  .gmatExamCountdown { position:relative; z-index:1; flex:none; text-align:right; }
+  .gmatExamCountdown strong { display:block; font-size:clamp(22px,8cqi,32px); line-height:.9; font-weight:900; letter-spacing:-.05em; }
+  .gmatExamCountdown span { display:block; margin-top:4px; color:var(--dim); font-size:8.5px; line-height:1.1; font-weight:850; text-transform:uppercase; }
+  .gmatSections { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  .gmatSectionMini { min-width:0; padding:8px 9px; border:1px solid var(--fieldbd); border-radius:13px; background:var(--field); }
+  .gmatSectionTop { display:flex; align-items:center; justify-content:space-between; gap:4px; font-size:9px; line-height:1; font-weight:900; }
+  .gmatSectionTop b { font-size:11px; }
+  .gmatMeter { height:5px; margin-top:6px; overflow:hidden; border-radius:999px; background:color-mix(in srgb,var(--accent) 12%,transparent); }
+  .gmatMeter span { display:block; height:100%; border-radius:inherit; background:var(--accent); }
+  .gmatTileActions { display:flex; align-items:center; justify-content:space-between; gap:7px; margin-top:auto; }
+  .gmatTileActions .pill { flex:1 1 auto; justify-content:center; }
+  .gmatTileMeta { color:var(--dim); font-size:9.5px; line-height:1.2; font-weight:800; text-align:right; white-space:nowrap; }
+  .gmatOverlay { --gm:#654EF2; --gmDark:#3E2AA6; background:radial-gradient(circle at 15% 10%,rgba(101,78,242,.25),transparent 38%),rgba(22,18,52,.72); }
+  .gmatWorkspace { max-width:980px; min-height:min(720px,calc(100vh - 60px)); padding:0; overflow:hidden; border:1px solid rgba(101,78,242,.17); border-radius:26px; background:linear-gradient(145deg,#fbfaff,#f2f0ff 58%,#f7fbff); box-shadow:0 36px 100px rgba(23,14,68,.35); color:#27204f; }
+  .gmatWorkspace button,.gmatWorkspace input { font-family:'Nunito',sans-serif; }
+  .gmatTop { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 20px; border-bottom:1px solid rgba(62,42,166,.1); background:rgba(255,255,255,.64); }
+  .gmatBrand { display:flex; align-items:center; gap:10px; min-width:0; }
+  .gmatBrandMark { width:39px; height:39px; display:grid; place-items:center; flex:none; border-radius:13px; background:linear-gradient(145deg,var(--gm),var(--gmDark)); color:#fff; font-size:12px; font-weight:950; letter-spacing:-.03em; box-shadow:0 9px 20px rgba(101,78,242,.25); }
+  .gmatBrand h2 { margin:0; font-size:17px; line-height:1.1; font-weight:950; letter-spacing:-.025em; }
+  .gmatBrand p { margin:3px 0 0; color:#70699a; font-size:10.5px; line-height:1.2; }
+  .gmatClose { width:37px; height:37px; padding:0; border:1px solid rgba(62,42,166,.15); border-radius:50%; background:#fff; color:var(--gmDark); cursor:pointer; font-size:20px; line-height:1; }
+  .gmatBody { min-height:0; padding:20px; }
+  .gmatNav { display:flex; gap:6px; margin-bottom:16px; overflow-x:auto; scrollbar-width:none; }
+  .gmatNav::-webkit-scrollbar { display:none; }
+  .gmatNavBtn { min-height:36px; padding:7px 13px; border:1px solid rgba(62,42,166,.13); border-radius:999px; background:rgba(255,255,255,.75); color:#615a88; cursor:pointer; font-size:10.5px; font-weight:850; white-space:nowrap; }
+  .gmatNavBtn.on { border-color:var(--gm); background:var(--gm); color:#fff; box-shadow:0 7px 16px rgba(101,78,242,.2); }
+  .gmatDashboard { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr); gap:14px; }
+  .gmatPanel { padding:16px; border:1px solid rgba(62,42,166,.1); border-radius:20px; background:rgba(255,255,255,.72); box-shadow:0 9px 24px rgba(46,35,108,.055); }
+  .gmatPanel h3 { margin:0; font-size:14px; line-height:1.2; font-weight:950; }
+  .gmatPanelSub { margin:4px 0 0; color:#756f98; font-size:10.5px; line-height:1.4; }
+  .gmatHeroPanel { position:relative; overflow:hidden; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(145deg,#6e57f4,#4b35c9); color:#fff; }
+  .gmatHeroPanel::after { content:""; position:absolute; right:-70px; bottom:-95px; width:260px; height:260px; border:1px solid rgba(255,255,255,.15); border-radius:50%; box-shadow:0 0 0 30px rgba(255,255,255,.045),0 0 0 62px rgba(255,255,255,.025); }
+  .gmatHeroPanel>* { position:relative; z-index:1; }
+  .gmatHeroPanel .gmatPanelSub { color:rgba(255,255,255,.74); }
+  .gmatHeroFocus { margin-top:15px; font-size:clamp(25px,4vw,38px); line-height:.98; font-weight:950; letter-spacing:-.045em; }
+  .gmatHeroActions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:18px; }
+  .gmatBtn { min-height:40px; display:inline-flex; align-items:center; justify-content:center; padding:8px 15px; border:1.5px solid var(--gm); border-radius:999px; background:var(--gm); color:#fff; cursor:pointer; font-size:11px; line-height:1.2; font-weight:900; text-decoration:none; }
+  .gmatBtn:hover { filter:brightness(1.06); transform:translateY(-1px); }
+  .gmatBtn.light { border-color:#fff; background:#fff; color:var(--gmDark); }
+  .gmatBtn.soft { border-color:rgba(101,78,242,.18); background:#f0edff; color:var(--gmDark); }
+  .gmatBtn.ghost { border-color:rgba(255,255,255,.38); background:rgba(255,255,255,.1); color:#fff; }
+  .gmatBtn:disabled { cursor:not-allowed; opacity:.45; transform:none; }
+  .gmatAnalytics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin-top:14px; }
+  .gmatStatCard { padding:12px; border:1px solid rgba(62,42,166,.1); border-radius:15px; background:rgba(255,255,255,.68); }
+  .gmatStatHead { display:flex; align-items:center; justify-content:space-between; gap:6px; color:#69628f; font-size:9.5px; font-weight:900; }
+  .gmatStatHead span:first-child { width:25px; height:25px; display:grid; place-items:center; border-radius:8px; background:#ebe8ff; color:var(--gmDark); }
+  .gmatStatValue { margin-top:10px; font-size:24px; line-height:.9; font-weight:950; letter-spacing:-.04em; }
+  .gmatStatSub { margin-top:5px; color:#7c769d; font-size:9px; font-weight:750; }
+  .gmatSideStack { display:flex; flex-direction:column; gap:14px; }
+  .gmatField { width:100%; min-height:40px; padding:9px 11px; border:1px solid rgba(62,42,166,.16); border-radius:11px; background:#fff; color:#29224f; outline:none; font-size:12px; }
+  .gmatField:focus { border-color:var(--gm); box-shadow:0 0 0 3px rgba(101,78,242,.1); }
+  .gmatSettingRow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:10px; }
+  .gmatDueList { display:flex; flex-direction:column; gap:7px; margin-top:11px; }
+  .gmatDueRow { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:11px; background:#f4f2ff; color:#5d5685; font-size:10px; font-weight:800; }
+  .gmatDueRow b { color:var(--gmDark); }
+  .gmatPracticeHead { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .gmatQuestionShell { max-width:760px; margin:0 auto; }
+  .gmatQuestionMeta { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#70699a; font-size:10px; font-weight:850; }
+  .gmatQuestionMeta span:first-child { display:inline-flex; align-items:center; gap:6px; }
+  .gmatQuestionMeta b { color:var(--gmDark); }
+  .gmatSessionProgress { height:6px; margin:9px 0 17px; overflow:hidden; border-radius:999px; background:#e5e1fa; }
+  .gmatSessionProgress span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#8b75ff,var(--gm)); transition:width .25s ease; }
+  .gmatQuestion { margin:0; font-size:clamp(17px,2.6vw,23px); line-height:1.32; font-weight:900; letter-spacing:-.02em; color:#2b2454; }
+  .gmatOptions { display:grid; gap:8px; margin-top:17px; }
+  .gmatOption { width:100%; min-height:44px; display:flex; align-items:center; gap:10px; padding:9px 12px; border:1.5px solid rgba(62,42,166,.13); border-radius:13px; background:#fff; color:#37305f; cursor:pointer; text-align:left; font-size:12px; line-height:1.3; font-weight:750; }
+  .gmatOption:hover:not(:disabled) { border-color:#9b8af7; background:#f7f5ff; }
+  .gmatOption:disabled { cursor:default; }
+  .gmatOption.correct { border-color:#24a66a; background:#eaf9f1; color:#12653f; }
+  .gmatOption.wrong { border-color:#e15a75; background:#fff0f3; color:#9f2941; }
+  .gmatOption.dim { opacity:.5; }
+  .gmatLetter { width:25px; height:25px; display:grid; place-items:center; flex:none; border-radius:8px; background:#eeeafd; color:var(--gmDark); font-size:9px; font-weight:950; }
+  .gmatOption.correct .gmatLetter { background:#24a66a; color:#fff; }
+  .gmatOption.wrong .gmatLetter { background:#e15a75; color:#fff; }
+  .gmatFeedback { margin-top:14px; padding:13px 14px; border-left:4px solid var(--gm); border-radius:12px; background:#f0edff; color:#5d5684; font-size:11.5px; line-height:1.5; }
+  .gmatErrorWrap { margin-top:14px; }
+  .gmatPromptLabel { margin-bottom:7px; color:#746d99; font-size:9px; font-weight:950; letter-spacing:.07em; text-transform:uppercase; }
+  .gmatChips { display:flex; flex-wrap:wrap; gap:6px; }
+  .gmatChip { min-height:32px; padding:6px 10px; border:1px solid rgba(62,42,166,.14); border-radius:999px; background:#fff; color:#625b89; cursor:pointer; font-size:9.5px; font-weight:850; }
+  .gmatChip.on { border-color:var(--gm); background:var(--gm); color:#fff; }
+  .gmatFeelings { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:14px; }
+  .gmatFeeling { min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:7px; border:1.5px solid rgba(62,42,166,.14); border-radius:15px; background:#fff; color:#514a7a; cursor:pointer; }
+  .gmatFeeling:hover:not(:disabled) { border-color:var(--gm); transform:translateY(-2px); box-shadow:0 8px 18px rgba(70,49,172,.1); }
+  .gmatFeeling:disabled { cursor:not-allowed; opacity:.38; }
+  .gmatFeeling .face { font-size:24px; line-height:1; }
+  .gmatFeeling b { font-size:9.5px; }
+  .gmatSessionDone { max-width:620px; margin:30px auto; padding:28px; border:1px solid rgba(62,42,166,.1); border-radius:24px; background:#fff; text-align:center; }
+  .gmatDoneMark { width:68px; height:68px; display:grid; place-items:center; margin:0 auto 14px; border-radius:22px; background:linear-gradient(145deg,var(--gm),var(--gmDark)); color:#fff; font-size:30px; box-shadow:0 16px 30px rgba(101,78,242,.24); }
+  .gmatSessionDone h3 { margin:0; font-size:24px; font-weight:950; letter-spacing:-.035em; }
+  .gmatSessionDone p { color:#746e98; font-size:12px; line-height:1.5; }
+  .gmatDoneStats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:18px 0; }
+  .gmatDoneStats div { padding:12px 8px; border-radius:14px; background:#f3f1ff; }
+  .gmatDoneStats b { display:block; font-size:21px; line-height:1; color:var(--gmDark); }
+  .gmatDoneStats span { display:block; margin-top:5px; color:#7a749a; font-size:8.5px; font-weight:850; text-transform:uppercase; }
+  .gmatMistakes { display:flex; flex-direction:column; gap:8px; }
+  .gmatMistake { padding:12px 13px; border:1px solid rgba(62,42,166,.1); border-radius:14px; background:#fff; }
+  .gmatMistakeTop { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#746d99; font-size:9px; font-weight:900; }
+  .gmatMistakeText { margin-top:6px; font-size:12px; line-height:1.35; font-weight:850; color:#393260; }
+  .gmatMistakeReason { display:inline-flex; margin-top:7px; padding:4px 7px; border-radius:999px; background:#fff0f3; color:#a52e49; font-size:8.5px; font-weight:900; }
+  .gmatMockForm { display:grid; grid-template-columns:repeat(4,minmax(70px,1fr)) auto; gap:7px; margin-top:12px; }
+  .gmatMocks { display:flex; flex-direction:column; gap:7px; margin-top:12px; }
+  .gmatMockRow { display:grid; grid-template-columns:1.2fr repeat(4,.7fr) auto; align-items:center; gap:7px; padding:9px 10px; border-radius:12px; background:#f4f2ff; color:#625b89; font-size:9.5px; font-weight:800; text-align:center; }
+  .gmatMockRow b { color:var(--gmDark); }
+  .gmatEmpty { padding:24px; border:1.5px dashed rgba(62,42,166,.2); border-radius:18px; color:#77709b; text-align:center; font-size:11.5px; line-height:1.5; }
+  @container tile (max-width:330px) {
+    .gmatFocus{padding:9px 10px}
+    .gmatSections{gap:4px}
+    .gmatSectionMini{padding:7px 6px}
+    .gmatSectionTop{font-size:8px}
+    .gmatTileMeta{display:none}
+  }
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatFocus{padding:5px 8px;border-radius:11px}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatKicker,.tile[data-tileid="gmat"][data-rows="1"] .gmatExamCountdown{display:none}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatFocusName{margin:0;font-size:12px}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatSections{display:none}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatTile{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatTileActions{margin:0}
+  .tile[data-tileid="gmat"][data-rows="1"] .gmatTileActions .pill{min-height:28px!important;padding:3px 9px!important;font-size:9px}
+  @media(max-width:700px){
+    .gmatOverlay{padding:10px}
+    .gmatWorkspace{min-height:calc(100vh - 20px);border-radius:20px}
+    .gmatTop{padding:13px 14px}
+    .gmatBody{padding:14px}
+    .gmatDashboard{grid-template-columns:1fr}
+    .gmatAnalytics{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .gmatFeelings{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .gmatMockForm{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .gmatMockForm .gmatBtn{grid-column:1/-1}
+    .gmatMockRow{grid-template-columns:1fr repeat(2,.7fr)}
+    .gmatMockRow span:nth-child(4),.gmatMockRow span:nth-child(5){display:none}
+  }
+
   /* ---- philosophy chat ---- */
   .philoQ { font-size:14.5px; font-weight:700; line-height:1.35; margin-bottom:10px; }
   .philoThinkArea { width:100%; min-height:74px; resize:vertical; background:var(--field); border:1px solid var(--fieldbd); border-radius:10px; padding:9px 11px; color:var(--ink); font-family:inherit; font-size:13.5px; line-height:1.5; outline:none; }
@@ -1074,11 +1212,12 @@ const COL = {
   events:   {p:"#EAE5FF", v:"#7357F6", d:"#4931AE"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
   academic: {p:"#E0F4E5", v:"#2CC05E", d:"#1C7440"},
+  gmat:     {p:"#E8E5FF", v:"#654EF2", d:"#3E2AA6"},
   brainflex:{p:"#FFF0D8", v:"#FF9A2E", d:"#B0560F"},
   philo:    {p:"#EEE8FF", v:"#8A5CFF", d:"#543AAE"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
 };
-const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","brainflex","philo","people"]);
+const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people"]);
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
@@ -1417,6 +1556,69 @@ const scheduleRecall=(item,rating,reviewDate=todayKey)=>{
 };
 const humanInterval=days=>days===1?"tomorrow":days<7?`in ${days} days`:days<14?"in 1 week":days<60?`in ${Math.round(days/7)} weeks`:days<730?`in ${Math.round(days/30)} months`:`in ${Math.round(days/365)} years`;
 
+/* Original GMAT-style practice bank. Questions are written for this dashboard,
+   not copied from official or commercial preparation material. */
+const GMAT_SECTIONS={
+  quant:{name:"Quant",full:"Quantitative Reasoning",mark:"Q",target:125},
+  verbal:{name:"Verbal",full:"Verbal Reasoning",mark:"V",target:115},
+  data:{name:"Data",full:"Data Insights",mark:"DI",target:135}
+};
+const GMAT_QUESTIONS=[
+  {id:"q-profit",section:"quant",skill:"Percents & ratios",type:"Problem solving",target:120,prompt:"A company’s revenue rises from $100,000 to $120,000 while costs rise from $60,000 to $66,000. By what percent does profit increase?",options:["20%","30%","35%","40%","45%"],answer:2,explain:"Profit rises from $40,000 to $54,000. The $14,000 increase is 35% of the original $40,000 profit."},
+  {id:"q-work",section:"quant",skill:"Rates & averages",type:"Problem solving",target:120,prompt:"Machine A completes a job in 6 hours and Machine B in 4 hours. Working together at constant rates, how many hours do they need?",options:["2","2.4","2.5","3","5"],answer:1,explain:"Their combined hourly rate is 1/6 + 1/4 = 5/12 of the job, so time is 12/5 = 2.4 hours."},
+  {id:"q-remainder",section:"quant",skill:"Numbers & algebra",type:"Problem solving",target:135,prompt:"What is the least positive integer that leaves remainder 2 when divided by 5 and remainder 4 when divided by 7?",options:["12","18","25","32","39"],answer:3,explain:"Numbers congruent to 2 mod 5 are 2, 7, 12, 17, 22, 27, 32… and 32 leaves remainder 4 when divided by 7."},
+  {id:"q-average",section:"quant",skill:"Rates & averages",type:"Problem solving",target:105,prompt:"Five numbers have an average of 18. If one of the numbers, 24, is removed, what is the average of the remaining four?",options:["15","16","16.5","17","17.5"],answer:2,explain:"The original total is 5 × 18 = 90. Removing 24 leaves 66, and 66 ÷ 4 = 16.5."},
+  {id:"q-mixture",section:"quant",skill:"Percents & ratios",type:"Problem solving",target:135,prompt:"A 10-litre solution is 20% salt. How many litres of water must be added to make the solution 16% salt?",options:["1.5","2","2.5","3","4"],answer:2,explain:"The 2 litres of salt stay constant. For 2 litres to be 16%, total volume must be 12.5 litres, so add 2.5."},
+  {id:"q-algebra",section:"quant",skill:"Numbers & algebra",type:"Problem solving",target:110,prompt:"If x is positive and x + 1/x = 5, what is x² + 1/x²?",options:["21","23","25","27","29"],answer:1,explain:"Squaring gives x² + 2 + 1/x² = 25, so x² + 1/x² = 23."},
+  {id:"v-assumption",section:"verbal",skill:"Argument structure",type:"Critical reasoning",target:125,prompt:"A firm will replace most business travel with video meetings because video meetings cost less. Therefore, the change will increase profit without reducing productivity. Which assumption is required?",options:["Employees prefer video meetings","Travel costs exceeded office rent","Most clients own new computers","In-person meetings are not materially more productive for the trips replaced","Competitors will also reduce travel"],answer:3,explain:"The conclusion requires the savings not to be offset by a meaningful productivity loss. That is exactly what option D supplies."},
+  {id:"v-weaken",section:"verbal",skill:"Causal reasoning",type:"Critical reasoning",target:115,prompt:"Gym members who attend group classes renew more often than members who do not. The gym concludes that classes cause higher retention. Which fact most weakens the conclusion?",options:["Classes are offered every day","Long-term members are more likely to choose group classes","Some classes require equipment","The gym recently raised prices","Members may attend more than one class"],answer:1,explain:"Pre-existing commitment could cause both class attendance and renewal, reversing the proposed causal direction."},
+  {id:"v-strengthen",section:"verbal",skill:"Causal reasoning",type:"Critical reasoning",target:120,prompt:"A city claims a new protected bike lane reduced car commuting. Which finding most strengthens that claim?",options:["Petrol prices rose nationwide","Cyclists report feeling safer","Car commuting fell near the lane but stayed stable in comparable districts","The lane cost less than forecast","Bus ridership also increased"],answer:2,explain:"A comparison with similar unaffected districts makes the bike lane, rather than a broad outside trend, the stronger explanation."},
+  {id:"v-inference",section:"verbal",skill:"Inference & evaluation",type:"Reading comprehension",target:120,prompt:"A study found remote teams produced more output on routine tasks but generated fewer novel proposals. The authors caution that task type may mediate remote work’s effects. Which statement is best supported?",options:["Remote work always increases output","Novel work cannot be done remotely","The effect of remote work may depend on the work being performed","Office teams avoid routine tasks","Proposal quality was higher remotely"],answer:2,explain:"The contrast between routine output and novel proposals directly supports a task-dependent effect, not a universal advantage or disadvantage."},
+  {id:"v-structure",section:"verbal",skill:"Argument structure",type:"Critical reasoning",target:130,prompt:"A retailer says: ‘Our new packaging is recyclable. Because customers prefer sustainable products, sales will rise.’ What role does the first sentence play?",options:["It states the final conclusion","It provides evidence intended to support the prediction","It presents an objection","It defines customer preference","It reports the sales increase"],answer:1,explain:"The packaging claim is a premise. Together with the customer-preference premise, it is intended to support the predicted sales increase."},
+  {id:"v-evaluate",section:"verbal",skill:"Inference & evaluation",type:"Critical reasoning",target:135,prompt:"A restaurant plans to shorten its menu to reduce kitchen delays without losing customers. Which question is most useful in evaluating the plan?",options:["How old is the restaurant?","Do frequently ordered dishes account for most current orders?","How many cooks wear uniforms?","Did food prices rise last year?","Are nearby restaurants profitable?"],answer:1,explain:"If most demand is concentrated in dishes the shorter menu retains, the plan can reduce complexity without sacrificing many orders."},
+  {id:"d-table",section:"data",skill:"Tables & graphics",type:"Table analysis",target:130,prompt:"Four divisions report revenue and cost: A 80/56, B 120/90, C 90/63, D 150/112 (millions). Which division has the highest profit margin?",options:["A","B","C","D","A and C tie"],answer:4,explain:"Margins are A 30%, B 25%, C 30%, and D about 25.3%. A and C tie for the highest."},
+  {id:"d-sufficiency",section:"data",skill:"Sufficiency & constraints",type:"Data sufficiency",target:125,prompt:"Is x positive? (1) x³ > 0. (2) x² > 0. Which information is sufficient?",options:["Statement 1 alone","Statement 2 alone","Both together, neither alone","Each statement alone","Neither statement"],answer:0,explain:"A positive cube requires x > 0. A positive square only shows x ≠ 0, so statement 2 permits positive or negative x."},
+  {id:"d-graphics",section:"data",skill:"Tables & graphics",type:"Graphics interpretation",target:120,prompt:"A chart shows conversions rising from 240 to 300 while site visits rise from 4,000 to 6,000. How does the conversion rate change?",options:["Rises by 1 percentage point","Falls by 1 percentage point","Falls by 20%","Stays at 6%","Rises by 25%"],answer:1,explain:"The rate moves from 240/4,000 = 6% to 300/6,000 = 5%, a fall of 1 percentage point."},
+  {id:"d-multisource",section:"data",skill:"Multi-source synthesis",type:"Multi-source reasoning",target:135,prompt:"Store A ships 120 units with an 8% return rate. Store B ships 90 units with a 4% return rate. Approximately how many more units does A keep after returns?",options:["18","20","22","24","28"],answer:3,explain:"A keeps 120 × .92 = 110.4 units; B keeps 90 × .96 = 86.4. The difference is 24."},
+  {id:"d-twopart",section:"data",skill:"Sufficiency & constraints",type:"Two-part analysis",target:140,prompt:"A firm sells Basic units for $30 and Pro units for $50. It sells 100 units for $3,800 total. How many Basic and Pro units are sold?",options:["70 Basic, 30 Pro","60 Basic, 40 Pro","55 Basic, 45 Pro","50 Basic, 50 Pro","40 Basic, 60 Pro"],answer:1,explain:"Let Pro = p. Then 30(100−p)+50p=3,800, so 20p=800 and p=40; Basic=60."},
+  {id:"d-synthesis",section:"data",skill:"Multi-source synthesis",type:"Data synthesis",target:125,prompt:"A portfolio is 40% Fund X returning 8% and 60% Fund Y returning −2%. What is the portfolio’s overall return?",options:["0.8%","1.2%","2.0%","3.2%","6.0%"],answer:2,explain:"The weighted return is .40(8%) + .60(−2%) = 3.2% − 1.2% = 2.0%."}
+];
+const defaultGmatState=()=>({version:1,examDate:"",weeklyGoal:180,history:[],sessions:[],memory:{},mocks:[]});
+const gmatStateOf=state=>({...defaultGmatState(),...(state||{}),history:Array.isArray(state&&state.history)?state.history:[],sessions:Array.isArray(state&&state.sessions)?state.sessions:[],memory:(state&&state.memory)||{},mocks:Array.isArray(state&&state.mocks)?state.mocks:[]});
+const gmatHistoryFor=(state,id)=>gmatStateOf(state).history.filter(h=>h.questionId===id);
+const gmatQuestionPriority=(state,q)=>{
+  const s=gmatStateOf(state), history=gmatHistoryFor(s,q.id), attempts=history.length;
+  const correct=history.filter(h=>h.correct).length, accuracy=attempts?correct/attempts:0;
+  const average=attempts?history.reduce((sum,h)=>sum+(h.seconds||q.target),0)/attempts:q.target;
+  const last=attempts?history[history.length-1]:null;
+  const memory=s.memory[q.skill], due=!memory||!memory.nextReview||memory.nextReview<=todayKey;
+  const seenToday=history.some(h=>h.date===todayKey);
+  const stableNoise=(q.id.split("").reduce((n,ch)=>n+ch.charCodeAt(0),0)+Number(todayKey.slice(-2)))%17/100;
+  return (attempts?0:3)+(1-accuracy)*3+Math.max(0,average/q.target-1)*1.4+(due?2.2:0)+(last&&!last.correct?1.2:0)-(seenToday?3:0)+stableNoise;
+};
+const gmatStats=(state,section)=>{
+  const rows=gmatStateOf(state).history.filter(h=>!section||h.section===section);
+  const correct=rows.filter(h=>h.correct).length;
+  const seconds=rows.reduce((sum,h)=>sum+(h.seconds||0),0);
+  return {attempts:rows.length,correct,accuracy:rows.length?Math.round(correct/rows.length*100):0,average:rows.length?Math.round(seconds/rows.length):0};
+};
+const buildGmatSession=(state,mode="daily",section=null)=>{
+  const s=gmatStateOf(state);
+  let pool=GMAT_QUESTIONS.filter(q=>!section||q.section===section);
+  if(mode==="repair"){
+    const wrongIds=[...s.history].reverse().filter(h=>!h.correct).map(h=>h.questionId);
+    const unique=[...new Set(wrongIds)];
+    const repair=unique.map(id=>GMAT_QUESTIONS.find(q=>q.id===id)).filter(Boolean);
+    if(repair.length) return repair.slice(0,5);
+  }
+  const ranked=[...pool].sort((a,b)=>gmatQuestionPriority(s,b)-gmatQuestionPriority(s,a));
+  if(section) return ranked.slice(0,Math.min(6,ranked.length));
+  const picks=Object.keys(GMAT_SECTIONS).map(key=>ranked.find(q=>q.section===key)).filter(Boolean);
+  ranked.forEach(q=>{ if(picks.length<5&&!picks.some(p=>p.id===q.id))picks.push(q); });
+  return picks;
+};
+const gmatFocusQuestion=state=>[...GMAT_QUESTIONS].sort((a,b)=>gmatQuestionPriority(state,b)-gmatQuestionPriority(state,a))[0];
+
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
 function weekCount(log,id){ let c=0; for(let d=0;d<7;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) c++; } return c; }
 
@@ -1509,14 +1711,16 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
-const V2_ORDER=["goals","habits","breathing","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["goals","habits","breathing","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
+const GMAT_TILE_INTRODUCED=load("gmatTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
+const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=next.indexOf("academic"); next.splice(at<0?next.length:at+1,0,"gmat"); return next; };
 
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
@@ -1541,14 +1745,14 @@ function App(){
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library"].includes(route)?route:"dashboard"; });
   const [showSettings,setShowSettings]=useState(false);
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); return next; });
-  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>id!=="breathing")}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
+  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
   const [goalsLog,setGoalsLog]=useState(()=>load("goalsLog",{}));
@@ -1566,6 +1770,7 @@ function App(){
   const [birthdays,setBirthdays]=useState(()=>load("birthdays",[]));
   const [people,setPeople]=useState(()=>load("peopleMet",[]));
   const [recallList,setRecallList]=useState(()=>load("recall",[]));
+  const [gmat,setGmat]=useState(()=>gmatStateOf(load("gmat",null)));
   const [keyField,setKeyField]=useState(()=>getKey());
   const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
   const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
@@ -1732,6 +1937,13 @@ function App(){
       return;
     }
     setRecallList(v); save("recall",v);
+  };
+  const persistGmat=v=>{
+    if(typeof v==="function"){
+      setGmat(previous=>{ const next=gmatStateOf(v(gmatStateOf(previous))); save("gmat",next); return next; });
+      return;
+    }
+    const next=gmatStateOf(v); setGmat(next); save("gmat",next);
   };
   const toggleHabit=id=>{ const day={...hToday,[id]:!hToday[id]}; const m={...habitLog,[todayKey]:day}; setHabitLog(m); save("habitLog",m); };
   const setRitual=k=>{ if(rToday[k]) return; const day={...rToday,[k]:true}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
@@ -2014,7 +2226,7 @@ function App(){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","music","world","breathing"];
+  const ritualScoreIds=["word","worth","spanish","music","world","breathing","gmat"];
   const ritualOK=k=>{ const r=ritualLog[k]||{}, active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:!!r[id]); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
@@ -2193,6 +2405,8 @@ function App(){
     academic: T("academic","Study",!!rToday.academic,null,<>
       <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} />
       <RetryNote tileKey="academic"/></>),
+    gmat: T("gmat","GMAT",!!rToday.gmat,null,
+      <GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} />),
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
       <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
@@ -2759,6 +2973,174 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
       <button className="pill" style={{marginTop:10}} onClick={onOpenEditor}>📄 Manage files</button>
     </div>
   );
+}
+
+function GmatCard({state,onChange,done,onComplete}){
+  const [open,setOpen]=useState(false);
+  const [launchMode,setLaunchMode]=useState(null);
+  const safe=gmatStateOf(state), focus=gmatFocusQuestion(safe);
+  const examDays=safe.examDate?daysBetween(todayKey,safe.examDate):null;
+  const todayAttempts=safe.history.filter(h=>h.date===todayKey).length;
+  const openWorkspace=mode=>{ setLaunchMode(mode||null); setOpen(true); };
+  return (
+    <>
+      <div className="gmatTile">
+        <div className="gmatFocus">
+          <div className="gmatFocusCopy"><div className="gmatKicker">Adaptive focus</div><div className="gmatFocusName">{focus?focus.skill:"Start your baseline"}</div></div>
+          <div className="gmatExamCountdown">{examDays===null?<><strong>—</strong><span>set exam date</span></>:<><strong>{Math.max(0,examDays)}</strong><span>days to exam</span></>}</div>
+        </div>
+        <div className="gmatSections">
+          {Object.entries(GMAT_SECTIONS).map(([key,section])=>{ const stats=gmatStats(safe,key); return <div className="gmatSectionMini" key={key}><div className="gmatSectionTop"><span>{section.name}</span><b>{stats.attempts?stats.accuracy+"%":"—"}</b></div><div className="gmatMeter"><span style={{width:`${stats.attempts?Math.max(5,stats.accuracy):5}%`}}/></div></div>; })}
+        </div>
+        <div className="gmatTileActions">
+          <button className="pill primary" onClick={()=>openWorkspace("daily")}>{done?"Practise again":"Start sprint"}</button>
+          <button className="link" onClick={()=>openWorkspace(null)}>Workspace</button>
+          <span className="gmatTileMeta">{todayAttempts?`${todayAttempts} today`:"5 questions"}</span>
+        </div>
+      </div>
+      {open&&ReactDOM.createPortal(<GmatWorkspace state={safe} onChange={onChange} initialMode={launchMode} onComplete={onComplete} onClose={()=>setOpen(false)} />,document.body)}
+    </>
+  );
+}
+
+function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
+  const safe=gmatStateOf(state);
+  const makeSession=(mode="daily",section=null)=>{
+    const questions=buildGmatSession(safe,mode,section);
+    return {id:uid(),mode,section,questionIds:questions.map(q=>q.id),index:0,startedAt:Date.now(),results:[],complete:false};
+  };
+  const [screen,setScreen]=useState(initialMode?"practice":"home");
+  const [session,setSession]=useState(()=>initialMode?makeSession(initialMode):null);
+  const [selected,setSelected]=useState(null);
+  const [answerSeconds,setAnswerSeconds]=useState(0);
+  const [errorType,setErrorType]=useState("");
+  const [questionStarted,setQuestionStarted]=useState(Date.now());
+  const [tick,setTick]=useState(Date.now());
+  const [mockForm,setMockForm]=useState({total:"",quant:"",verbal:"",data:""});
+  useEffect(()=>{
+    if(screen!=="practice"||!session||session.complete||selected!==null)return;
+    const timer=setInterval(()=>setTick(Date.now()),1000);
+    return ()=>clearInterval(timer);
+  },[screen,session&&session.id,session&&session.index,session&&session.complete,selected]);
+  const begin=(mode="daily",section=null)=>{ setSession(makeSession(mode,section)); setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now()); setScreen("practice"); };
+  const current=session&&!session.complete?GMAT_QUESTIONS.find(q=>q.id===session.questionIds[session.index]):null;
+  const choose=index=>{ if(selected!==null||!current)return; setSelected(index); setAnswerSeconds(Math.max(1,Math.round((Date.now()-questionStarted)/1000))); };
+  const rate=rating=>{
+    if(!current||selected===null)return;
+    const correct=selected===current.answer;
+    if(!correct&&!errorType)return;
+    const result={questionId:current.id,section:current.section,skill:current.skill,date:todayKey,correct,selected,seconds:answerSeconds,rating,errorType:correct?null:errorType};
+    const results=[...session.results,result], last=session.index>=session.questionIds.length-1;
+    onChange(previous=>{
+      const next=gmatStateOf(previous);
+      const memoryBase=next.memory[current.skill]||newRecallItem({id:"gmat-"+current.skill,type:"gmat-skill",addedOn:todayKey,title:current.skill,reviewLog:[]});
+      const memory=scheduleRecall(memoryBase,correct?rating:Math.min(rating,2));
+      const updated={...next,history:[...next.history,result],memory:{...next.memory,[current.skill]:memory}};
+      if(last){
+        const duration=Math.max(1,Math.round((Date.now()-session.startedAt)/60000));
+        updated.sessions=[...updated.sessions,{id:session.id,date:todayKey,mode:session.mode,section:session.section||null,questions:session.questionIds.length,correct:results.filter(r=>r.correct).length,minutes:duration,completedAt:new Date().toISOString()}];
+      }
+      return updated;
+    });
+    if(last){
+      setSession({...session,results,complete:true});
+      onComplete();
+    }else{
+      setSession({...session,results,index:session.index+1});
+      setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now());
+    }
+  };
+  const addMock=()=>{
+    const total=Number(mockForm.total), quant=Number(mockForm.quant), verbal=Number(mockForm.verbal), data=Number(mockForm.data);
+    if(total<205||total>805||[quant,verbal,data].some(n=>n<60||n>90)){ alert("Use a total score from 205–805 and section scores from 60–90."); return; }
+    onChange(previous=>{ const next=gmatStateOf(previous); return {...next,mocks:[...next.mocks,{id:uid(),date:todayKey,total,quant,verbal,data}]}; });
+    setMockForm({total:"",quant:"",verbal:"",data:""});
+  };
+  const removeMock=id=>onChange(previous=>{ const next=gmatStateOf(previous); return {...next,mocks:next.mocks.filter(m=>m.id!==id)}; });
+  const focus=gmatFocusQuestion(safe);
+  const examDays=safe.examDate?daysBetween(todayKey,safe.examDate):null;
+  const recentMistakes=[...safe.history].reverse().filter(h=>!h.correct).slice(0,30);
+  const dueSkills=Object.entries(safe.memory).filter(([,m])=>!m.nextReview||m.nextReview<=todayKey).slice(0,5);
+  const weeklyMinutes=safe.sessions.filter(s=>s.date>=addDays(todayKey,-6)).reduce((sum,s)=>sum+(s.minutes||0),0);
+  const sessionSeconds=current&&selected===null?Math.max(0,Math.round((tick-questionStarted)/1000)):answerSeconds;
+  const answerLetters=["A","B","C","D","E"];
+  return <div className="ovl gmatOverlay" onClick={onClose}>
+    <div className="ovlcard gmatWorkspace" onClick={e=>e.stopPropagation()}>
+      <div className="gmatTop">
+        <div className="gmatBrand"><div className="gmatBrandMark">GMAT</div><div><h2>GMAT workspace</h2><p>Adaptive practice · original questions · FSRS review</p></div></div>
+        <button className="gmatClose" aria-label="Close GMAT workspace" onClick={onClose}>×</button>
+      </div>
+      <div className="gmatBody">
+        {screen!=="practice"&&<div className="gmatNav">
+          <button className={"gmatNavBtn"+(screen==="home"?" on":"")} onClick={()=>setScreen("home")}>Overview</button>
+          <button className={"gmatNavBtn"+(screen==="mistakes"?" on":"")} onClick={()=>setScreen("mistakes")}>Mistakes · {recentMistakes.length}</button>
+          <button className={"gmatNavBtn"+(screen==="mocks"?" on":"")} onClick={()=>setScreen("mocks")}>Official mocks · {safe.mocks.length}</button>
+        </div>}
+        {screen==="home"&&<div className="gmatDashboard">
+          <div>
+            <section className="gmatPanel gmatHeroPanel">
+              <div><h3>Today’s best next move</h3><p className="gmatPanelSub">Chosen from weakness, timing, coverage and memory decay.</p><div className="gmatHeroFocus">{focus?focus.skill:"Build your baseline"}</div></div>
+              <div className="gmatHeroActions"><button className="gmatBtn light" onClick={()=>begin("daily")}>Start 5-question sprint</button>{recentMistakes.length>0&&<button className="gmatBtn ghost" onClick={()=>begin("repair")}>Repair mistakes</button>}</div>
+            </section>
+            <div className="gmatAnalytics">
+              {Object.entries(GMAT_SECTIONS).map(([key,section])=>{ const stats=gmatStats(safe,key); return <div className="gmatStatCard" key={key}><div className="gmatStatHead"><span>{section.mark}</span><span>{stats.average?stats.average+"s avg":"No baseline"}</span></div><div className="gmatStatValue">{stats.attempts?stats.accuracy+"%":"—"}</div><div className="gmatStatSub">{stats.attempts} answered · target ~{section.target}s</div></div>; })}
+            </div>
+            <section className="gmatPanel" style={{marginTop:14}}>
+              <h3>Focused section sets</h3><p className="gmatPanelSub">Six timed questions from one section, ordered by your weakest skills.</p>
+              <div className="gmatHeroActions">{Object.entries(GMAT_SECTIONS).map(([key,section])=><button className="gmatBtn soft" key={key} onClick={()=>begin("section",key)}>{section.name}</button>)}</div>
+            </section>
+          </div>
+          <div className="gmatSideStack">
+            <section className="gmatPanel">
+              <h3>Exam target</h3><p className="gmatPanelSub">{examDays===null?"Add a date to turn preparation into a countdown.":examDays>=0?`${examDays} days remaining`:"Exam date has passed"}</p>
+              <div className="gmatSettingRow"><input className="gmatField" type="date" value={safe.examDate} onChange={e=>onChange(previous=>({...gmatStateOf(previous),examDate:e.target.value}))}/><button className="gmatBtn soft" onClick={()=>onChange(previous=>({...gmatStateOf(previous),examDate:""}))}>Clear</button></div>
+            </section>
+            <section className="gmatPanel">
+              <h3>Seven-day rhythm</h3><p className="gmatPanelSub">{weeklyMinutes} of {safe.weeklyGoal} focused minutes completed.</p>
+              <div className="gmatMeter" style={{height:7,marginTop:10}}><span style={{width:`${Math.min(100,weeklyMinutes/Math.max(1,safe.weeklyGoal)*100)}%`}}/></div>
+              <div className="gmatSettingRow"><input className="gmatField" type="number" min="30" max="1200" step="15" aria-label="Weekly GMAT minutes goal" value={safe.weeklyGoal} onChange={e=>onChange(previous=>({...gmatStateOf(previous),weeklyGoal:Math.max(30,Math.min(1200,Number(e.target.value)||30))}))}/><span className="gmatBtn soft" style={{cursor:"default"}}>min/week</span></div>
+            </section>
+            <section className="gmatPanel">
+              <h3>Due for memory repair</h3><p className="gmatPanelSub">Concepts FSRS predicts are ready to be refreshed.</p>
+              <div className="gmatDueList">{dueSkills.length?dueSkills.map(([skill,m])=><div className="gmatDueRow" key={skill}><b>{skill}</b><span>{m.nextReview&&m.nextReview<todayKey?"overdue":"today"}</span></div>):<div className="gmatEmpty">No learned skills are due yet. Your first sprint creates the schedule.</div>}</div>
+            </section>
+            <section className="gmatPanel">
+              <h3>Practice source</h3><p className="gmatPanelSub">Questions here are original training material, not official GMAT questions. Use official mocks for score estimates.</p>
+              <div className="gmatHeroActions"><a className="gmatBtn soft" href="https://www.mba.com/exam-prep/gmat-official-starter-kit" target="_blank" rel="noreferrer">Official practice ↗</a></div>
+            </section>
+          </div>
+        </div>}
+        {screen==="practice"&&session&&session.complete&&<div className="gmatSessionDone">
+          <div className="gmatDoneMark">✓</div><h3>Sprint complete</h3><p>Your answers now update both the weakness model and the FSRS review calendar.</p>
+          <div className="gmatDoneStats"><div><b>{session.results.filter(r=>r.correct).length}/{session.results.length}</b><span>correct</span></div><div><b>{Math.round(session.results.reduce((n,r)=>n+r.seconds,0)/Math.max(1,session.results.length))}s</b><span>average</span></div><div><b>{session.results.filter(r=>!r.correct).length}</b><span>repairs</span></div></div>
+          <div className="gmatHeroActions" style={{justifyContent:"center"}}><button className="gmatBtn" onClick={()=>begin("daily")}>Another sprint</button><button className="gmatBtn soft" onClick={()=>setScreen("home")}>Back to overview</button></div>
+        </div>}
+        {screen==="practice"&&session&&!session.complete&&current&&<div className="gmatQuestionShell">
+          <div className="gmatPracticeHead"><button className="gmatNavBtn" onClick={()=>setScreen("home")}>← Exit sprint</button><span className="gmatKicker">Original practice · not official</span></div>
+          <div className="gmatQuestionMeta"><span><b>{GMAT_SECTIONS[current.section].full}</b> · {current.type}</span><span>{sessionSeconds}s · target {current.target}s</span></div>
+          <div className="gmatSessionProgress"><span style={{width:`${(session.index+(selected!==null ? 0.45 : 0))/session.questionIds.length*100}%`}}/></div>
+          <p className="gmatQuestion">{current.prompt}</p>
+          <div className="gmatOptions">{current.options.map((option,i)=>{ let cls="gmatOption"; if(selected!==null){ if(i===current.answer)cls+=" correct"; else if(i===selected)cls+=" wrong"; else cls+=" dim"; } return <button className={cls} disabled={selected!==null} key={i} onClick={()=>choose(i)}><span className="gmatLetter">{answerLetters[i]}</span><span>{option}</span></button>; })}</div>
+          {selected!==null&&<><div className="gmatFeedback"><b>{selected===current.answer?"Correct.":"Not quite."}</b> {current.explain}</div>
+            {selected!==current.answer&&<div className="gmatErrorWrap"><div className="gmatPromptLabel">What broke?</div><div className="gmatChips">{["Concept","Setup","Calculation","Timing","Trap"].map(reason=><button className={"gmatChip"+(errorType===reason?" on":"")} key={reason} onClick={()=>setErrorType(reason)}>{reason}</button>)}</div></div>}
+            <div className="gmatPromptLabel" style={{marginTop:14,marginBottom:0}}>How did the reasoning feel?</div>
+            <div className="gmatFeelings">{[
+              {rating:1,face:"😵",label:"Guessed"},{rating:2,face:"😕",label:"Struggled"},{rating:3,face:"🙂",label:"Understood"},{rating:4,face:"😄",label:"Automatic"}
+            ].map(feel=><button className="gmatFeeling" disabled={selected!==current.answer&&!errorType} key={feel.rating} onClick={()=>rate(feel.rating)}><span className="face">{feel.face}</span><b>{feel.label}</b></button>)}</div>
+          </>}
+        </div>}
+        {screen==="mistakes"&&<div>
+          <div className="gmatPracticeHead"><div><h3 style={{margin:0}}>Mistake notebook</h3><p className="gmatPanelSub">Recent errors, including why they happened.</p></div>{recentMistakes.length>0&&<button className="gmatBtn" onClick={()=>begin("repair")}>Repair set</button>}</div>
+          <div className="gmatMistakes">{recentMistakes.length?recentMistakes.map((mistake,i)=>{ const q=GMAT_QUESTIONS.find(item=>item.id===mistake.questionId); if(!q)return null; return <div className="gmatMistake" key={i}><div className="gmatMistakeTop"><span>{GMAT_SECTIONS[q.section].name} · {q.skill}</span><span>{mistake.seconds}s</span></div><div className="gmatMistakeText">{q.prompt}</div><span className="gmatMistakeReason">{mistake.errorType||"Unclassified"}</span></div>; }):<div className="gmatEmpty">No mistakes yet. Your errors will become a focused repair queue instead of disappearing.</div>}</div>
+        </div>}
+        {screen==="mocks"&&<div>
+          <div><h3 style={{margin:0}}>Official mock history</h3><p className="gmatPanelSub">Log official practice results here. The dashboard will not invent a predicted score.</p></div>
+          <div className="gmatMockForm"><input className="gmatField" inputMode="numeric" placeholder="Total 205–805" value={mockForm.total} onChange={e=>setMockForm({...mockForm,total:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Quant 60–90" value={mockForm.quant} onChange={e=>setMockForm({...mockForm,quant:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Verbal 60–90" value={mockForm.verbal} onChange={e=>setMockForm({...mockForm,verbal:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Data 60–90" value={mockForm.data} onChange={e=>setMockForm({...mockForm,data:e.target.value})}/><button className="gmatBtn" onClick={addMock}>Log mock</button></div>
+          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{mock.date}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
+        </div>}
+      </div>
+    </div>
+  </div>;
 }
 
 function BrainFlexCard({brain,busy,revealed,onReveal}){
