@@ -228,11 +228,13 @@
   .reviewItem:last-child { border-bottom:none; margin-bottom:0; }
   .rtitle { font-size:11px; color:var(--dim); margin:0 0 6px; font-weight:700; }
   .recallRatings { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:11px; }
-  .recallRating { min-width:0; min-height:68px!important; padding:7px 5px!important; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; border-radius:18px!important; }
-  .recallRating .face { font-size:24px; line-height:1; filter:drop-shadow(0 3px 5px rgba(63,24,89,.12)); transition:transform .18s ease; }
+  .recallRating { min-width:0; min-height:54px!important; padding:7px 5px!important; display:flex; align-items:center; justify-content:center; border-radius:18px!important; }
+  .recallRating .face { font-size:28px; line-height:1; filter:drop-shadow(0 3px 5px rgba(63,24,89,.12)); transition:transform .18s ease; }
   .recallRating:hover .face { transform:scale(1.12) rotate(-3deg); }
-  .recallRating .ratingName { font-size:9.5px; line-height:1.05; font-weight:850; }
-  .recallRating .ratingWhen { font-size:8.5px; line-height:1; color:var(--dim); font-weight:750; white-space:nowrap; }
+  .recallFlash { display:flex; flex-direction:column; gap:8px; padding:10px 11px; border:1.5px solid var(--fieldbd); border-radius:20px; background:var(--field); }
+  .recallQuestion { margin:0; color:var(--accentDark); font-size:14px; line-height:1.35; font-weight:850; }
+  .recallAnswer { padding:9px 10px; border-radius:16px; border:1.5px solid color-mix(in srgb,var(--accent) 24%,#fff); color:var(--ink); font-size:12.5px; line-height:1.45; }
+  .recallAnswer b { display:block; margin-bottom:3px; color:var(--accentDark); font-size:13.5px; }
   .recallRating.suggested { border-color:var(--accent)!important; box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 18%,transparent)!important; }
   .recallScheduled { display:flex; align-items:center; gap:8px; width:fit-content; max-width:100%; margin-top:10px; padding:7px 11px; border:1px solid var(--fieldbd); border-radius:999px; background:var(--field); font-size:11px; font-weight:750; color:var(--dim); }
   .recallScheduled .face { font-size:18px; line-height:1; }
@@ -310,6 +312,12 @@
   /* ---- freshly-added-today task styling ---- */
   .trow.fresh .tick { border-color:var(--tickbd); }
   .trow.fresh > span:nth-child(2) { color:var(--dim); font-weight:500; }
+  .goalRow { display:flex; align-items:center; gap:8px; padding:3px 0; border-bottom:0!important; }
+  .goalRow .goalTick { width:22px!important; height:22px!important; min-height:22px!important; border-radius:8px!important; font-size:12px!important; box-shadow:none!important; }
+  .goalText { flex:1 1 120px; overflow-wrap:anywhere; color:var(--accentDark); font-weight:750; line-height:1.25; }
+  .goalRow.done .goalText { opacity:.58; text-decoration:none!important; }
+  .goalRow .del { opacity:.45; }
+  .goalRow:hover .del { opacity:1; }
 
   /* ---- per-tile retry-failed banner ---- */
   .tileRetry { display:flex; align-items:center; gap:8px; background:var(--field); border:1px solid var(--fieldbd); border-radius:10px; padding:8px 10px; font-size:11.5px; line-height:1.4; margin-top:9px; color:var(--dim); }
@@ -2492,9 +2500,9 @@ function App(){
             <span className="lbl" style={isToday?{color:"var(--ink)",fontSize:11}:null}>{planDl(k)}</span>
             {list.length>0 && <span className="muted" style={{fontSize:11}}>{list.filter(g=>g.done).length}/{list.length}</span>}
           </div>
-          {list.map(g=>(<div key={g.id} draggable className={"trow"+(!g.carried&&!g.done?" fresh":"")} style={{padding:"5px 0",cursor:"grab"}} onDragStart={e=>e.dataTransfer.setData("text/plain",JSON.stringify({day:k,id:g.id}))}>
-            <button className={"tick"+(g.done?" on":"")} onClick={()=>setGoalsDay(k,list.map(x=>x.id===g.id?{...x,done:!x.done}:x))}>{g.done?"✓":""}</button>
-            <span style={{flex:1,textDecoration:g.done?"line-through":"none",opacity:g.done?0.7:1,fontSize:isToday?14.5:13.5}}>{g.text}{g.carried && <span className="carry" title="Carried from a previous day"> ↩</span>}</span>
+          {list.map(g=>(<div key={g.id} draggable className={"goalRow"+(g.done?" done":"")+(!g.carried&&!g.done?" fresh":"")} style={{cursor:"grab"}} onClick={e=>e.stopPropagation()} onDragStart={e=>e.dataTransfer.setData("text/plain",JSON.stringify({day:k,id:g.id}))}>
+            <button className={"tick goalTick"+(g.done?" on":"")} aria-label={g.done?"Mark goal incomplete":"Mark goal complete"} onClick={()=>setGoalsDay(k,list.map(x=>x.id===g.id?{...x,done:!x.done}:x))}>{g.done?"✓":""}</button>
+            <span className="goalText" style={{fontSize:isToday?14.5:13.5}}>{g.text}{g.carried && <span className="carry" title="Carried from a previous day"> ↩</span>}</span>
             <button className="del" onClick={()=>setGoalsDay(k,list.filter(x=>x.id!==g.id))}>×</button>
           </div>))}
           <GoalInput compact={!isToday} placeholder={isToday?"Add a goal for today…":"Plan…"} onAdd={text=>setGoalsDay(k,[...goalsFor(k),{id:uid(),text,done:false}])} />
@@ -2879,12 +2887,20 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
+const recallAnswerFor=item=>{
+  const q=item&&item.quiz?item.quiz:{};
+  const option=Array.isArray(q.options)?q.options[Number(q.answer)||0]:"";
+  const explain=q.explain||"";
+  if(option&&explain) return {short:option, detail:explain};
+  if(option) return {short:option, detail:""};
+  if(explain) return {short:"Answer", detail:explain};
+  return {short:item.term||item.title||"Answer", detail:item.meta||""};
+};
 function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
   const [snap]=useState(()=>due);
   const [answered,setAnswered]=useState({});
-  const [quizResult,setQuizResult]=useState({});
+  const [revealed,setRevealed]=useState({});
   useEffect(()=>{ if(snap.length===0) onComplete(); /* eslint-disable-next-line */ },[]);
-  const handleAnswer=(item,correct)=>setQuizResult(results=>({...results,[item.id]:correct}));
   const rate=(item,rating)=>{
     const scheduled=onGrade(item,rating);
     setAnswered(a=>{ const n={...a,[item.id]:scheduled}; if(Object.keys(n).length>=snap.length) onComplete(); return n; });
@@ -2892,29 +2908,32 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
   const undo=item=>{
     if(answered[item.id]){ onRestore(item); onIncomplete(); }
     setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; });
-    setQuizResult(results=>{ const n={...results}; delete n[item.id]; return n; });
+    setRevealed(results=>{ const n={...results}; delete n[item.id]; return n; });
   };
   if(snap.length===0) return <PlainEmpty>Nothing due. Finished words and lessons return when FSRS predicts they need refreshing.</PlainEmpty>;
   return <div>{snap.map(item=>{
-    const prompts=(item.quiz.prompts&&item.quiz.prompts.length)?item.quiz.prompts:[item.quiz.prompt||""];
+    const quiz=item.quiz||{};
+    const prompts=(quiz.prompts&&quiz.prompts.length)?quiz.prompts:[quiz.prompt||item.title||"What do you remember?"];
     const seen=item.seen||1;
     const prompt=prompts[(seen)%prompts.length]||prompts[0];
-    const hasResult=Object.prototype.hasOwnProperty.call(quizResult,item.id);
+    const isRevealed=!!revealed[item.id];
     const scheduled=answered[item.id];
-    return (<div key={item.id} className="reviewItem">
+    const answer=recallAnswerFor(item);
+    return (<div key={item.id} className="reviewItem" onClick={e=>e.stopPropagation()}>
       <p className="rtitle">{item.title}</p>
       {item.meta && <p className="muted" style={{fontSize:11.5,margin:"-4px 0 8px"}}>{item.meta}</p>}
-      <Quiz prompt={prompt} options={item.quiz.options} answer={item.quiz.answer} explain={item.quiz.explain} onDone={correct=>handleAnswer(item,correct)} onUndo={()=>undo(item)} />
-      {hasResult&&!scheduled&&<>
-        <p className="recallHint">How did that memory feel?</p>
+      <div className="recallFlash">
+        <p className="recallQuestion">{prompt}</p>
+        {!isRevealed&&!scheduled&&<button type="button" className="pill primary" onClick={()=>setRevealed(r=>({...r,[item.id]:true}))}>Reveal answer</button>}
+        {(isRevealed||scheduled)&&<div className="recallAnswer"><b>{answer.short}</b>{answer.detail}</div>}
+      </div>
+      {isRevealed&&!scheduled&&<>
+        <p className="recallHint">How did it feel?</p>
         <div className="recallRatings" role="group" aria-label="Rate this memory">
           {FSRS_RATINGS.map(choice=>{
             const preview=scheduleRecall(item,choice.value);
-            const suggested=choice.value===(quizResult[item.id]?3:1);
-            return <button type="button" key={choice.value} className={"recallRating"+(suggested?" suggested":"")} aria-label={`${choice.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(item,choice.value)}>
+            return <button type="button" key={choice.value} className="recallRating" title={`${choice.name} · ${humanInterval(preview.fsrs.scheduledDays)}`} aria-label={`${choice.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(item,choice.value)}>
               <span className="face" aria-hidden="true">{choice.face}</span>
-              <span className="ratingName">{choice.name}</span>
-              <span className="ratingWhen">{humanInterval(preview.fsrs.scheduledDays)}</span>
             </button>;
           })}
         </div>

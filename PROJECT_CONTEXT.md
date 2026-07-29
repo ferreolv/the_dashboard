@@ -51,7 +51,8 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
-- Dashboard Recall uses FSRS-6 at 90% desired retention with the standard four ratings (Again, Hard, Good, Easy), presented as emoji-first reactions after each quiz answer. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
+- Dashboard Recall uses FSRS-6 at 90% desired retention, presented as flashcards: prompt first, reveal answer, then emoji-only grading. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
+- Goals use a light list style: completing a goal only ticks a small box; the goal text is not struck through and goal rows avoid heavy separators.
 - A saved location profile (city + timezone) drives the dashboard clock and weather tile.
 - Health data uses the no-native-app bridge: an iOS Shortcut exports selected Apple Health daily summaries as JSON, and the dashboard imports/stores them locally under the same backup/sync memory contract.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
