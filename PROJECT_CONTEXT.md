@@ -26,7 +26,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Configurable tile library with date-aware active-tile history.
 - Active tiles determine daily progress and perfect-day requirements.
 - Habits may use an emoji, text label, or both; emoji-only habits remain valid.
-- Goals, habits, shopping list, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
+- Goals, habits, shopping list, Health import bridge, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 - The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
@@ -53,6 +53,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
 - Dashboard Recall uses FSRS-6 at 90% desired retention with the standard four ratings (Again, Hard, Good, Easy), presented as emoji-first reactions after each quiz answer. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
 - A saved location profile (city + timezone) drives the dashboard clock and weather tile.
+- Health data uses the no-native-app bridge: an iOS Shortcut exports selected Apple Health daily summaries as JSON, and the dashboard imports/stores them locally under the same backup/sync memory contract.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

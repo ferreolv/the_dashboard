@@ -110,6 +110,23 @@
   .shopIcon:hover { transform:translateY(-1px); background:rgba(255,255,255,.82); }
   .shopIcon.on { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 18%,transparent); }
   .shopOther { display:grid; grid-template-columns:minmax(0,1fr) 36px; gap:7px; margin-top:auto; }
+  .healthCard { display:flex; flex-direction:column; gap:10px; min-height:100%; }
+  .healthTop { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .healthMain { display:flex; flex-direction:column; gap:2px; }
+  .healthDate { color:var(--dim); font-size:10.5px; font-weight:800; }
+  .healthSteps { color:var(--accentDark); font-size:clamp(25px,8cqi,42px); line-height:.95; font-weight:950; letter-spacing:-.06em; }
+  .healthSteps span { font-size:11px; letter-spacing:0; font-weight:850; }
+  .healthSync { min-height:30px!important; padding:5px 10px!important; font-size:10.5px!important; white-space:nowrap; }
+  .healthGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+  .healthMetric { min-width:0; padding:8px 9px; border:1.5px solid color-mix(in srgb,var(--accent) 30%,#fff); border-radius:18px; background:color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.28)); }
+  .healthMetric b { display:block; color:var(--accentDark); font-size:15px; line-height:1.05; }
+  .healthMetric span { display:block; margin-top:2px; color:var(--dim); font-size:9.5px; font-weight:850; }
+  .healthWorkout { padding:8px 10px; border-radius:18px; border:1.5px solid color-mix(in srgb,var(--accent) 24%,#fff); color:var(--accentDark); font-size:11px; font-weight:850; line-height:1.25; }
+  .healthHint { margin-top:auto; color:var(--dim); font-size:11px; line-height:1.35; }
+  .tile.completed .healthDate,.tile.completed .healthMetric span,.tile.completed .healthHint{color:rgba(255,255,255,.78)!important}
+  .tile.completed .healthSteps,.tile.completed .healthMetric b,.tile.completed .healthWorkout{color:#fff!important}
+  .tile.completed .healthMetric,.tile.completed .healthWorkout{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.13)}
+  @container (max-width:260px){ .healthGrid{grid-template-columns:1fr 1fr}.healthSync{white-space:normal}.healthTop{align-items:stretch}.healthSteps{font-size:28px} }
   .libraryIntro { max-width:1320px; margin:0 auto 14px; padding:15px 17px; border-radius:16px; background:rgba(255,255,255,.72); border:1px solid rgba(0,0,0,.07); display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; }
   .libraryIntro h2 { margin:0 0 3px; font-size:18px; }
   .libraryIntro p { margin:0; color:rgba(29,32,48,.62); font-size:12.5px; line-height:1.45; max-width:760px; }
@@ -1241,8 +1258,9 @@ const COL = {
   philo:    {p:"#E8F4FF", v:"#178FE5", d:"#0B5D99"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
   shopping: {p:"#FFF6D8", v:"#F2B705", d:"#7A5A00"},
+  health:   {p:"#E1F7EC", v:"#18B96E", d:"#0C7042"},
 };
-const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people","shopping"]);
+const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people","shopping","health"]);
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
@@ -1315,6 +1333,12 @@ async function pullSync(){ const id=getSyncId(); if(!id) return false;
 const pad=n=>String(n).padStart(2,"0");
 const dateKey=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const formatDateKey=key=>{ const [y,m,d]=String(key||"").split("-").map(Number); return y&&m&&d?`${pad(d)}/${pad(m)}/${y}`:""; };
+const parseDateKey=value=>{
+  const s=String(value||"").trim();
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(m) return `${m[3]}-${pad(m[2])}-${pad(m[1])}`;
+  return "";
+};
 function addDays(key,n){ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt); }
 function daysBetween(fromKey,toKey){ const [ay,am,ad]=fromKey.split("-").map(Number); const [by,bm,bd]=toKey.split("-").map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000); }
 const logicalDateKey=(d=new Date())=>{ const dt=new Date(d); if(dt.getHours()<1) dt.setDate(dt.getDate()-1); return dateKey(dt); };
@@ -1802,18 +1826,20 @@ function WeatherCard({data,busy,onGenerate}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
-const V2_ORDER=["goals","habits","breathing","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
+const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
 const GMAT_TILE_INTRODUCED=load("gmatTileIntroduced",false);
 const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
+const HEALTH_TILE_INTRODUCED=load("healthTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=next.indexOf("academic"); next.splice(at<0?next.length:at+1,0,"gmat"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
+const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"health"); return next; };
 
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
@@ -1837,14 +1863,14 @@ function App(){
   const [edit,setEdit]=useState(false);
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","settings"].includes(route)?route:"dashboard"; });
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
-  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
+  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
   const [goalsLog,setGoalsLog]=useState(()=>load("goalsLog",{}));
@@ -1856,6 +1882,7 @@ function App(){
     return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
+  const [healthLog,setHealthLog]=useState(()=>load("healthLog",{}));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
   const [ritualLog,setRitualLog]=useState(()=>load("ritualLog",{}));
@@ -1872,6 +1899,7 @@ function App(){
   const [locationMatches,setLocationMatches]=useState([]);
   const [locationBusy,setLocationBusy]=useState(false);
   const [showBirthdayHelp,setShowBirthdayHelp]=useState(false);
+  const [showHealthHelp,setShowHealthHelp]=useState(false);
   const [syncId,setSyncIdState]=useState(()=>getSyncId());
   const [syncField,setSyncField]=useState("");
   const [syncBusy,setSyncBusy]=useState(false);
@@ -1925,6 +1953,40 @@ function App(){
       reader.readAsText(file);
     }; input.click();
   };
+  const normaliseHealthEntry=row=>{
+    if(!row||typeof row!=="object") return null;
+    const key=parseDateKey(row.date||row.day||row.startDate||row.endDate);
+    if(!key) return null;
+    const num=v=>{ const n=Number(v); return Number.isFinite(n)?n:null; };
+    const entry={
+      date:key,
+      steps:num(row.steps),
+      sleepHours:num(row.sleepHours??row.sleep_hours??row.sleep),
+      restingHeartRate:num(row.restingHeartRate??row.resting_hr??row.rhr),
+      activeEnergyKcal:num(row.activeEnergyKcal??row.activeEnergy??row.calories),
+      workouts:Array.isArray(row.workouts)?row.workouts.map(w=>({
+        type:String(w.type||w.name||"Workout"),
+        durationMinutes:num(w.durationMinutes??w.minutes??w.duration)||0,
+        calories:num(w.calories??w.energy)||null
+      })).filter(w=>w.durationMinutes||w.calories):[]
+    };
+    return entry;
+  };
+  const importHealthJson=()=>{
+    const input=document.createElement("input"); input.type="file"; input.accept="application/json,.json";
+    input.onchange=()=>{ const file=input.files&&input.files[0]; if(!file) return; const reader=new FileReader();
+      reader.onload=()=>{ try{
+        const payload=JSON.parse(String(reader.result||""));
+        const raw=Array.isArray(payload)?payload:(Array.isArray(payload.days)?payload.days:Array.isArray(payload.health)?payload.health:[payload]);
+        const rows=raw.map(normaliseHealthEntry).filter(Boolean);
+        if(!rows.length) throw new Error("No readable health day found.");
+        const next={...healthLog}; rows.forEach(row=>{ next[row.date]={...(next[row.date]||{}),...row}; });
+        persistHealth(next);
+        alert(`Imported ${rows.length} health day${rows.length===1?"":"s"}.`);
+      }catch(e){ alert("Couldn't import health JSON: "+e.message); } };
+      reader.readAsText(file);
+    }; input.click();
+  };
 
   const [daily,setDaily]=useState(()=>load("daily:"+todayKey, null));
   const haveKey=!!getKey();
@@ -1958,6 +2020,7 @@ function App(){
   const [agendaChecks,setAgendaChecks]=useState(()=>load("agendaChecks",{}));
   const persistAgendaChecks=v=>{ setAgendaChecks(v); save("agendaChecks",v); };
   const persistShopping=v=>{ setShoppingList(v); save("shoppingList",v); };
+  const persistHealth=v=>{ setHealthLog(v); save("healthLog",v); };
   const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
   const toggleManualTile=id=>{ const next={...manualTileDone,[id]:!manualTileDone[id]}; setManualTileDone(next); save("manualTileDone:"+todayKey,next); };
 
@@ -2525,6 +2588,8 @@ function App(){
       <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
     breathing: T("breathing","Breathing",!!rToday.breathing,null,
       <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} />),
+    health: T("health","Health",!!healthLog[todayKey],null,
+      <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} onImport={importHealthJson} />),
     shopping: T("shopping","Shopping",shoppingLit,null,
       <ShoppingCard items={shoppingList} onChange={persistShopping} />),
     agenda: T("agenda","Reminders",agendaLit,null,
@@ -2618,6 +2683,32 @@ function App(){
                   <li>Export your contacts as a `.vcf` or vCard file from your phone or contacts app.</li>
                   <li>Make sure birthdays are filled in before exporting.</li>
                   <li>Come back here, press `Import contacts`, and pick that file.</li>
+                </ol>
+              </div>}
+            </section>
+            <section className="settingsCard">
+              <h4>Health bridge</h4>
+              <p className="hint">Best no-app option: an iOS Shortcut exports selected Apple Health summaries as JSON, then the Health tile imports it.</p>
+              <div className="srow">
+                <button className="ghostbtn" onClick={importHealthJson}>Import health JSON</button>
+                <button className="ghostbtn" onClick={()=>setShowHealthHelp(v=>!v)}>{showHealthHelp?"Hide tuto":"Tuto"}</button>
+              </div>
+              {showHealthHelp && <div className="settingsHelp">
+                <div className="hint">Shortcut JSON shape</div>
+                <pre style={{whiteSpace:"pre-wrap",fontSize:11,lineHeight:1.35,margin:"7px 0 0",color:"#4a5064"}}>{`{
+  "date": "29/07/2026",
+  "steps": 8420,
+  "sleepHours": 7.3,
+  "restingHeartRate": 58,
+  "activeEnergyKcal": 420,
+  "workouts": [
+    {"type": "Running", "durationMinutes": 35, "calories": 310}
+  ]
+}`}</pre>
+                <ol className="settingsList">
+                  <li>In Shortcuts, read only the Health metrics you approve.</li>
+                  <li>Create a Dictionary with the keys above, or a list of these dictionaries for multiple days.</li>
+                  <li>Save it as `.json`, then import it in the Health tile or here.</li>
                 </ol>
               </div>}
             </section>
@@ -3097,6 +3188,34 @@ function PositiveEventForm({onAdd,onClose}){
     </div>
     <button className="link" onClick={onClose}>Cancel</button>
   </div>;
+}
+function HealthCard({data,latest,onImport}){
+  const d=data||latest||null;
+  const steps=d&&Number.isFinite(Number(d.steps))?Number(d.steps):null;
+  const sleep=d&&Number.isFinite(Number(d.sleepHours))?Number(d.sleepHours):null;
+  const rhr=d&&Number.isFinite(Number(d.restingHeartRate))?Number(d.restingHeartRate):null;
+  const energy=d&&Number.isFinite(Number(d.activeEnergyKcal))?Number(d.activeEnergyKcal):null;
+  const workouts=(d&&Array.isArray(d.workouts)?d.workouts:[]);
+  const has=!!d;
+  return (
+    <div className="healthCard">
+      <div className="healthTop">
+        <div className="healthMain">
+          <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Shortcut bridge"}</div>
+          <div className="healthSteps">{steps!=null?steps.toLocaleString("en-GB"):"—"} <span>steps</span></div>
+        </div>
+        <button className="ghostbtn healthSync" onClick={onImport}>{has?"Import":"Import JSON"}</button>
+      </div>
+      <div className="healthGrid">
+        <div className="healthMetric"><b>{sleep!=null?sleep.toFixed(1)+"h":"—"}</b><span>sleep</span></div>
+        <div className="healthMetric"><b>{rhr!=null?rhr:"—"}</b><span>resting HR</span></div>
+        <div className="healthMetric"><b>{energy!=null?Math.round(energy):"—"}</b><span>active kcal</span></div>
+      </div>
+      {workouts.length>0
+        ? <div className="healthWorkout">🏃 {workouts.slice(0,2).map(w=>`${w.type} ${Math.round(Number(w.durationMinutes)||0)}m`).join(" · ")}</div>
+        : <div className="healthHint">{has?"No workout in this import.":"Use an iOS Shortcut to export selected Health metrics as JSON, then import here."}</div>}
+    </div>
+  );
 }
 function ShoppingCard({items,onChange}){
   const [custom,setCustom]=useState("");
