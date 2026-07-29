@@ -881,6 +881,9 @@
   .agKind{display:inline-flex;padding:3px 6px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--accentDark);font-size:8px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
   .taskAddLink{margin-top:3px}
   .taskAddForm{margin-top:3px;padding:10px;border:1px dashed color-mix(in srgb,var(--accent) 42%,transparent);border-radius:14px;background:rgba(255,255,255,.26)}
+  .taskAddForm .addrow{flex-wrap:wrap}
+  .taskAddForm .addrow .addinput{flex:1 1 118px;min-width:0}
+  .taskAddForm input[type="time"].addinput{flex:0 1 104px;text-align:center}
   /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
   .eventHero{position:relative;overflow:hidden;padding:8px 10px 9px;border:1.5px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
@@ -1155,7 +1158,7 @@
   /* Reminders use simple text rows: later, due now, or crossed-through complete. */
   .taskAgenda{gap:6px}
   .taskAgenda .taskRow{display:flex;align-items:center;gap:8px;padding:8px 9px!important;transition:background .18s,border-color .18s,opacity .18s}
-  .taskAgenda .taskRow.later{border-style:dashed;background:rgba(255,255,255,.20);opacity:.72}
+  .taskAgenda .taskRow.later{border-style:dashed;background:rgba(255,255,255,.30);opacity:.88}
   .taskAgenda .taskRow.dueNow{border:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.46));box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 12%,transparent)}
   .taskAgenda .taskRow.done{border-color:color-mix(in srgb,var(--accent) 16%,transparent);background:rgba(255,255,255,.18);opacity:.58}
   .tile.completed .taskAgenda .taskRow{border-color:rgba(255,255,255,.38)!important;background:rgba(255,255,255,.14)!important}
@@ -1183,7 +1186,7 @@
   .taskRow.done .agName{text-decoration:line-through 2px;text-decoration-color:currentColor}
   .taskAgenda .agWhen{flex:none;margin-left:auto;padding:4px 7px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
   .taskAgenda .taskRow.dueNow .agWhen{background:var(--accent);color:#fff}
-  .taskAgenda .taskRow.later .agWhen{border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);color:var(--dim);background:transparent}
+  .taskAgenda .taskRow.later .agWhen{border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);color:var(--accentDark);background:rgba(255,255,255,.22)}
   .taskAgenda .taskRow.done .agWhen{color:var(--dim);background:rgba(255,255,255,.32)}
   /* Note is a compact writing card: hidden scrollbar, writing left, actions stacked right. */
   .tile[data-tileid="note"] .notearea{min-height:0;overflow:auto;scrollbar-width:none}
@@ -1292,6 +1295,13 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
+const defaultAgendaRecurring=()=>[
+  {id:uid(),label:"Suggest app improvement / recommendation to the creator",everyDays:1,lastDone:addDays(todayKey,-1),source:"default"},
+  {id:uid(),label:"Call your mum",everyDays:7,lastDone:addDays(todayKey,-7),source:"default"}
+];
+const defaultAgendaEvents=()=>[
+  {id:uid(),label:"Example doctor appointment",date:addDays(todayKey,7),time:"09:30",source:"default"}
+];
 const getLocationProfile=()=>{
   const raw=load("location",null);
   if(!raw||typeof raw!=="object") return DEFAULT_LOCATION;
@@ -2053,14 +2063,26 @@ function App(){
   /* reminders: recurring chores + one-off tasks */
   const [agendaRecurring,setAgendaRecurring]=useState(()=>{
     let v=load("agendaRecurring",null);
-    if(!v){ const sept=new Date(); const anchor=new Date(sept.getFullYear()-(sept.getMonth()>=8?0:1),8,1);
-      v=[ {id:uid(),label:"Call grandma(s)",everyDays:60,lastDone:addDays(todayKey,-59)},
-          {id:uid(),label:"Change sheets",everyDays:14,lastDone:addDays(todayKey,-13)},
-          {id:uid(),label:"Blood donation",everyDays:365,lastDone:dateKey(anchor)} ];
-      save("agendaRecurring",v); }
+    if(!v) v=[];
+    if(!load("agendaDefaultsV2",false)){
+      const existing=new Set((Array.isArray(v)?v:[]).map(r=>String(r.label||"").toLowerCase()));
+      const add=defaultAgendaRecurring().filter(r=>!existing.has(r.label.toLowerCase()));
+      v=[...(Array.isArray(v)?v:[]),...add];
+      save("agendaRecurring",v);
+    }
     return v; });
   const persistRecurring=v=>{ setAgendaRecurring(v); save("agendaRecurring",v); };
-  const [agendaEvents,setAgendaEvents]=useState(()=>load("agendaEvents",[]));
+  const [agendaEvents,setAgendaEvents]=useState(()=>{
+    let v=load("agendaEvents",[]);
+    if(!Array.isArray(v)) v=[];
+    if(!load("agendaDefaultsV2",false)){
+      const existing=new Set(v.map(e=>String(e.label||"").toLowerCase()));
+      const add=defaultAgendaEvents().filter(e=>!existing.has(e.label.toLowerCase()));
+      v=[...v,...add];
+      save("agendaEvents",v);
+      save("agendaDefaultsV2",true);
+    }
+    return v; });
   const persistEvents=v=>{ setAgendaEvents(v); save("agendaEvents",v); };
   const [agendaChecks,setAgendaChecks]=useState(()=>load("agendaChecks",{}));
   const persistAgendaChecks=v=>{ setAgendaChecks(v); save("agendaChecks",v); };
@@ -2263,7 +2285,7 @@ function App(){
   const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>r.id===id?{...r,lastDone:todayKey}:r)); };
   const addRecurring=(label,days)=>{ persistRecurring([...agendaRecurring,{id:uid(),label,everyDays:days,lastDone:todayKey}]); };
   const removeRecurring=id=>{ persistRecurring(agendaRecurring.filter(r=>r.id!==id)); };
-  const addEvent=(label,date)=>{ persistEvents([...agendaEvents,{id:uid(),label,date}]); };
+  const addEvent=(label,date,time="")=>{ persistEvents([...agendaEvents,{id:uid(),label,date,time:time||""}]); };
   const removeEvent=id=>{ persistEvents(agendaEvents.filter(e=>e.id!==id)); };
   const toggleEventDone=id=>{ persistEvents(agendaEvents.map(e=>e.id===id?{...e,doneDate:e.doneDate===todayKey?null:todayKey}:e)); };
   const toggleAgendaCheck=id=>{ const day={...(agendaChecks[todayKey]||{}),[id]:!(agendaChecks[todayKey]&&agendaChecks[todayKey][id])}; persistAgendaChecks({...agendaChecks,[todayKey]:day}); };
@@ -3139,13 +3161,14 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":formatDateKey(e.date), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
+    const time=String(e.time||"").trim();
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":formatDateKey(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   birthdays.forEach(b=>{
     const nb=nextBirthday([b]), id="gift-"+b.id;
     if(nb && nb.days<=14) rows.push({ id, kind:"One-off", label:"🎁 Gift for "+b.name, days:nb.days, done:!!checks[id], sub:checks[id]?"Completed today":nb.days===0?"Birthday today":`Birthday in ${nb.days}d`, canToggle:nb.days===0||!!checks[id], onCheck:()=>onToggleCheck(id) });
   });
-  rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days);
+  rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
   const shown=rows.slice(0,7);
   return (
     <div className="taskAgenda">
@@ -3155,7 +3178,7 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
           <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
             <span className="agName">{r.label}</span><span className="agSub">{r.sub}</span>
           </button>
-          <span className="agWhen">{r.done?"done":r.days<0?`${-r.days}d late`:r.days===0?"due today":`in ${r.days}d`}</span>
+          <span className="agWhen">{r.done?"done":r.days<0?`${-r.days}d late`:r.days===0?(r.time||"due today"):`in ${r.days}d`}</span>
           {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
       );})}
@@ -3170,9 +3193,9 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
 }
 function AgendaAddForm({onAddRecurring,onAddEvent,onClose}){
   const [mode,setMode]=useState("oneoff");
-  const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [days,setDays]=useState("");
+  const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [time,setTime]=useState(""); const [days,setDays]=useState("");
   const submit=()=>{ const t=label.trim(); if(!t) return;
-    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date); } else { const n=Number(days); if(!n||n<1) return; onAddRecurring(t,n); }
+    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date,time); } else { const n=Number(days); if(!n||n<1) return; onAddRecurring(t,n); }
     onClose(); };
   return (
     <div className="taskAddForm">
@@ -3183,7 +3206,10 @@ function AgendaAddForm({onAddRecurring,onAddEvent,onClose}){
       <div className="addrow"><input className="addinput" placeholder={mode==="oneoff"?"e.g. Renew passport":"e.g. Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} /></div>
       <div className="addrow" style={{marginTop:7}}>
         {mode==="oneoff"
-          ? <input className="addinput" type="date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
+          ? <>
+              <input className="addinput" type="date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
+              <input className="addinput" type="time" value={time} onChange={e=>setTime(e.target.value)} />
+            </>
           : <input className="addinput" type="number" min="1" placeholder="Every N days" value={days} onChange={e=>setDays(e.target.value)} />}
         <button className="addbtn" onClick={submit}>+</button>
       </div>
