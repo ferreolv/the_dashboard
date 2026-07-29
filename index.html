@@ -884,6 +884,26 @@
   .taskAddForm .addrow{flex-wrap:wrap}
   .taskAddForm .addrow .addinput{flex:1 1 118px;min-width:0}
   .taskAddForm input[type="time"].addinput{flex:0 1 104px;text-align:center}
+  .miniCalendar{width:100%;border:1.5px solid color-mix(in srgb,var(--accent) 24%,rgba(255,255,255,.62));border-radius:16px;overflow:hidden;background:rgba(255,255,255,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.38)}
+  .miniCalHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;color:var(--accentDark);font-size:13px;font-weight:950;letter-spacing:-.02em}
+  .miniCalView{color:var(--dim);font-size:10px;font-weight:900}
+  .miniCalWeek,.miniCalGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+  .miniCalWeek span{padding:4px 2px;text-align:center;color:var(--dim);font-size:8.5px;font-weight:900;border-top:1px solid color-mix(in srgb,var(--accent) 14%,transparent)}
+  .miniCalDay{position:relative;min-height:42px;padding:3px 3px 4px;border-top:1px solid color-mix(in srgb,var(--accent) 12%,transparent);border-left:1px solid color-mix(in srgb,var(--accent) 12%,transparent);background:rgba(255,255,255,.12);overflow:hidden}
+  .miniCalDay:nth-child(7n+1){border-left:0}
+  .miniCalDay.out{background:rgba(255,255,255,.08);opacity:.46}
+  .miniCalNum{display:grid;place-items:center;width:18px;height:18px;border-radius:999px;margin-left:auto;color:var(--accentDark);font-size:10px;font-weight:950}
+  .miniCalDay.today .miniCalNum{background:#1f2533;color:#fff}
+  .miniCalEvents{display:flex;flex-direction:column;gap:2px;margin-top:2px}
+  .miniCalChip{display:block;max-width:100%;padding:2px 4px;border-radius:6px;background:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.72));color:var(--accentDark);font-size:7.5px;font-weight:900;line-height:1.12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .miniCalChip.due{background:var(--accent);color:#fff}
+  .miniCalMore{color:var(--dim);font-size:7.5px;font-weight:900}
+  .tile.completed .miniCalendar{border-color:rgba(255,255,255,.34);background:rgba(255,255,255,.10)}
+  .tile.completed .miniCalHead,.tile.completed .miniCalNum,.tile.completed .miniCalView,.tile.completed .miniCalWeek span,.tile.completed .miniCalMore{color:#fff}
+  .tile.completed .miniCalDay.today .miniCalNum{background:#fff;color:var(--accentDark)}
+  .tile.completed .miniCalChip{background:rgba(255,255,255,.22);color:#fff}
+  .tile.completed .miniCalChip.due{background:#fff;color:var(--accentDark)}
+  @container (max-width:320px){.miniCalDay{min-height:34px;padding:2px}.miniCalChip{display:none}.miniCalDay:has(.miniCalChip)::after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}}
   /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
   .eventHero{position:relative;overflow:hidden;padding:8px 10px 9px;border:1.5px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
@@ -2084,8 +2104,6 @@ function App(){
     }
     return v; });
   const persistEvents=v=>{ setAgendaEvents(v); save("agendaEvents",v); };
-  const [agendaChecks,setAgendaChecks]=useState(()=>load("agendaChecks",{}));
-  const persistAgendaChecks=v=>{ setAgendaChecks(v); save("agendaChecks",v); };
   const persistShopping=v=>{ setShoppingList(v); save("shoppingList",v); };
   const persistHealth=v=>{ setHealthLog(v); save("healthLog",v); };
   const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
@@ -2288,7 +2306,6 @@ function App(){
   const addEvent=(label,date,time="")=>{ persistEvents([...agendaEvents,{id:uid(),label,date,time:time||""}]); };
   const removeEvent=id=>{ persistEvents(agendaEvents.filter(e=>e.id!==id)); };
   const toggleEventDone=id=>{ persistEvents(agendaEvents.map(e=>e.id===id?{...e,doneDate:e.doneDate===todayKey?null:todayKey}:e)); };
-  const toggleAgendaCheck=id=>{ const day={...(agendaChecks[todayKey]||{}),[id]:!(agendaChecks[todayKey]&&agendaChecks[todayKey][id])}; persistAgendaChecks({...agendaChecks,[todayKey]:day}); };
 
   /* ---- positive events: sport, concerts, holidays and plans worth anticipating ---- */
   const addPositiveEvent=(label,date,type)=>{ persistPositiveEvents([...positiveEvents,{id:uid(),label,date,type:type||"other"}]); };
@@ -2521,7 +2538,6 @@ function App(){
   const agendaTodayStates=[];
   agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,addDays(r.lastDone,r.everyDays))<=0; if(done||due)agendaTodayStates.push(done); });
   agendaEvents.forEach(e=>{ const done=e.doneDate===todayKey, due=!e.doneDate&&e.date<=todayKey; if(done||due)agendaTodayStates.push(done); });
-  todayBdays.forEach(b=>agendaTodayStates.push(!!(agendaChecks[todayKey]||{})["gift-"+b.id]));
   const agendaLit=!!rToday.agenda||(agendaTodayStates.length>0&&agendaTodayStates.every(Boolean));
   const activeNow=new Set(activeTiles);
   const scoredRituals=ritualScoreIds.filter(id=>activeNow.has(id));
@@ -2661,11 +2677,10 @@ function App(){
     shopping: T("shopping","Shopping",shoppingLit,null,
       <ShoppingCard items={shoppingList} onChange={persistShopping} />),
     agenda: T("agenda","Reminders",agendaLit,null,
-      <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
-        checks={agendaChecks[todayKey]||{}}
+      <AgendaCard recurring={agendaRecurring} events={agendaEvents}
         noDueToday={agendaTodayStates.length===0} emptyDone={!!rToday.agenda} onToggleEmpty={()=>toggleRitual("agenda")}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
-        onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} onToggleCheck={toggleAgendaCheck} />),
+        onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} />),
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     brain: T("brain","Memory",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
@@ -3151,7 +3166,45 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
-function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,onToggleCheck}){
+function MiniAgendaCalendar({recurring,events}){
+  const [y,m]=todayKey.split("-").map(Number);
+  const first=new Date(y,m-1,1);
+  const monthLabel=new Intl.DateTimeFormat("en-GB",{month:"long",year:"numeric"}).format(first);
+  const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
+  const monthOf=key=>Number(String(key||"").split("-")[1]);
+  const itemsByDay={};
+  const addItem=(key,item)=>{ if(!key||monthOf(key)!==m) return; (itemsByDay[key]=itemsByDay[key]||[]).push(item); };
+  (events||[]).forEach(e=>{
+    if(e.doneDate&&e.doneDate<todayKey) return;
+    const d=daysBetween(todayKey,e.date);
+    addItem(e.date,{label:e.label,time:e.time||"",due:d<=0&&!e.doneDate,done:e.doneDate===todayKey});
+  });
+  (recurring||[]).forEach(r=>{
+    let due=addDays(r.lastDone,r.everyDays);
+    if(due<todayKey) due=todayKey;
+    const d=daysBetween(todayKey,due);
+    addItem(due,{label:r.label,time:"",due:d<=0&&r.lastDone!==todayKey,done:r.lastDone===todayKey});
+  });
+  const days=Array.from({length:42},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
+  return (
+    <div className="miniCalendar" aria-label="Reminder calendar">
+      <div className="miniCalHead"><span>{monthLabel}</span><span className="miniCalView">View</span></div>
+      <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
+      <div className="miniCalGrid">
+        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==m, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||""))); return (
+          <div key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")}>
+            <div className="miniCalNum">{day}</div>
+            <div className="miniCalEvents">
+              {items.slice(0,2).map((item,i)=><span key={i} className={"miniCalChip"+(item.due?" due":"")} title={(item.time?item.time+" · ":"")+item.label}>{item.time?item.time+" ":""}{item.label}</span>)}
+              {items.length>2&&<span className="miniCalMore">+{items.length-2}</span>}
+            </div>
+          </div>
+        ); })}
+      </div>
+    </div>
+  );
+}
+function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone}){
   const [showAdd,setShowAdd]=useState(false);
   const rows=[];
   recurring.forEach(r=>{
@@ -3164,14 +3217,11 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
     const time=String(e.time||"").trim();
     rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":formatDateKey(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
-  birthdays.forEach(b=>{
-    const nb=nextBirthday([b]), id="gift-"+b.id;
-    if(nb && nb.days<=14) rows.push({ id, kind:"One-off", label:"🎁 Gift for "+b.name, days:nb.days, done:!!checks[id], sub:checks[id]?"Completed today":nb.days===0?"Birthday today":`Birthday in ${nb.days}d`, canToggle:nb.days===0||!!checks[id], onCheck:()=>onToggleCheck(id) });
-  });
   rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
-  const shown=rows.slice(0,7);
+  const shown=rows.slice(0,5);
   return (
     <div className="taskAgenda">
+      <MiniAgendaCalendar recurring={recurring} events={events} />
       {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
         <div key={r.id} className={"agRow taskRow"+state}>
@@ -3182,7 +3232,7 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
           {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
       );})}
-      {noDueToday && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
+      {noDueToday && shown.length===0 && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
       {!showAdd ? (
         <button className="link taskAddLink" onClick={()=>setShowAdd(true)}>+ Add task →</button>
       ) : (
