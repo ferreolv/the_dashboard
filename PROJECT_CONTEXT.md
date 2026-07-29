@@ -55,6 +55,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Goals use a light list style: completing a goal only ticks a small box; the goal text is not struck through and goal rows avoid heavy separators.
 - A saved location profile (city + timezone) drives the dashboard clock and weather tile.
 - Health data uses the no-native-app bridge: an iOS Shortcut exports selected Apple Health daily summaries as JSON, and the dashboard imports/stores them locally under the same backup/sync memory contract.
+- Philosophy keeps its standard below-the-surface Socratic mode and also offers a per-topic philosopher dropdown. Named-philosopher replies must reconstruct only textually grounded views, admit when the source basis is unclear, and end with short source notes rather than inventing positions.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.

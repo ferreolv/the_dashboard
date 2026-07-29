@@ -496,6 +496,9 @@
 
   /* ---- philosophy chat ---- */
   .philoQ { font-size:14.5px; font-weight:700; line-height:1.35; margin-bottom:10px; }
+  .philoModeRow { display:flex; align-items:center; gap:7px; margin:-2px 0 9px; }
+  .philoModeRow span { color:var(--dim); font-size:10px; font-weight:850; white-space:nowrap; }
+  .philoModeSelect { width:100%; min-width:0; border-radius:999px!important; padding:7px 10px!important; font-size:11px!important; font-weight:800!important; }
   .philoThinkArea { width:100%; min-height:74px; resize:vertical; background:var(--field); border:1px solid var(--fieldbd); border-radius:10px; padding:9px 11px; color:var(--ink); font-family:inherit; font-size:13.5px; line-height:1.5; outline:none; }
   .philoThinkArea::placeholder { color:var(--dim); }
   .chatLog { display:flex; flex-direction:column; gap:10px; }
@@ -1387,6 +1390,37 @@ const genBrainFlex=(avoid)=>callClaude("You output ONLY valid minified JSON, no 
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, {max:220}).then(extractJSON);
 
+const PHILO_MODES=[
+  {id:"standard",label:"Standard · go deeper"},
+  {id:"plato",label:"Plato"},
+  {id:"aristotle",label:"Aristotle"},
+  {id:"epicurus",label:"Epicurus"},
+  {id:"augustine",label:"Augustine"},
+  {id:"aquinas",label:"Aquinas"},
+  {id:"machiavelli",label:"Machiavelli"},
+  {id:"descartes",label:"Descartes"},
+  {id:"spinoza",label:"Spinoza"},
+  {id:"locke",label:"Locke"},
+  {id:"hume",label:"Hume"},
+  {id:"rousseau",label:"Rousseau"},
+  {id:"kant",label:"Kant"},
+  {id:"hegel",label:"Hegel"},
+  {id:"mill",label:"J. S. Mill"},
+  {id:"kierkegaard",label:"Kierkegaard"},
+  {id:"marx",label:"Marx"},
+  {id:"nietzsche",label:"Nietzsche"},
+  {id:"james",label:"William James"},
+  {id:"husserl",label:"Husserl"},
+  {id:"heidegger",label:"Heidegger"},
+  {id:"wittgenstein",label:"Wittgenstein"},
+  {id:"arendt",label:"Hannah Arendt"},
+  {id:"beauvoir",label:"Simone de Beauvoir"},
+  {id:"foucault",label:"Foucault"},
+  {id:"rawls",label:"Rawls"},
+  {id:"nozick",label:"Nozick"}
+];
+const philoModeLabel=id=>(PHILO_MODES.find(m=>m.id===id)||PHILO_MODES[0]).label.replace(/^Standard · /,"");
+
 /* Academic: one focused study capsule per day from the student's own pasted course material,
    deliberately tied back to the broader chapter/subject rather than an isolated fact. */
 const genAcademic=(course,avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
@@ -1402,9 +1436,12 @@ async function genBankReorg(bank){ const existing=[]; Object.entries((bank&&bank
   return callClaude("You output ONLY valid minified JSON, no markdown.",`Rebuild this entire knowledge bank as one coherent nested mind map: ${JSON.stringify(existing).slice(0,18000)}. Return {"structure":[{"id":"EVERY existing id","path":["broad","narrower"]}]}. Include every id exactly once. Related notes share branches and ancestors. Merge redundant categories, split overloaded ones, and remove one-note heading chains when a shared structure is possible. Use 2 to 4 meaningful levels. Categorise by subject, never language. Preserve all notes and add no facts.`,{max:1400}).then(extractJSON); }
 
 /* Philosophy chat — a real back-and-forth, kept on a stronger model since it's low-volume and quality-sensitive. */
-async function philoReply(question,history){
+async function philoReply(question,history,mode="standard"){
   const key=getKey(); if(!key) throw new Error("no-key");
-  const system=`You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
+  const philosopher=mode&&mode!=="standard"?philoModeLabel(mode):"";
+  const system=philosopher
+    ? `You are reconstructing ${philosopher}'s philosophical response to a live conversation. Do not roleplay theatrically or invent views. Use only claims, arguments, distinctions, and likely extensions that are well grounded in ${philosopher}'s primary texts or widely accepted scholarship. If ${philosopher} has no clear basis for answering the user's exact claim, say that the textual basis is unclear, then offer only a careful nearby distinction if one is genuinely grounded. Defend ${philosopher}'s opposition as ${philosopher} plausibly would, but never fabricate a counterargument. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." You may imitate the philosopher's argumentative style at a high level, but do not invent quotations. End every answer with a short parenthetical source note naming the relevant work(s), e.g. "(Sources: ...)." Today's question under discussion: "${question}"`
+    : `You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking and keep digging below the surface: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
   const body={ model:"claude-sonnet-4-20250514", max_tokens:420, system, messages:history.map(h=>({role:h.role,content:h.text})) };
   const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
     headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
@@ -2037,7 +2074,7 @@ function App(){
   const persistPositiveEvents=v=>{ setPositiveEvents(v); save("positiveEvents",v); };
 
   /* philosophy chat (today's conversation only — the daily question itself lives in `daily.philo`) */
-  const [philoChat,setPhiloChat]=useState(()=>load("philoChat:"+todayKey,{initial:"",messages:[]}));
+  const [philoChat,setPhiloChat]=useState(()=>({initial:"",messages:[],mode:"standard",...load("philoChat:"+todayKey,{})}));
   const persistPhiloChat=v=>{ setPhiloChat(v); save("philoChat:"+todayKey,v); };
   const [philoBusy,setPhiloBusy]=useState(false);
 
@@ -2263,10 +2300,11 @@ function App(){
     const cov=load("courseCoverage",{}); if(cov[id]){ const nc={...cov}; delete nc[id]; save("courseCoverage",nc); } };
 
   /* ---- philosophy chat ---- */
+  const setPhiloMode=mode=>persistPhiloChat({...philoChat,mode});
   const philoSubmitInitial=async(text)=>{
     const q=daily && daily.philo && daily.philo.question; if(!q) return;
-    const base={initial:text,messages:[]}; persistPhiloChat(base); setRitual("philo"); setPhiloBusy(true);
-    try{ const reply=await philoReply(q,[{role:"user",text}]); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
+    const base={initial:text,messages:[],mode:philoChat.mode||"standard"}; persistPhiloChat(base); setRitual("philo"); setPhiloBusy(true);
+    try{ const reply=await philoReply(q,[{role:"user",text}],base.mode); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
     catch(e){ persistPhiloChat({...base,messages:[{role:"assistant",text:"Couldn't reach the model just now — say something else to try again, or check your key in ⚙."}]}); }
     setPhiloBusy(false);
   };
@@ -2276,7 +2314,7 @@ function App(){
     persistPhiloChat(withUser); setPhiloBusy(true);
     try{
       const history=[{role:"user",text:philoChat.initial},...withUser.messages];
-      const reply=await philoReply(q,history);
+      const reply=await philoReply(q,history,philoChat.mode||"standard");
       persistPhiloChat({...withUser,messages:[...withUser.messages,{role:"assistant",text:reply}]});
     }catch(e){ persistPhiloChat({...withUser,messages:[...withUser.messages,{role:"assistant",text:"Couldn't reach the model just now — try again in a moment."}]}); }
     setPhiloBusy(false);
@@ -2619,7 +2657,7 @@ function App(){
       <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
-      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onGenerate={()=>regenerateOne("philo")} />
+      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onGenerate={()=>regenerateOne("philo")} />
       <RetryNote tileKey="philo"/></>),
     people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
@@ -3512,17 +3550,24 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onGenerate}){
   );
 }
 
-function PhilosophyCard({philo,busy,chat,sending,onSubmitInitial,onSend,onGenerate}){
+function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,onSend,onGenerate}){
   const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
   const logRef=useRef(null);
   useEffect(()=>{ if(logRef.current) logRef.current.scrollTop=logRef.current.scrollHeight; });
   if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
+  const mode=chat.mode||"standard";
   const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
+      <label className="philoModeRow">
+        <span>Mode</span>
+        <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
+          {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
+        </select>
+      </label>
       {!started ? (<>
         <textarea className="philoThinkArea" placeholder="Think it through first — write your own take here…" value={draft} onChange={e=>setDraft(e.target.value)} />
         <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={()=>onSubmitInitial(draft.trim())}>I've thought about this →</button>
