@@ -65,6 +65,10 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Minimal note-like writing: few words, little filler.
 - No unnecessary application branding or invented product name in the UI.
 - Preserve colour identity, tactile completion reward, and individual character without inconsistency.
+- Every dashboard tile follows one reversible visual-state contract: informative tiles can be tapped to toggle full colour, task tiles return to clear glass when their answer, button, or checkbox is undone, and no tile type is excluded from the full-colour treatment.
+- Resized widgets use deliberate compact summaries and edge-to-edge internal layouts. At every supported tile shape, controls either reflow or secondary detail progressively hides; borders must never slice through buttons, text, or cards.
+- Delete and close glyphs inside widgets are bare, centred, minimalist crosses rather than pill or rounded-rectangle buttons.
+- Full-colour tiles use a deeper hue-aware glass fill with high-contrast content and translucent internal surfaces, including for naturally light accents such as yellow, mint, and cyan.
 
 ## Learn direction
 

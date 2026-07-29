@@ -1253,6 +1253,225 @@
     .tile[data-tileid="pushups"]:not([data-rows="1"]) .pushBtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
     .tile[data-tileid="pushups"]:not([data-rows="1"]) .pushBtns .puReset{width:100%}
   }
+
+  /* Universal widget contract
+     One completion treatment, one delete language, and deliberate compact
+     summaries instead of controls being sliced by a resized tile. */
+  .tile{
+    min-width:0;min-height:0;overflow:hidden;
+    background-clip:padding-box!important
+  }
+  .tile.cornerOutside{overflow:visible}
+  .tile .tbody,.tile .content{min-width:0;min-height:0;max-width:100%}
+  .tile .content{width:100%}
+
+  /* Full colour is intentionally deeper than the accent itself so white type
+     remains readable for yellow, mint, cyan, and other light tile identities. */
+  .tile.completed{
+    background:
+      radial-gradient(circle at 88% 4%,rgba(255,255,255,.22),transparent 28%),
+      linear-gradient(150deg,
+        color-mix(in srgb,var(--accent) 58%,var(--accentDark)),
+        color-mix(in srgb,var(--accentDark) 88%,#172033))!important;
+    border-color:color-mix(in srgb,var(--accent) 45%,#fff)!important
+  }
+  .tile.completed .content{
+    color:#fff!important;
+    text-shadow:0 1px 2px rgba(18,24,44,.20)
+  }
+  .tile.completed .content :where(p,span,div,label):not(button *){
+    color:inherit
+  }
+  .tile.completed .content :where(button,input,textarea,select,a){
+    text-shadow:none
+  }
+  .tile.completed .content :where(.insight,.examLink,.wrevSection,.placeBranch,.flameCard,.achCard,.plainEmpty,.recallFlash,.recallAnswer,.eventHero,.miniCalendar,.taskRow){
+    background:rgba(255,255,255,.12)!important;
+    border-color:rgba(255,255,255,.34)!important
+  }
+
+  /* Delete / close controls are always a bare, centred glyph. They never
+     inherit the dashboard's pill-button treatment. */
+  .tile button.del,.tile .del,
+  .tile button.hdel,.tile .hdel{
+    display:grid!important;place-items:center!important;flex:0 0 24px!important;
+    width:24px!important;min-width:24px!important;max-width:24px!important;
+    height:24px!important;min-height:24px!important;max-height:24px!important;
+    margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+    background:transparent!important;color:currentColor!important;box-shadow:none!important;
+    font:900 17px/1 'Nunito',sans-serif!important;opacity:.58;
+    transform:none!important;filter:none!important;text-shadow:none!important
+  }
+  .tile button.del:hover,.tile .del:hover,.tile .hdel:hover{
+    opacity:1;background:transparent!important;border:0!important;
+    transform:none!important;box-shadow:none!important
+  }
+  .tile .hdel{position:absolute;top:4px;right:4px;z-index:2}
+  .tile>.libraryRemoveToday{
+    top:-12px!important;right:-12px!important;
+    width:25px!important;min-width:25px!important;height:25px!important;min-height:25px!important;
+    padding:0!important;border:0!important;border-radius:0!important;
+    background:transparent!important;color:var(--accentDark)!important;box-shadow:none!important;
+    filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 3px rgba(27,31,50,.18));
+    font-size:23px!important;line-height:1!important;transform:none!important
+  }
+  .tile>.libraryRemoveToday:hover{
+    border:0!important;background:transparent!important;transform:scale(1.08)!important
+  }
+
+  /* Compact tiles expose a composed summary. Secondary detail is available
+     again as soon as the tile grows, rather than appearing half-clipped. */
+  @media (min-width:640px){
+  .tile[data-rows="1"] .tbody{overflow:hidden}
+  .tile[data-rows="1"] .content{height:100%;overflow:hidden;padding-bottom:0}
+  .tile[data-rows="1"] .content :where(button,.pill,.mark,.puBtn,.ghostbtn,.pillBtn,.tileRetryBtn,.link){
+    min-height:26px!important;padding:3px 9px!important;font-size:9.5px;line-height:1.1
+  }
+  .tile[data-rows="1"] :where(input,textarea,select){
+    min-height:29px!important;padding:4px 9px!important;font-size:10.5px!important
+  }
+  .tile[data-rows="1"] :where(p,.muted){
+    margin-block:2px;font-size:10px!important;line-height:1.2!important
+  }
+  .tile[data-rows="1"] :where(.qprompt,.qopts,.qexplain,.insight,.examLink,.tileRetry,.samplehint){
+    display:none!important
+  }
+  .tile[data-rows="1"] .story{
+    display:-webkit-box!important;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    margin:2px 0 0;font-size:10.5px;line-height:1.25
+  }
+  .tile[data-rows="1"] .story p{display:contents}
+  .tile[data-tileid="goals"][data-rows="1"] .goalDay:not(:first-child){display:none}
+  .tile[data-tileid="goals"][data-rows="1"] .goalDay:first-child>.goalRow:nth-of-type(n+3),
+  .tile[data-tileid="goals"][data-rows="1"] .goalInputRow{display:none}
+  .tile[data-tileid="goals"][data-rows="1"] .goalDay{margin:0}
+  .tile[data-tileid="goals"][data-rows="1"] .goalText{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px!important
+  }
+  .tile[data-tileid="habits"][data-rows="1"] .hgrid,
+  .tile[data-tileid="shopping"][data-rows="1"] .shopShelf{
+    display:flex;align-items:center;gap:7px;width:100%;height:100%;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none
+  }
+  .tile[data-tileid="habits"][data-rows="1"] .hgrid::-webkit-scrollbar,
+  .tile[data-tileid="shopping"][data-rows="1"] .shopShelf::-webkit-scrollbar{display:none}
+  .tile[data-tileid="habits"][data-rows="1"] .hsq{
+    flex:0 0 56px;width:56px;min-width:56px;min-height:56px!important;height:56px;
+    padding:4px!important;font-size:9px
+  }
+  .tile[data-tileid="habits"][data-rows="1"] .hicon{font-size:18px}
+  .tile[data-tileid="habits"][data-rows="1"] .hname{
+    max-width:46px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:8.5px
+  }
+  .tile[data-tileid="shopping"][data-rows="1"] .shoppingPicked,
+  .tile[data-tileid="shopping"][data-rows="1"] .shopOther{display:none}
+  }
+  .tile[data-tileid="shopping"] .shopShelf{
+    display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 77px)/12);align-items:center;gap:7px;
+    width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 0 5px;
+    scrollbar-width:none;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory
+  }
+  .tile[data-tileid="shopping"] .shopShelf::-webkit-scrollbar{display:none}
+  .tile[data-tileid="shopping"] .shopIcon{
+    width:100%!important;min-width:0!important;height:38px!important;min-height:38px!important;
+    aspect-ratio:auto;scroll-snap-align:start
+  }
+  @media (min-width:640px){
+  .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
+  .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink,
+  .tile[data-tileid="agenda"][data-rows="1"] .taskRow:nth-of-type(n+3){display:none}
+  .tile[data-tileid="agenda"][data-rows="1"] .taskAgenda{height:100%;justify-content:center}
+  .tile[data-tileid="agenda"][data-rows="1"] .taskRow{padding:5px 7px!important}
+  .tile[data-tileid="agenda"][data-rows="1"] .agSub{display:none}
+  .tile[data-tileid="agenda"][data-rows="2"] .miniCalendar{display:none}
+  .tile[data-tileid="agenda"][data-rows="2"] .taskRow:nth-of-type(n+4){display:none}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalHead{padding:5px 8px;font-size:10.5px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalView{font-size:8px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalWeek span{padding:2px 1px;font-size:7px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalDay{min-height:17px;padding:1px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalNum{width:14px;height:14px;font-size:8px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalChip{display:none}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalDay:has(.miniCalChip)::after{
+    content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;
+    border-radius:50%;background:var(--accent);transform:translateX(-50%)
+  }
+  .tile[data-tileid="agenda"][data-rows="3"] .taskRow:nth-of-type(n+4){display:none}
+  .tile[data-tileid="agenda"][data-rows="3"] .taskAgenda{gap:4px}
+  .tile[data-tileid="agenda"][data-rows="3"] .taskRow{padding:4px 7px!important}
+  .tile[data-tileid="agenda"][data-rows="3"] .agName{font-size:11.5px}
+  .tile[data-tileid="agenda"][data-rows="3"] .agSub{display:none}
+  .tile[data-tileid="agenda"][data-rows="3"] .taskAddLink{
+    min-height:23px!important;padding:2px 9px!important;font-size:9px
+  }
+  .tile[data-tileid="events"][data-rows="1"] .eventHero:not(:first-child){display:none}
+  .tile[data-tileid="events"][data-rows="1"] .eventHero{
+    min-height:0;padding:6px 8px;border-radius:12px
+  }
+  .tile[data-tileid="events"][data-rows="1"] .eventTitle{margin-top:2px;font-size:11px}
+  .tile[data-tileid="events"][data-rows="1"] .eventCountdown{font-size:14px}
+  .tile[data-tileid="world"][data-rows="1"] .content>div>div:not(:first-child),
+  .tile[data-tileid="world"][data-rows="1"] .mark{display:none!important}
+  .tile[data-tileid="world"][data-rows="1"] .content>div>div:first-child .muted{
+    display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2
+  }
+  .tile[data-tileid="weekly"][data-rows="1"] .wrev>*:not(:first-child){display:none}
+  .tile[data-tileid="weekly"][data-rows="1"] .wrevSection{min-height:0;height:100%;padding:5px 7px}
+  .tile[data-tileid="philo"][data-rows="1"] .philoModeRow,
+  .tile[data-tileid="philo"][data-rows="1"] .philoThinkArea,
+  .tile[data-tileid="philo"][data-rows="1"] .chatLog,
+  .tile[data-tileid="philo"][data-rows="1"] .chatInputRow,
+  .tile[data-tileid="philo"][data-rows="1"] .pill{display:none!important}
+  .tile[data-tileid="philo"][data-rows="1"] .philoQ{
+    display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3;
+    margin:0!important;font-size:11px!important;line-height:1.3!important;opacity:1!important
+  }
+  .tile[data-tileid="people"][data-rows="1"] .content>div>.addinput,
+  .tile[data-tileid="people"][data-rows="1"] .peopleTree{display:none}
+  .tile[data-tileid="people"][data-rows="1"] .peopleAddRow{height:100%;align-content:center}
+  }
+
+  @container tile (max-width:250px){
+    .tile{padding-left:12px;padding-right:12px}
+    .tile .tilehead{margin-bottom:7px}
+    .tile .content{font-size:11px}
+    .tile .qopts,.tile .tabbar{grid-template-columns:1fr}
+    .tile .musicActions,.tile .noteActions,.tile .timerActions{gap:5px}
+    .tile :where(.pill,.mark,.puBtn,.ghostbtn,.pillBtn,.tileRetryBtn,.link){
+      max-width:100%;padding-inline:10px
+    }
+  }
+  @container tile (max-width:520px){
+    .tile[data-tileid="shopping"] .shopShelf{grid-auto-columns:calc((100% - 49px)/8)}
+  }
+  @container tile (max-width:320px){
+    .tile[data-tileid="shopping"] .shopShelf{grid-auto-columns:calc((100% - 28px)/5)}
+  }
+  .philoModeBar{display:flex;align-items:flex-start;gap:6px}
+  .philoModeBar .philoModeRow{flex:1 1 auto;min-width:0}
+  .tile button.tileUndo{
+    display:grid!important;place-items:center!important;flex:0 0 28px!important;
+    width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
+    margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+    background:transparent!important;color:var(--accentDark)!important;box-shadow:none!important;
+    font-size:18px!important;line-height:1!important;transform:none!important
+  }
+  .tile.completed button.tileUndo{color:#fff!important}
+  .tile button.tileUndo:hover{background:transparent!important;transform:scale(1.08)!important}
+  .tile button.brainSolution{
+    display:block;width:100%;height:auto;min-height:0!important;margin-top:8px;padding:10px 12px!important;
+    border-radius:20px!important;text-align:left;white-space:normal
+  }
+  .tile button.recallScheduled{
+    display:flex;width:fit-content;min-height:0!important;padding:7px 11px!important;
+    border-radius:999px!important;font-size:11px
+  }
+  .gmatClose,.gmatChip.del{
+    display:grid!important;place-items:center!important;
+    width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
+    padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;
+    color:inherit!important;box-shadow:none!important;font:900 20px/1 'Nunito',sans-serif!important
+  }
+  .gmatClose:hover,.gmatChip.del:hover{background:transparent!important;transform:scale(1.08)!important}
 </style>
 </head>
 <body>
@@ -1294,7 +1513,10 @@ const COL = {
   shopping: {p:"#FFF6D8", v:"#F2B705", d:"#7A5A00"},
   health:   {p:"#E1F7EC", v:"#18B96E", d:"#0C7042"},
 };
-const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people","shopping","health"]);
+/* Every dashboard tile shares the same reversible full-colour presentation.
+   Whether a tile is completed by a task control or by tapping an informative
+   surface is decided by the tile itself; the visual system never opts out. */
+const TASK = new Set(Object.keys(COL));
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
@@ -1832,7 +2054,7 @@ function Quiz({prompt,options,answer,explain,onDone,onUndo}){
 }
 
 /* cards */
-function WordCard({word,busy,onLearned,onGenerate}){
+function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
   if(!word) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
     <div className="wordcard">
@@ -1846,7 +2068,7 @@ function WordCard({word,busy,onLearned,onGenerate}){
         <span className="wcTermFr">{word.term_fr}</span>
         <span className="muted wcDefFr"> — {word.def_fr}</span>
       </div>
-      {word.quiz && <Quiz prompt="Quiz · closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`Closest synonym for “${word.term_en}”.`} onDone={()=>onLearned(word)} />}
+      {word.quiz && <Quiz prompt="Quiz · closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`Closest synonym for “${word.term_en}”.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}
     </div>
   );
 }
@@ -2271,6 +2493,7 @@ function App(){
 
   /* recall scheduling — store alt prompts so review looks different each time */
   const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) persistRecall([...recallList,newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
+  const unlearnWord=w=>{ unsetRitual("word"); persistRecall(recallList.filter(x=>!(x.type==="word"&&x.addedOn===todayKey&&x.term===(w&&w.term_en)))); };
   const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; persistRecall([...recallList,newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
   const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(recallList.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
   /* Spanish feeds recall harder than the others on purpose — both quiz questions AND each
@@ -2295,12 +2518,20 @@ function App(){
     const additions=a.quiz.filter(Boolean).map(q=>newRecallItem({ id:uid(), type:"academic", addedOn:todayKey, title:(a.courseName?a.courseName+" · ":"")+a.concept, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }));
     if(additions.length) persistRecall([...recallList,...additions]);
   } };
+  const unlearnAcademic=a=>{ unsetRitual("academic"); persistRecall(recallList.filter(x=>!(x.type==="academic"&&x.addedOn===todayKey&&x.title===((a&&a.courseName?a.courseName+" · ":"")+(a&&a.concept||""))))); };
   const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall([...recallList,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
   const gradeRecall=(item,rating)=>{ const scheduled=scheduleRecall(item,rating); persistRecall(list=>list.map(x=>x.id===item.id?scheduled:x)); return scheduled; };
   const restoreRecall=item=>{ persistRecall(list=>list.map(x=>x.id===item.id?item:x)); };
 
   /* ---- reminders: recurring chores + one-off dated tasks ---- */
-  const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>r.id===id?{...r,lastDone:todayKey}:r)); };
+  const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>{
+    if(r.id!==id)return r;
+    if(r.lastDone===todayKey){
+      const restored=r.previousLastDone||addDays(todayKey,-Math.max(1,Number(r.everyDays)||1));
+      const next={...r,lastDone:restored}; delete next.previousLastDone; return next;
+    }
+    return {...r,previousLastDone:r.lastDone,lastDone:todayKey};
+  })); };
   const addRecurring=(label,days)=>{ persistRecurring([...agendaRecurring,{id:uid(),label,everyDays:days,lastDone:todayKey}]); };
   const removeRecurring=id=>{ persistRecurring(agendaRecurring.filter(r=>r.id!==id)); };
   const addEvent=(label,date,time="")=>{ persistEvents([...agendaEvents,{id:uid(),label,date,time:time||""}]); };
@@ -2590,7 +2821,7 @@ function App(){
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
       <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
     word: T("word","Word",!!rToday.word, null,<>
-      <WordCard word={view.word} busy={genBusy} onLearned={learnWord} onGenerate={()=>regenerateOne("word")} />
+      <WordCard word={view.word} busy={genBusy} onLearned={learnWord} onUnlearned={unlearnWord} onGenerate={()=>regenerateOne("word")} />
       <RetryNote tileKey="word"/></>),
     worth: T("worth","Knowledge",!!rToday.worth, null,<>
       <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} onGenerate={()=>regenerateOne("worth")} />
@@ -2643,7 +2874,7 @@ function App(){
         {(view.world&&view.world.length>0) && <div style={{marginTop:11}}><button className={"mark"+(rToday.world?" on":"")} onClick={()=>toggleRitual("world")}><span className={"tick sm"+(rToday.world?" on":"")}>{rToday.world?"✓":""}</span>{rToday.world?"Read":"Mark read"}</button></div>}
       </>
       <RetryNote tileKey="world"/></>),
-    recall: T("recall","Recall",!!rToday.recall,null,
+    recall: T("recall","Recall",dueFacts.length>0&&!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
     weekly: T("weekly","Weekly",!!rToday.weekly,null,
       <div className="wrev">
@@ -2671,8 +2902,8 @@ function App(){
     timer: T("timer","Timer",timerFired,null,
       <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
     breathing: T("breathing","Breathing",!!rToday.breathing,null,
-      <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} />),
-    health: T("health","Health",!!healthLog[todayKey],null,
+      <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} onIncomplete={()=>unsetRitual("breathing")} />),
+    health: T("health","Health",false,null,
       <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} onImport={importHealthJson} />),
     shopping: T("shopping","Shopping",shoppingLit,null,
       <ShoppingCard items={shoppingList} onChange={persistShopping} />),
@@ -2683,18 +2914,18 @@ function App(){
         onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} />),
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
-    brain: T("brain","Memory",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
+    brain: T("brain","Memory",false,null,
       <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
-      <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} onGenerate={()=>regenerateOne("academic")} />
+      <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onUnlearned={unlearnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} onGenerate={()=>regenerateOne("academic")} />
       <RetryNote tileKey="academic"/></>),
     gmat: T("gmat","GMAT",!!rToday.gmat,null,
-      <GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} />),
+      <GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} onIncomplete={()=>unsetRitual("gmat")} />),
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
-      <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
+      <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onHide={()=>unsetRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
-      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onGenerate={()=>regenerateOne("philo")} />
+      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onReset={()=>unsetRitual("philo")} onGenerate={()=>regenerateOne("philo")} />
       <RetryNote tileKey="philo"/></>),
     people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
@@ -3013,7 +3244,7 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
           })}
         </div>
       </>}
-      {scheduled&&<div className="recallScheduled"><span className="face" aria-hidden="true">{FSRS_RATINGS[scheduled.reviewLog[scheduled.reviewLog.length-1].rating-1].face}</span><span>Back {humanInterval(scheduled.fsrs.scheduledDays)}</span></div>}
+      {scheduled&&<button type="button" className="recallScheduled" aria-label={`Undo review for ${item.title}`} onClick={()=>undo(item)}><span className="face" aria-hidden="true">{FSRS_RATINGS[scheduled.reviewLog[scheduled.reviewLog.length-1].rating-1].face}</span><span>Back {humanInterval(scheduled.fsrs.scheduledDays)}</span></button>}
     </div>);
   })}</div>;
 }
@@ -3068,7 +3299,7 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
   );
 }
 
-function BreathingCard({done,onComplete}){
+function BreathingCard({done,onComplete,onIncomplete}){
   const TOTAL_MS=60000, CYCLE_MS=10000, INHALE_MS=4000;
   const [startedAt,setStartedAt]=useState(null);
   const [clock,setClock]=useState(Date.now());
@@ -3106,7 +3337,7 @@ function BreathingCard({done,onComplete}){
   const breathAmount=running?(inhaling?phaseProgress:1-phaseProgress):(finished||done?1:0);
   const breathScale=running?(0.72+breathAmount*0.34):(finished||done?1.02:0.8);
   const phaseRemaining=running?Math.max(1,Math.ceil(((inhaling?INHALE_MS:CYCLE_MS)-withinCycle)/1000)):null;
-  const begin=()=>{ const time=Date.now(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
+  const begin=()=>{ const time=Date.now(); if(done)onIncomplete&&onIncomplete(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
   const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
   const phase=running?(inhaling?"Inhale":"Exhale"):finished||done?"Complete":"Ready";
   const cue=running?(inhaling?"through your nose":"gently and slowly"):finished||done?"Six calm rounds finished":"4 seconds in · 6 seconds out";
@@ -3209,7 +3440,7 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
   const rows=[];
   recurring.forEach(r=>{
     const done=r.lastDone===todayKey, due=addDays(r.lastDone,r.everyDays), d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:!done&&d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
@@ -3217,7 +3448,8 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
     const time=String(e.time||"").trim();
     rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":formatDateKey(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
-  rows.sort((a,b)=>Number(!!a.done)-Number(!!b.done)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
+  const rowRank=r=>r.done?1:r.days<=0?0:2;
+  rows.sort((a,b)=>rowRank(a)-rowRank(b)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
   const shown=rows.slice(0,5);
   return (
     <div className="taskAgenda">
@@ -3367,7 +3599,7 @@ function ShoppingCard({items,onChange}){
       <div className="shoppingPicked">
         {list.length===0 ? <PlainEmpty>Tap icons to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
           <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
-            <span>{p.icon}</span><span>{item.label||p.label}</span><button aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
+            <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
           </span>
         ); })}
       </div>
@@ -3420,7 +3652,7 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser}){
   );
 }
 
-function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor,onGenerate}){
+function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEditor,onGenerate}){
   const [n,setN]=useState(0);
   useEffect(()=>{ setN(0); },[academic && academic.concept]);
   if(!hasCourses) return (
@@ -3433,19 +3665,20 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor,onGenerat
   if(!academic) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=academic.quiz||[];
   const mark=()=>{ setN(v=>{ const nv=v+1; if(nv>=qs.length) onLearned(academic); return nv; }); };
+  const undo=()=>{ setN(v=>Math.max(0,v-1)); onUnlearned&&onUnlearned(academic); };
   return (
     <div>
       {academic.courseName && <span className="lbl">{academic.courseName}</span>}
       <div style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginTop:4}}>{academic.concept}</div>
       <p style={{fontSize:13.2,lineHeight:1.55,margin:"8px 0 0"}}>{academic.explain}</p>
       {academic.bigPicture && <div className="examLink">🎯 {academic.bigPicture}</div>}
-      {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} />)}
+      {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}
       <button className="pill" style={{marginTop:10}} onClick={onOpenEditor}>📄 Manage files</button>
     </div>
   );
 }
 
-function GmatCard({state,onChange,done,onComplete}){
+function GmatCard({state,onChange,done,onComplete,onIncomplete}){
   const [open,setOpen]=useState(false);
   const [launchMode,setLaunchMode]=useState(null);
   const safe=gmatStateOf(state), focus=gmatFocusQuestion(safe);
@@ -3465,6 +3698,7 @@ function GmatCard({state,onChange,done,onComplete}){
         <div className="gmatTileActions">
           <button className="pill primary" onClick={()=>openWorkspace("daily")}>{done?"Practise again":"Start sprint"}</button>
           <button className="link" onClick={()=>openWorkspace(null)}>Workspace</button>
+          {done&&<button className="tileUndo" aria-label="Mark GMAT incomplete" title="Mark incomplete" onClick={onIncomplete}>↶</button>}
           <span className="gmatTileMeta">{todayAttempts?`${todayAttempts} today`:"5 questions"}</span>
         </div>
       </div>
@@ -3606,27 +3840,27 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
         {screen==="mocks"&&<div>
           <div><h3 style={{margin:0}}>Official mock history</h3><p className="gmatPanelSub">Log official practice results here. The dashboard will not invent a predicted score.</p></div>
           <div className="gmatMockForm"><input className="gmatField" inputMode="numeric" placeholder="Total 205–805" value={mockForm.total} onChange={e=>setMockForm({...mockForm,total:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Quant 60–90" value={mockForm.quant} onChange={e=>setMockForm({...mockForm,quant:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Verbal 60–90" value={mockForm.verbal} onChange={e=>setMockForm({...mockForm,verbal:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Data 60–90" value={mockForm.data} onChange={e=>setMockForm({...mockForm,data:e.target.value})}/><button className="gmatBtn" onClick={addMock}>Log mock</button></div>
-          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{formatDateKey(mock.date)}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
+          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{formatDateKey(mock.date)}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip del" aria-label="Delete mock score" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
         </div>}
       </div>
     </div>
   </div>;
 }
 
-function BrainFlexCard({brain,busy,revealed,onReveal,onGenerate}){
+function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
   if(!brain) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
     <div>
       <span className="brainFormat">{brain.format}</span>
       <p className="brainPrompt">{brain.prompt}</p>
       {!revealed ? <button className="pill primary" style={{marginTop:9}} onClick={onReveal}>Reveal answer</button> : (
-        <div className="insight">💡 {brain.solution}</div>
+        <button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>
       )}
     </div>
   );
 }
 
-function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,onSend,onGenerate}){
+function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
   const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
   const logRef=useRef(null);
@@ -3638,12 +3872,15 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
-      <label className="philoModeRow">
-        <span>Mode</span>
-        <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
-          {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
-        </select>
-      </label>
+      <div className="philoModeBar">
+        <label className="philoModeRow">
+          <span>Mode</span>
+          <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
+            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
+          </select>
+        </label>
+        {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
+      </div>
       {!started ? (<>
         <textarea className="philoThinkArea" placeholder="Think it through first — write your own take here…" value={draft} onChange={e=>setDraft(e.target.value)} />
         <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={()=>onSubmitInitial(draft.trim())}>I've thought about this →</button>
