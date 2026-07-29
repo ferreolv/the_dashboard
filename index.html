@@ -99,6 +99,17 @@
   .placeOption b { display:block; font-size:13px; }
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+
+  .shoppingCard { display:flex; flex-direction:column; gap:9px; min-height:100%; }
+  .shoppingPicked { display:flex; flex-wrap:wrap; gap:6px; min-height:28px; }
+  .shopChip { display:inline-flex; align-items:center; gap:5px; max-width:100%; min-height:27px; padding:4px 8px; border:1px solid var(--fieldbd); border-radius:999px; background:var(--field); color:var(--accentDark); font-size:10.5px; font-weight:850; line-height:1; }
+  .shopChip.done { background:var(--accent); border-color:var(--accent); color:#fff; text-decoration:line-through; }
+  .shopChip button { display:grid; place-items:center; width:16px; height:16px; border:0; border-radius:50%; background:rgba(255,255,255,.55); color:inherit; cursor:pointer; font:900 11px/1 'Nunito',sans-serif; }
+  .shopShelf { display:grid; grid-template-columns:repeat(auto-fill,minmax(38px,1fr)); gap:6px; }
+  .shopIcon { display:grid; place-items:center; min-width:0; aspect-ratio:1; border:1px solid var(--fieldbd); border-radius:12px; background:rgba(255,255,255,.48); color:var(--accentDark); cursor:pointer; font-size:20px; transition:transform .16s ease,background .16s ease,border-color .16s ease,color .16s ease; }
+  .shopIcon:hover { transform:translateY(-1px); background:rgba(255,255,255,.82); }
+  .shopIcon.on { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 8px 18px color-mix(in srgb,var(--accent) 18%,transparent); }
+  .shopOther { display:grid; grid-template-columns:minmax(0,1fr) 36px; gap:7px; margin-top:auto; }
   .libraryIntro { max-width:1320px; margin:0 auto 14px; padding:15px 17px; border-radius:16px; background:rgba(255,255,255,.72); border:1px solid rgba(0,0,0,.07); display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; }
   .libraryIntro h2 { margin:0 0 3px; font-size:18px; }
   .libraryIntro p { margin:0; color:rgba(29,32,48,.62); font-size:12.5px; line-height:1.45; max-width:760px; }
@@ -1206,15 +1217,15 @@ const { useState, useEffect, useRef, useCallback, useLayoutEffect } = React;
 
 /* colour sets: p=pastel(undone), v=vivid(done), d=dark accent (labels on pastel) */
 const COL = {
-  goals:    {p:"#E7E8FF", v:"#5A4BEA", d:"#372BBE"},
-  word:     {p:"#EDEAFF", v:"#7C4DFF", d:"#4A2CBE"},
+  goals:    {p:"#FFF2CC", v:"#F0A500", d:"#8A5200"},
+  word:     {p:"#E5F7FF", v:"#00A6D6", d:"#006A8A"},
   worth:    {p:"#DDF7F0", v:"#00C2A3", d:"#067563"},
   spanish:  {p:"#FFE4EB", v:"#FF3D77", d:"#B01E4E"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
   weather:  {p:"#DDF4FF", v:"#00B4DC", d:"#0E6E8C"},
-  world:    {p:"#F0E6FF", v:"#9B4DFF", d:"#6329AE"},
+  world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
   recall:   {p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
   weekly:   {p:"#DCF6E5", v:"#10C46E", d:"#0C7544"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
@@ -1222,15 +1233,16 @@ const COL = {
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
   breathing:{p:"#DCF7F6", v:"#0DB9B1", d:"#08736E"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
-  events:   {p:"#EAE5FF", v:"#7357F6", d:"#4931AE"},
+  events:   {p:"#FFF3D6", v:"#FFB000", d:"#9A5B00"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
   academic: {p:"#E0F4E5", v:"#2CC05E", d:"#1C7440"},
-  gmat:     {p:"#E8E5FF", v:"#654EF2", d:"#3E2AA6"},
+  gmat:     {p:"#FFE1D8", v:"#F05A36", d:"#A7341B"},
   brainflex:{p:"#FFF0D8", v:"#FF9A2E", d:"#B0560F"},
-  philo:    {p:"#EEE8FF", v:"#8A5CFF", d:"#543AAE"},
+  philo:    {p:"#E8F4FF", v:"#178FE5", d:"#0B5D99"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
+  shopping: {p:"#FFF6D8", v:"#F2B705", d:"#7A5A00"},
 };
-const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people"]);
+const TASK = new Set(["goals","word","worth","spanish","music","pushups","habits","world","birthdays","weather","weekly","recall","note","timer","breathing","brain","academic","gmat","brainflex","philo","people","shopping"]);
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
@@ -1302,6 +1314,7 @@ async function pullSync(){ const id=getSyncId(); if(!id) return false;
    doesn't quietly become tomorrow while you're still awake. */
 const pad=n=>String(n).padStart(2,"0");
 const dateKey=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const formatDateKey=key=>{ const [y,m,d]=String(key||"").split("-").map(Number); return y&&m&&d?`${pad(d)}/${pad(m)}/${y}`:""; };
 function addDays(key,n){ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt); }
 function daysBetween(fromKey,toKey){ const [ay,am,ad]=fromKey.split("-").map(Number); const [by,bm,bd]=toKey.split("-").map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000); }
 const logicalDateKey=(d=new Date())=>{ const dt=new Date(d); if(dt.getHours()<1) dt.setDate(dt.getDate()-1); return dateKey(dt); };
@@ -1695,6 +1708,10 @@ const Note=({children})=>{
   if(busy) return <div className="emptyState genState" role="status" aria-label="Generating today's content"><span className="genSpin" aria-hidden="true"></span></div>;
   return <button type="button" className="emptyState genState genBtn" title="Generate today" onClick={()=>{ try{ window.__fefeGenerate && window.__fefeGenerate(); }catch(e){} }}><span className="genGlyph">✦</span><span className="genCap">Generate</span></button>;
 };
+const GenerateEmpty=({busy,onGenerate,label="Generate"})=>{
+  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating content"><span className="genSpin" aria-hidden="true"></span></div>;
+  return <button type="button" className="emptyState genState genBtn" title={label} onClick={onGenerate}><span className="genGlyph">✦</span><span className="genCap">{label}</span></button>;
+};
 const PlainEmpty=({children})=><div className="plainEmpty">{children}</div>;
 const AppIcon=({name})=>{ const paths={sparkle:<><path d="M12 3l1.15 3.1L16 7.5l-2.85 1.4L12 12l-1.15-3.1L8 7.5l2.85-1.4L12 3Z"/><path d="M5 13l.8 2.2L8 16l-2.2.8L5 19l-.8-2.2L2 16l2.2-.8L5 13Z"/><path d="M18 12l.65 1.35L20 14l-1.35.65L18 16l-.65-1.35L16 14l1.35-.65L18 12Z"/></>,settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.6v-.1A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3V9.6h.1A1.7 1.7 0 0 0 4.6 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.5 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.17.35.38.68.68.94.3.26.68.4 1.08.42H21v4h-.1A1.7 1.7 0 0 0 19.4 15Z"/></>,layout:<><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M9 10h12"/></>,check:<path d="m5 12 4 4L19 6"/>}; return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>; };
 function buildMindTree(topics){ const root={children:{},entries:[]}; Object.entries(topics||{}).forEach(([path,list])=>{ let node=root; path.split(" › ").filter(Boolean).forEach(part=>{ node.children[part]=node.children[part]||{children:{},entries:[]}; node=node.children[part]; }); (list||[]).forEach(e=>node.entries.push({...e,_topic:path})); }); return root; }
@@ -1716,8 +1733,8 @@ function Quiz({prompt,options,answer,explain,onDone,onUndo}){
 }
 
 /* cards */
-function WordCard({word,busy,onLearned}){
-  if(!word) return <Note>{busy?"Fetching today's word…":"Not generated yet — tap ✦ Generate today."}</Note>;
+function WordCard({word,busy,onLearned,onGenerate}){
+  if(!word) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
     <div className="wordcard">
       <div style={{display:"flex",alignItems:"baseline",gap:8,flexWrap:"wrap"}}>
@@ -1734,10 +1751,10 @@ function WordCard({word,busy,onLearned}){
     </div>
   );
 }
-function LessonCard({lesson,busy,onLearned,onUnlearned}){
+function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const [n,setN]=useState(0);
   useEffect(()=>{ setN(0); },[lesson && lesson.title]);
-  if(!lesson) return <Note>{busy?"Writing today's lesson…":"Not generated yet — tap ✦ Generate today."}</Note>;
+  if(!lesson) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=lesson.quiz||[];
   const mark=()=>{ setN(v=>{ const nv=v+1; if(nv>=qs.length) onLearned(lesson); return nv; }); };
   const undo=()=>{ setN(v=>Math.max(0,v-1)); onUnlearned&&onUnlearned(lesson); };
@@ -1763,9 +1780,9 @@ function musicGenreIcon(genre){
   if(/reggae|dub/.test(g)) return "🔊";
   return "🎵";
 }
-function WeatherCard({data,busy}){
+function WeatherCard({data,busy,onGenerate}){
   if(busy && !data) return <Note>Checking local skies…</Note>;
-  if(!data) return <Note>No weather yet — tap Generate today.</Note>;
+  if(!data) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const [label,emoji]=WMO[data.code]||["—","🌡️"];
   const t=data.tomorrow;
   const [tlab,temoji]=t?(WMO[t.code]||["—","🌡️"]):["",""];
@@ -1785,16 +1802,18 @@ function WeatherCard({data,busy}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
-const V2_ORDER=["goals","habits","breathing","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
+const V2_ORDER=["goals","habits","breathing","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
 const GMAT_TILE_INTRODUCED=load("gmatTileIntroduced",false);
+const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=next.indexOf("academic"); next.splice(at<0?next.length:at+1,0,"gmat"); return next; };
+const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
 
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
@@ -1805,7 +1824,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,
   return (
     <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
-      <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?onTap:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
         <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
@@ -1818,14 +1837,14 @@ function App(){
   const [edit,setEdit]=useState(false);
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","settings"].includes(route)?route:"dashboard"; });
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
-  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
+  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
   const [goalsLog,setGoalsLog]=useState(()=>load("goalsLog",{}));
@@ -1836,6 +1855,7 @@ function App(){
     const OLD=["🚿 Shower","🏋️ Squats","🗺️ Travel notes","📖 Read"]; if(Array.isArray(v)&&v.length===4&&v.every((h,i)=>h.name===OLD[i])){ const n=mk(); save("habits",n); return n; }
     return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
+  const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
   const [ritualLog,setRitualLog]=useState(()=>load("ritualLog",{}));
@@ -1937,6 +1957,9 @@ function App(){
   const persistEvents=v=>{ setAgendaEvents(v); save("agendaEvents",v); };
   const [agendaChecks,setAgendaChecks]=useState(()=>load("agendaChecks",{}));
   const persistAgendaChecks=v=>{ setAgendaChecks(v); save("agendaChecks",v); };
+  const persistShopping=v=>{ setShoppingList(v); save("shoppingList",v); };
+  const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
+  const toggleManualTile=id=>{ const next={...manualTileDone,[id]:!manualTileDone[id]}; setManualTileDone(next); save("manualTileDone:"+todayKey,next); };
 
   /* positive events: future experiences to anticipate, never tasks */
   const [positiveEvents,setPositiveEvents]=useState(()=>load("positiveEvents",[]));
@@ -2363,6 +2386,7 @@ function App(){
   const greeting=lateNight?"Still up":zoneParts.hour<12?"Bonjour":zoneParts.hour<18?"Bon aprèm":"Bonsoir";
   const goalsLit=goals.length>0 && goals.every(g=>g.done);
   const habitsLit=habits.length>0 && habits.every(h=>hToday[h.id]);
+  const shoppingLit=shoppingList.length>0 && shoppingList.every(item=>item.checked);
   const agendaTodayStates=[];
   agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,addDays(r.lastDone,r.everyDays))<=0; if(done||due)agendaTodayStates.push(done); });
   agendaEvents.forEach(e=>{ const done=e.doneDate===todayKey, due=!e.doneDate&&e.date<=todayKey; if(done||due)agendaTodayStates.push(done); });
@@ -2382,15 +2406,15 @@ function App(){
   const pushTotal14=push14.reduce((a,b)=>a+b,0); const pushAvg14=Math.round(pushTotal14/14);
   let goalsHit7=0; for(let i=0;i<7;i++){ (goalsLog[addDays(todayKey,-i)]||[]).forEach(g=>{ if(g.done) goalsHit7++; }); }
   const learned7=recallList.filter(f=>f.addedOn>=addDays(todayKey,-6)).length;
-  const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=k.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-GB",{weekday:"short",day:"numeric"}); };
+  const planDl=k=> k===todayKey ? "Today" : formatDateKey(k);
   const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
-  const restingAiTile=id=>page==="library"&&!activeNow.has(id)&&ALL_GEN_KEYS.includes(id);
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
     const libraryCorner=page==="library"?(onDaily
       ? <button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>
       : <button className="libraryAddToday" aria-label={`Add ${label} to Today`} title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+</button>):null;
-    return <Tile key={id} id={id} label={label} done={done} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} onTap={onTap} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{children}</Tile>;
+    const visualDone=!!done||!!manualTileDone[id];
+    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} onTap={onTap||(()=>toggleManualTile(id))} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{children}</Tile>;
   };
   /* dropped into any daily-generated tile; only renders once that key is known to have failed */
   const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
@@ -2414,24 +2438,18 @@ function App(){
         </div>
       ); })}</>),
     spanish: T("spanish","Español",!!rToday.spanish, null,<>
-      {restingAiTile("spanish")
-        ? <PlainEmpty>Add this to Today to load a fresh Spanish exercise.</PlainEmpty>
-        : <SpanishCard sp={view.spanish} busy={genBusy} done={!!rToday.spanish} onLearned={learnSpanish} onUnlearned={()=>unsetRitual("spanish")} />}
+      <SpanishCard sp={view.spanish} busy={genBusy} done={!!rToday.spanish} onLearned={learnSpanish} onUnlearned={()=>unsetRitual("spanish")} onGenerate={()=>regenerateOne("spanish")} />
       <RetryNote tileKey="spanish"/></>),
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
       <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
     word: T("word","Word",!!rToday.word, null,<>
-      {restingAiTile("word")
-        ? <PlainEmpty>Add this to Today to load a fresh word.</PlainEmpty>
-        : <WordCard word={view.word} busy={genBusy} onLearned={learnWord} />}
+      <WordCard word={view.word} busy={genBusy} onLearned={learnWord} onGenerate={()=>regenerateOne("word")} />
       <RetryNote tileKey="word"/></>),
     worth: T("worth","Knowledge",!!rToday.worth, null,<>
-      {restingAiTile("worth")
-        ? <PlainEmpty>Add this to Today to load a fresh knowledge card.</PlainEmpty>
-        : <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} />}
+      <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} onGenerate={()=>regenerateOne("worth")} />
       <RetryNote tileKey="worth"/></>),
     music: T("music","Song",!!rToday.music, null,<>
-      {restingAiTile("music") ? <PlainEmpty>Add this to Today to load a fresh discovery.</PlainEmpty> : view.music ? (<div>
+      {view.music ? (<div>
         <div className="musicTitle">{view.music.title}</div>
         <div className="musicArtist">{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
         {view.music.genre && <div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(view.music.genre)} {view.music.genre}</span></div>}
@@ -2441,10 +2459,10 @@ function App(){
           <button className={"mark"+(rToday.music?" on":"")} onClick={()=>toggleRitual("music")}><span className={"tick sm"+(rToday.music?" on":"")}>{rToday.music?"✓":""}</span>{rToday.music?"Heard":"Listened"}</button>
         </div>
         {!view.music.url && <p className="samplehint">Couldn't confirm a direct link — the button opens a search instead.</p>}
-      </div>) : <Note>{genBusy?"Finding today's discovery…":"Not generated yet — tap ✦ Generate today."}</Note>}
+      </div>) : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
       <RetryNote tileKey="music"/></>),
     weather: T("weather","Weather",!!rToday.weather, null,<>
-      <WeatherCard data={weather} busy={genBusy} />
+      <WeatherCard data={weather} busy={genBusy} onGenerate={()=>regenerateOne("weather")} />
       <RetryNote tileKey="weather"/></>, ()=>toggleRitual("weather")),
     pushups: T("pushups","Push-ups",pToday>0,null,
       <div className="pushWrap">
@@ -2467,8 +2485,8 @@ function App(){
         <HabitAdd onAdd={name=>persistHabits([...habits,{id:uid(),name}])} />
       </div></>),
     world: T("world","World",!!rToday.world, null,<>
-      {restingAiTile("world") ? <PlainEmpty>Add this to Today to load today's briefing.</PlainEmpty> : <>
-        {(!view.world || view.world.length===0) && <Note>{genBusy?"Reading the wire…":"Not generated yet — tap ✦ Generate today."}</Note>}
+      <>
+        {(!view.world || view.world.length===0) && <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("world")} />}
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           {(view.world||[]).map((n,i)=>(<div key={i}>
             <div style={{fontSize:14.5,fontWeight:700,lineHeight:1.25}}>{clean(n.headline)}</div>
@@ -2476,7 +2494,7 @@ function App(){
           </div>))}
         </div>
         {(view.world&&view.world.length>0) && <div style={{marginTop:11}}><button className={"mark"+(rToday.world?" on":"")} onClick={()=>toggleRitual("world")}><span className={"tick sm"+(rToday.world?" on":"")}>{rToday.world?"✓":""}</span>{rToday.world?"Read":"Mark read"}</button></div>}
-      </>}
+      </>
       <RetryNote tileKey="world"/></>),
     recall: T("recall","Recall",!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
@@ -2507,6 +2525,8 @@ function App(){
       <TimerCard duration={timerDuration} end={timerEnd} remaining={timerRemaining} fired={timerFired} now={now} onSetDuration={persistTimerDuration} onStart={startTimer} onPause={pauseTimer} onReset={resetTimer} />),
     breathing: T("breathing","Breathing",!!rToday.breathing,null,
       <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} />),
+    shopping: T("shopping","Shopping",shoppingLit,null,
+      <ShoppingCard items={shoppingList} onChange={persistShopping} />),
     agenda: T("agenda","Reminders",agendaLit,null,
       <AgendaCard recurring={agendaRecurring} events={agendaEvents} birthdays={birthdays}
         checks={agendaChecks[todayKey]||{}}
@@ -2518,21 +2538,15 @@ function App(){
     brain: T("brain","Memory",Object.values(brainBank.topics||{}).some(list=>list.some(e=>e.date===todayKey)),null,
       <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
-      {restingAiTile("academic")
-        ? <PlainEmpty>Add this to Today to load a fresh study capsule.</PlainEmpty>
-        : <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} />}
+      <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} onGenerate={()=>regenerateOne("academic")} />
       <RetryNote tileKey="academic"/></>),
     gmat: T("gmat","GMAT",!!rToday.gmat,null,
       <GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} />),
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
-      {restingAiTile("brainflex")
-        ? <PlainEmpty>Add this to Today to load a fresh challenge.</PlainEmpty>
-        : <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} />}
+      <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
-      {restingAiTile("philo")
-        ? <PlainEmpty>Add this to Today to load a fresh philosophy prompt.</PlainEmpty>
-        : <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onSubmitInitial={philoSubmitInitial} onSend={philoSend} />}
+      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onGenerate={()=>regenerateOne("philo")} />
       <RetryNote tileKey="philo"/></>),
     people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
@@ -2663,7 +2677,7 @@ function App(){
             {Object.keys(notes).filter(k=>(notes[k]||"").trim()).length===0 && <p className="hint">No notes yet — write today's in the “Note du jour” tile.</p>}
             {Object.keys(notes).filter(k=>(notes[k]||"").trim()).sort().reverse().map(k=>{ const [y,m,d]=k.split("-").map(Number);
               return (<div key={k} className="jitem">
-                <div className="jdate">{new Date(y,m-1,d).toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>
+                <div className="jdate">{formatDateKey(k)}</div>
                 <div className="jtext">{notes[k]}</div>
               </div>); })}
           </div>
@@ -2742,10 +2756,10 @@ function NoteCard({saved,onSave,onView}){
     </div>
   );
 }
-function SpanishCard({sp,busy,done,onLearned,onUnlearned}){
+function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const [answered,setAnswered]=useState({});
   useEffect(()=>{ setAnswered({}); },[sp && sp.tema]);
-  if(!sp) return <Note>{busy?"Preparando el ejercicio de hoy…":"Sin generar todavía — pulsa ✦ Generate today."}</Note>;
+  if(!sp) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=sp.quiz||[];
   const mark=i=>correct=>setAnswered(prev=>{
     if(prev[i]) return prev;
@@ -2977,7 +2991,7 @@ function AgendaCard({recurring,events,birthdays,checks,noDueToday,emptyDone,onTo
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":e.date, canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, done, sub:done?"Completed today":formatDateKey(e.date), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   birthdays.forEach(b=>{
     const nb=nextBirthday([b]), id="gift-"+b.id;
@@ -3037,10 +3051,17 @@ const POSITIVE_EVENT_TYPES={
   plan:{label:"Plan",icon:"✨"},
   other:{label:"Event",icon:"🎉"}
 };
+const SHOPPING_PRODUCTS=[
+  ["milk","🥛","Milk"],["eggs","🥚","Eggs"],["bread","🍞","Bread"],["rice","🍚","Rice"],["pasta","🍝","Pasta"],["potatoes","🥔","Potatoes"],
+  ["chicken","🍗","Chicken"],["fish","🐟","Fish"],["meat","🥩","Meat"],["cheese","🧀","Cheese"],["yoghurt","🥣","Yoghurt"],["butter","🧈","Butter"],
+  ["apple","🍎","Apples"],["banana","🍌","Bananas"],["orange","🍊","Oranges"],["berries","🫐","Berries"],["avocado","🥑","Avocado"],["tomato","🍅","Tomatoes"],
+  ["carrot","🥕","Carrots"],["broccoli","🥦","Broccoli"],["lettuce","🥬","Greens"],["pepper","🫑","Peppers"],["onion","🧅","Onions"],["mushroom","🍄","Mushrooms"],
+  ["coffee","☕","Coffee"],["tea","🍵","Tea"],["water","💧","Water"],["juice","🧃","Juice"],["snacks","🥨","Snacks"],["chocolate","🍫","Chocolate"],
+  ["soap","🧼","Soap"],["paper","🧻","Paper"],["cleaner","🧽","Cleaner"],["pet","🐾","Pet"],["medicine","💊","Medicine"],["other","🛒","Other"]
+].map(([key,icon,label])=>({key,icon,label}));
+const shoppingProduct=key=>SHOPPING_PRODUCTS.find(p=>p.key===key)||SHOPPING_PRODUCTS[SHOPPING_PRODUCTS.length-1];
 function positiveEventDate(key){
-  const [y,m,d]=key.split("-").map(Number);
-  const options={weekday:"short",day:"numeric",month:"short"}; if(y!==new Date().getFullYear())options.year="numeric";
-  return new Date(y,m-1,d).toLocaleDateString("en-GB",options);
+  return formatDateKey(key);
 }
 function PositiveEventsCard({events,onAdd,onRemove}){
   const [showAdd,setShowAdd]=useState(false);
@@ -3076,6 +3097,37 @@ function PositiveEventForm({onAdd,onClose}){
     </div>
     <button className="link" onClick={onClose}>Cancel</button>
   </div>;
+}
+function ShoppingCard({items,onChange}){
+  const [custom,setCustom]=useState("");
+  const list=Array.isArray(items)?items:[];
+  const hasKey=key=>list.some(item=>item.key===key&&!item.custom);
+  const toggleProduct=product=>{
+    if(product.key==="other"){ const label=custom.trim(); if(!label) return; onChange([...list,{id:uid(),key:"other",label,checked:false,custom:true}]); setCustom(""); return; }
+    if(hasKey(product.key)) onChange(list.filter(item=>!(item.key===product.key&&!item.custom)));
+    else onChange([...list,{id:uid(),key:product.key,label:product.label,checked:false}]);
+  };
+  const toggleCheck=id=>onChange(list.map(item=>item.id===id?{...item,checked:!item.checked}:item));
+  const remove=id=>onChange(list.filter(item=>item.id!==id));
+  const addCustom=()=>toggleProduct(shoppingProduct("other"));
+  return (
+    <div className="shoppingCard">
+      <div className="shoppingPicked">
+        {list.length===0 ? <PlainEmpty>Tap icons to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
+          <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
+            <span>{p.icon}</span><span>{item.label||p.label}</span><button aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
+          </span>
+        ); })}
+      </div>
+      <div className="shopShelf">
+        {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
+      </div>
+      <div className="shopOther">
+        <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
+        <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
+      </div>
+    </div>
+  );
 }
 function CourseAddForm({onAdd}){
   const [name,setName]=useState(""); const [content,setContent]=useState("");
@@ -3116,7 +3168,7 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser}){
   );
 }
 
-function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
+function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor,onGenerate}){
   const [n,setN]=useState(0);
   useEffect(()=>{ setN(0); },[academic && academic.concept]);
   if(!hasCourses) return (
@@ -3126,7 +3178,7 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onOpenEditor}){
       <button className="pill primary" onClick={onOpenEditor}>📄 Add study files</button>
     </div>
   );
-  if(!academic) return <Note>{busy?"Preparing today's study capsule…":"Not generated yet — tap ✦ Generate today."}</Note>;
+  if(!academic) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=academic.quiz||[];
   const mark=()=>{ setN(v=>{ const nv=v+1; if(nv>=qs.length) onLearned(academic); return nv; }); };
   return (
@@ -3302,15 +3354,15 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
         {screen==="mocks"&&<div>
           <div><h3 style={{margin:0}}>Official mock history</h3><p className="gmatPanelSub">Log official practice results here. The dashboard will not invent a predicted score.</p></div>
           <div className="gmatMockForm"><input className="gmatField" inputMode="numeric" placeholder="Total 205–805" value={mockForm.total} onChange={e=>setMockForm({...mockForm,total:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Quant 60–90" value={mockForm.quant} onChange={e=>setMockForm({...mockForm,quant:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Verbal 60–90" value={mockForm.verbal} onChange={e=>setMockForm({...mockForm,verbal:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Data 60–90" value={mockForm.data} onChange={e=>setMockForm({...mockForm,data:e.target.value})}/><button className="gmatBtn" onClick={addMock}>Log mock</button></div>
-          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{mock.date}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
+          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{formatDateKey(mock.date)}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
         </div>}
       </div>
     </div>
   </div>;
 }
 
-function BrainFlexCard({brain,busy,revealed,onReveal}){
-  if(!brain) return <Note>{busy?"Cooking up today's challenge…":"Not generated yet — tap ✦ Generate today."}</Note>;
+function BrainFlexCard({brain,busy,revealed,onReveal,onGenerate}){
+  if(!brain) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
     <div>
       <span className="brainFormat">{brain.format}</span>
@@ -3322,12 +3374,12 @@ function BrainFlexCard({brain,busy,revealed,onReveal}){
   );
 }
 
-function PhilosophyCard({philo,busy,chat,sending,onSubmitInitial,onSend}){
+function PhilosophyCard({philo,busy,chat,sending,onSubmitInitial,onSend,onGenerate}){
   const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
   const logRef=useRef(null);
   useEffect(()=>{ if(logRef.current) logRef.current.scrollTop=logRef.current.scrollHeight; });
-  if(!philo) return <Note>{busy?"Choosing today's question…":"Not generated yet — tap ✦ Generate today."}</Note>;
+  if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
   const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
   return (

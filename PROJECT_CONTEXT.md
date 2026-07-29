@@ -26,7 +26,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Configurable tile library with date-aware active-tile history.
 - Active tiles determine daily progress and perfect-day requirements.
 - Habits may use an emoji, text label, or both; emoji-only habits remain valid.
-- Goals, habits, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
+- Goals, habits, shopping list, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
 - AI-generated content uses a user-provided Anthropic API key.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 - The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
@@ -46,7 +46,8 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Birthday import lives in Settings with a short tutorial; the Birthdays tile stays focused on the compact summary and hidden full list.
 - Compact utility tiles retain their title and adapt to tile shape: wide Timer and Push-ups layouts move controls to the right, Weather gives Tomorrow equal visual weight, completed due Reminders receive the tile’s full-colour completion state, and Event cards stay comparatively compact.
 - Flat Timer tiles reserve a separate title row, keep the time on the left, keep adjustment/Stop/Resume/Reset controls on the right, and show no state-caption text. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
-- Tiles resting outside Today should not generate or surface fresh AI-loaded daily content in the Library; they stay lightweight until re-added to Today.
+- Library widgets should match their Today widget bodies. AI-capable widgets can be generated individually from the Library without being added to Today.
+- Visible stored dates render as `dd/mm/yyyy`.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
