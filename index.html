@@ -498,6 +498,8 @@
   .philoQ { font-size:14.5px; font-weight:700; line-height:1.35; margin-bottom:10px; }
   .philoModeRow { display:flex; align-items:center; gap:7px; margin:-2px 0 9px; }
   .philoModeRow span { color:var(--dim); font-size:10px; font-weight:850; white-space:nowrap; }
+  .philoModeIcon { display:grid!important; place-items:center; flex:0 0 29px; width:29px; height:29px; border-radius:50%; background:color-mix(in srgb,var(--accent) 15%,rgba(255,255,255,.58)); color:var(--accentDark)!important; font-size:15px!important; line-height:1; }
+  .tile.completed .philoModeIcon { background:rgba(255,255,255,.22); color:#fff!important; }
   .philoModeSelect { width:100%; min-width:0; border-radius:999px!important; padding:7px 10px!important; font-size:11px!important; font-weight:800!important; }
   .philoThinkArea { width:100%; min-height:74px; resize:vertical; background:var(--field); border:1px solid var(--fieldbd); border-radius:10px; padding:9px 11px; color:var(--ink); font-family:inherit; font-size:13.5px; line-height:1.5; outline:none; }
   .philoThinkArea::placeholder { color:var(--dim); }
@@ -872,6 +874,8 @@
   .taskAgenda{display:flex;flex-direction:column;gap:7px}
   .taskIntro{margin:0 0 3px;color:var(--dim);font-size:12px;line-height:1.4}
   .taskAgenda .agRow{margin:0;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);border-radius:13px;background:rgba(255,255,255,.34)}
+  .taskAgenda .agRow.calendarSelected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.44));box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 10%,transparent)}
+  .tile.completed .taskAgenda .agRow.calendarSelected{border-color:#fff;background:rgba(255,255,255,.21);box-shadow:0 0 0 2px rgba(255,255,255,.12)}
   .taskAgenda .agRow:last-child{border-bottom:1px solid color-mix(in srgb,var(--accent) 20%,transparent)}
   .taskRow.done{opacity:.66}
   .taskRow.done .agName{text-decoration:line-through}
@@ -885,13 +889,23 @@
   .taskAddForm .addrow .addinput{flex:1 1 118px;min-width:0}
   .taskAddForm input[type="time"].addinput{flex:0 1 104px;text-align:center}
   .miniCalendar{width:100%;border:1.5px solid color-mix(in srgb,var(--accent) 24%,rgba(255,255,255,.62));border-radius:16px;overflow:hidden;background:rgba(255,255,255,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.38)}
-  .miniCalHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;color:var(--accentDark);font-size:13px;font-weight:950;letter-spacing:-.02em}
-  .miniCalView{color:var(--dim);font-size:10px;font-weight:900}
+  .miniCalHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;color:var(--accentDark);font-size:13px;font-weight:950;letter-spacing:-.02em}
+  .miniCalNavGroup{display:grid;grid-template-columns:26px minmax(0,1fr) 26px;align-items:center;gap:4px;min-width:0;flex:1}
+  .tile button.miniCalNav,.tile button.miniCalTitle,.tile button.miniCalToday{
+    display:grid!important;place-items:center!important;width:auto!important;min-width:0!important;height:26px!important;min-height:26px!important;
+    margin:0!important;padding:0!important;border:0!important;border-radius:8px!important;background:transparent!important;
+    color:var(--accentDark)!important;box-shadow:none!important;font:950 17px/1 'Nunito',sans-serif!important;white-space:nowrap!important;transform:none!important
+  }
+  .tile button.miniCalNav:hover,.tile button.miniCalTitle:hover,.tile button.miniCalToday:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;transform:none!important}
+  .tile button.miniCalTitle{overflow:hidden;text-overflow:ellipsis;font-size:12px!important;letter-spacing:-.02em}
+  .tile button.miniCalToday{flex:0 0 auto;padding:0 6px!important;color:var(--dim)!important;font-size:8.5px!important;letter-spacing:.02em}
   .miniCalWeek,.miniCalGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
   .miniCalWeek span{padding:4px 2px;text-align:center;color:var(--dim);font-size:8.5px;font-weight:900;border-top:1px solid color-mix(in srgb,var(--accent) 14%,transparent)}
-  .miniCalDay{position:relative;min-height:42px;padding:3px 3px 4px;border-top:1px solid color-mix(in srgb,var(--accent) 12%,transparent);border-left:1px solid color-mix(in srgb,var(--accent) 12%,transparent);background:rgba(255,255,255,.12);overflow:hidden}
-  .miniCalDay:nth-child(7n+1){border-left:0}
+  .tile button.miniCalDay{position:relative;display:block;width:100%!important;min-width:0!important;min-height:42px!important;margin:0!important;padding:3px 3px 4px!important;border:0!important;border-top:1px solid color-mix(in srgb,var(--accent) 12%,transparent)!important;border-left:1px solid color-mix(in srgb,var(--accent) 12%,transparent)!important;border-radius:0!important;background:rgba(255,255,255,.12)!important;box-shadow:none!important;color:inherit!important;text-align:left!important;overflow:hidden;transform:none!important}
+  .tile button.miniCalDay:nth-child(7n+1){border-left:0!important}
   .miniCalDay.out{background:rgba(255,255,255,.08);opacity:.46}
+  .tile button.miniCalDay:hover,.tile button.miniCalDay.selected{background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.22))!important}
+  .tile button.miniCalDay.selected{box-shadow:inset 0 0 0 1.5px var(--accent)!important;opacity:1}
   .miniCalNum{display:grid;place-items:center;width:18px;height:18px;border-radius:999px;margin-left:auto;color:var(--accentDark);font-size:10px;font-weight:950}
   .miniCalDay.today .miniCalNum{background:#1f2533;color:#fff}
   .miniCalEvents{display:flex;flex-direction:column;gap:2px;margin-top:2px}
@@ -899,11 +913,13 @@
   .miniCalChip.due{background:var(--accent);color:#fff}
   .miniCalMore{color:var(--dim);font-size:7.5px;font-weight:900}
   .tile.completed .miniCalendar{border-color:rgba(255,255,255,.34);background:rgba(255,255,255,.10)}
-  .tile.completed .miniCalHead,.tile.completed .miniCalNum,.tile.completed .miniCalView,.tile.completed .miniCalWeek span,.tile.completed .miniCalMore{color:#fff}
+  .tile.completed .miniCalHead,.tile.completed .miniCalNum,.tile.completed .miniCalWeek span,.tile.completed .miniCalMore{color:#fff}
+  .tile.completed button.miniCalNav,.tile.completed button.miniCalTitle,.tile.completed button.miniCalToday{color:#fff!important}
+  .tile.completed button.miniCalDay.selected{box-shadow:inset 0 0 0 1.5px #fff!important}
   .tile.completed .miniCalDay.today .miniCalNum{background:#fff;color:var(--accentDark)}
   .tile.completed .miniCalChip{background:rgba(255,255,255,.22);color:#fff}
   .tile.completed .miniCalChip.due{background:#fff;color:var(--accentDark)}
-  @container (max-width:320px){.miniCalDay{min-height:34px;padding:2px}.miniCalChip{display:none}.miniCalDay:has(.miniCalChip)::after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}}
+  @container (max-width:320px){.tile button.miniCalDay{min-height:34px!important;padding:2px!important}.miniCalChip{display:none}.miniCalDay:has(.miniCalChip)::after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}}
   /* Every positive event gets the same celebratory countdown-card hierarchy. */
   .positiveEvents{display:flex;flex-direction:column;gap:10px}
   .eventHero{position:relative;overflow:hidden;padding:8px 10px 9px;border:1.5px solid color-mix(in srgb,var(--accent) 42%,#fff);border-radius:16px;background:linear-gradient(145deg,rgba(255,255,255,.68),color-mix(in srgb,var(--accent) 13%,rgba(255,255,255,.28)))}
@@ -1378,24 +1394,26 @@
   }
   @media (min-width:640px){
   .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
-  .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink,
-  .tile[data-tileid="agenda"][data-rows="1"] .taskRow:nth-of-type(n+3){display:none}
+  .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink{display:none}
   .tile[data-tileid="agenda"][data-rows="1"] .taskAgenda{height:100%;justify-content:center}
   .tile[data-tileid="agenda"][data-rows="1"] .taskRow{padding:5px 7px!important}
   .tile[data-tileid="agenda"][data-rows="1"] .agSub{display:none}
   .tile[data-tileid="agenda"][data-rows="2"] .miniCalendar{display:none}
-  .tile[data-tileid="agenda"][data-rows="2"] .taskRow:nth-of-type(n+4){display:none}
   .tile[data-tileid="agenda"][data-rows="3"] .miniCalHead{padding:5px 8px;font-size:10.5px}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalView{font-size:8px}
+  .tile[data-tileid="agenda"][data-rows="3"] .miniCalNavGroup{grid-template-columns:22px minmax(0,1fr) 22px;gap:2px}
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalNav,
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalTitle,
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalToday{height:22px!important;min-height:22px!important}
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalTitle{font-size:10px!important}
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalToday{font-size:7.5px!important}
   .tile[data-tileid="agenda"][data-rows="3"] .miniCalWeek span{padding:2px 1px;font-size:7px}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalDay{min-height:17px;padding:1px}
+  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalDay{min-height:17px!important;padding:1px!important}
   .tile[data-tileid="agenda"][data-rows="3"] .miniCalNum{width:14px;height:14px;font-size:8px}
   .tile[data-tileid="agenda"][data-rows="3"] .miniCalChip{display:none}
   .tile[data-tileid="agenda"][data-rows="3"] .miniCalDay:has(.miniCalChip)::after{
     content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;
     border-radius:50%;background:var(--accent);transform:translateX(-50%)
   }
-  .tile[data-tileid="agenda"][data-rows="3"] .taskRow:nth-of-type(n+4){display:none}
   .tile[data-tileid="agenda"][data-rows="3"] .taskAgenda{gap:4px}
   .tile[data-tileid="agenda"][data-rows="3"] .taskRow{padding:4px 7px!important}
   .tile[data-tileid="agenda"][data-rows="3"] .agName{font-size:11.5px}
@@ -1534,6 +1552,12 @@ const getKey=()=> (localStorage.getItem("fefe_apiKey")||"").trim();
 /* ---- cross-device sync (JSONBlob) ----
    Whole-state snapshot under a secret blob id. The Anthropic API key is NEVER synced. */
 const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
+/* Shared community daily content: one server-side key generates word/knowledge/spanish/
+   music/news/brainflex/philo-prompt once a day for EVERYONE (see worker/shared-content.js).
+   These tiles then need no personal API key. Set to "" to disable and fall back to per-user
+   generation. Weather, academic, and philosophy chat stay per-user. */
+const SHARED_URL="https://fefe-shared.fefedashboard.workers.dev";
+const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
@@ -1627,7 +1651,7 @@ async function callClaude(system,user,opts={}){
 const genWord=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `One moderately uncommon but useful English word a curious bilingual reader probably doesn't know, with its French equivalent and a quick synonym quiz. Avoid: ${avoid.join(", ")||"none"}. Shape:{"term_en":"","ipa":"","pos":"","def_en":"","term_fr":"","def_fr":"","quiz":{"options":["","","",""],"answer":0,"alt_prompts":["","",""]}}. Exactly one option is the closest synonym. Every option must be a familiar everyday word, so the quiz tests the new word rather than four obscure words. Distractors remain meaningfully close. Provide 3 short alternative prompts. Defs under 12 words.`, {max:400}).then(extractJSON);
 const genMusic=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Recommend ONE song that is critically or technically excellent yet UNDERRATED — something most people don't know but that a musicologist or serious critic would admire (craft, innovation, influence, musicianship). Deliberately vary widely across genres, eras and cultures every time (e.g. modal jazz, West African highlife, ambient, post-punk, bossa nova, baroque, experimental electronic, Appalachian folk, dub). Real, findable track. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ")||"none"}. Shape:{"title":"","artist":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, {max:350}).then(extractJSON);
+  `Recommend ONE specific, real recording that is critically or technically excellent yet UNDERRATED — something most people don't know but that a musicologist or serious critic would admire (craft, innovation, influence, musicianship). Deliberately vary widely across genres, eras and cultures every time (e.g. modal jazz, West African highlife, ambient, post-punk, bossa nova, baroque, experimental electronic, Appalachian folk, dub). It MUST be findable as a track in Apple Music. Give the exact released track title. "artist" is the complete recording credit (all named performers, ensemble and/or conductor as appropriate), not automatically the composer and not artificially reduced to one person. For classical music, include the work's composer separately in "composer"; otherwise "composer" may be empty. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ")||"none"}. Shape:{"title":"","artist":"","composer":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, {max:420}).then(extractJSON);
 const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. Select intrinsically useful material whose importance follows naturally from accurate explanation, never from a forced analogy or post-hoc connection. Quiz questions should require a small inference using only material taught in the lesson; do not introduce a new fact or concept.",
   `Write a short daily LESSON in story format. Goal: over many days, make the reader knowledgeable about EVERYTHING — rotate freely across ALL domains (hard sciences, mathematics, medicine, economics, finance, geopolitics, geography, world history, philosophy, psychology, art, architecture, music theory, literature, linguistics, law, technology, engineering, astronomy, ecology, anthropology…). CALIBRATE DIFFICULTY: assume a smart, curious 24-year-old business student who reads the news — skip what such a person already knows (no famous facts everyone learned at school), but stay broadly useful, never niche trivia. The sweet spot: important mechanisms, events, and concepts an educated adult plausibly hasn't mastered. Choose a domain clearly different from these recent lessons: ${(avoid||[]).join(" | ")||"none"}. Exactly 2 short paragraphs (~110 words total) separated by \\n\\n, vivid and concrete. Then a one-line memorable insight and a 2-question quiz. Shape:{"title":"","category":"","story":"","insight":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]},{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]}]}. Quiz rules: make each question genuinely difficult through close conceptual distinctions or a small inference using only the lesson. Every prompt is at most 18 words. Every option is a parallel phrase of 2–5 words and at most 28 characters. Wrong options must be plausible and closely related, never absurd or off-topic. Each "explain" one sentence; "answer" is the correct option index. "alt_prompts" are 2 alternative rewordings of the same question, used later for spaced recall.`, {max:1050}).then(extractJSON);
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
@@ -1643,33 +1667,33 @@ const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, n
   `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, {max:220}).then(extractJSON);
 
 const PHILO_MODES=[
-  {id:"standard",label:"Standard · go deeper"},
-  {id:"plato",label:"Plato"},
-  {id:"aristotle",label:"Aristotle"},
-  {id:"epicurus",label:"Epicurus"},
-  {id:"augustine",label:"Augustine"},
-  {id:"aquinas",label:"Aquinas"},
-  {id:"machiavelli",label:"Machiavelli"},
-  {id:"descartes",label:"Descartes"},
-  {id:"spinoza",label:"Spinoza"},
-  {id:"locke",label:"Locke"},
-  {id:"hume",label:"Hume"},
-  {id:"rousseau",label:"Rousseau"},
-  {id:"kant",label:"Kant"},
-  {id:"hegel",label:"Hegel"},
-  {id:"mill",label:"J. S. Mill"},
-  {id:"kierkegaard",label:"Kierkegaard"},
-  {id:"marx",label:"Marx"},
-  {id:"nietzsche",label:"Nietzsche"},
-  {id:"james",label:"William James"},
-  {id:"husserl",label:"Husserl"},
-  {id:"heidegger",label:"Heidegger"},
-  {id:"wittgenstein",label:"Wittgenstein"},
-  {id:"arendt",label:"Hannah Arendt"},
-  {id:"beauvoir",label:"Simone de Beauvoir"},
-  {id:"foucault",label:"Foucault"},
-  {id:"rawls",label:"Rawls"},
-  {id:"nozick",label:"Nozick"}
+  {id:"standard",label:"Standard · go deeper",icon:"🔎"},
+  {id:"plato",label:"Plato",icon:"🏛️"},
+  {id:"aristotle",label:"Aristotle",icon:"📚"},
+  {id:"epicurus",label:"Epicurus",icon:"🌿"},
+  {id:"augustine",label:"Augustine",icon:"⛪"},
+  {id:"aquinas",label:"Aquinas",icon:"✝️"},
+  {id:"machiavelli",label:"Machiavelli",icon:"🦊"},
+  {id:"descartes",label:"Descartes",icon:"🧠"},
+  {id:"spinoza",label:"Spinoza",icon:"🔷"},
+  {id:"locke",label:"Locke",icon:"🗝️"},
+  {id:"hume",label:"Hume",icon:"👁️"},
+  {id:"rousseau",label:"Rousseau",icon:"🌱"},
+  {id:"kant",label:"Kant",icon:"🧭"},
+  {id:"hegel",label:"Hegel",icon:"🌀"},
+  {id:"mill",label:"J. S. Mill",icon:"⚖️"},
+  {id:"kierkegaard",label:"Kierkegaard",icon:"⚡"},
+  {id:"marx",label:"Marx",icon:"⚒️"},
+  {id:"nietzsche",label:"Nietzsche",icon:"⛰️"},
+  {id:"james",label:"William James",icon:"🧪"},
+  {id:"husserl",label:"Husserl",icon:"🔬"},
+  {id:"heidegger",label:"Heidegger",icon:"⏳"},
+  {id:"wittgenstein",label:"Wittgenstein",icon:"💬"},
+  {id:"arendt",label:"Hannah Arendt",icon:"🌍"},
+  {id:"beauvoir",label:"Simone de Beauvoir",icon:"♀️"},
+  {id:"foucault",label:"Foucault",icon:"👁️‍🗨️"},
+  {id:"rawls",label:"Rawls",icon:"🎭"},
+  {id:"nozick",label:"Nozick",icon:"🛡️"}
 ];
 const philoModeLabel=id=>(PHILO_MODES.find(m=>m.id===id)||PHILO_MODES[0]).label.replace(/^Standard · /,"");
 
@@ -1729,28 +1753,59 @@ const GEN_TASKS={
   },
 };
 
-/* Resolve a direct Apple Music track link via the free iTunes Search API (with proxy fallback).
-   Tries a few query phrasings and prefers a result whose artist actually matches, since obscure
-   tracks often miss on the first exact-string search. If everything misses, callers fall back
-   to a plain Apple Music search link rather than a dead one. */
-async function resolveMusicUrl(m){
-  const clean=s=>String(s||"").replace(/["“”]/g,"").replace(/\s*[\(\[]feat\.[^)\]]*[\)\]]/gi,"").trim();
-  const title=clean(m.title), artist=clean(m.artist);
-  const norm=s=>String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-  const variants=[`${title} ${artist}`, title, `${artist} ${title.split(" ").slice(0,3).join(" ")}`].filter(Boolean);
-  for(const q of variants){
-    const term=encodeURIComponent(q);
-    const api=`https://itunes.apple.com/search?term=${term}&entity=song&limit=5`;
-    for(const u of [api, "https://api.allorigins.win/raw?url="+encodeURIComponent(api)]){
-      try{
-        const r=await fetch(u); if(!r.ok) continue; const d=await r.json();
-        const results=d.results||[];
-        const hit=results.find(t=>t.trackViewUrl && norm(t.artistName).includes(norm(artist).slice(0,6))) || results[0];
-        if(hit&&hit.trackViewUrl) return hit.trackViewUrl;
-      }catch(e){}
-    }
+/* Apple catalog matching must be conservative: a search result is never accepted merely because
+   it came first. Title and the complete recording credit (performers and/or composer) are scored
+   separately, which also handles classical recordings whose Apple "artist" is not the composer. */
+const musicNorm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/&/g," and ").replace(/[^a-z0-9]+/g," ").trim();
+const MUSIC_NOISE=new Set(["a","an","the","and","feat","featuring","with","version","edit","remaster","remastered","mono","stereo"]);
+const musicTokens=s=>new Set(musicNorm(s).split(/\s+/).filter(w=>w&&!MUSIC_NOISE.has(w)));
+const musicOverlap=(a,b)=>{
+  const aa=musicTokens(a),bb=musicTokens(b); if(!aa.size||!bb.size) return 0;
+  let hit=0; aa.forEach(w=>{ if(bb.has(w)) hit++; });
+  return hit/Math.max(aa.size,bb.size);
+};
+const appleMusicSearchUrl=m=>`https://music.apple.com/au/search?term=${encodeURIComponent([m.title,m.artist,m.composer].filter(Boolean).join(" "))}`;
+async function resolveMusicTrack(m){
+  const title=String(m&&m.title||"").trim(), artist=String(m&&m.artist||"").trim(), composer=String(m&&m.composer||"").trim();
+  if(!title) return null;
+  const signature=musicNorm([title,artist,composer].join(" | "));
+  const cached=load("musicMatches",{});
+  if(cached[signature]&&cached[signature].url) return cached[signature];
+  const queries=[`${title} ${artist} ${composer}`,`${title} ${artist}`,`${title} ${composer}`].map(q=>q.trim()).filter((q,i,a)=>q&&a.indexOf(q)===i);
+  const candidates=new Map();
+  for(const q of queries){
+    try{
+      const api=`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=au&media=music&entity=song&limit=25`;
+      const response=await fetch(api); if(!response.ok) continue;
+      const data=await response.json();
+      (data.results||[]).forEach(track=>{ if(track.trackViewUrl) candidates.set(String(track.trackId||track.trackViewUrl),track); });
+    }catch(e){}
   }
-  return null;
+  const expectedCredits=[artist,composer].filter(Boolean).join(" ");
+  const scored=[...candidates.values()].map(track=>{
+    const wanted=musicNorm(title), found=musicNorm(track.trackName);
+    const titleOverlap=musicOverlap(title,track.trackName);
+    const titleScore=wanted===found?100:(wanted&&found&&(wanted.includes(found)||found.includes(wanted))?88:titleOverlap*80);
+    const catalogCredits=[track.artistName,track.composerName,track.collectionArtistName].filter(Boolean).join(" ");
+    const wantedCredit=musicNorm(expectedCredits), foundCredit=musicNorm(catalogCredits);
+    const creditOverlap=musicOverlap(expectedCredits,catalogCredits);
+    const creditScore=!wantedCredit?12:(wantedCredit===foundCredit?38:(wantedCredit.includes(foundCredit)||foundCredit.includes(wantedCredit)?32:creditOverlap*30));
+    return {track,titleScore,creditScore,score:titleScore+creditScore};
+  }).sort((a,b)=>b.score-a.score);
+  const best=scored[0];
+  if(!best||best.titleScore<70||best.creditScore<10) return null;
+  const match={
+    url:best.track.trackViewUrl,
+    trackId:best.track.trackId||"",
+    catalogTitle:best.track.trackName||title,
+    catalogArtist:best.track.artistName||artist,
+    catalogComposer:best.track.composerName||composer,
+    catalogMatched:true
+  };
+  const nextCache={...cached,[signature]:match};
+  const trimmed=Object.fromEntries(Object.entries(nextCache).slice(-80));
+  save("musicMatches",trimmed);
+  return match;
 }
 
 /* World briefing — pulls real, free RSS headlines via our own Worker (same origin, no CORS),
@@ -2123,7 +2178,7 @@ function WeatherCard({data,busy,onGenerate}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:3}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const ALL=Object.keys(DEFSIZE);
 const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
@@ -2161,10 +2216,11 @@ function App(){
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","settings"].includes(route)?route:"dashboard"; });
   const [cols,setCols]=useState(()=>{ const w=window.innerWidth; return w>=1000?6:w>=640?4:2; });
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
-  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",4); return DEFSIZE; }
+  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",5); return DEFSIZE; }
     let s={...DEFSIZE,...load("sizes",{})};
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
+    if(load("designVersion",4)<5){ const c=s.agenda; if(c&&c.c===3&&c.r===3)s.agenda={...DEFSIZE.agenda}; save("sizes",s); save("designVersion",5); }
     return s; });
   const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
@@ -2290,6 +2346,27 @@ function App(){
   const view=daily||{};
   const [weather,setWeather]=useState(()=>load("weather",null));
   const [appDays,setAppDays]=useState(()=>load("appDays",[]));
+
+  /* Shared community content: pull the day's communal tiles (word/knowledge/spanish/music/
+     news/brainflex/philo-prompt) generated once server-side for everyone. No personal key
+     needed for these — they simply appear. Personal tiles (academic, philosophy chat) are
+     untouched. Falls back silently to per-user generation if the endpoint is unavailable. */
+  useEffect(()=>{ if(!SHARED_URL) return; let alive=true;
+    (async()=>{
+      try{
+        const r=await fetch(SHARED_URL+"/shared"); if(!r.ok) return;
+        const doc=await r.json(); const c=doc&&doc.content; if(!c||typeof c!=="object") return;
+        if(!alive) return;
+        setDaily(prev=>{
+          const next={...(prev||{})}; let changed=false;
+          SHARED_KEYS.forEach(k=>{ if(c[k]!=null && JSON.stringify(c[k])!==JSON.stringify(next[k])){ next[k]=c[k]; changed=true; } });
+          if(!changed) return prev;
+          save("daily:"+todayKey,next); return next;
+        });
+      }catch(e){}
+    })();
+    return ()=>{ alive=false; };
+  },[]);
 
   /* academic tile */
   const [courses,setCourses]=useState(()=>load("courses",[]));
@@ -2450,7 +2527,10 @@ function App(){
     try{
       const results=await Promise.all(keys.map(k=>(GEN_TASKS[k]?GEN_TASKS[k]():Promise.resolve(null)).catch(()=>null)));
       const musicIdx=keys.indexOf("music");
-      if(musicIdx>-1 && results[musicIdx]){ const u=await resolveMusicUrl(results[musicIdx]).catch(()=>null); if(u) results[musicIdx].url=u; }
+      if(musicIdx>-1 && results[musicIdx]){
+        const match=await resolveMusicTrack(results[musicIdx]).catch(()=>null);
+        if(match) results[musicIdx]={...results[musicIdx],...match};
+      }
       const prev=daily||{}; const next={...prev};
       keys.forEach((k,i)=>{ if(k==="weather") return; next[k]=results[i]||prev[k]||null; });
       setDaily(next); save("daily:"+todayKey,next);
@@ -2482,7 +2562,7 @@ function App(){
     if(!getKey()){ goSettings(); return; }
     if(genBusy) return;
     if(daily && !confirm("Today's content is already generated. Regenerate the tiles currently on Today?")) return;
-    const keys=ALL_GEN_KEYS.filter(k=>activeTiles.includes(k)&&(k!=="academic"||courses.length>0));
+    const keys=ALL_GEN_KEYS.filter(k=>activeTiles.includes(k)&&(k!=="academic"||courses.length>0)&&!(SHARED_URL&&SHARED_KEYS.has(k)));
     if(!keys.length){ alert("None of your active Today tiles need generated content right now."); return; }
     await runGen(keys);
   };
@@ -2827,17 +2907,7 @@ function App(){
       <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} onGenerate={()=>regenerateOne("worth")} />
       <RetryNote tileKey="worth"/></>),
     music: T("music","Song",!!rToday.music, null,<>
-      {view.music ? (<div>
-        <div className="musicTitle">{view.music.title}</div>
-        <div className="musicArtist">{view.music.artist}{view.music.year?` · ${view.music.year}`:""}</div>
-        {view.music.genre && <div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(view.music.genre)} {view.music.genre}</span></div>}
-        <p className="muted" style={{fontSize:12.5,margin:"7px 0 9px",lineHeight:1.4}}>{view.music.why}</p>
-        <div className="musicActions">
-          <a className="pill" target="_blank" rel="noreferrer" href={view.music.url || `https://music.apple.com/search?term=${encodeURIComponent(view.music.title+" "+view.music.artist)}`}>Apple Music ↗</a>
-          <button className={"mark"+(rToday.music?" on":"")} onClick={()=>toggleRitual("music")}><span className={"tick sm"+(rToday.music?" on":"")}>{rToday.music?"✓":""}</span>{rToday.music?"Heard":"Listened"}</button>
-        </div>
-        {!view.music.url && <p className="samplehint">Couldn't confirm a direct link — the button opens a search instead.</p>}
-      </div>) : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
+      {view.music ? <MusicCard music={view.music} done={!!rToday.music} onToggle={()=>toggleRitual("music")} /> : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
       <RetryNote tileKey="music"/></>),
     weather: T("weather","Weather",!!rToday.weather, null,<>
       <WeatherCard data={weather} busy={genBusy} onGenerate={()=>regenerateOne("weather")} />
@@ -3397,14 +3467,47 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
-function MiniAgendaCalendar({recurring,events}){
-  const [y,m]=todayKey.split("-").map(Number);
+function MusicCard({music,done,onToggle}){
+  const catalogMatch=()=>{
+    if(!music||!music.catalogMatched||!music.url) return null;
+    return {url:music.url,catalogTitle:music.catalogTitle||music.title,catalogArtist:music.catalogArtist||music.artist,catalogComposer:music.catalogComposer||music.composer,catalogMatched:true};
+  };
+  const [match,setMatch]=useState(catalogMatch);
+  const [matching,setMatching]=useState(!catalogMatch());
+  useEffect(()=>{
+    let live=true;
+    const ready=catalogMatch();
+    if(ready){ setMatch(ready); setMatching(false); return ()=>{ live=false; }; }
+    setMatch(null); setMatching(true);
+    resolveMusicTrack(music).then(found=>{ if(live){ setMatch(found); setMatching(false); } }).catch(()=>{ if(live){ setMatch(null); setMatching(false); } });
+    return ()=>{ live=false; };
+  },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
+  const href=match&&match.url?match.url:appleMusicSearchUrl(music);
+  return <div>
+    <div className="musicTitle">{music.title}</div>
+    <div className="musicArtist">{music.artist}{music.year?` · ${music.year}`:""}</div>
+    {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="samplehint" style={{marginTop:3,fontStyle:"normal"}}>Composed by {music.composer}</div>}
+    {music.genre&&<div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(music.genre)} {music.genre}</span></div>}
+    <p className="muted" style={{fontSize:12.5,margin:"7px 0 9px",lineHeight:1.4}}>{music.why}</p>
+    <div className="musicActions">
+      <a className="pill" target="_blank" rel="noreferrer" href={href}>{matching?"Matching Apple Music…":match?"Apple Music ↗":"Find on Apple Music ↗"}</a>
+      <button className={"mark"+(done?" on":"")} onClick={onToggle}><span className={"tick sm"+(done?" on":"")}>{done?"✓":""}</span>{done?"Heard":"Listened"}</button>
+    </div>
+    {!matching&&!match&&<p className="samplehint">No confident direct match — this opens a precise Apple Music search instead.</p>}
+  </div>;
+}
+
+function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
+  const [baseY,baseM]=todayKey.split("-").map(Number);
+  const [viewMonth,setViewMonth]=useState(()=>new Date(baseY,baseM-1,1));
+  const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1;
   const first=new Date(y,m-1,1);
   const monthLabel=new Intl.DateTimeFormat("en-GB",{month:"long",year:"numeric"}).format(first);
   const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
-  const monthOf=key=>Number(String(key||"").split("-")[1]);
+  const monthKey=`${y}-${pad(m)}`;
+  const monthOf=key=>String(key||"").slice(0,7);
   const itemsByDay={};
-  const addItem=(key,item)=>{ if(!key||monthOf(key)!==m) return; (itemsByDay[key]=itemsByDay[key]||[]).push(item); };
+  const addItem=(key,item)=>{ if(!key||monthOf(key)!==monthKey) return; (itemsByDay[key]=itemsByDay[key]||[]).push(item); };
   (events||[]).forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date);
@@ -3417,19 +3520,32 @@ function MiniAgendaCalendar({recurring,events}){
     addItem(due,{label:r.label,time:"",due:d<=0&&r.lastDone!==todayKey,done:r.lastDone===todayKey});
   });
   const days=Array.from({length:42},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
+  const moveMonth=delta=>setViewMonth(current=>new Date(current.getFullYear(),current.getMonth()+delta,1));
+  const returnToday=()=>setViewMonth(new Date(baseY,baseM-1,1));
+  const chooseDay=key=>{
+    onSelectDate(key===selectedDate?"":key);
+    if(monthOf(key)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
+  };
   return (
     <div className="miniCalendar" aria-label="Reminder calendar">
-      <div className="miniCalHead"><span>{monthLabel}</span><span className="miniCalView">View</span></div>
+      <div className="miniCalHead">
+        <div className="miniCalNavGroup">
+          <button className="miniCalNav" aria-label="Previous month" onClick={()=>moveMonth(-1)}>‹</button>
+          <button className="miniCalTitle" aria-label="Return to the current month" onClick={returnToday}>{monthLabel}</button>
+          <button className="miniCalNav" aria-label="Next month" onClick={()=>moveMonth(1)}>›</button>
+        </div>
+        <button className="miniCalToday" onClick={returnToday}>Today</button>
+      </div>
       <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
-        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==m, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||""))); return (
-          <div key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")}>
+        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||""))); return (
+          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")} aria-label={`${formatDateKey(key)}${items.length?` · ${items.map(item=>item.label).join(", ")}`:""}`} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
             <div className="miniCalNum">{day}</div>
             <div className="miniCalEvents">
               {items.slice(0,2).map((item,i)=><span key={i} className={"miniCalChip"+(item.due?" due":"")} title={(item.time?item.time+" · ":"")+item.label}>{item.time?item.time+" ":""}{item.label}</span>)}
               {items.length>2&&<span className="miniCalMore">+{items.length-2}</span>}
             </div>
-          </div>
+          </button>
         ); })}
       </div>
     </div>
@@ -3437,26 +3553,27 @@ function MiniAgendaCalendar({recurring,events}){
 }
 function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone}){
   const [showAdd,setShowAdd]=useState(false);
+  const [selectedDate,setSelectedDate]=useState("");
   const rows=[];
   recurring.forEach(r=>{
     const done=r.lastDone===todayKey, due=addDays(r.lastDone,r.everyDays), d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
     const time=String(e.time||"").trim();
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":formatDateKey(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, calendarDate:e.date, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":formatDateKey(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   const rowRank=r=>r.done?1:r.days<=0?0:2;
   rows.sort((a,b)=>rowRank(a)-rowRank(b)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
-  const shown=rows.slice(0,5);
+  const shown=rows;
   return (
     <div className="taskAgenda">
-      <MiniAgendaCalendar recurring={recurring} events={events} />
+      <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
       {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
-        <div key={r.id} className={"agRow taskRow"+state}>
+        <div key={r.id} className={"agRow taskRow"+state+(selectedDate&&r.calendarDate===selectedDate?" calendarSelected":"")}>
           <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
             <span className="agName">{r.label}</span><span className="agSub">{r.sub}</span>
           </button>
@@ -3868,15 +3985,17 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
   if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
   const mode=chat.mode||"standard";
+  const modeDef=PHILO_MODES.find(m=>m.id===mode)||PHILO_MODES[0];
   const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
   return (
     <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
       <div className="philoModeBar">
+        <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
         <label className="philoModeRow">
           <span>Mode</span>
           <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
-            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
+            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.icon} {m.label}</option>)}
           </select>
         </label>
         {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
