@@ -1490,6 +1490,33 @@
     color:inherit!important;box-shadow:none!important;font:900 20px/1 'Nunito',sans-serif!important
   }
   .gmatClose:hover,.gmatChip.del:hover{background:transparent!important;transform:scale(1.08)!important}
+
+  /* Stats keeps a neutral shell. Habits carry their own colour only in the
+     compact completion history, so a quick scan never blends them together. */
+  .tile[data-tileid="weekly"] .wrev{gap:10px}
+  .tile[data-tileid="weekly"] .wrevSection{border-color:rgba(80,87,100,.16)!important;background:rgba(255,255,255,.46)!important}
+  .habitStatsSection{padding:10px 11px!important}
+  .habitHistoryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:8px}
+  .habitHistoryCard{min-width:0;padding:8px 9px;border:1px solid color-mix(in srgb,var(--habit-color) 30%,#fff);border-radius:12px;background:color-mix(in srgb,var(--habit-color) 5%,rgba(255,255,255,.72))}
+  .habitHistoryHead{display:flex;align-items:center;gap:6px;min-width:0;margin-bottom:7px}
+  .habitHistoryName{min-width:0;flex:1;overflow:hidden;color:#424955;font-size:10.5px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+  .habitHistoryStreak{flex:none;color:var(--habit-color);font:800 9.5px/1 'Nunito',sans-serif;white-space:nowrap}
+  .habitHistoryCard .iceBtn{display:grid;place-items:center;flex:none;width:20px;min-width:20px;height:20px;min-height:20px!important;margin:0!important;padding:0!important;border:0!important;border-radius:5px!important;background:rgba(118,156,221,.14)!important;color:#42659a!important;font-size:10px!important;box-shadow:none!important}
+  .habitHistoryCard .iceBtn:hover{background:rgba(118,156,221,.27)!important;transform:none!important}
+  .habitSquares{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px}
+  .habitSquare{display:block;aspect-ratio:1;border-radius:3px;background:color-mix(in srgb,var(--habit-color) 13%,#e4e6eb);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--habit-color) 10%,transparent)}
+  .habitSquare.done{background:var(--habit-color);box-shadow:0 1px 3px color-mix(in srgb,var(--habit-color) 32%,transparent)}
+  .habitSquare.frozen{background:linear-gradient(135deg,#e7f6ff 0 42%,#74b9e8 43% 57%,#e7f6ff 58%);box-shadow:inset 0 0 0 1px rgba(67,129,183,.38)}
+  .tile.completed .habitHistoryCard{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.34)!important}
+  .tile.completed .habitHistoryName{color:#fff!important}
+  .tile.completed .habitHistoryStreak{color:rgba(255,255,255,.9)!important}
+  .tile.completed .habitSquare{background:rgba(255,255,255,.18)}
+  .tile.completed .habitSquare.done{background:var(--habit-color);box-shadow:none}
+  @container tile (max-width:330px){
+    .habitHistoryGrid{grid-template-columns:1fr}
+    .habitHistoryCard{padding:7px 8px}
+    .habitSquares{gap:2px}
+  }
 </style>
 </head>
 <body>
@@ -1515,7 +1542,7 @@ const COL = {
   weather:  {p:"#DDF4FF", v:"#00B4DC", d:"#0E6E8C"},
   world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
   recall:   {p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
-  weekly:   {p:"#DCF6E5", v:"#10C46E", d:"#0C7544"},
+  weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
   birthdays:{p:"#FFE3F0", v:"#FF4FA3", d:"#AC2A6C"},
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
@@ -2072,6 +2099,7 @@ const gmatFocusQuestion=state=>[...GMAT_QUESTIONS].sort((a,b)=>gmatQuestionPrior
 
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
 function weekCount(log,id){ let c=0; for(let d=0;d<7;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) c++; } return c; }
+const HABIT_STREAK_COLORS=["#0FAF83","#5B6CF0","#A75BEA","#E6902E","#E85C87","#1595B8","#71A63B","#D35B40"];
 
 /* atoms */
 const Readout=({children})=> <span className="ro">{children}</span>;
@@ -2946,7 +2974,7 @@ function App(){
       <RetryNote tileKey="world"/></>),
     recall: T("recall","Recall",dueFacts.length>0&&!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
-    weekly: T("weekly","Weekly",!!rToday.weekly,null,
+    weekly: T("weekly","Stats",!!rToday.weekly,null,
       <div className="wrev">
         <div className="wrevSection chartSec">
           <div className="wrevTitle">Push-ups · last 14 days</div>
@@ -2960,9 +2988,12 @@ function App(){
           <div className="achCard"><div className="achN">{learned7}</div><div className="achL">learned · 7d</div></div>
           <div className="achCard"><div className="achN">{pushStreak}</div><div className="achL">push-up streak</div></div>
         </div>
-        <div className="wrevSection">
-          <div className="wrevRow"><div className="wrevTitle">Habit streaks</div><div className="wrevMeta">🧊 <b>{ice.available}</b></div></div>
-          <div className="flameGrid">{habits.map(h=>{ const st=habitStreak(h.id); return <div key={h.id} className="flameCard"><div className="flameName">{h.name}</div><div className="flameCount">🔥 {st}</div><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>ice cover</button></div>; })}</div>
+        <div className="wrevSection habitStatsSection">
+          <div className="wrevRow"><div className="wrevTitle">Habit history</div><div className="wrevMeta">🧊 <b>{ice.available}</b></div></div>
+          <div className="habitHistoryGrid">{habits.map((h,index)=>{ const st=habitStreak(h.id), color=HABIT_STREAK_COLORS[index%HABIT_STREAK_COLORS.length], history=Array.from({length:28},(_,i)=>addDays(todayKey,27-i)); return <div key={h.id} className="habitHistoryCard" style={{"--habit-color":color}}>
+            <div className="habitHistoryHead"><span className="habitHistoryName" title={h.name}>{h.name}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>🧊</button></div>
+            <div className="habitSquares" aria-label={`${h.name}: ${st} day streak`}>{history.map(day=>{ const done=!!(habitLog[day]&&habitLog[day][h.id]), frozen=(freezes[h.id]||[]).includes(day); return <span key={day} className={`habitSquare${done?" done":""}${frozen?" frozen":""}`} title={`${day}: ${done?"completed":frozen?"covered":"not completed"}`}/>; })}</div>
+          </div>; })}</div>
         </div>
       </div>, ()=>toggleRitual("weekly")),
     birthdays: T("birthdays","Birthdays",false,null,
