@@ -1583,7 +1583,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    music/news/brainflex/philo-prompt once a day for EVERYONE (see worker/shared-content.js).
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
-const SHARED_URL="https://fefe-shared.fefedashboard.workers.dev";
+const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
 const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
