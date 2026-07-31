@@ -2963,7 +2963,7 @@ function App(){
     drag.current=null;
   };
 
-  const saveSettings=async()=>{
+  const saveSettings=()=>{
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
     save("profileUsername",usernameField.trim());
@@ -2972,11 +2972,6 @@ function App(){
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
     save("location",locationProfile);
-    try{
-      const fresh=await fetchWeather(locationProfile);
-      setWeather(fresh);
-      save("weather",fresh);
-    }catch(e){}
   };
   const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
   const findLocations=async()=>{
