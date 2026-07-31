@@ -2311,6 +2311,12 @@ function App(){
       location.reload();
     }catch(e){ alert("Couldn't connect: "+e.message); setSyncBusy(false); } };
   const disableSync=()=>{ localStorage.removeItem("fefe_syncId"); setSyncIdState(""); };
+  const startNewMemory=()=>{
+    if(!confirm("Start a new dashboard memory? This disconnects this device from the current sync code and clears its saved dashboard data. Your API key will stay on this device.")) return;
+    for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.removeItem(k); }
+    localStorage.removeItem("fefe_syncId"); localStorage.removeItem("fefe_syncStamp");
+    location.reload();
+  };
 
   /* Portable local backups. Secrets and sync metadata are deliberately excluded. */
   const exportBackup=()=>{
@@ -3137,6 +3143,7 @@ function App(){
                 <div>
                   <p className="hint" style={{margin:"0 0 6px"}}>Sync is ON. Enter this code on your other devices.</p>
                   <div className="srow"><input className="sinput" readOnly value={syncId} onFocus={e=>e.target.select()} /><button className="ghostbtn" onClick={disableSync}>Disable on this device</button></div>
+                  <button className="link" style={{marginTop:8}} onClick={startNewMemory}>＋ Start a new dashboard memory</button>
                 </div>
               ) : (
                 <div>
