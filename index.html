@@ -99,6 +99,7 @@
   .placeOption b { display:block; font-size:13px; }
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .accountBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; margin:0 0 9px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
 
   .shoppingCard { display:flex; flex-direction:column; gap:9px; min-height:100%; }
   .shoppingPicked { display:flex; flex-wrap:wrap; gap:6px; min-height:28px; }
@@ -2293,8 +2294,9 @@ function App(){
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
     if(!/^[A-Za-z0-9_-]+$/.test(code)){ alert("Use only letters, numbers, - and _ in your code."); return; }
+    if(!nameField.trim()){ alert("Add your dashboard account name in Identity first."); return; }
     setSyncBusy(true);
-    try{ const stamp=Date.now();
+    try{ const existing=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":code}}); if(existing.ok){ const doc=await existing.json(); if(doc&&doc.data){ throw new Error("That account already has data. Use Connect existing account so it cannot be overwritten."); } } const stamp=Date.now();
       const r=await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":code},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
       if(!r.ok) throw new Error("server returned "+r.status);
       localStorage.setItem("fefe_syncId",code); localStorage.setItem("fefe_syncStamp",String(stamp)); setSyncIdState(code);
@@ -2304,7 +2306,7 @@ function App(){
     if(code.length<6){ alert("Enter the same code you used on your main device."); return; }
     setSyncBusy(true);
     try{ const r=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":code}}); if(!r.ok) throw new Error("server returned "+r.status);
-      const doc=await r.json();
+      const doc=await r.json(); if(!doc||!doc.data) throw new Error("No dashboard account was found for that code.");
       localStorage.setItem("fefe_syncId",code);
       if(doc&&doc.data){ Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); }); }
       localStorage.setItem("fefe_syncStamp",String((doc&&doc.updatedAt)||Date.now()));
@@ -3138,6 +3140,7 @@ function App(){
             <section className="settingsCard">
               <h4>Sync & backup</h4>
               <p className="hint">Your API key never syncs. Your saved dashboard memory does.</p>
+              <div className="accountBadge">Dashboard account · {nameField.trim()||"Unnamed"}</div>
               <div className="lab">Sync across devices</div>
               {syncId ? (
                 <div>
@@ -3149,8 +3152,8 @@ function App(){
                 <div>
                   <div className="srow"><input className="sinput" placeholder="Choose a secret code — 6+ chars" value={syncField} onChange={e=>setSyncField(e.target.value)} /></div>
                   <div className="srow" style={{marginTop:8}}>
-                    <button className="savebtn" onClick={enableSync} disabled={syncBusy}>{syncBusy?"…":"Turn on sync — this device"}</button>
-                    <button className="ghostbtn" onClick={connectSync} disabled={syncBusy}>{syncBusy?"…":"Connect another device"}</button>
+                    <button className="savebtn" onClick={enableSync} disabled={syncBusy}>{syncBusy?"…":"Create new account"}</button>
+                    <button className="ghostbtn" onClick={connectSync} disabled={syncBusy}>{syncBusy?"…":"Sign in to existing account"}</button>
                   </div>
                 </div>
               )}
