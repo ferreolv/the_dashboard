@@ -1651,6 +1651,9 @@
   @media (min-width:1500px){
     .dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{max-width:1800px}
   }
+  @media (min-width:761px){
+    .topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{width:100%;box-sizing:border-box}
+  }
   </style>
 </head>
 <body>
@@ -2345,6 +2348,8 @@ function WeatherCard({data,busy,onGenerate}){
 /* sizing */
 const ROW=112, GAP=13;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:2,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:2},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:2,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
+const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
@@ -2387,7 +2392,7 @@ function App(){
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     if(load("designVersion",4)<5){ const c=s.agenda; if(c&&c.c===3&&c.r===3)s.agenda={...DEFSIZE.agenda}; save("sizes",s); save("designVersion",5); }
-    return s; });
+    return clampTileSizes(s,window.innerWidth>=1000?6:window.innerWidth>=640?4:2); });
   const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
@@ -2944,8 +2949,9 @@ function App(){
         const cw=cellW();
         const dc=Math.round((cx-d.x)/(cw+GAP));
         const dr=Math.round((cy-d.y)/(ROW+GAP));
-        const nc=Math.max(1,Math.min(cols, d.c0+dc));
-        const nr=Math.max(1,Math.min(6, d.r0+dr));
+        const min=MIN_SIZE[d.id]||{c:1,r:1};
+        const nc=Math.max(Math.min(min.c,cols),Math.min(cols, d.c0+dc));
+        const nr=Math.max(min.r,Math.min(6, d.r0+dr));
         const cur=sizesRef.current[d.id]||{c:2,r:1};
         if(cur.c!==nc||cur.r!==nr){ const next={...sizesRef.current,[d.id]:{c:nc,r:nr}}; sizesRef.current=next; setSizes(next); }
       });
