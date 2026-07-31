@@ -1427,6 +1427,14 @@
     .tile[data-tileid="shopping"] .shopShelf{min-height:32px}
     .tile[data-tileid="shopping"] .shopIcon{height:32px!important;min-height:32px!important}
   }
+  /* Universal compact-tile contract: no horizontal clipping or side-scrolling. */
+  .tile,.tile .tbody,.tile .content{min-width:0;max-width:100%;overflow-x:hidden}
+  .tile .tbody{overflow-y:auto;overscroll-behavior-y:contain}
+  .tile .content{box-sizing:border-box;min-height:0;overflow-y:visible}
+  .tile .content>*{min-width:0;max-width:100%;box-sizing:border-box}
+  .tile .content button,.tile .content input,.tile .content textarea,.tile .content select{max-width:100%;min-width:0}
+  .tile[data-tileid="habits"][data-rows="1"] .hgrid,.tile[data-tileid="shopping"][data-rows="1"] .shopShelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;overflow-y:visible;overflow-x:hidden;height:auto;max-height:none}
+  .tile[data-tileid="habits"][data-rows="1"] .hsq,.tile[data-tileid="shopping"][data-rows="1"] .shopIcon{width:100%;min-width:0;max-width:100%}
   @media (min-width:640px){
   .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
   .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink{display:none}
