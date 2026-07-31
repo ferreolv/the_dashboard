@@ -100,6 +100,13 @@
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
   .accountBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; margin:0 0 9px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .accountFields { display:grid; gap:9px; }
+  .accountField { display:grid; gap:4px; }
+  .accountField label { color:#7a7d91; font-size:10px; font-weight:800; letter-spacing:.04em; }
+  .accountField .sinput { min-width:0; width:100%; box-sizing:border-box; padding:8px 10px; background:rgba(247,247,252,.9); }
+  .accountPassword { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:35px; padding:0 10px; border:1px solid rgba(31,36,55,.1); border-radius:10px; background:rgba(247,247,252,.9); }
+  .accountDots { letter-spacing:.2em; font-weight:900; color:#41455d; }
+  .accountPassword .link { padding:0; font-size:11px; }
   .dangerLink { color:#b42345!important; }
   .authGate { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:20px; background:rgba(244,246,255,.82); backdrop-filter:blur(18px); }
   .authCard { width:min(420px,100%); display:flex; flex-direction:column; gap:10px; padding:30px; border:1px solid rgba(120,130,220,.25); border-radius:28px; background:rgba(255,255,255,.82); box-shadow:0 24px 70px rgba(50,60,120,.18); }
@@ -1709,6 +1716,7 @@ const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex",
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
+const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
 const getAccountToken=()=>localStorage.getItem(ACCOUNT_TOKEN_KEY)||"";
 const accountRequest=async(path,body)=>{ const r=await fetch(SYNC_URL+path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json",...(getAccountToken()?{Authorization:`Bearer ${getAccountToken()}`}:{})},...(body?{body:JSON.stringify(body)}:{})}); const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||`server returned ${r.status}`); return data; };
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
@@ -2399,6 +2407,8 @@ function App(){
   const [keyField,setKeyField]=useState(()=>getKey());
   const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
   const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
+  const [usernameField,setUsernameField]=useState(()=>load("profileUsername",""));
+  const [accountEmail,setAccountEmail]=useState(()=>localStorage.getItem(ACCOUNT_EMAIL_KEY)||"");
   const [locationProfile,setLocationProfile]=useState(()=>getLocationProfile());
   const [locationQuery,setLocationQuery]=useState(()=>{ const loc=getLocationProfile(); return [loc.name,loc.region].filter(Boolean).join(", "); });
   const [locationMatches,setLocationMatches]=useState([]);
@@ -2417,7 +2427,7 @@ function App(){
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
-  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
+  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
   const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem("fefe_syncStamp"); location.reload(); }catch(e){alert(e.message);} };
 
@@ -2943,6 +2953,7 @@ function App(){
   const saveSettings=async()=>{
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
+    save("profileUsername",usernameField.trim());
     setProfileName(nextName);
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
@@ -3271,10 +3282,14 @@ function App(){
             <section className="settingsCard">
               <h4>Account</h4>
               <p className="hint">Your dashboard memory and settings belong to this account.</p>
-              <div className="accountBadge">Dashboard account · {nameField.trim()||"Unnamed"}</div>
-              {accountSignedIn && <button className="ghostbtn" onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); location.reload();}}>Sign out / switch account</button>}
-              <div className="lab">Change password</div>
-              <div className="srow"><input className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
+              <div className="accountFields">
+                <div className="accountField"><label>Full name</label><input className="sinput" autoComplete="name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
+                <div className="accountField"><label>Username</label><input className="sinput" autoComplete="username" placeholder="Choose a username" value={usernameField} onChange={e=>setUsernameField(e.target.value)} /></div>
+                <div className="accountField"><label>Email</label><input className="sinput" type="email" value={accountEmail||"Signed-in account"} readOnly /></div>
+                <div className="accountField"><label>Password</label><div className="accountPassword"><span className="accountDots">••••••</span><button className="link" onClick={()=>document.getElementById("account-new-password")?.focus()}>Change</button></div></div>
+              </div>
+              {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); location.reload();}}>Sign out / switch account</button>}
+              <div className="srow" style={{marginTop:11}}><input id="account-new-password" className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
               <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount}>Delete account</button>
               <div className="lab">Backup & restore</div>
               <div className="srow">
