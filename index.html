@@ -805,9 +805,6 @@
      height to keep the top row clear of the label. Timer/push-ups/birthdays center short content that
      never reaches the top, so they need no reservation (adding one only steals space on 1×1 tiles). */
   .tile[data-tileid="weather"]:not(:has(.emptyState)) .tbody{padding-top:22px}
-  .tile .tbody.moreBelow{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent)}
-  .tile .tbody.moreAbove.moreBelow{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent)}
-  .tile .tbody.moreAbove:not(.moreBelow){-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px);mask-image:linear-gradient(to bottom,transparent,#000 16px)}
   /* Responsive tile contract: each widget adapts to its own dimensions, not only to the viewport. */
   .tile{container-name:tile;container-type:inline-size}
   .tile,.tile *{min-width:0}
@@ -1572,6 +1569,75 @@
     .habitHistoryCard{padding:7px 8px}
     .habitSquares{gap:2px}
   }
+
+  /* Final compact layout contract. The tile body is the only scroll owner,
+     scrolling is vertical, and scrollbar chrome is never drawn. */
+  .tile .tbody{
+    display:block!important;overflow-x:hidden!important;overflow-y:auto!important;
+    scrollbar-width:none!important;-ms-overflow-style:none!important;
+    -webkit-mask-image:none!important;mask-image:none!important
+  }
+  .tile .tbody::-webkit-scrollbar,.tile .tbody::-webkit-scrollbar-track,
+  .tile .tbody::-webkit-scrollbar-thumb,.tile .tbody::-webkit-scrollbar-button{
+    display:none!important;width:0!important;height:0!important;background:transparent!important
+  }
+  .tile .content{width:100%!important;height:auto!important;min-height:0!important;overflow:visible!important;box-sizing:border-box}
+  .tile .content>*{min-width:0!important;max-width:100%!important;box-sizing:border-box}
+  @media (min-width:640px){
+    .tile[data-rows="1"] .tbody{overflow-x:hidden!important;overflow-y:auto!important}
+    .tile[data-rows="1"] .content{height:auto!important;overflow:visible!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoModeRow{display:flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoThinkArea,
+    .tile[data-tileid="philo"][data-rows="1"] .chatLog{display:block!important}
+    .tile[data-tileid="philo"][data-rows="1"] .chatInputRow{display:flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .pill{display:inline-flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoQ{display:block!important;overflow:visible!important;-webkit-line-clamp:unset}
+  }
+  .tile[data-tileid="habits"] .hgrid{
+    display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;align-content:flex-start!important;
+    gap:8px!important;width:100%!important;height:auto!important;overflow:visible!important
+  }
+  .tile[data-tileid="habits"] .hsq{
+    flex:0 0 68px!important;width:68px!important;height:68px!important;min-width:68px!important;
+    min-height:68px!important;max-width:68px!important;max-height:68px!important;aspect-ratio:1!important;border-radius:50%!important
+  }
+  .tile[data-tileid="shopping"] .shoppingCard,.tile[data-tileid="shopping"] .shoppingPicked,
+  .tile[data-tileid="shopping"] .shopShelf{height:auto!important;max-height:none!important;overflow:visible!important}
+  .tile[data-tileid="shopping"] .shoppingPicked,.tile[data-tileid="shopping"] .shopShelf{
+    display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;align-content:flex-start!important;gap:7px!important
+  }
+  .tile[data-tileid="shopping"] .shopIcon{
+    flex:0 0 42px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+    max-width:42px!important;max-height:42px!important;aspect-ratio:1!important;border-radius:50%!important
+  }
+  .tile[data-tileid="shopping"] .shopChip{position:relative;overflow:visible!important;flex:0 0 42px}
+  .tile[data-tileid="shopping"] .shopChip .del{
+    position:absolute;right:-4px;top:-4px;width:16px!important;min-width:16px!important;height:16px!important;min-height:16px!important;
+    padding:0!important;font-size:9px!important
+  }
+  .tile[data-tileid="shopping"] .shopOther{width:100%;margin-top:4px}
+  .tile[data-tileid="word"] .wordcard{height:auto!important;min-height:0!important;overflow:visible!important}
+  .tile[data-tileid="pushups"] .pushWrap{height:auto!important;min-height:0!important;overflow:visible!important;justify-content:flex-start!important}
+  .tile[data-tileid="pushups"] .pushBtns{
+    display:grid!important;grid-template-columns:repeat(2,minmax(48px,1fr))!important;
+    width:100%!important;height:auto!important;overflow:visible!important
+  }
+  .tile[data-tileid="pushups"] .pushBtns .puBtn{width:100%!important;height:auto!important;min-width:0!important;min-height:34px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCard{grid-template-columns:76px minmax(0,1fr)!important;align-items:start!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathStage{min-height:78px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress{width:70px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress::before{width:63px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathOrb{width:50px!important}
+  .tile[data-tileid="philo"] .philoCard{display:flex;flex-direction:column;width:100%;height:auto;min-width:0;overflow:visible}
+  .tile[data-tileid="philo"] .chatLog{height:auto!important;max-height:none!important;overflow:visible!important}
+  .tile[data-tileid="philo"] .chatMsg{max-width:100%;overflow-wrap:anywhere}
+  .tile[data-tileid="weather"] .content,.tile[data-tileid="weather"] .weatherSplit,
+  .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{height:auto!important;overflow:visible!important}
+  @container tile (max-width:360px){
+    .tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr!important;grid-template-rows:auto auto!important;align-items:start!important}
+    .tile[data-tileid="weather"] .weatherNow{justify-content:flex-start!important}
+    .tile[data-tileid="weather"] .wtomorrow{border-left:0!important;padding:8px!important}
+  }
 </style>
 </head>
 <body>
@@ -2285,12 +2351,10 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,
   const t=themeVars(id,done);
   const tileCols=Math.min(size.c,cols);
   const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
-  const tbodyRef=useRef(null);
-  useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
     <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
-      <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
         <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
@@ -4086,7 +4150,7 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
   const modeDef=PHILO_MODES.find(m=>m.id===mode)||PHILO_MODES[0];
   const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
   return (
-    <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div className="philoCard">
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
       <div className="philoModeBar">
         <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
@@ -4102,7 +4166,7 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
         <textarea className="philoThinkArea" placeholder="Think it through first — write your own take here…" value={draft} onChange={e=>setDraft(e.target.value)} />
         <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={()=>onSubmitInitial(draft.trim())}>I've thought about this →</button>
       </>) : (<>
-        <div className="chatLog" ref={logRef} style={{flex:1,overflowY:"auto",minHeight:0}}>
+        <div className="chatLog" ref={logRef}>
           <div className="chatMsg me">{chat.initial}</div>
           {chat.messages.map((m,i)=>(<div key={i} className={"chatMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>))}
           {sending && <div className="chatThinking">…thinking</div>}
