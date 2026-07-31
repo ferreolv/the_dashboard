@@ -3510,12 +3510,16 @@ function PushBars({values}){
     </div>
   );
 }
+function birthdayDaysUntil(b,baseDate=new Date()){
+  const base=new Date(baseDate.getFullYear(),baseDate.getMonth(),baseDate.getDate());
+  let d=new Date(base.getFullYear(),Number(b.month)-1,Number(b.day));
+  if(d<base) d=new Date(base.getFullYear()+1,Number(b.month)-1,Number(b.day));
+  return Math.round((d-base)/86400000);
+}
 function nextBirthday(list){
   if(!list.length) return null;
-  const now=new Date(); const base=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let best=null,bd=99999;
-  list.forEach(b=>{ let d=new Date(now.getFullYear(),b.month-1,b.day); if(d<base) d=new Date(now.getFullYear()+1,b.month-1,b.day);
-    const days=Math.round((d-base)/86400000); if(days<bd){ bd=days; best={...b,days}; } });
+  list.forEach(b=>{ const days=birthdayDaysUntil(b); if(days<bd){ bd=days; best={...b,days}; } });
   return best;
 }
 function BirthdaysCard({birthdays,today,onAdd,onRemove}){
@@ -3538,7 +3542,7 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
           <BirthdayInput onAdd={onAdd} />
           <div className="birthdayManagerList">
             {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Add someone by hand here, or import your contacts from Settings.</div></div>}
-            {[...birthdays].sort((a,b)=>a.month-b.month||a.day-b.day).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
+            {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
           </div>
         </div>
       </div>,document.body)}
@@ -3670,7 +3674,6 @@ function MusicCard({music,done,onToggle}){
       <a className="pill" target="_blank" rel="noreferrer" href={href}>{matching?"Matching Apple Music…":match?"Apple Music ↗":"Find on Apple Music ↗"}</a>
       <button className={"mark"+(done?" on":"")} onClick={onToggle}><span className={"tick sm"+(done?" on":"")}>{done?"✓":""}</span>{done?"Heard":"Listened"}</button>
     </div>
-    {!matching&&!match&&<p className="samplehint">No confident direct match — this opens a precise Apple Music search instead.</p>}
   </div>;
 }
 
@@ -4172,7 +4175,7 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
         <label className="philoModeRow">
           <span>Mode</span>
           <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
-            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.icon} {m.label}</option>)}
+            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </label>
         {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
