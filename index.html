@@ -544,12 +544,13 @@
   .placeBranch { background:var(--field); border:1px solid var(--fieldbd); border-radius:12px; padding:9px 11px; }
 
   /* ===== Daylight v2 design system ===== */
-  :root { --canvas:#f7f8fc; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
+  :root { --canvas:#eef0f2; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
   html { background:var(--canvas); overflow-x:hidden; }
-  body { max-width:100%; overflow-x:hidden; color:var(--text); background:radial-gradient(circle at 8% 0%,rgba(111,93,255,.08),transparent 28%),radial-gradient(circle at 94% 16%,rgba(31,182,255,.07),transparent 24%),var(--canvas); }
+  body { max-width:100%; overflow-x:hidden; color:var(--text); background:var(--canvas); }
+  body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff); }
   button,input,textarea { -webkit-tap-highlight-color:transparent; }
   button:focus-visible,input:focus-visible,textarea:focus-visible { outline:3px solid rgba(99,102,241,.22); outline-offset:2px; }
-  .wrap { max-width:1480px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; }
+  .wrap { width:100%; max-width:1800px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; box-sizing:border-box; }
 
   .topbar { position:sticky; top:12px; z-index:110; max-width:1396px; margin:0 auto 34px; min-height:58px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:8px 9px 8px 12px; background:rgba(255,255,255,.90); border:1px solid rgba(255,255,255,.96); border-radius:18px; box-shadow:0 12px 38px rgba(34,39,72,.12),inset 0 0 0 1px rgba(23,24,44,.05); backdrop-filter:blur(24px) saturate(1.3); }
   .brand { display:flex; align-items:center; gap:10px; min-width:150px; }
@@ -565,7 +566,7 @@
   .actionBtn.active { color:#fff; background:#6257e7; border-color:#6257e7; }
   .actionBtn svg { width:15px; height:15px; stroke-width:1.9; }
 
-  .dashboardHero { max-width:1320px; margin:0 auto 24px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
+  .dashboardHero { max-width:1800px; margin:0 auto 24px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
   .heroCopy { min-width:0; }
   .heroEyebrow { color:#7a7d91; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:7px; }
   .dashboardHero h1 { margin:0; color:#16172a; font-size:clamp(30px,4vw,48px); line-height:1.03; letter-spacing:-.052em; font-weight:750; }
@@ -579,7 +580,7 @@
   .metricLabel { display:block; margin-top:2px; color:#85889a; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
   .heroClock { color:#5a5d70; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 
-  .grid { gap:16px; grid-auto-rows:104px; max-width:1320px; }
+  .grid { gap:16px; grid-auto-rows:104px; max-width:1800px; }
   .tile { isolation:isolate; border-radius:var(--radius); padding:17px 18px 18px; color:var(--ink); background:var(--tileBg); border:1px solid rgba(255,255,255,.78); box-shadow:var(--glow),var(--shadow); transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s,background .5s var(--ease),color .35s; }
   .tile::before { content:""; position:absolute; z-index:-1; left:18px; right:18px; top:0; height:2px; border-radius:0 0 4px 4px; background:var(--accent); opacity:.0; transform:scaleX(.55); transition:opacity .25s,transform .35s var(--ease); }
   .tile.completed::before { opacity:.85; transform:scaleX(1); background:rgba(255,255,255,.92); }
@@ -1645,7 +1646,11 @@
     .tile[data-tileid="weather"] .weatherNow{justify-content:flex-start!important}
     .tile[data-tileid="weather"] .wtomorrow{border-left:0!important;padding:8px!important}
   }
-</style>
+  /* Large screens use the available canvas; smaller screens keep the existing responsive breakpoints. */
+  @media (min-width:1500px){
+    .dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{max-width:1800px}
+  }
+  </style>
 </head>
 <body>
 <div id="root"></div>
@@ -2424,6 +2429,12 @@ function App(){
   const [authPassword,setAuthPassword]=useState("");
   const [authBusy,setAuthBusy]=useState(false);
   const [newPassword,setNewPassword]=useState("");
+  const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
+
+  useEffect(()=>{
+    document.body.classList.toggle("theme-atmospheric",backgroundTheme==="atmospheric");
+    return ()=>document.body.classList.remove("theme-atmospheric");
+  },[backgroundTheme]);
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
@@ -2954,6 +2965,7 @@ function App(){
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
     save("profileUsername",usernameField.trim());
+    save("backgroundTheme",backgroundTheme);
     setProfileName(nextName);
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
@@ -3225,6 +3237,15 @@ function App(){
               <div className="srow"><input className="sinput" autoComplete="name" placeholder="Your name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
               <div className="lab">Anthropic API key — powers the word, lesson, song & world tiles</div>
               <div className="srow"><input className="sinput" type="password" placeholder="sk-ant-…" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
+            </section>
+            <section className="settingsCard">
+              <h4>Appearance</h4>
+              <p className="hint">Choose the canvas behind your glass tiles.</p>
+              <div className="lab">Dashboard background</div>
+              <select className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
+                <option value="neutral">Neutral grey</option>
+                <option value="atmospheric">Soft colour wash</option>
+              </select>
             </section>
             <section className="settingsCard">
               <h4>Location</h4>
