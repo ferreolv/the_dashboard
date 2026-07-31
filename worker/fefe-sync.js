@@ -242,6 +242,20 @@ var index_default = {
     if (url.pathname === "/auth/me" && request.method === "GET") {
       const account = await authAccount(env, request); return account ? sharedJson(account) : sharedJson({ error: "Not signed in" }, 401);
     }
+    if (url.pathname === "/auth/password" && request.method === "POST") {
+      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const body = await request.json().catch(() => ({})), nextPassword = String(body.password || "");
+      if (nextPassword.length < 8) return sharedJson({ error: "Password must be at least 8 characters." }, 400);
+      const key = `auth:user:${account.email}`, record = await env.SYNC.get(key, "json"); if (!record) return sharedJson({ error: "Account not found." }, 404);
+      const salt = authToken(); record.salt = salt; record.hash = await authHash(account.email, nextPassword, salt); await env.SYNC.put(key, JSON.stringify(record));
+      return sharedJson({ ok: true });
+    }
+    if (url.pathname === "/auth/delete" && request.method === "POST") {
+      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      await env.SYNC.delete(`auth:user:${account.email}`); await env.SYNC.delete(`account:${account.email}`);
+      const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim(); if (token) await env.SYNC.delete(`auth:session:${token}`);
+      return sharedJson({ ok: true });
+    }
     if (url.pathname === "/account/data") {
       const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const key = `account:${account.email}`;

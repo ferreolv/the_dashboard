@@ -100,6 +100,7 @@
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
   .accountBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; margin:0 0 9px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .dangerLink { color:#b42345!important; }
   .authGate { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:20px; background:rgba(244,246,255,.82); backdrop-filter:blur(18px); }
   .authCard { width:min(420px,100%); display:flex; flex-direction:column; gap:10px; padding:30px; border:1px solid rgba(120,130,220,.25); border-radius:28px; background:rgba(255,255,255,.82); box-shadow:0 24px 70px rgba(50,60,120,.18); }
   .authCard h2 { margin:0; color:#313a95; font-size:26px; }
@@ -2328,10 +2329,13 @@ function App(){
   const [authEmailField,setAuthEmailField]=useState("");
   const [authPassword,setAuthPassword]=useState("");
   const [authBusy,setAuthBusy]=useState(false);
+  const [newPassword,setNewPassword]=useState("");
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
   const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
+  const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
+  const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem("fefe_syncStamp"); location.reload(); }catch(e){alert(e.message);} };
 
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
@@ -3181,26 +3185,13 @@ function App(){
               </div>}
             </section>
             <section className="settingsCard">
-              <h4>Sync & backup</h4>
-              <p className="hint">Your API key never syncs. Your saved dashboard memory does.</p>
+              <h4>Account</h4>
+              <p className="hint">Your dashboard memory and settings belong to this account.</p>
               <div className="accountBadge">Dashboard account · {nameField.trim()||"Unnamed"}</div>
               {accountSignedIn && <button className="ghostbtn" onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); location.reload();}}>Sign out / switch account</button>}
-              <div className="lab">Sync across devices</div>
-              {syncId ? (
-                <div>
-                  <p className="hint" style={{margin:"0 0 6px"}}>Sync is ON. Enter this code on your other devices.</p>
-                  <div className="srow"><input className="sinput" readOnly value={syncId} onFocus={e=>e.target.select()} /><button className="ghostbtn" onClick={disableSync}>Disable on this device</button></div>
-                  <button className="link" style={{marginTop:8}} onClick={startNewMemory}>＋ Start a new dashboard memory</button>
-                </div>
-              ) : (
-                <div>
-                  <div className="srow"><input className="sinput" placeholder="Choose a secret code — 6+ chars" value={syncField} onChange={e=>setSyncField(e.target.value)} /></div>
-                  <div className="srow" style={{marginTop:8}}>
-                    <button className="savebtn" onClick={enableSync} disabled={syncBusy}>{syncBusy?"…":"Create new account"}</button>
-                    <button className="ghostbtn" onClick={connectSync} disabled={syncBusy}>{syncBusy?"…":"Sign in to existing account"}</button>
-                  </div>
-                </div>
-              )}
+              <div className="lab">Change password</div>
+              <div className="srow"><input className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
+              <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount}>Delete account</button>
               <div className="lab">Backup & restore</div>
               <div className="srow">
                 <button className="ghostbtn" onClick={exportBackup}>Download backup</button>

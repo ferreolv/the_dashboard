@@ -17,8 +17,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Data persists in browser `localStorage` with `fefe_` keys.
 - Learn owns `fefe_learnDB`; Dashboard does not load or display Learn navigation or progress.
 - Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
-- Settings can disconnect the current sync code and start a fresh local dashboard memory; the API key remains local.
-- Sync setup presents a named dashboard account, refuses to overwrite an existing remote account during creation, and uses an explicit sign-in action to connect existing data.
+- Settings presents a classic Account section with sign out, password change, account deletion, and separate backup/restore; legacy sync-code controls are no longer exposed.
 - JSON backup and restore are available in Settings.
 - Settings lives on its own top-level dashboard page at `#/settings`.
 - Existing saved data must survive code and architecture changes.
