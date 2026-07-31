@@ -22,11 +22,24 @@ function sharedCors() {
   return {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, X-Sync-Code"
+    "Access-Control-Allow-Headers": "Content-Type, X-Sync-Code, Authorization"
   };
 }
 function sharedJson(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", ...sharedCors() } });
+}
+function authEmail(value) { return String(value || "").trim().toLowerCase(); }
+async function authHash(email, password, salt) {
+  const bytes = new TextEncoder().encode(`${salt}:${email}:${password}`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function authToken() { return crypto.randomUUID().replaceAll("-", ""); }
+async function authAccount(env, request) {
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
+  if (!token) return null;
+  const email = await env.SYNC.get(`auth:session:${token}`);
+  return email ? { email } : null;
 }
 function sharedDayKey() {
   return new Date().toLocaleDateString("en-CA", { timeZone: TZ }); // YYYY-MM-DD
@@ -207,7 +220,36 @@ var index_default = {
       return sharedJson({ date, content });
     }
 
-    // ---- cross-device sync (unchanged) ----
+    // ---- account authentication and account-scoped data ----
+    if (url.pathname === "/auth/signup" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const email = authEmail(body.email), password = String(body.password || "");
+      if (!/^\S+@\S+\.\S+$/.test(email) || password.length < 8) return sharedJson({ error: "Use a valid email and a password of at least 8 characters." }, 400);
+      const key = `auth:user:${email}`;
+      if (await env.SYNC.get(key)) return sharedJson({ error: "An account with that email already exists." }, 409);
+      const salt = authToken(), hash = await authHash(email, password, salt), token = authToken();
+      await env.SYNC.put(key, JSON.stringify({ email, salt, hash, createdAt: Date.now() }));
+      await env.SYNC.put(`auth:session:${token}`, email, { expirationTtl: 60 * 60 * 24 * 30 });
+      return sharedJson({ token, email });
+    }
+    if (url.pathname === "/auth/login" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const email = authEmail(body.email), password = String(body.password || ""), record = await env.SYNC.get(`auth:user:${email}`, "json");
+      if (!record || !(await authHash(email, password, record.salt) === record.hash)) return sharedJson({ error: "Email or password is incorrect." }, 401);
+      const token = authToken(); await env.SYNC.put(`auth:session:${token}`, email, { expirationTtl: 60 * 60 * 24 * 30 });
+      return sharedJson({ token, email });
+    }
+    if (url.pathname === "/auth/me" && request.method === "GET") {
+      const account = await authAccount(env, request); return account ? sharedJson(account) : sharedJson({ error: "Not signed in" }, 401);
+    }
+    if (url.pathname === "/account/data") {
+      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const key = `account:${account.email}`;
+      if (request.method === "GET") return sharedJson(await env.SYNC.get(key, "json") || { updatedAt: 0, data: {} });
+      if (request.method === "POST") { const body = await request.json().catch(() => null); if (!body || typeof body !== "object") return sharedJson({ error: "Invalid data" }, 400); await env.SYNC.put(key, JSON.stringify(body)); return sharedJson({ ok: true }); }
+      return sharedJson({ error: "Method not allowed" }, 405);
+    }
+    // ---- cross-device sync (legacy sync-code compatibility) ----
     if (url.pathname === "/data") {
       const code = request.headers.get("X-Sync-Code");
       if (!code || code.length < 6) {

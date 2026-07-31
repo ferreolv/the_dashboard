@@ -100,6 +100,10 @@
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
   .accountBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; margin:0 0 9px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .authGate { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:20px; background:rgba(244,246,255,.82); backdrop-filter:blur(18px); }
+  .authCard { width:min(420px,100%); display:flex; flex-direction:column; gap:10px; padding:30px; border:1px solid rgba(120,130,220,.25); border-radius:28px; background:rgba(255,255,255,.82); box-shadow:0 24px 70px rgba(50,60,120,.18); }
+  .authCard h2 { margin:0; color:#313a95; font-size:26px; }
+  .authCard .sinput { width:100%; box-sizing:border-box; }
 
   .shoppingCard { display:flex; flex-direction:column; gap:9px; min-height:100%; }
   .shoppingPicked { display:flex; flex-wrap:wrap; gap:6px; min-height:28px; }
@@ -1588,6 +1592,9 @@ const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
 const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
+const ACCOUNT_TOKEN_KEY="fefe_accountToken";
+const getAccountToken=()=>localStorage.getItem(ACCOUNT_TOKEN_KEY)||"";
+const accountRequest=async(path,body)=>{ const r=await fetch(SYNC_URL+path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json",...(getAccountToken()?{Authorization:`Bearer ${getAccountToken()}`}:{})},...(body?{body:JSON.stringify(body)}:{})}); const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||`server returned ${r.status}`); return data; };
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
 const defaultAgendaRecurring=()=>[
   {id:uid(),label:"Suggest app improvement / recommendation to the creator",everyDays:1,lastDone:addDays(todayKey,-1),source:"default"},
@@ -1629,13 +1636,13 @@ function logicalDateKeyInZone(date,timeZone){
 }
 function collectState(){ const o={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) o[k]=localStorage.getItem(k); } return o; }
 let _pushT=null;
-function schedulePush(){ const id=getSyncId(); if(!id) return; clearTimeout(_pushT);
+function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return; clearTimeout(_pushT);
   _pushT=setTimeout(async()=>{ try{ const stamp=Date.now();
-    const r=await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
+    const r=token?await fetch(SYNC_URL+"/account/data",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({updatedAt:stamp,data:collectState()})}):await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
     if(r.ok) localStorage.setItem("fefe_syncStamp",String(stamp));
   }catch(e){} },3500); }
-async function pullSync(){ const id=getSyncId(); if(!id) return false;
-  try{ const r=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
+async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return false;
+  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
     const local=Number(localStorage.getItem("fefe_syncStamp")||0);
     if(doc&&doc.updatedAt&&doc.data&&doc.updatedAt>local){
       Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
@@ -2287,9 +2294,15 @@ function App(){
   const [syncId,setSyncIdState]=useState(()=>getSyncId());
   const [syncField,setSyncField]=useState("");
   const [syncBusy,setSyncBusy]=useState(false);
+  const [accountSignedIn,setAccountSignedIn]=useState(()=>!!getAccountToken());
+  const [authMode,setAuthMode]=useState("login");
+  const [authEmailField,setAuthEmailField]=useState("");
+  const [authPassword,setAuthPassword]=useState("");
+  const [authBusy,setAuthBusy]=useState(false);
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
+  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
 
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
@@ -3044,6 +3057,7 @@ function App(){
 
   return (
     <div className="wrap">
+      {!accountSignedIn && <div className="authGate"><div className="authCard"><div className="ldot"/><h2>{authMode==="login"?"Sign in to your dashboard":"Create your dashboard account"}</h2><p className="hint">Your memories, settings and dashboard data stay with this account on every device.</p><input className="sinput" type="email" autoComplete="email" placeholder="Email" value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)} /><input className="sinput" type="password" autoComplete={authMode==="login"?"current-password":"new-password"} placeholder="Password (8+ characters)" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submitAccount()} /><button className="savebtn" onClick={submitAccount} disabled={authBusy}>{authBusy?"…":authMode==="login"?"Sign in":"Create account"}</button><button className="link" onClick={()=>setAuthMode(authMode==="login"?"signup":"login")}>{authMode==="login"?"Create a new account":"I already have an account"}</button></div></div>}
       <nav className="topbar" aria-label="Primary navigation">
         <div className="topnav">
           <button className={"navbtn"+(page==="dashboard"?" active":"")} onClick={()=>openPage("dashboard")}>Today</button>
@@ -3141,6 +3155,7 @@ function App(){
               <h4>Sync & backup</h4>
               <p className="hint">Your API key never syncs. Your saved dashboard memory does.</p>
               <div className="accountBadge">Dashboard account · {nameField.trim()||"Unnamed"}</div>
+              {accountSignedIn && <button className="ghostbtn" onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); location.reload();}}>Sign out / switch account</button>}
               <div className="lab">Sync across devices</div>
               {syncId ? (
                 <div>
