@@ -1654,6 +1654,31 @@
   @media (min-width:761px){
     .topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{width:100%;box-sizing:border-box}
   }
+  /* Keep the shopping basket visually separate from the product catalogue. */
+  .shoppingSection{display:flex;flex-direction:column;gap:7px;min-width:0;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 24%,rgba(255,255,255,.65));border-radius:16px;background:rgba(255,255,255,.20)}
+  .shoppingSection.picker{background:rgba(255,255,255,.08);border-style:dashed}
+  .shopSectionLabel{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--accentDark)}
+  .shoppingSection .shoppingPicked{min-height:30px}
+  .shoppingSection .shopShelf{margin-top:0}
+  .shoppingSection .shopOther{margin-top:2px}
+  /* Philosophy mode chooser reads as a control card rather than a cramped native field. */
+  .philoModeBar{padding:8px 9px;border:1px solid color-mix(in srgb,var(--accent) 26%,rgba(255,255,255,.64));border-radius:16px;background:rgba(255,255,255,.18);align-items:center}
+  .philoModeRow{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px}
+  .philoModeRow span{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--accentDark)}
+  .philoModeSelect{appearance:auto!important;border-radius:10px!important;padding:7px 9px!important;background:rgba(255,255,255,.62)!important;border:1px solid color-mix(in srgb,var(--accent) 30%,#fff)!important;color:var(--accentDark)!important}
+  /* Weather uses a clear current/next-day hierarchy and never stretches empty space. */
+  .tile[data-tileid="weather"] .weatherSplit{height:auto!important;display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)!important;gap:10px!important;align-items:stretch!important}
+  .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{min-width:0!important;padding:11px 12px;border:1px solid color-mix(in srgb,var(--accent) 28%,rgba(255,255,255,.58));border-radius:18px;background:rgba(255,255,255,.22);box-sizing:border-box}
+  .tile[data-tileid="weather"] .weatherNow{display:flex;align-items:center;gap:10px;justify-content:flex-start!important}
+  .tile[data-tileid="weather"] .weatherEmoji{font-size:clamp(30px,8cqi,48px)!important;flex:none}
+  .tile[data-tileid="weather"] .wbig{font-size:clamp(27px,8cqi,44px)!important;line-height:.95}
+  .tile[data-tileid="weather"] .weatherMeta{margin-top:5px;font-size:10px}
+  .tile[data-tileid="weather"] .wtomorrow{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 8px;text-align:left}
+  .tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}
+  .tile[data-tileid="weather"] .weatherTomorrowEmoji{font-size:25px!important}
+  .tile[data-tileid="weather"] .weatherTomorrowTemps{font-size:12px;font-weight:900;color:var(--accentDark)}
+  .tile[data-tileid="weather"] .weatherTomorrowLabel{grid-column:1/-1;font-size:10px}
+  @container tile (max-width:340px){.tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr!important;gap:7px!important}.tile[data-tileid="weather"] .wtomorrow{grid-template-columns:auto 1fr}.tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}}
   </style>
 </head>
 <body>
@@ -3915,21 +3940,27 @@ function ShoppingCard({items,onChange}){
   const toggleCheck=id=>onChange(list.map(item=>item.id===id?{...item,checked:!item.checked}:item));
   const remove=id=>onChange(list.filter(item=>item.id!==id));
   const addCustom=()=>toggleProduct(shoppingProduct("other"));
-  return (
+    return (
     <div className="shoppingCard">
-      <div className="shoppingPicked">
-        {list.length===0 ? <PlainEmpty>Tap icons to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
-          <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
-            <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
-          </span>
-        ); })}
+      <div className="shoppingSection basket">
+        <div className="shopSectionLabel">Your list</div>
+        <div className="shoppingPicked">
+          {list.length===0 ? <PlainEmpty>Tap icons below to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
+            <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
+              <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
+            </span>
+          ); })}
+        </div>
       </div>
-      <div className="shopShelf">
-        {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
-      </div>
-      <div className="shopOther">
-        <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
-        <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
+      <div className="shoppingSection picker">
+        <div className="shopSectionLabel">Choose products</div>
+        <div className="shopShelf">
+          {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
+        </div>
+        <div className="shopOther">
+          <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
+          <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
+        </div>
       </div>
     </div>
   );
