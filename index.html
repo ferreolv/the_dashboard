@@ -1437,6 +1437,16 @@
   .tile .content button,.tile .content input,.tile .content textarea,.tile .content select{max-width:100%;min-width:0}
   .tile[data-tileid="habits"][data-rows="1"] .hgrid,.tile[data-tileid="shopping"][data-rows="1"] .shopShelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;overflow-y:visible;overflow-x:hidden;height:auto;max-height:none}
   .tile[data-tileid="habits"][data-rows="1"] .hsq,.tile[data-tileid="shopping"][data-rows="1"] .shopIcon{width:100%;min-width:0;max-width:100%}
+  /* Scroll remains available, but its chrome is never visible. */
+  *,.tile *{scrollbar-width:none!important;-ms-overflow-style:none!important}
+  *::-webkit-scrollbar,.tile *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+  .tile[data-tileid="habits"] .hgrid{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));align-items:start}
+  .tile[data-tileid="habits"] .hsq{width:100%!important;aspect-ratio:1/1!important;min-height:0!important;height:auto!important;overflow:hidden}
+  .tile[data-tileid="habits"] .hname{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tile[data-tileid="philo"] .content,.tile[data-tileid="philo"] .philoCard,.tile[data-tileid="philo"] .philoQ,.tile[data-tileid="philo"] .philoThinkArea,.tile[data-tileid="philo"] .chatLog,.tile[data-tileid="philo"] .chatInputRow{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere}
+  .tile[data-tileid="word"] .wordcard{width:100%;max-width:100%;min-height:max-content;overflow-wrap:anywhere}
+  .tile[data-tileid="pushups"] .pushBtns{max-width:100%;flex-wrap:wrap;overflow:hidden}
+  .tile[data-tileid="pushups"] .pushBtns .puBtn{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   @media (min-width:640px){
   .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
   .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink{display:none}
