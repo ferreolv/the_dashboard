@@ -546,8 +546,9 @@
   /* ===== Daylight v2 design system ===== */
   :root { --canvas:#eef0f2; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
   html { background:var(--canvas); overflow-x:hidden; }
-  body { max-width:100%; overflow-x:hidden; color:var(--text); background:var(--canvas); }
-  body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff); }
+  body { max-width:100%; overflow-x:hidden; color:var(--text); background:#dfe3e7 !important; }
+  body.theme-neutral { background:#dfe3e7 !important; }
+  body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff) !important; }
   button,input,textarea { -webkit-tap-highlight-color:transparent; }
   button:focus-visible,input:focus-visible,textarea:focus-visible { outline:3px solid rgba(99,102,241,.22); outline-offset:2px; }
   .wrap { width:100%; max-width:1800px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; box-sizing:border-box; }
@@ -2433,7 +2434,8 @@ function App(){
 
   useEffect(()=>{
     document.body.classList.toggle("theme-atmospheric",backgroundTheme==="atmospheric");
-    return ()=>document.body.classList.remove("theme-atmospheric");
+    document.body.classList.toggle("theme-neutral",backgroundTheme!=="atmospheric");
+    return ()=>document.body.classList.remove("theme-atmospheric","theme-neutral");
   },[backgroundTheme]);
 
   /* pull remote state on load; reload once if it was newer */
