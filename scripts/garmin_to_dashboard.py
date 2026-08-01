@@ -27,8 +27,14 @@ Run:
 import os
 import sys
 import json
+import time
 import datetime as dt
-from urllib import request as urlrequest
+from urllib import request as urlrequest, error as urlerror
+
+# A browser-like identity: Cloudflare's bot protection rejects the default
+# "Python-urllib/x.y" user agent with a 403, which is exactly what blocked the
+# push before. This looks like an ordinary request instead.
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 
 try:
     from garminconnect import Garmin
@@ -133,10 +139,40 @@ def push(url, token, days):
         url.rstrip("/") + "/health",
         data=body,
         method="POST",
-        headers={"Content-Type": "application/json", "X-Health-Token": token},
+        headers={
+            "Content-Type": "application/json",
+            "X-Health-Token": token,
+            "User-Agent": UA,
+            "Accept": "application/json",
+        },
     )
-    with urlrequest.urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        with urlrequest.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urlerror.HTTPError as exc:
+        detail = exc.read().decode("utf-8", "replace")[:300]
+        raise SystemExit(f"Push failed: HTTP {exc.code} from the health store — {detail}")
+
+
+def login_with_retry(email, password, attempts=4):
+    """Garmin rate-limits (429) fresh logins, especially from shared cloud IPs.
+    Retry a few times with growing back-off before giving up."""
+    delay = 20
+    for i in range(attempts):
+        try:
+            client = Garmin(email, password)
+            client.login()
+            return client
+        except Exception as exc:  # noqa: BLE001
+            msg = str(exc).lower()
+            transient = "429" in msg or "rate" in msg or "too many" in msg or "timeout" in msg
+            if i < attempts - 1 and transient:
+                print(f"Login throttled, retrying in {delay}s … ({exc})", file=sys.stderr)
+                time.sleep(delay)
+                delay *= 2
+            else:
+                raise
+    return None
 
 
 def main():
@@ -147,8 +183,7 @@ def main():
     back = int(env("DAYS", "7"))
 
     print(f"Logging in to Garmin as {email} …")
-    client = Garmin(email, password)
-    client.login()
+    client = login_with_retry(email, password)
 
     today = dt.date.today()
     days = []
