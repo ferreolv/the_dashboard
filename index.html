@@ -7,17 +7,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Dashboard" />
+<meta name="apple-mobile-web-app-title" content="TheDashboard" />
 <link rel="manifest" href="dashboard.webmanifest" />
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
-<title>Fefe · Daily Panel</title>
+<title>TheDashboard</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body { font-family:'Nunito',system-ui,sans-serif; color:#17182c;
-    background:linear-gradient(145deg,#f2efff,#e8f7ff 48%,#fff1f7); min-height:100vh; -webkit-font-smoothing:antialiased; }
+    background:linear-gradient(145deg,#fcfaf6,#f7f8f5 52%,#fbf9f5); min-height:100vh; -webkit-font-smoothing:antialiased; }
   body.dragging { user-select: none; -webkit-user-select: none; cursor: grabbing; }
   .wrap { padding: 20px clamp(12px,3vw,32px) 48px; }
 
@@ -99,6 +99,19 @@
   .placeOption b { display:block; font-size:13px; }
   .placeOption span { display:block; margin-top:3px; color:#7a7f90; font-size:11.5px; }
   .locationBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .accountBadge { display:inline-flex; align-items:center; gap:7px; padding:8px 11px; margin:0 0 9px; border-radius:999px; border:1px solid rgba(31,36,55,.08); background:rgba(255,255,255,.82); font-size:12px; font-weight:750; color:#2a2d40; }
+  .accountFields { display:grid; gap:9px; }
+  .accountField { display:grid; gap:4px; }
+  .accountField label { color:#7a7d91; font-size:10px; font-weight:800; letter-spacing:.04em; }
+  .accountField .sinput { min-width:0; width:100%; box-sizing:border-box; padding:8px 10px; background:rgba(247,247,252,.9); }
+  .accountPassword { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:35px; padding:0 10px; border:1px solid rgba(31,36,55,.1); border-radius:10px; background:rgba(247,247,252,.9); }
+  .accountDots { letter-spacing:.2em; font-weight:900; color:#41455d; }
+  .accountPassword .link { padding:0; font-size:11px; }
+  .dangerLink { color:#b42345!important; }
+  .authGate { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:20px; background:rgba(244,246,255,.82); backdrop-filter:blur(18px); }
+  .authCard { width:min(420px,100%); display:flex; flex-direction:column; gap:10px; padding:30px; border:1px solid rgba(120,130,220,.25); border-radius:28px; background:rgba(255,255,255,.82); box-shadow:0 24px 70px rgba(50,60,120,.18); }
+  .authCard h2 { margin:0; color:#313a95; font-size:26px; }
+  .authCard .sinput { width:100%; box-sizing:border-box; }
 
   .shoppingCard { display:flex; flex-direction:column; gap:9px; min-height:100%; }
   .shoppingPicked { display:flex; flex-wrap:wrap; gap:6px; min-height:28px; }
@@ -531,12 +544,14 @@
   .placeBranch { background:var(--field); border:1px solid var(--fieldbd); border-radius:12px; padding:9px 11px; }
 
   /* ===== Daylight v2 design system ===== */
-  :root { --canvas:#f7f8fc; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
+  :root { --canvas:#eef0f2; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
   html { background:var(--canvas); overflow-x:hidden; }
-  body { max-width:100%; overflow-x:hidden; color:var(--text); background:radial-gradient(circle at 8% 0%,rgba(111,93,255,.08),transparent 28%),radial-gradient(circle at 94% 16%,rgba(31,182,255,.07),transparent 24%),var(--canvas); }
+  body { max-width:100%; overflow-x:hidden; color:var(--text); background:#dfe3e7 !important; }
+  body.theme-neutral { background:#dfe3e7 !important; }
+  body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff) !important; }
   button,input,textarea { -webkit-tap-highlight-color:transparent; }
   button:focus-visible,input:focus-visible,textarea:focus-visible { outline:3px solid rgba(99,102,241,.22); outline-offset:2px; }
-  .wrap { max-width:1480px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; }
+  .wrap { width:100%; max-width:1800px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; box-sizing:border-box; }
 
   .topbar { position:sticky; top:12px; z-index:110; max-width:1396px; margin:0 auto 34px; min-height:58px; display:flex; align-items:center; justify-content:space-between; gap:18px; padding:8px 9px 8px 12px; background:rgba(255,255,255,.90); border:1px solid rgba(255,255,255,.96); border-radius:18px; box-shadow:0 12px 38px rgba(34,39,72,.12),inset 0 0 0 1px rgba(23,24,44,.05); backdrop-filter:blur(24px) saturate(1.3); }
   .brand { display:flex; align-items:center; gap:10px; min-width:150px; }
@@ -552,7 +567,7 @@
   .actionBtn.active { color:#fff; background:#6257e7; border-color:#6257e7; }
   .actionBtn svg { width:15px; height:15px; stroke-width:1.9; }
 
-  .dashboardHero { max-width:1320px; margin:0 auto 24px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
+  .dashboardHero { max-width:1800px; margin:0 auto 24px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; }
   .heroCopy { min-width:0; }
   .heroEyebrow { color:#7a7d91; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:7px; }
   .dashboardHero h1 { margin:0; color:#16172a; font-size:clamp(30px,4vw,48px); line-height:1.03; letter-spacing:-.052em; font-weight:750; }
@@ -566,7 +581,7 @@
   .metricLabel { display:block; margin-top:2px; color:#85889a; font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
   .heroClock { color:#5a5d70; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 
-  .grid { gap:16px; grid-auto-rows:104px; max-width:1320px; }
+  .grid { gap:16px; grid-auto-rows:104px; max-width:1800px; }
   .tile { isolation:isolate; border-radius:var(--radius); padding:17px 18px 18px; color:var(--ink); background:var(--tileBg); border:1px solid rgba(255,255,255,.78); box-shadow:var(--glow),var(--shadow); transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s,background .5s var(--ease),color .35s; }
   .tile::before { content:""; position:absolute; z-index:-1; left:18px; right:18px; top:0; height:2px; border-radius:0 0 4px 4px; background:var(--accent); opacity:.0; transform:scaleX(.55); transition:opacity .25s,transform .35s var(--ease); }
   .tile.completed::before { opacity:.85; transform:scaleX(1); background:rgba(255,255,255,.92); }
@@ -799,9 +814,6 @@
      height to keep the top row clear of the label. Timer/push-ups/birthdays center short content that
      never reaches the top, so they need no reservation (adding one only steals space on 1×1 tiles). */
   .tile[data-tileid="weather"]:not(:has(.emptyState)) .tbody{padding-top:22px}
-  .tile .tbody.moreBelow{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 20px),transparent)}
-  .tile .tbody.moreAbove.moreBelow{-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(to bottom,transparent,#000 16px,#000 calc(100% - 20px),transparent)}
-  .tile .tbody.moreAbove:not(.moreBelow){-webkit-mask-image:linear-gradient(to bottom,transparent,#000 16px);mask-image:linear-gradient(to bottom,transparent,#000 16px)}
   /* Responsive tile contract: each widget adapts to its own dimensions, not only to the viewport. */
   .tile{container-name:tile;container-type:inline-size}
   .tile,.tile *{min-width:0}
@@ -1392,6 +1404,55 @@
     width:100%!important;min-width:0!important;height:38px!important;min-height:38px!important;
     aspect-ratio:auto;scroll-snap-align:start
   }
+  /* Weather and Shopping stay inside their own tile box at every resize. */
+  .tile[data-tileid="weather"] .content,.tile[data-tileid="shopping"] .content{min-width:0;min-height:0;overflow:hidden}
+  .tile[data-tileid="weather"] .weatherSplit{box-sizing:border-box;min-width:0;min-height:0;overflow:hidden}
+  .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{min-width:0;max-width:100%;overflow:hidden}
+  .tile[data-tileid="weather"] .weatherMeta,.tile[data-tileid="weather"] .weatherTomorrowLabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+  .tile[data-tileid="shopping"] .shoppingCard{min-width:0;min-height:0;height:100%;overflow:hidden}
+  .tile[data-tileid="shopping"] .shoppingPicked{min-width:0;max-height:70px;overflow:auto;scrollbar-width:none}
+  .tile[data-tileid="shopping"] .shoppingPicked::-webkit-scrollbar{display:none}
+  .tile[data-tileid="shopping"] .shopChip{min-width:0;max-width:100%;overflow:hidden}
+  .tile[data-tileid="shopping"] .shopChip>span:nth-child(2){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tile[data-tileid="shopping"] .shopChip>span:nth-child(2){display:none}
+  .tile[data-tileid="shopping"] .shopChip{width:42px;height:42px;min-height:42px;justify-content:center;padding:0;border-radius:50%;font-size:23px}
+  .tile[data-tileid="shopping"] .shopShelf{flex:1 1 auto;min-height:38px;max-height:100%;overflow:auto;grid-auto-flow:row;grid-template-columns:repeat(auto-fit,minmax(34px,1fr));grid-auto-columns:auto}
+  .tile[data-tileid="shopping"] .shopOther{flex:0 0 auto;min-width:0}
+  @container tile (max-width:300px){
+    .tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:6px}
+    .tile[data-tileid="weather"] .wtomorrow{border-left:0;padding:5px 8px}
+    .tile[data-tileid="weather"] .weatherNow{justify-content:flex-start}
+    .tile[data-tileid="shopping"] .shoppingPicked{max-height:42px}
+    .tile[data-tileid="shopping"] .shopShelf{grid-template-columns:repeat(auto-fit,minmax(32px,1fr));gap:5px}
+    .tile[data-tileid="shopping"] .shopIcon{height:32px!important;min-height:32px!important;font-size:17px}
+  }
+  @container tile (max-height:210px){
+    .tile[data-tileid="weather"] .weatherSplit{gap:5px}
+    .tile[data-tileid="weather"] .weatherEmoji{font-size:clamp(24px,10cqi,34px)}
+    .tile[data-tileid="weather"] .weatherReading .wbig{font-size:clamp(25px,11cqi,36px)}
+    .tile[data-tileid="weather"] .weatherMeta,.tile[data-tileid="weather"] .weatherTomorrowLabel{display:none}
+    .tile[data-tileid="shopping"] .shoppingPicked{max-height:34px}
+    .tile[data-tileid="shopping"] .shopShelf{min-height:32px}
+    .tile[data-tileid="shopping"] .shopIcon{height:32px!important;min-height:32px!important}
+  }
+  /* Universal compact-tile contract: no horizontal clipping or side-scrolling. */
+  .tile,.tile .tbody,.tile .content{min-width:0;max-width:100%;overflow-x:hidden}
+  .tile .tbody{overflow-y:auto;overscroll-behavior-y:contain}
+  .tile .content{box-sizing:border-box;min-height:0;overflow-y:visible}
+  .tile .content>*{min-width:0;max-width:100%;box-sizing:border-box}
+  .tile .content button,.tile .content input,.tile .content textarea,.tile .content select{max-width:100%;min-width:0}
+  .tile[data-tileid="habits"][data-rows="1"] .hgrid,.tile[data-tileid="shopping"][data-rows="1"] .shopShelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;overflow-y:visible;overflow-x:hidden;height:auto;max-height:none}
+  .tile[data-tileid="habits"][data-rows="1"] .hsq,.tile[data-tileid="shopping"][data-rows="1"] .shopIcon{width:100%;min-width:0;max-width:100%}
+  /* Scroll remains available, but its chrome is never visible. */
+  *,.tile *{scrollbar-width:none!important;-ms-overflow-style:none!important}
+  *::-webkit-scrollbar,.tile *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+  .tile[data-tileid="habits"] .hgrid{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));align-items:start}
+  .tile[data-tileid="habits"] .hsq{width:100%!important;aspect-ratio:1/1!important;min-height:0!important;height:auto!important;overflow:hidden}
+  .tile[data-tileid="habits"] .hname{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tile[data-tileid="philo"] .content,.tile[data-tileid="philo"] .philoCard,.tile[data-tileid="philo"] .philoQ,.tile[data-tileid="philo"] .philoThinkArea,.tile[data-tileid="philo"] .chatLog,.tile[data-tileid="philo"] .chatInputRow{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere}
+  .tile[data-tileid="word"] .wordcard{width:100%;max-width:100%;min-height:max-content;overflow-wrap:anywhere}
+  .tile[data-tileid="pushups"] .pushBtns{max-width:100%;flex-wrap:wrap;overflow:hidden}
+  .tile[data-tileid="pushups"] .pushBtns .puBtn{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   @media (min-width:640px){
   .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
   .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink{display:none}
@@ -1490,7 +1551,135 @@
     color:inherit!important;box-shadow:none!important;font:900 20px/1 'Nunito',sans-serif!important
   }
   .gmatClose:hover,.gmatChip.del:hover{background:transparent!important;transform:scale(1.08)!important}
-</style>
+
+  /* Stats keeps a neutral shell. Habits carry their own colour only in the
+     compact completion history, so a quick scan never blends them together. */
+  .tile[data-tileid="weekly"] .wrev{gap:10px}
+  .tile[data-tileid="weekly"] .wrevSection{border-color:rgba(80,87,100,.16)!important;background:rgba(255,255,255,.46)!important}
+  .habitStatsSection{padding:10px 11px!important}
+  .habitHistoryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:8px}
+  .habitHistoryCard{min-width:0;padding:8px 9px;border:1px solid color-mix(in srgb,var(--habit-color) 30%,#fff);border-radius:12px;background:color-mix(in srgb,var(--habit-color) 5%,rgba(255,255,255,.72))}
+  .habitHistoryHead{display:flex;align-items:center;gap:6px;min-width:0;margin-bottom:7px}
+  .habitHistoryName{min-width:0;flex:1;overflow:hidden;color:#424955;font-size:10.5px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+  .habitHistoryStreak{flex:none;color:var(--habit-color);font:800 9.5px/1 'Nunito',sans-serif;white-space:nowrap}
+  .habitHistoryCard .iceBtn{display:grid;place-items:center;flex:none;width:20px;min-width:20px;height:20px;min-height:20px!important;margin:0!important;padding:0!important;border:0!important;border-radius:5px!important;background:rgba(118,156,221,.14)!important;color:#42659a!important;font-size:10px!important;box-shadow:none!important}
+  .habitHistoryCard .iceBtn:hover{background:rgba(118,156,221,.27)!important;transform:none!important}
+  .habitSquares{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px}
+  .habitSquare{display:block;aspect-ratio:1;border-radius:3px;background:color-mix(in srgb,var(--habit-color) 13%,#e4e6eb);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--habit-color) 10%,transparent)}
+  .habitSquare.done{background:var(--habit-color);box-shadow:0 1px 3px color-mix(in srgb,var(--habit-color) 32%,transparent)}
+  .habitSquare.frozen{background:linear-gradient(135deg,#e7f6ff 0 42%,#74b9e8 43% 57%,#e7f6ff 58%);box-shadow:inset 0 0 0 1px rgba(67,129,183,.38)}
+  .tile.completed .habitHistoryCard{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.34)!important}
+  .tile.completed .habitHistoryName{color:#fff!important}
+  .tile.completed .habitHistoryStreak{color:rgba(255,255,255,.9)!important}
+  .tile.completed .habitSquare{background:rgba(255,255,255,.18)}
+  .tile.completed .habitSquare.done{background:var(--habit-color);box-shadow:none}
+  @container tile (max-width:330px){
+    .habitHistoryGrid{grid-template-columns:1fr}
+    .habitHistoryCard{padding:7px 8px}
+    .habitSquares{gap:2px}
+  }
+
+  /* Final compact layout contract. The tile body is the only scroll owner,
+     scrolling is vertical, and scrollbar chrome is never drawn. */
+  .tile .tbody{
+    display:block!important;overflow-x:hidden!important;overflow-y:auto!important;
+    scrollbar-width:none!important;-ms-overflow-style:none!important;
+    -webkit-mask-image:none!important;mask-image:none!important
+  }
+  .tile .tbody::-webkit-scrollbar,.tile .tbody::-webkit-scrollbar-track,
+  .tile .tbody::-webkit-scrollbar-thumb,.tile .tbody::-webkit-scrollbar-button{
+    display:none!important;width:0!important;height:0!important;background:transparent!important
+  }
+  .tile .content{width:100%!important;height:auto!important;min-height:0!important;overflow:visible!important;box-sizing:border-box}
+  .tile .content>*{min-width:0!important;max-width:100%!important;box-sizing:border-box}
+  @media (min-width:640px){
+    .tile[data-rows="1"] .tbody{overflow-x:hidden!important;overflow-y:auto!important}
+    .tile[data-rows="1"] .content{height:auto!important;overflow:visible!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoModeRow{display:flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoThinkArea,
+    .tile[data-tileid="philo"][data-rows="1"] .chatLog{display:block!important}
+    .tile[data-tileid="philo"][data-rows="1"] .chatInputRow{display:flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .pill{display:inline-flex!important}
+    .tile[data-tileid="philo"][data-rows="1"] .philoQ{display:block!important;overflow:visible!important;-webkit-line-clamp:unset}
+  }
+  .tile[data-tileid="habits"] .hgrid{
+    display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;align-content:flex-start!important;
+    gap:8px!important;width:100%!important;height:auto!important;overflow:visible!important
+  }
+  .tile[data-tileid="habits"] .hsq{
+    flex:0 0 68px!important;width:68px!important;height:68px!important;min-width:68px!important;
+    min-height:68px!important;max-width:68px!important;max-height:68px!important;aspect-ratio:1!important;border-radius:50%!important
+  }
+  .tile[data-tileid="shopping"] .shoppingCard,.tile[data-tileid="shopping"] .shoppingPicked,
+  .tile[data-tileid="shopping"] .shopShelf{height:auto!important;max-height:none!important;overflow:visible!important}
+  .tile[data-tileid="shopping"] .shoppingPicked,.tile[data-tileid="shopping"] .shopShelf{
+    display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;align-content:flex-start!important;gap:7px!important
+  }
+  .tile[data-tileid="shopping"] .shopIcon{
+    flex:0 0 42px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+    max-width:42px!important;max-height:42px!important;aspect-ratio:1!important;border-radius:50%!important
+  }
+  .tile[data-tileid="shopping"] .shopChip{position:relative;overflow:visible!important;flex:0 0 42px}
+  .tile[data-tileid="shopping"] .shopChip .del{
+    position:absolute;right:-4px;top:-4px;width:16px!important;min-width:16px!important;height:16px!important;min-height:16px!important;
+    padding:0!important;font-size:9px!important
+  }
+  .tile[data-tileid="shopping"] .shopOther{width:100%;margin-top:4px}
+  .tile[data-tileid="word"] .wordcard{height:auto!important;min-height:0!important;overflow:visible!important}
+  .tile[data-tileid="pushups"] .pushWrap{height:auto!important;min-height:0!important;overflow:visible!important;justify-content:flex-start!important}
+  .tile[data-tileid="pushups"] .pushBtns{
+    display:grid!important;grid-template-columns:repeat(2,minmax(48px,1fr))!important;
+    width:100%!important;height:auto!important;overflow:visible!important
+  }
+  .tile[data-tileid="pushups"] .pushBtns .puBtn{width:100%!important;height:auto!important;min-width:0!important;min-height:34px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathCard{grid-template-columns:76px minmax(0,1fr)!important;align-items:start!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathStage{min-height:78px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress{width:70px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathProgress::before{width:63px!important}
+  .tile[data-tileid="breathing"][data-rows="1"] .breathOrb{width:50px!important}
+  .tile[data-tileid="philo"] .philoCard{display:flex;flex-direction:column;width:100%;height:auto;min-width:0;overflow:visible}
+  .tile[data-tileid="philo"] .chatLog{height:auto!important;max-height:none!important;overflow:visible!important}
+  .tile[data-tileid="philo"] .chatMsg{max-width:100%;overflow-wrap:anywhere}
+  .tile[data-tileid="weather"] .content,.tile[data-tileid="weather"] .weatherSplit,
+  .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{height:auto!important;overflow:visible!important}
+  @container tile (max-width:360px){
+    .tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr!important;grid-template-rows:auto auto!important;align-items:start!important}
+    .tile[data-tileid="weather"] .weatherNow{justify-content:flex-start!important}
+    .tile[data-tileid="weather"] .wtomorrow{border-left:0!important;padding:8px!important}
+  }
+  /* Large screens use the available canvas; smaller screens keep the existing responsive breakpoints. */
+  @media (min-width:1500px){
+    .dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{max-width:1800px}
+  }
+  @media (min-width:761px){
+    .topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.settings{width:100%;box-sizing:border-box}
+  }
+  /* Keep the shopping basket visually separate from the product catalogue. */
+  .shoppingSection{display:flex;flex-direction:column;gap:7px;min-width:0;padding:9px 10px;border:1px solid color-mix(in srgb,var(--accent) 24%,rgba(255,255,255,.65));border-radius:16px;background:rgba(255,255,255,.20)}
+  .shoppingSection.picker{background:rgba(255,255,255,.08);border-style:dashed}
+  .shopSectionLabel{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--accentDark)}
+  .shoppingSection .shoppingPicked{min-height:30px}
+  .shoppingSection .shopShelf{margin-top:0}
+  .shoppingSection .shopOther{margin-top:2px}
+  /* Philosophy mode chooser reads as a control card rather than a cramped native field. */
+  .philoModeBar{padding:8px 9px;border:1px solid color-mix(in srgb,var(--accent) 26%,rgba(255,255,255,.64));border-radius:16px;background:rgba(255,255,255,.18);align-items:center}
+  .philoModeRow{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px}
+  .philoModeRow span{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--accentDark)}
+  .philoModeSelect{appearance:auto!important;border-radius:10px!important;padding:7px 9px!important;background:rgba(255,255,255,.62)!important;border:1px solid color-mix(in srgb,var(--accent) 30%,#fff)!important;color:var(--accentDark)!important}
+  /* Weather uses a clear current/next-day hierarchy and never stretches empty space. */
+  .tile[data-tileid="weather"] .weatherSplit{height:auto!important;display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)!important;gap:10px!important;align-items:stretch!important}
+  .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{min-width:0!important;padding:11px 12px;border:1px solid color-mix(in srgb,var(--accent) 28%,rgba(255,255,255,.58));border-radius:18px;background:rgba(255,255,255,.22);box-sizing:border-box}
+  .tile[data-tileid="weather"] .weatherNow{display:flex;align-items:center;gap:10px;justify-content:flex-start!important}
+  .tile[data-tileid="weather"] .weatherEmoji{font-size:clamp(30px,8cqi,48px)!important;flex:none}
+  .tile[data-tileid="weather"] .wbig{font-size:clamp(27px,8cqi,44px)!important;line-height:.95}
+  .tile[data-tileid="weather"] .weatherMeta{margin-top:5px;font-size:10px}
+  .tile[data-tileid="weather"] .wtomorrow{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:3px 8px;text-align:left}
+  .tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}
+  .tile[data-tileid="weather"] .weatherTomorrowEmoji{font-size:25px!important}
+  .tile[data-tileid="weather"] .weatherTomorrowTemps{font-size:12px;font-weight:900;color:var(--accentDark)}
+  .tile[data-tileid="weather"] .weatherTomorrowLabel{grid-column:1/-1;font-size:10px}
+  @container tile (max-width:340px){.tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr!important;gap:7px!important}.tile[data-tileid="weather"] .wtomorrow{grid-template-columns:auto 1fr}.tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}}
+  </style>
 </head>
 <body>
 <div id="root"></div>
@@ -1515,7 +1704,7 @@ const COL = {
   weather:  {p:"#DDF4FF", v:"#00B4DC", d:"#0E6E8C"},
   world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
   recall:   {p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
-  weekly:   {p:"#DCF6E5", v:"#10C46E", d:"#0C7544"},
+  weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
   birthdays:{p:"#FFE3F0", v:"#FF4FA3", d:"#AC2A6C"},
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
@@ -1556,7 +1745,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    music/news/brainflex/philo-prompt once a day for EVERYONE (see worker/shared-content.js).
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
-const SHARED_URL="https://fefe-shared.fefedashboard.workers.dev";
+const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
 const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
 /* Garmin (and any scripted health source) push daily summaries to this token-keyed
    store; the dashboard pulls them in on load and merges into the local health log.
@@ -1566,6 +1755,10 @@ const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
 const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
 const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp","fefe_healthToken"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
+const ACCOUNT_TOKEN_KEY="fefe_accountToken";
+const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
+const getAccountToken=()=>localStorage.getItem(ACCOUNT_TOKEN_KEY)||"";
+const accountRequest=async(path,body)=>{ const r=await fetch(SYNC_URL+path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json",...(getAccountToken()?{Authorization:`Bearer ${getAccountToken()}`}:{})},...(body?{body:JSON.stringify(body)}:{})}); const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||`server returned ${r.status}`); return data; };
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
 const defaultAgendaRecurring=()=>[
   {id:uid(),label:"Suggest app improvement / recommendation to the creator",everyDays:1,lastDone:addDays(todayKey,-1),source:"default"},
@@ -1607,13 +1800,13 @@ function logicalDateKeyInZone(date,timeZone){
 }
 function collectState(){ const o={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) o[k]=localStorage.getItem(k); } return o; }
 let _pushT=null;
-function schedulePush(){ const id=getSyncId(); if(!id) return; clearTimeout(_pushT);
+function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return; clearTimeout(_pushT);
   _pushT=setTimeout(async()=>{ try{ const stamp=Date.now();
-    const r=await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
+    const r=token?await fetch(SYNC_URL+"/account/data",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({updatedAt:stamp,data:collectState()})}):await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
     if(r.ok) localStorage.setItem("fefe_syncStamp",String(stamp));
   }catch(e){} },3500); }
-async function pullSync(){ const id=getSyncId(); if(!id) return false;
-  try{ const r=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
+async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return false;
+  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
     const local=Number(localStorage.getItem("fefe_syncStamp")||0);
     if(doc&&doc.updatedAt&&doc.data&&doc.updatedAt>local){
       Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
@@ -2084,6 +2277,7 @@ const gmatFocusQuestion=state=>[...GMAT_QUESTIONS].sort((a,b)=>gmatQuestionPrior
 
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
 function weekCount(log,id){ let c=0; for(let d=0;d<7;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) c++; } return c; }
+const HABIT_STREAK_COLORS=["#0FAF83","#5B6CF0","#A75BEA","#E6902E","#E85C87","#1595B8","#71A63B","#D35B40"];
 
 /* atoms */
 const Readout=({children})=> <span className="ro">{children}</span>;
@@ -2191,7 +2385,11 @@ function WeatherCard({data,busy,onGenerate}){
 /* sizing */
 const ROW=112, GAP=13;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
+const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:2,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:2},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:2,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
+const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
+const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
+const DEFAULT_TODAY_LAYOUT_VERSION=6;
 const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -2209,12 +2407,10 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,
   const t=themeVars(id,done);
   const tileCols=Math.min(size.c,cols);
   const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
-  const tbodyRef=useRef(null);
-  useEffect(()=>{ const el=tbodyRef.current; if(!el) return; const update=()=>{ el.classList.toggle("moreBelow",el.scrollHeight-el.clientHeight-el.scrollTop>2); el.classList.toggle("moreAbove",el.scrollTop>2); }; update(); el.addEventListener("scroll",update,{passive:true}); const ro=(typeof ResizeObserver!=="undefined")?new ResizeObserver(update):null; if(ro)ro.observe(el); window.addEventListener("resize",update); return ()=>{ el.removeEventListener("scroll",update); if(ro)ro.disconnect(); window.removeEventListener("resize",update); }; });
   return (
     <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
-      <div className={"tbody"} ref={tbodyRef} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
         <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
@@ -2233,8 +2429,8 @@ function App(){
     if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
     if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
     if(load("designVersion",4)<5){ const c=s.agenda; if(c&&c.c===3&&c.r===3)s.agenda={...DEFSIZE.agenda}; save("sizes",s); save("designVersion",5); }
-    return s; });
-  const [activeTiles,setActiveTiles]=useState(()=>{ const a=load("activeTiles",ALL); let next=Array.isArray(a)?ALL.filter(id=>a.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; save("activeTiles",next); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
+    return clampTileSizes(s,window.innerWidth>=1000?6:window.innerWidth>=640?4:2); });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -2259,6 +2455,8 @@ function App(){
   const [keyField,setKeyField]=useState(()=>getKey());
   const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
   const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
+  const [usernameField,setUsernameField]=useState(()=>load("profileUsername",""));
+  const [accountEmail,setAccountEmail]=useState(()=>localStorage.getItem(ACCOUNT_EMAIL_KEY)||"");
   const [locationProfile,setLocationProfile]=useState(()=>getLocationProfile());
   const [locationQuery,setLocationQuery]=useState(()=>{ const loc=getLocationProfile(); return [loc.name,loc.region].filter(Boolean).join(", "); });
   const [locationMatches,setLocationMatches]=useState([]);
@@ -2271,15 +2469,32 @@ function App(){
   const [healthToken,setHealthTokenState]=useState(()=>getHealthToken());
   const [healthTokenField,setHealthTokenField]=useState("");
   const [healthBusy,setHealthBusy]=useState(false);
+  const [accountSignedIn,setAccountSignedIn]=useState(()=>!!getAccountToken());
+  const [authMode,setAuthMode]=useState("login");
+  const [authEmailField,setAuthEmailField]=useState("");
+  const [authPassword,setAuthPassword]=useState("");
+  const [authBusy,setAuthBusy]=useState(false);
+  const [newPassword,setNewPassword]=useState("");
+  const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
+
+  useEffect(()=>{
+    document.body.classList.toggle("theme-atmospheric",backgroundTheme==="atmospheric");
+    document.body.classList.toggle("theme-neutral",backgroundTheme!=="atmospheric");
+    return ()=>document.body.classList.remove("theme-atmospheric","theme-neutral");
+  },[backgroundTheme]);
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
+  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
+  const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
+  const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem("fefe_syncStamp"); location.reload(); }catch(e){alert(e.message);} };
 
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
     if(!/^[A-Za-z0-9_-]+$/.test(code)){ alert("Use only letters, numbers, - and _ in your code."); return; }
+    if(!nameField.trim()){ alert("Add your dashboard account name in Identity first."); return; }
     setSyncBusy(true);
-    try{ const stamp=Date.now();
+    try{ const existing=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":code}}); if(existing.ok){ const doc=await existing.json(); if(doc&&doc.data){ throw new Error("That account already has data. Use Connect existing account so it cannot be overwritten."); } } const stamp=Date.now();
       const r=await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":code},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
       if(!r.ok) throw new Error("server returned "+r.status);
       localStorage.setItem("fefe_syncId",code); localStorage.setItem("fefe_syncStamp",String(stamp)); setSyncIdState(code);
@@ -2289,13 +2504,19 @@ function App(){
     if(code.length<6){ alert("Enter the same code you used on your main device."); return; }
     setSyncBusy(true);
     try{ const r=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":code}}); if(!r.ok) throw new Error("server returned "+r.status);
-      const doc=await r.json();
+      const doc=await r.json(); if(!doc||!doc.data) throw new Error("No dashboard account was found for that code.");
       localStorage.setItem("fefe_syncId",code);
       if(doc&&doc.data){ Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); }); }
       localStorage.setItem("fefe_syncStamp",String((doc&&doc.updatedAt)||Date.now()));
       location.reload();
     }catch(e){ alert("Couldn't connect: "+e.message); setSyncBusy(false); } };
   const disableSync=()=>{ localStorage.removeItem("fefe_syncId"); setSyncIdState(""); };
+  const startNewMemory=()=>{
+    if(!confirm("Start a new dashboard memory? This disconnects this device from the current sync code and clears its saved dashboard data. Your API key will stay on this device.")) return;
+    for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.removeItem(k); }
+    localStorage.removeItem("fefe_syncId"); localStorage.removeItem("fefe_syncStamp");
+    location.reload();
+  };
 
   /* Garmin auto-pull: the token is the shared secret between the dashboard and the
      scheduled Garmin script. It is deliberately kept out of the sync snapshot. */
@@ -2798,8 +3019,9 @@ function App(){
         const cw=cellW();
         const dc=Math.round((cx-d.x)/(cw+GAP));
         const dr=Math.round((cy-d.y)/(ROW+GAP));
-        const nc=Math.max(1,Math.min(cols, d.c0+dc));
-        const nr=Math.max(1,Math.min(6, d.r0+dr));
+        const min=MIN_SIZE[d.id]||{c:1,r:1};
+        const nc=Math.max(Math.min(min.c,cols),Math.min(cols, d.c0+dc));
+        const nr=Math.max(min.r,Math.min(6, d.r0+dr));
         const cur=sizesRef.current[d.id]||{c:2,r:1};
         if(cur.c!==nc||cur.r!==nr){ const next={...sizesRef.current,[d.id]:{c:nc,r:nr}}; sizesRef.current=next; setSizes(next); }
       });
@@ -2817,18 +3039,15 @@ function App(){
     drag.current=null;
   };
 
-  const saveSettings=async()=>{
+  const saveSettings=()=>{
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
+    save("profileUsername",usernameField.trim());
+    save("backgroundTheme",backgroundTheme);
     setProfileName(nextName);
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
     save("location",locationProfile);
-    try{
-      const fresh=await fetchWeather(locationProfile);
-      setWeather(fresh);
-      save("weather",fresh);
-    }catch(e){}
   };
   const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
   const findLocations=async()=>{
@@ -2991,7 +3210,7 @@ function App(){
       <RetryNote tileKey="world"/></>),
     recall: T("recall","Recall",dueFacts.length>0&&!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
-    weekly: T("weekly","Weekly",!!rToday.weekly,null,
+    weekly: T("weekly","Stats",!!rToday.weekly,null,
       <div className="wrev">
         <div className="wrevSection chartSec">
           <div className="wrevTitle">Push-ups · last 14 days</div>
@@ -3005,9 +3224,12 @@ function App(){
           <div className="achCard"><div className="achN">{learned7}</div><div className="achL">learned · 7d</div></div>
           <div className="achCard"><div className="achN">{pushStreak}</div><div className="achL">push-up streak</div></div>
         </div>
-        <div className="wrevSection">
-          <div className="wrevRow"><div className="wrevTitle">Habit streaks</div><div className="wrevMeta">🧊 <b>{ice.available}</b></div></div>
-          <div className="flameGrid">{habits.map(h=>{ const st=habitStreak(h.id); return <div key={h.id} className="flameCard"><div className="flameName">{h.name}</div><div className="flameCount">🔥 {st}</div><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>ice cover</button></div>; })}</div>
+        <div className="wrevSection habitStatsSection">
+          <div className="wrevRow"><div className="wrevTitle">Habit history</div><div className="wrevMeta">🧊 <b>{ice.available}</b></div></div>
+          <div className="habitHistoryGrid">{habits.map((h,index)=>{ const st=habitStreak(h.id), color=HABIT_STREAK_COLORS[index%HABIT_STREAK_COLORS.length], history=Array.from({length:28},(_,i)=>addDays(todayKey,27-i)); return <div key={h.id} className="habitHistoryCard" style={{"--habit-color":color}}>
+            <div className="habitHistoryHead"><span className="habitHistoryName" title={h.name}>{h.name}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>🧊</button></div>
+            <div className="habitSquares" aria-label={`${h.name}: ${st} day streak`}>{history.map(day=>{ const done=!!(habitLog[day]&&habitLog[day][h.id]), frozen=(freezes[h.id]||[]).includes(day); return <span key={day} className={`habitSquare${done?" done":""}${frozen?" frozen":""}`} title={`${day}: ${done?"completed":frozen?"covered":"not completed"}`}/>; })}</div>
+          </div>; })}</div>
         </div>
       </div>, ()=>toggleRitual("weekly")),
     birthdays: T("birthdays","Birthdays",false,null,
@@ -3048,6 +3270,7 @@ function App(){
 
   return (
     <div className="wrap">
+      {!accountSignedIn && <div className="authGate"><div className="authCard"><div className="ldot"/><h2>{authMode==="login"?"Sign in to your dashboard":"Create your dashboard account"}</h2><p className="hint">Your memories, settings and dashboard data stay with this account on every device.</p><input className="sinput" type="email" autoComplete="email" placeholder="Email" value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)} /><input className="sinput" type="password" autoComplete={authMode==="login"?"current-password":"new-password"} placeholder="Password (8+ characters)" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submitAccount()} /><button className="savebtn" onClick={submitAccount} disabled={authBusy}>{authBusy?"…":authMode==="login"?"Sign in":"Create account"}</button><button className="link" onClick={()=>setAuthMode(authMode==="login"?"signup":"login")}>{authMode==="login"?"Create a new account":"I already have an account"}</button></div></div>}
       <nav className="topbar" aria-label="Primary navigation">
         <div className="topnav">
           <button className={"navbtn"+(page==="dashboard"?" active":"")} onClick={()=>openPage("dashboard")}>Today</button>
@@ -3087,6 +3310,15 @@ function App(){
               <div className="srow"><input className="sinput" autoComplete="name" placeholder="Your name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
               <div className="lab">Anthropic API key — powers the word, lesson, song & world tiles</div>
               <div className="srow"><input className="sinput" type="password" placeholder="sk-ant-…" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
+            </section>
+            <section className="settingsCard">
+              <h4>Appearance</h4>
+              <p className="hint">Choose the canvas behind your glass tiles.</p>
+              <div className="lab">Dashboard background</div>
+              <select className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
+                <option value="neutral">Neutral grey</option>
+                <option value="atmospheric">Soft colour wash</option>
+              </select>
             </section>
             <section className="settingsCard">
               <h4>Location</h4>
@@ -3167,23 +3399,17 @@ function App(){
               </div>}
             </section>
             <section className="settingsCard">
-              <h4>Sync & backup</h4>
-              <p className="hint">Your API key never syncs. Your saved dashboard memory does.</p>
-              <div className="lab">Sync across devices</div>
-              {syncId ? (
-                <div>
-                  <p className="hint" style={{margin:"0 0 6px"}}>Sync is ON. Enter this code on your other devices.</p>
-                  <div className="srow"><input className="sinput" readOnly value={syncId} onFocus={e=>e.target.select()} /><button className="ghostbtn" onClick={disableSync}>Disable on this device</button></div>
-                </div>
-              ) : (
-                <div>
-                  <div className="srow"><input className="sinput" placeholder="Choose a secret code — 6+ chars" value={syncField} onChange={e=>setSyncField(e.target.value)} /></div>
-                  <div className="srow" style={{marginTop:8}}>
-                    <button className="savebtn" onClick={enableSync} disabled={syncBusy}>{syncBusy?"…":"Turn on sync — this device"}</button>
-                    <button className="ghostbtn" onClick={connectSync} disabled={syncBusy}>{syncBusy?"…":"Connect another device"}</button>
-                  </div>
-                </div>
-              )}
+              <h4>Account</h4>
+              <p className="hint">Your dashboard memory and settings belong to this account.</p>
+              <div className="accountFields">
+                <div className="accountField"><label>Full name</label><input className="sinput" autoComplete="name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
+                <div className="accountField"><label>Username</label><input className="sinput" autoComplete="username" placeholder="Choose a username" value={usernameField} onChange={e=>setUsernameField(e.target.value)} /></div>
+                <div className="accountField"><label>Email</label><input className="sinput" type="email" value={accountEmail||"Signed-in account"} readOnly /></div>
+                <div className="accountField"><label>Password</label><div className="accountPassword"><span className="accountDots">••••••</span><button className="link" onClick={()=>document.getElementById("account-new-password")?.focus()}>Change</button></div></div>
+              </div>
+              {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); location.reload();}}>Sign out / switch account</button>}
+              <div className="srow" style={{marginTop:11}}><input id="account-new-password" className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
+              <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount}>Delete account</button>
               <div className="lab">Backup & restore</div>
               <div className="srow">
                 <button className="ghostbtn" onClick={exportBackup}>Download backup</button>
@@ -3403,12 +3629,16 @@ function PushBars({values}){
     </div>
   );
 }
+function birthdayDaysUntil(b,baseDate=new Date()){
+  const base=new Date(baseDate.getFullYear(),baseDate.getMonth(),baseDate.getDate());
+  let d=new Date(base.getFullYear(),Number(b.month)-1,Number(b.day));
+  if(d<base) d=new Date(base.getFullYear()+1,Number(b.month)-1,Number(b.day));
+  return Math.round((d-base)/86400000);
+}
 function nextBirthday(list){
   if(!list.length) return null;
-  const now=new Date(); const base=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let best=null,bd=99999;
-  list.forEach(b=>{ let d=new Date(now.getFullYear(),b.month-1,b.day); if(d<base) d=new Date(now.getFullYear()+1,b.month-1,b.day);
-    const days=Math.round((d-base)/86400000); if(days<bd){ bd=days; best={...b,days}; } });
+  list.forEach(b=>{ const days=birthdayDaysUntil(b); if(days<bd){ bd=days; best={...b,days}; } });
   return best;
 }
 function BirthdaysCard({birthdays,today,onAdd,onRemove}){
@@ -3431,7 +3661,7 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
           <BirthdayInput onAdd={onAdd} />
           <div className="birthdayManagerList">
             {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Add someone by hand here, or import your contacts from Settings.</div></div>}
-            {[...birthdays].sort((a,b)=>a.month-b.month||a.day-b.day).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
+            {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
           </div>
         </div>
       </div>,document.body)}
@@ -3563,7 +3793,6 @@ function MusicCard({music,done,onToggle}){
       <a className="pill" target="_blank" rel="noreferrer" href={href}>{matching?"Matching Apple Music…":match?"Apple Music ↗":"Find on Apple Music ↗"}</a>
       <button className={"mark"+(done?" on":"")} onClick={onToggle}><span className={"tick sm"+(done?" on":"")}>{done?"✓":""}</span>{done?"Heard":"Listened"}</button>
     </div>
-    {!matching&&!match&&<p className="samplehint">No confident direct match — this opens a precise Apple Music search instead.</p>}
   </div>;
 }
 
@@ -3787,21 +4016,27 @@ function ShoppingCard({items,onChange}){
   const toggleCheck=id=>onChange(list.map(item=>item.id===id?{...item,checked:!item.checked}:item));
   const remove=id=>onChange(list.filter(item=>item.id!==id));
   const addCustom=()=>toggleProduct(shoppingProduct("other"));
-  return (
+    return (
     <div className="shoppingCard">
-      <div className="shoppingPicked">
-        {list.length===0 ? <PlainEmpty>Tap icons to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
-          <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
-            <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
-          </span>
-        ); })}
+      <div className="shoppingSection basket">
+        <div className="shopSectionLabel">Your list</div>
+        <div className="shoppingPicked">
+          {list.length===0 ? <PlainEmpty>Tap icons below to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
+            <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
+              <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
+            </span>
+          ); })}
+        </div>
       </div>
-      <div className="shopShelf">
-        {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
-      </div>
-      <div className="shopOther">
-        <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
-        <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
+      <div className="shoppingSection picker">
+        <div className="shopSectionLabel">Choose products</div>
+        <div className="shopShelf">
+          {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
+        </div>
+        <div className="shopOther">
+          <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
+          <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
+        </div>
       </div>
     </div>
   );
@@ -4064,14 +4299,14 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
   const modeDef=PHILO_MODES.find(m=>m.id===mode)||PHILO_MODES[0];
   const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
   return (
-    <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div className="philoCard">
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
       <div className="philoModeBar">
         <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
         <label className="philoModeRow">
           <span>Mode</span>
           <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
-            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.icon} {m.label}</option>)}
+            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </label>
         {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
@@ -4080,7 +4315,7 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
         <textarea className="philoThinkArea" placeholder="Think it through first — write your own take here…" value={draft} onChange={e=>setDraft(e.target.value)} />
         <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={()=>onSubmitInitial(draft.trim())}>I've thought about this →</button>
       </>) : (<>
-        <div className="chatLog" ref={logRef} style={{flex:1,overflowY:"auto",minHeight:0}}>
+        <div className="chatLog" ref={logRef}>
           <div className="chatMsg me">{chat.initial}</div>
           {chat.messages.map((m,i)=>(<div key={i} className={"chatMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>))}
           {sending && <div className="chatThinking">…thinking</div>}

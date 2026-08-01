@@ -1,13 +1,13 @@
 {
-  "name": "Personal Dashboard",
-  "short_name": "Dashboard",
+  "name": "TheDashboard",
+  "short_name": "TheDashboard",
   "description": "A personal daily dashboard for plans, habits, reminders and recall.",
   "id": "./#/dashboard",
   "start_url": "./#/dashboard",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#F2EFFF",
-  "theme_color": "#E4E4E9",
+  "background_color": "#FAF9F6",
+  "theme_color": "#FAF9F6",
   "icons": [
     {
       "src": "assets/icons/dashboard-192.png",

@@ -17,6 +17,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Data persists in browser `localStorage` with `fefe_` keys.
 - Learn owns `fefe_learnDB`; Dashboard does not load or display Learn navigation or progress.
 - Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
+- Settings presents a classic Account section with sign out, password change, account deletion, and separate backup/restore; legacy sync-code controls are no longer exposed.
 - JSON backup and restore are available in Settings.
 - Settings lives on its own top-level dashboard page at `#/settings`.
 - Existing saved data must survive code and architecture changes.
@@ -24,6 +25,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 ## Current dashboard capabilities
 
 - Configurable tile library with date-aware active-tile history.
+- New dashboards start Today with only Goals, Habits, Weather, Word, and World; existing customized Today layouts are preserved.
 - Active tiles determine daily progress and perfect-day requirements.
 - Habits may use an emoji, text label, or both; emoji-only habits remain valid.
 - Goals, habits, shopping list, Health import bridge, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
@@ -41,7 +43,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
 - Arrange and resize affordances stay on the right edge of every tile. Habit controls remain true circles at every responsive size.
 - Reminders are practical recurring or one-off tasks: later items stay subdued, due items become prominent, and completed items are crossed through without checkbox UI. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
-- Default Reminders are: suggest an app improvement/recommendation to the creator daily, call your mum weekly, and an example doctor appointment. One-off reminders can include an optional time, future reminders should stay subdued but readable, and the tile includes a compact month calendar view for reminder dates. Birthday gift planning does not appear in Reminders.
+- Default Reminders are: suggest an app improvement/recommendation to the creator daily, call your mum weekly, and an example doctor appointment. One-off reminders can include an optional time, future reminders should stay subdued but readable, and the tile combines a navigable month calendar with its complete upcoming list; selecting a calendar date highlights the matching reminder without filtering or hiding the rest. Birthday gift planning does not appear in Reminders.
 - In the Library, both Add-to-Today “+” and Remove-from-Today “×” are direct, absolutely positioned tile children centred half-inside/half-outside the top-right corner; neither action appears in the tile body or title wrapper. Compact Birthdays shows only today’s cake/name or the next birthday; its complete list and import controls live in a separate overlay.
 - Timer Stop pauses and preserves the remaining time for Resume; Reset alone starts it over. Every positive Event uses the same full countdown-card hierarchy rather than a primary/secondary split.
 - Birthday import lives in Settings with a short tutorial; the Birthdays tile stays focused on the compact summary and hidden full list.
@@ -56,7 +58,8 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Goals use a light list style: completing a goal only ticks a small box; the goal text is not struck through and goal rows avoid heavy separators.
 - A saved location profile (city + timezone) drives the dashboard clock and weather tile.
 - Health data uses the no-native-app bridge: an iOS Shortcut exports selected Apple Health daily summaries as JSON, and the dashboard imports/stores them locally under the same backup/sync memory contract. Garmin can instead be pulled automatically: a scheduled script (`scripts/garmin_to_dashboard.py`) pushes daily summaries — including Garmin-only Body Battery, stress, and HRV — to a token-keyed ingest Worker (`worker/health-ingest.js`), and the dashboard pulls and merges them on load. The health token is stored locally as `fefe_healthToken` and is deliberately excluded from cross-device sync, so a scripted write can never clobber the whole-state snapshot.
-- Philosophy keeps its standard below-the-surface Socratic mode and also offers a per-topic philosopher dropdown. Named-philosopher replies must reconstruct only textually grounded views, admit when the source basis is unclear, and end with short source notes rather than inventing positions.
+- Philosophy keeps its standard below-the-surface Socratic mode and also offers a per-topic philosopher dropdown with a distinct relevant icon for every mode. Named-philosopher replies must reconstruct only textually grounded views, admit when the source basis is unclear, and end with short source notes rather than inventing positions.
+- Song recommendations name an exact recording and retain complete performer/ensemble/conductor credits plus a separate classical composer when relevant. Apple Music links use conservative catalog matching on both title and credits; an uncertain result opens a precise search instead of linking to a different recording.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
 - Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
 - No visible scrollbars; scrolling must still work.
@@ -67,6 +70,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Preserve colour identity, tactile completion reward, and individual character without inconsistency.
 - Every dashboard tile follows one reversible visual-state contract: informative tiles can be tapped to toggle full colour, task tiles return to clear glass when their answer, button, or checkbox is undone, and no tile type is excluded from the full-colour treatment.
 - Resized widgets use deliberate compact summaries and edge-to-edge internal layouts. At every supported tile shape, controls either reflow or secondary detail progressively hides; borders must never slice through buttons, text, or cards.
+- Compact tiles never use horizontal scrolling: content reflows into the tile width and only the tile body scrolls vertically when more detail is present.
 - Delete and close glyphs inside widgets are bare, centred, minimalist crosses rather than pill or rounded-rectangle buttons.
 - Full-colour tiles use a deeper hue-aware glass fill with high-contrast content and translucent internal surfaces, including for naturally light accents such as yellow, mint, and cyan.
 
