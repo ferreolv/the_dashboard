@@ -1,0 +1,2 @@
+# Unofficial Garmin Connect client (reverse-engineered; may need version bumps).
+garminconnect>=0.2.19

@@ -1,0 +1,35 @@
+name: Garmin health sync
+
+# Pulls your Garmin daily summaries and pushes them to the health-ingest
+# Worker, which the dashboard then reads. Runs on a schedule and on demand.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   GARMIN_EMAIL       your Garmin Connect login email
+#   GARMIN_PASSWORD    your Garmin Connect password
+#   HEALTH_INGEST_URL  e.g. https://fefe-health.fefedashboard.workers.dev
+#   HEALTH_TOKEN       the same secret token entered in the dashboard
+#
+# The unofficial garminconnect library can break when Garmin changes their
+# internal API; if a run fails, bump the version in scripts/requirements.txt.
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 06:00 UTC daily
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r scripts/requirements.txt
+      - run: python scripts/garmin_to_dashboard.py
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+          HEALTH_INGEST_URL: ${{ secrets.HEALTH_INGEST_URL }}
+          HEALTH_TOKEN: ${{ secrets.HEALTH_TOKEN }}
+          DAYS: "7"

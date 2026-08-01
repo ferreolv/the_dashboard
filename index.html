@@ -1747,7 +1747,13 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    generation. Weather, academic, and philosophy chat stay per-user. */
 const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
 const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
-const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp"]);
+/* Garmin (and any scripted health source) push daily summaries to this token-keyed
+   store; the dashboard pulls them in on load and merges into the local health log.
+   Its own little Worker — separate from sync so a script write can never clobber the
+   whole-state snapshot. See worker/health-ingest.js. Set to "" to disable. */
+const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
+const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
+const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp","fefe_healthToken"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
 const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
@@ -1807,6 +1813,12 @@ async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id
       localStorage.setItem("fefe_syncStamp",String(doc.updatedAt)); return true; }
   }catch(e){}
   return false; }
+/* Pull the token's health days from the ingest store. Returns a {date:entry} map or null.
+   Read-only: it never writes back, so it can't disturb anything the script pushed. */
+async function pullHealth(token){ const t=(token||getHealthToken()).trim(); if(!t||!HEALTH_URL) return null;
+  try{ const r=await fetch(HEALTH_URL+"/health",{headers:{"X-Health-Token":t}}); if(!r.ok) return null;
+    const doc=await r.json(); return doc&&doc.days&&typeof doc.days==="object"?doc.days:null;
+  }catch(e){ return null; } }
 
 /* dates — the "logical day" rolls over at 01:00, not midnight, so a late night
    doesn't quietly become tomorrow while you're still awake. */
@@ -2454,6 +2466,9 @@ function App(){
   const [syncId,setSyncIdState]=useState(()=>getSyncId());
   const [syncField,setSyncField]=useState("");
   const [syncBusy,setSyncBusy]=useState(false);
+  const [healthToken,setHealthTokenState]=useState(()=>getHealthToken());
+  const [healthTokenField,setHealthTokenField]=useState("");
+  const [healthBusy,setHealthBusy]=useState(false);
   const [accountSignedIn,setAccountSignedIn]=useState(()=>!!getAccountToken());
   const [authMode,setAuthMode]=useState("login");
   const [authEmailField,setAuthEmailField]=useState("");
@@ -2503,6 +2518,21 @@ function App(){
     location.reload();
   };
 
+  /* Garmin auto-pull: the token is the shared secret between the dashboard and the
+     scheduled Garmin script. It is deliberately kept out of the sync snapshot. */
+  const connectHealthToken=async()=>{ const t=healthTokenField.trim();
+    if(!/^[A-Za-z0-9_-]{8,}$/.test(t)){ alert("Use 8+ characters — letters, numbers, - or _ — the same token you put in the Garmin script."); return; }
+    localStorage.setItem("fefe_healthToken",t); setHealthTokenState(t); setHealthTokenField("");
+    setHealthBusy(true); const days=await pullHealth(t); setHealthBusy(false);
+    const n=mergeHealthDays(days);
+    alert(n?`Connected. Pulled ${n} day${n===1?"":"s"} from Garmin.`:"Token saved. No data there yet — run the Garmin script, then press Sync now.");
+  };
+  const syncHealthNow=async()=>{ setHealthBusy(true); const days=await pullHealth(); setHealthBusy(false);
+    if(days===null){ alert("Couldn't reach the health store. Check the token and try again."); return; }
+    const n=mergeHealthDays(days); alert(n?`Synced ${n} day${n===1?"":"s"} from Garmin.`:"Reached the store, but it has no days yet.");
+  };
+  const disableHealthToken=()=>{ localStorage.removeItem("fefe_healthToken"); setHealthTokenState(""); };
+
   /* Portable local backups. Secrets and sync metadata are deliberately excluded. */
   const exportBackup=()=>{
     const stamp=new Date().toISOString();
@@ -2532,12 +2562,16 @@ function App(){
     const key=parseDateKey(row.date||row.day||row.startDate||row.endDate);
     if(!key) return null;
     const num=v=>{ const n=Number(v); return Number.isFinite(n)?n:null; };
+    const sleepSeconds=num(row.sleepSeconds??row.sleepingSeconds??row.sleepTimeSeconds);
     const entry={
       date:key,
-      steps:num(row.steps),
-      sleepHours:num(row.sleepHours??row.sleep_hours??row.sleep),
-      restingHeartRate:num(row.restingHeartRate??row.resting_hr??row.rhr),
-      activeEnergyKcal:num(row.activeEnergyKcal??row.activeEnergy??row.calories),
+      steps:num(row.steps??row.totalSteps??row.stepsTotal),
+      sleepHours:num(row.sleepHours??row.sleep_hours??row.sleep) ?? (sleepSeconds!=null?Math.round(sleepSeconds/360)/10:null),
+      restingHeartRate:num(row.restingHeartRate??row.resting_hr??row.rhr??row.restingHr),
+      activeEnergyKcal:num(row.activeEnergyKcal??row.activeEnergy??row.calories??row.activeKilocalories),
+      bodyBattery:num(row.bodyBattery??row.body_battery??row.bodyBatteryHigh??row.bodyBatteryMostRecentValue),
+      stress:num(row.stress??row.averageStressLevel??row.avgStress??row.stressLevel),
+      hrv:num(row.hrv??row.hrvMs??row.hrvLastNight??row.lastNightAvg??row.hrvWeeklyAvg),
       workouts:Array.isArray(row.workouts)?row.workouts.map(w=>({
         type:String(w.type||w.name||"Workout"),
         durationMinutes:num(w.durationMinutes??w.minutes??w.duration)||0,
@@ -2626,6 +2660,17 @@ function App(){
   const persistEvents=v=>{ setAgendaEvents(v); save("agendaEvents",v); };
   const persistShopping=v=>{ setShoppingList(v); save("shoppingList",v); };
   const persistHealth=v=>{ setHealthLog(v); save("healthLog",v); };
+  /* Merge a {date:entry} map (from the Garmin pull, already server-stored) into the local
+     log. Pulled fields fill in over whatever a day already has; other days are untouched. */
+  const mergeHealthDays=days=>{
+    if(!days||typeof days!=="object") return 0;
+    const rows=Object.values(days).map(normaliseHealthEntry).filter(Boolean);
+    if(!rows.length) return 0;
+    setHealthLog(prev=>{ const next={...prev}; rows.forEach(r=>{ next[r.date]={...(next[r.date]||{}),...r}; }); save("healthLog",next); return next; });
+    return rows.length;
+  };
+  /* On load, quietly pull any Garmin days the script has pushed for this token. */
+  useEffect(()=>{ let alive=true; (async()=>{ const days=await pullHealth(); if(alive&&days) mergeHealthDays(days); })(); return ()=>{ alive=false; }; },[]);
   const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
   const toggleManualTile=id=>{ const next={...manualTileDone,[id]:!manualTileDone[id]}; setManualTileDone(next); save("manualTileDone:"+todayKey,next); };
 
@@ -3304,27 +3349,52 @@ function App(){
             </section>
             <section className="settingsCard">
               <h4>Health bridge</h4>
-              <p className="hint">Best no-app option: an iOS Shortcut exports selected Apple Health summaries as JSON, then the Health tile imports it.</p>
+              <p className="hint">Garmin pulls in automatically once connected. No Garmin? An iOS Shortcut can export Apple Health as JSON and you import the file by hand.</p>
+              <div className="lab">Garmin — automatic</div>
+              {healthToken ? (
+                <div>
+                  <p className="hint" style={{margin:"0 0 6px"}}>Auto-pull is ON. Your scheduled script pushes to this token; the dashboard pulls it in on every load.</p>
+                  <div className="srow">
+                    <input className="sinput" readOnly value={healthToken} onFocus={e=>e.target.select()} />
+                    <button className="ghostbtn" onClick={syncHealthNow} disabled={healthBusy}>{healthBusy?"…":"Sync now"}</button>
+                    <button className="ghostbtn" onClick={disableHealthToken}>Disable</button>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="srow"><input className="sinput" placeholder="Secret token — 8+ chars, same as the script" value={healthTokenField} onChange={e=>setHealthTokenField(e.target.value)} /></div>
+                  <div className="srow" style={{marginTop:8}}><button className="savebtn" onClick={connectHealthToken} disabled={healthBusy}>{healthBusy?"…":"Connect Garmin"}</button></div>
+                </div>
+              )}
+              <div className="lab">Manual JSON import</div>
               <div className="srow">
                 <button className="ghostbtn" onClick={importHealthJson}>Import health JSON</button>
                 <button className="ghostbtn" onClick={()=>setShowHealthHelp(v=>!v)}>{showHealthHelp?"Hide tuto":"Tuto"}</button>
               </div>
               {showHealthHelp && <div className="settingsHelp">
-                <div className="hint">Shortcut JSON shape</div>
+                <div className="hint">Garmin — one-time setup</div>
+                <ol className="settingsList">
+                  <li>Pick any secret token (8+ chars). Paste it above and press `Connect Garmin`.</li>
+                  <li>Put the SAME token, plus your Garmin email &amp; password, into the script at `scripts/garmin_to_dashboard.py` (as secrets — never in the file).</li>
+                  <li>Let it run on a schedule (the included GitHub Action, or your own cron). It pushes each day to the store; the dashboard pulls it in automatically.</li>
+                </ol>
+                <div className="hint" style={{marginTop:8}}>Manual JSON shape (per day, or a list of these)</div>
                 <pre style={{whiteSpace:"pre-wrap",fontSize:11,lineHeight:1.35,margin:"7px 0 0",color:"#4a5064"}}>{`{
   "date": "29/07/2026",
   "steps": 8420,
   "sleepHours": 7.3,
   "restingHeartRate": 58,
   "activeEnergyKcal": 420,
+  "bodyBattery": 72,
+  "stress": 31,
+  "hrv": 48,
   "workouts": [
     {"type": "Running", "durationMinutes": 35, "calories": 310}
   ]
 }`}</pre>
                 <ol className="settingsList">
-                  <li>In Shortcuts, read only the Health metrics you approve.</li>
-                  <li>Create a Dictionary with the keys above, or a list of these dictionaries for multiple days.</li>
-                  <li>Save it as `.json`, then import it in the Health tile or here.</li>
+                  <li>Any field may be omitted; only `date` is required.</li>
+                  <li>Save as `.json`, then import it in the Health tile or here.</li>
                 </ol>
               </div>}
             </section>
@@ -3600,7 +3670,7 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
 }
 
 function BreathingCard({done,onComplete,onIncomplete}){
-  const TOTAL_MS=60000, CYCLE_MS=10000, INHALE_MS=4000;
+  const TOTAL_MS=180000, BREATH_MS=8000, INHALE_MS=4000, SEGMENTS=6, SEG_MS=TOTAL_MS/SEGMENTS;
   const [startedAt,setStartedAt]=useState(null);
   const [clock,setClock]=useState(Date.now());
   const [finished,setFinished]=useState(done);
@@ -3630,37 +3700,37 @@ function BreathingCard({done,onComplete,onIncomplete}){
   },[startedAt]);
   const running=startedAt!==null;
   const elapsed=running?Math.min(TOTAL_MS,Math.max(0,clock-startedAt)):0;
-  const cycleIndex=running?Math.min(5,Math.floor(elapsed/CYCLE_MS)):finished?6:0;
-  const withinCycle=elapsed%CYCLE_MS;
-  const inhaling=running&&withinCycle<INHALE_MS;
-  const phaseProgress=running?(inhaling?withinCycle/INHALE_MS:(withinCycle-INHALE_MS)/(CYCLE_MS-INHALE_MS)):0;
+  const segIndex=running?Math.min(SEGMENTS-1,Math.floor(elapsed/SEG_MS)):finished?SEGMENTS:0;
+  const withinBreath=elapsed%BREATH_MS;
+  const inhaling=running&&withinBreath<INHALE_MS;
+  const phaseProgress=running?(inhaling?withinBreath/INHALE_MS:(withinBreath-INHALE_MS)/(BREATH_MS-INHALE_MS)):0;
   const breathAmount=running?(inhaling?phaseProgress:1-phaseProgress):(finished||done?1:0);
   const breathScale=running?(0.72+breathAmount*0.34):(finished||done?1.02:0.8);
-  const phaseRemaining=running?Math.max(1,Math.ceil(((inhaling?INHALE_MS:CYCLE_MS)-withinCycle)/1000)):null;
+  const phaseRemaining=running?Math.max(1,Math.ceil(((inhaling?INHALE_MS:BREATH_MS)-withinBreath)/1000)):null;
   const begin=()=>{ const time=Date.now(); if(done)onIncomplete&&onIncomplete(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
   const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
   const phase=running?(inhaling?"Inhale":"Exhale"):finished||done?"Complete":"Ready";
-  const cue=running?(inhaling?"through your nose":"gently and slowly"):finished||done?"Six calm rounds finished":"4 seconds in · 6 seconds out";
+  const cue=running?(inhaling?"Belly to the ceiling — lift at the top":"Hold the lift — release at the end"):finished||done?"Nicely done":"Inhale, lift, exhale, release";
   return (
     <div className="breathCard">
       <div className="breathStage">
-        <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="60" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
+        <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
           <div className={"breathOrb "+(running?(inhaling?"inhale":"exhale"):"idle")} style={{"--breath-scale":breathScale,"--breath-amount":breathAmount}}>
-            <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"6"}</span>
+            <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"3′"}</span>
           </div>
         </div>
       </div>
       <div className="breathCopy">
         <div className="breathPhase" aria-live="polite">{phase}</div>
         <div className="breathCue">{cue}</div>
-        {!running&&<div className="breathRecipe" aria-label="Inhale for 4 seconds, exhale for 6 seconds, repeat 6 times"><span>Nose · 4s</span><span>Gentle · 6s</span><span>× 6</span></div>}
-        <div className="breathRounds" aria-label={`${running?cycleIndex:finished||done?6:0} of 6 rounds complete`}>
-          {Array.from({length:6},(_,i)=><span key={i} className={"breathRound"+(i<cycleIndex?" done":running&&i===cycleIndex?" current":"")} />)}
+        {!running&&<div className="breathRecipe" aria-label="Inhale four seconds and lift, exhale four seconds and release, for three minutes"><span>Belly · 4s</span><span>Hold · 4s</span><span>3 min</span></div>}
+        <div className="breathRounds" aria-label={`${running?segIndex:finished||done?SEGMENTS:0} of ${SEGMENTS} segments complete`}>
+          {Array.from({length:SEGMENTS},(_,i)=><span key={i} className={"breathRound"+(i<segIndex?" done":running&&i===segIndex?" current":"")} />)}
         </div>
         <div className="breathActions">
           {!running&&<button type="button" className="pill primary" onClick={begin}>{finished||done?"Again":"Start"}</button>}
           {running&&<button type="button" className="link" onClick={stop}>Stop</button>}
-          {!running&&(finished||done)&&<span className="breathDone">1 minute</span>}
+          {!running&&(finished||done)&&<span className="breathDone">3 minutes</span>}
         </div>
       </div>
     </div>
@@ -3906,13 +3976,16 @@ function HealthCard({data,latest,onImport}){
   const sleep=d&&Number.isFinite(Number(d.sleepHours))?Number(d.sleepHours):null;
   const rhr=d&&Number.isFinite(Number(d.restingHeartRate))?Number(d.restingHeartRate):null;
   const energy=d&&Number.isFinite(Number(d.activeEnergyKcal))?Number(d.activeEnergyKcal):null;
+  const battery=d&&Number.isFinite(Number(d.bodyBattery))?Number(d.bodyBattery):null;
+  const stress=d&&Number.isFinite(Number(d.stress))?Number(d.stress):null;
+  const hrv=d&&Number.isFinite(Number(d.hrv))?Number(d.hrv):null;
   const workouts=(d&&Array.isArray(d.workouts)?d.workouts:[]);
   const has=!!d;
   return (
     <div className="healthCard">
       <div className="healthTop">
         <div className="healthMain">
-          <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Shortcut bridge"}</div>
+          <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Garmin bridge"}</div>
           <div className="healthSteps">{steps!=null?steps.toLocaleString("en-GB"):"—"} <span>steps</span></div>
         </div>
         <button className="ghostbtn healthSync" onClick={onImport}>{has?"Import":"Import JSON"}</button>
@@ -3921,10 +3994,13 @@ function HealthCard({data,latest,onImport}){
         <div className="healthMetric"><b>{sleep!=null?sleep.toFixed(1)+"h":"—"}</b><span>sleep</span></div>
         <div className="healthMetric"><b>{rhr!=null?rhr:"—"}</b><span>resting HR</span></div>
         <div className="healthMetric"><b>{energy!=null?Math.round(energy):"—"}</b><span>active kcal</span></div>
+        {battery!=null&&<div className="healthMetric"><b>{Math.round(battery)}</b><span>body battery</span></div>}
+        {stress!=null&&<div className="healthMetric"><b>{Math.round(stress)}</b><span>stress</span></div>}
+        {hrv!=null&&<div className="healthMetric"><b>{Math.round(hrv)}</b><span>HRV ms</span></div>}
       </div>
       {workouts.length>0
         ? <div className="healthWorkout">🏃 {workouts.slice(0,2).map(w=>`${w.type} ${Math.round(Number(w.durationMinutes)||0)}m`).join(" · ")}</div>
-        : <div className="healthHint">{has?"No workout in this import.":"Use an iOS Shortcut to export selected Health metrics as JSON, then import here."}</div>}
+        : <div className="healthHint">{has?"No workout logged for this day.":"Connect Garmin in Settings to pull steps, sleep, HR, Body Battery, stress and HRV automatically."}</div>}
     </div>
   );
 }
