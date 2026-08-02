@@ -1693,8 +1693,10 @@
   .tile[data-tileid="shopping"] .shoppingSection{width:100%;box-sizing:border-box}
   .tile[data-tileid="shopping"] .shopShelf{justify-content:center!important;align-items:center!important}
   .tile[data-tileid="shopping"] .shopIcon{flex:0 0 48px!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}
-  .tile[data-tileid="shopping"][data-cols="1"] .shopShelf{display:grid!important;grid-template-columns:repeat(2,minmax(0,48px))!important;justify-content:center!important}
+  .tile[data-tileid="shopping"][data-cols="1"] .shopShelf{display:grid!important;grid-template-columns:repeat(3,minmax(0,48px))!important;justify-content:center!important}
   .tile[data-tileid="shopping"][data-cols="1"] .shoppingSection.picker{min-height:100%}
+  .tile[data-tileid="weather"][data-cols="2"][data-rows="2"] .weatherSplit{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;gap:12px!important}
+  .tile[data-tileid="weather"][data-cols="2"][data-rows="2"] .weatherNow,.tile[data-tileid="weather"][data-cols="2"][data-rows="2"] .wtomorrow{padding:14px!important;border-radius:20px!important}
   .tile[data-tileid="timer"][data-cols="1"] .timerActions,.tile[data-tileid="pushups"][data-cols="1"] .pushBtns{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;gap:6px!important}
   .tile[data-tileid="timer"][data-cols="1"] .timerBig{font-size:clamp(24px,13cqi,34px)!important}
   .tile>.libraryRemoveToday,.tile>.libraryAddToday{top:-14px!important;right:-14px!important;width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;border:2px solid var(--accent)!important;border-radius:50%!important;background:rgba(255,255,255,.94)!important;color:var(--accent)!important;box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12))!important;font-size:18px!important;line-height:1!important}
@@ -2504,7 +2506,8 @@ function App(){
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
   const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
-  const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem("fefe_syncStamp"); location.reload(); }catch(e){alert(e.message);} };
+  const disconnectAccount=()=>{ localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); localStorage.removeItem("fefe_syncStamp"); localStorage.removeItem("fefe_healthToken"); location.reload(); };
+  const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); disconnectAccount(); }catch(e){alert(e.message);} };
 
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
@@ -3419,7 +3422,7 @@ function App(){
                 <div className="accountField"><label>Email</label><input className="sinput" type="email" value={accountEmail||"Signed-in account"} readOnly /></div>
                 <div className="accountField"><label>Password</label><div className="accountPassword"><span className="accountDots">••••••</span><button className="link" onClick={()=>document.getElementById("account-new-password")?.focus()}>Change</button></div></div>
               </div>
-              {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={()=>{localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); location.reload();}}>Sign out / switch account</button>}
+              {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={disconnectAccount}>Disconnect account</button>}
               <div className="srow" style={{marginTop:11}}><input id="account-new-password" className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
               <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount}>Delete account</button>
               <div className="lab">Backup & restore</div>
@@ -3941,6 +3944,10 @@ const SHOPPING_PRODUCTS=[
   ["apple","🍎","Apples"],["banana","🍌","Bananas"],["orange","🍊","Oranges"],["berries","🫐","Berries"],["avocado","🥑","Avocado"],["tomato","🍅","Tomatoes"],
   ["carrot","🥕","Carrots"],["broccoli","🥦","Broccoli"],["lettuce","🥬","Greens"],["pepper","🫑","Peppers"],["onion","🧅","Onions"],["mushroom","🍄","Mushrooms"],
   ["coffee","☕","Coffee"],["tea","🍵","Tea"],["water","💧","Water"],["juice","🧃","Juice"],["snacks","🥨","Snacks"],["chocolate","🍫","Chocolate"],
+  ["tortillas","🌯","Tortillas"],["prepared-meals","🍱","Prepared meals"],["eggplant","🍆","Eggplant"],["parmesan-gruyere","🧀","Parmesan / Gruyere"],["frozen-fries","🍟","Frozen fries"],
+  ["pizza-dough","🍕","Pizza dough"],["noodles","🍜","Noodles"],["tuna","🐟","Tuna"],["merguez","🌭","Merguez sausage"],["zucchini","🥒","Zucchini"],["cream","🥛","Cream"],
+  ["chickpeas","🫘","Chickpeas"],["egg","🥚","Egg"],["greek-yogurt","🥣","Greek yoghurt"],["sardines","🐟","Sardines"],["peanut-butter","🥜","Peanut butter"],["frozen-berries","🫐","Frozen berries"],
+  ["wholemeal-bread","🍞","Wholemeal bread"],["chia-seeds","🌱","Chia seeds"],["flax-seeds","🌾","Flax seeds"],["melon","🍈","Melon"],["walnuts","🌰","Walnuts"],["kefir","🥛","Kefir"],
   ["soap","🧼","Soap"],["paper","🧻","Paper"],["cleaner","🧽","Cleaner"],["pet","🐾","Pet"],["medicine","💊","Medicine"],["other","🛒","Other"]
 ].map(([key,icon,label])=>({key,icon,label}));
 const shoppingProduct=key=>SHOPPING_PRODUCTS.find(p=>p.key===key)||SHOPPING_PRODUCTS[SHOPPING_PRODUCTS.length-1];
