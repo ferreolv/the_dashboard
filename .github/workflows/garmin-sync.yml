@@ -14,7 +14,7 @@ name: Garmin health sync
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # 06:00 UTC daily
+    - cron: "0 */3 * * *"   # every 3 hours
   workflow_dispatch: {}
 
 jobs:
