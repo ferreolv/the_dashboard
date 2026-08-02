@@ -1685,6 +1685,19 @@
   .tile[data-tileid="weather"] .weatherTomorrowTemps{font-size:12px;font-weight:900;color:var(--accentDark)}
   .tile[data-tileid="weather"] .weatherTomorrowLabel{grid-column:1/-1;font-size:10px}
   @container tile (max-width:340px){.tile[data-tileid="weather"] .weatherSplit{grid-template-columns:1fr!important;gap:7px!important}.tile[data-tileid="weather"] .wtomorrow{grid-template-columns:auto 1fr}.tile[data-tileid="weather"] .wtomorrow .lbl{grid-column:1/-1}}
+  /* Final compact contracts. */
+  .tile[data-tileid="habits"] .hsq{flex-basis:82px!important;width:82px!important;height:82px!important;min-width:82px!important;min-height:82px!important;max-width:82px!important;max-height:82px!important;position:relative!important;overflow:visible!important}
+  .tile[data-tileid="habits"] .hdel{position:absolute!important;top:-5px!important;right:-5px!important;z-index:4;width:20px!important;height:20px!important;min-width:20px!important;min-height:20px!important;display:grid!important;place-items:center!important;padding:0!important;border:1px solid var(--accent)!important;border-radius:50%!important;background:rgba(255,255,255,.94)!important;color:var(--accentDark)!important;font-size:14px!important;line-height:1!important;cursor:pointer}
+  .tile[data-tileid="habits"] .hdel:hover{background:var(--accent)!important;color:#fff!important;transform:none!important}
+  .tile[data-tileid="shopping"] .shoppingCard{align-items:stretch!important}
+  .tile[data-tileid="shopping"] .shoppingSection{width:100%;box-sizing:border-box}
+  .tile[data-tileid="shopping"] .shopShelf{justify-content:center!important;align-items:center!important}
+  .tile[data-tileid="shopping"] .shopIcon{flex:0 0 48px!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}
+  .tile[data-tileid="shopping"][data-cols="1"] .shopShelf{display:grid!important;grid-template-columns:repeat(2,minmax(0,48px))!important;justify-content:center!important}
+  .tile[data-tileid="shopping"][data-cols="1"] .shoppingSection.picker{min-height:100%}
+  .tile[data-tileid="timer"][data-cols="1"] .timerActions,.tile[data-tileid="pushups"][data-cols="1"] .pushBtns{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;gap:6px!important}
+  .tile[data-tileid="timer"][data-cols="1"] .timerBig{font-size:clamp(24px,13cqi,34px)!important}
+  .tile>.libraryRemoveToday,.tile>.libraryAddToday{top:-14px!important;right:-14px!important;width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;border:2px solid var(--accent)!important;border-radius:50%!important;background:rgba(255,255,255,.94)!important;color:var(--accent)!important;box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12))!important;font-size:18px!important;line-height:1!important}
   </style>
 </head>
 <body>
@@ -1759,7 +1772,7 @@ const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex",
    whole-state snapshot. See worker/health-ingest.js. Set to "" to disable. */
 const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
 const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
-const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_syncId","fefe_syncStamp","fefe_healthToken"]);
+const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
 const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
@@ -1767,12 +1780,9 @@ const getAccountToken=()=>localStorage.getItem(ACCOUNT_TOKEN_KEY)||"";
 const accountRequest=async(path,body)=>{ const r=await fetch(SYNC_URL+path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json",...(getAccountToken()?{Authorization:`Bearer ${getAccountToken()}`}:{})},...(body?{body:JSON.stringify(body)}:{})}); const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||`server returned ${r.status}`); return data; };
 const DEFAULT_LOCATION={name:"Sydney",region:"NSW",country:"Australia",latitude:-33.8688,longitude:151.2093,timezone:"Australia/Sydney"};
 const defaultAgendaRecurring=()=>[
-  {id:uid(),label:"Suggest app improvement / recommendation to the creator",everyDays:1,lastDone:addDays(todayKey,-1),source:"default"},
-  {id:uid(),label:"Call your mum",everyDays:7,lastDone:addDays(todayKey,-7),source:"default"}
+  {id:uid(),label:"Suggest app improvement / recommendation to the creator",everyDays:1,lastDone:addDays(todayKey,-1),source:"default"}
 ];
-const defaultAgendaEvents=()=>[
-  {id:uid(),label:"Example doctor appointment",date:addDays(todayKey,7),time:"09:30",source:"default"}
-];
+const defaultAgendaEvents=()=>[];
 const getLocationProfile=()=>{
   const raw=load("location",null);
   if(!raw||typeof raw!=="object") return DEFAULT_LOCATION;
@@ -2391,7 +2401,7 @@ function WeatherCard({data,busy,onGenerate}){
 /* sizing */
 const ROW=112, GAP=13;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
-const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:2,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:2},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:2,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
+const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
@@ -2459,6 +2469,7 @@ function App(){
   const [recallList,setRecallList]=useState(()=>load("recall",[]));
   const [gmat,setGmat]=useState(()=>gmatStateOf(load("gmat",null)));
   const [keyField,setKeyField]=useState(()=>getKey());
+  const [garminKeyField,setGarminKeyField]=useState(()=>load("garminKey",""));
   const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
   const [nameField,setNameField]=useState(()=>load("profileName","Fefe"));
   const [usernameField,setUsernameField]=useState(()=>load("profileUsername",""));
@@ -2607,6 +2618,12 @@ function App(){
   const view=daily||{};
   const [weather,setWeather]=useState(()=>load("weather",null));
   const [appDays,setAppDays]=useState(()=>load("appDays",[]));
+  useEffect(()=>{
+    if(weather) return;
+    let alive=true;
+    fetchWeather(getLocationProfile()).then(fresh=>{ if(alive){ setWeather(fresh); save("weather",fresh); } }).catch(()=>{});
+    return ()=>{ alive=false; };
+  },[]);
 
   /* Shared community content: pull the day's communal tiles (word/knowledge/spanish/music/
      news/brainflex/philo-prompt) generated once server-side for everyone. No personal key
@@ -2644,6 +2661,10 @@ function App(){
   const [agendaRecurring,setAgendaRecurring]=useState(()=>{
     let v=load("agendaRecurring",null);
     if(!v) v=[];
+    if(!load("agendaDefaultsV3",false)){
+      v=(Array.isArray(v)?v:[]).filter(r=>!/^(call your mum)$/i.test(String(r.label||"")));
+      save("agendaRecurring",v); save("agendaDefaultsV3",true);
+    }
     if(!load("agendaDefaultsV2",false)){
       const existing=new Set((Array.isArray(v)?v:[]).map(r=>String(r.label||"").toLowerCase()));
       const add=defaultAgendaRecurring().filter(r=>!existing.has(r.label.toLowerCase()));
@@ -2655,6 +2676,7 @@ function App(){
   const [agendaEvents,setAgendaEvents]=useState(()=>{
     let v=load("agendaEvents",[]);
     if(!Array.isArray(v)) v=[];
+    if(!load("agendaEventsDefaultsV3",false)){ v=v.filter(e=>!/^example doctor appointment$/i.test(String(e.label||""))); save("agendaEventsDefaultsV3",true); }
     if(!load("agendaDefaultsV2",false)){
       const existing=new Set(v.map(e=>String(e.label||"").toLowerCase()));
       const add=defaultAgendaEvents().filter(e=>!existing.has(e.label.toLowerCase()));
@@ -3053,6 +3075,7 @@ function App(){
     setProfileName(nextName);
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
+    save("garminKey",garminKeyField.trim());
     save("location",locationProfile);
   };
   const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
@@ -3247,7 +3270,7 @@ function App(){
     breathing: T("breathing","Breathing",!!rToday.breathing,null,
       <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} onIncomplete={()=>unsetRitual("breathing")} />),
     health: T("health","Health",false,null,
-      <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} onImport={importHealthJson} />),
+      <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} />),
     shopping: T("shopping","Shopping",shoppingLit,null,
       <ShoppingCard items={shoppingList} onChange={persistShopping} />),
     agenda: T("agenda","Reminders",agendaLit,null,
@@ -3314,8 +3337,10 @@ function App(){
               <p className="hint">Your greeting, AI features and backups all stay tied to this profile.</p>
               <div className="lab">Your name</div>
               <div className="srow"><input className="sinput" autoComplete="name" placeholder="Your name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
-              <div className="lab">Anthropic API key — powers the word, lesson, song & world tiles</div>
-              <div className="srow"><input className="sinput" type="password" placeholder="sk-ant-…" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
+              <div className="lab">Claude API key</div>
+              <div className="srow"><input className="sinput" type="password" placeholder="Same Claude key, if used" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
+              <div className="lab">Garmin Connect key</div>
+              <div className="srow"><input className="sinput" type="password" placeholder="Optional Garmin key" value={garminKeyField} onChange={e=>setGarminKeyField(e.target.value)} /></div>
             </section>
             <section className="settingsCard">
               <h4>Appearance</h4>
@@ -3372,9 +3397,8 @@ function App(){
                   <div className="srow" style={{marginTop:8}}><button className="savebtn" onClick={connectHealthToken} disabled={healthBusy}>{healthBusy?"…":"Connect Garmin"}</button></div>
                 </div>
               )}
-              <div className="lab">Manual JSON import</div>
+              <div className="lab">Connection help</div>
               <div className="srow">
-                <button className="ghostbtn" onClick={importHealthJson}>Import health JSON</button>
                 <button className="ghostbtn" onClick={()=>setShowHealthHelp(v=>!v)}>{showHealthHelp?"Hide tuto":"Tuto"}</button>
               </div>
               {showHealthHelp && <div className="settingsHelp">
@@ -3383,24 +3407,6 @@ function App(){
                   <li>Pick any secret token (8+ chars). Paste it above and press `Connect Garmin`.</li>
                   <li>Put the SAME token, plus your Garmin email &amp; password, into the script at `scripts/garmin_to_dashboard.py` (as secrets — never in the file).</li>
                   <li>Let it run on a schedule (the included GitHub Action, or your own cron). It pushes each day to the store; the dashboard pulls it in automatically.</li>
-                </ol>
-                <div className="hint" style={{marginTop:8}}>Manual JSON shape (per day, or a list of these)</div>
-                <pre style={{whiteSpace:"pre-wrap",fontSize:11,lineHeight:1.35,margin:"7px 0 0",color:"#4a5064"}}>{`{
-  "date": "29/07/2026",
-  "steps": 8420,
-  "sleepHours": 7.3,
-  "restingHeartRate": 58,
-  "activeEnergyKcal": 420,
-  "bodyBattery": 72,
-  "stress": 31,
-  "hrv": 48,
-  "workouts": [
-    {"type": "Running", "durationMinutes": 35, "calories": 310}
-  ]
-}`}</pre>
-                <ol className="settingsList">
-                  <li>Any field may be omitted; only `date` is required.</li>
-                  <li>Save as `.json`, then import it in the Health tile or here.</li>
                 </ol>
               </div>}
             </section>
@@ -3992,7 +3998,7 @@ function Sym({name,className}){ const p=HEALTH_ICONS[name]; if(!p) return null; 
 function HealthMetric({icon,value,unit,label}){
   return <div className="healthMetric"><Sym name={icon} className="metricIcon" /><b>{value}{value!=="—"&&unit?<span style={{fontSize:"9.5px",fontWeight:800}}>{unit}</span>:null}</b><span>{label}</span></div>;
 }
-function HealthCard({data,latest,onImport}){
+function HealthCard({data,latest}){
   const d=data||latest||null;
   const steps=d&&Number.isFinite(Number(d.steps))?Number(d.steps):null;
   const sleep=d&&Number.isFinite(Number(d.sleepHours))?Number(d.sleepHours):null;
@@ -4010,7 +4016,7 @@ function HealthCard({data,latest,onImport}){
           <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Garmin bridge"}</div>
           <div className="healthSteps">{steps!=null?steps.toLocaleString("en-GB"):"—"} <span><Sym name="steps" className="healthUnitIcon" />steps</span></div>
         </div>
-        <button className="ghostbtn healthSync" onClick={onImport}>{has?"Import":"Import JSON"}</button>
+        <span className="healthSync">{has?"Connected":"Not connected"}</span>
       </div>
       <div className="healthGrid">
         <HealthMetric icon="moon" value={sleep!=null?sleep.toFixed(1):"—"} unit="h" label="sleep" />
