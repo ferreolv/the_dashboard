@@ -1700,6 +1700,9 @@
   .tile[data-tileid="timer"][data-cols="1"] .timerActions,.tile[data-tileid="pushups"][data-cols="1"] .pushBtns{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;gap:6px!important}
   .tile[data-tileid="timer"][data-cols="1"] .timerBig{font-size:clamp(24px,13cqi,34px)!important}
   .tile>.libraryRemoveToday,.tile>.libraryAddToday{top:-14px!important;right:-14px!important;width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;border:2px solid var(--accent)!important;border-radius:50%!important;background:rgba(255,255,255,.94)!important;color:var(--accent)!important;box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12))!important;font-size:18px!important;line-height:1!important}
+  @media (min-width:761px){
+    .wrap,.topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.libraryShelves,.settings,.foot{max-width:none!important}
+  }
   </style>
 </head>
 <body>
@@ -1826,7 +1829,7 @@ function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&
 async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return false;
   try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
     const local=Number(localStorage.getItem("fefe_syncStamp")||0);
-    if(doc&&doc.updatedAt&&doc.data&&doc.updatedAt>local){
+    if(doc&&doc.data&&((doc.updatedAt&&doc.updatedAt>local)||(!local&&Object.keys(doc.data).length>0))){
       Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
       localStorage.setItem("fefe_syncStamp",String(doc.updatedAt)); return true; }
   }catch(e){}
@@ -2504,7 +2507,7 @@ function App(){
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
-  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
+  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); localStorage.removeItem("fefe_syncStamp"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
   const disconnectAccount=()=>{ localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); localStorage.removeItem("fefe_syncStamp"); localStorage.removeItem("fefe_healthToken"); location.reload(); };
   const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); disconnectAccount(); }catch(e){alert(e.message);} };
