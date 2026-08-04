@@ -1701,19 +1701,18 @@
   .tile[data-tileid="timer"][data-cols="1"] .timerActions,.tile[data-tileid="pushups"][data-cols="1"] .pushBtns{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important;gap:6px!important}
   .tile[data-tileid="timer"][data-cols="1"] .timerBig{font-size:clamp(24px,13cqi,34px)!important}
   .tile>.libraryRemoveToday,.tile>.libraryAddToday{top:-14px!important;right:-14px!important;width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;border:2px solid var(--accent)!important;border-radius:50%!important;background:rgba(255,255,255,.94)!important;color:var(--accent)!important;box-shadow:0 5px 13px color-mix(in srgb,var(--accent) 24%,rgba(36,32,55,.12))!important;font-size:18px!important;line-height:1!important}
-  /* Desktop uses more, smaller columns instead of stretching a few oversized cards.
-     This keeps a wide Windows display dense, while normal laptop and phone layouts
-     retain their comfortable proportions. */
+  /* Wide desktops favour a focused, zoomed-in canvas over a dense wall of cards.
+     The dashboard deliberately keeps fewer columns and gives each card more room. */
   @media (min-width:761px){
     .wrap{max-width:none!important;padding:16px clamp(18px,2.2vw,42px) 60px!important}
     .topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.libraryShelves,.settings,.foot{max-width:none!important}
-    .grid{gap:clamp(12px,1vw,16px)!important;grid-auto-rows:100px!important}
+    .grid{gap:clamp(13px,1vw,17px)!important;grid-auto-rows:116px!important}
   }
   @media (min-width:1600px){
-    .grid{grid-auto-rows:94px!important;gap:14px!important}
+    .grid{grid-auto-rows:124px!important;gap:16px!important}
   }
   @media (min-width:2200px){
-    .grid{grid-auto-rows:88px!important;gap:13px!important}
+    .grid{grid-auto-rows:132px!important;gap:17px!important}
   }
   </style>
 </head>
@@ -2417,7 +2416,7 @@ function WeatherCard({data,busy,onGenerate}){
 
 /* sizing */
 const ROW=112, GAP=13;
-const columnsForWidth=width=>width>=2400?10:width>=1600?8:width>=1000?6:width>=640?4:2;
+const columnsForWidth=width=>width>=2200?6:width>=1000?5:width>=640?4:2;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
