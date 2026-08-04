@@ -1714,6 +1714,65 @@
   @media (min-width:2200px){
     .grid{grid-auto-rows:132px!important;gap:17px!important}
   }
+  /* Responsive scale system: on larger screens the entire interface grows as a
+     coherent set. Cards get room, and their typography, navigation, controls and
+     visual anchors grow with them instead of sitting in a large empty shell. */
+  @media (min-width:1200px){
+    .topbar{min-height:64px!important;padding:9px 11px 9px 14px!important;border-radius:20px!important}
+    .navbtn{padding:10px 16px!important;font-size:12.5px!important}
+    .actionBtn{height:42px!important;padding-inline:16px!important;font-size:12.5px!important}
+    .dashboardHero{margin-bottom:28px!important}
+    .heroEyebrow{font-size:12px!important}.heroStatus{font-size:14px!important}
+    .progressOrb{width:82px!important;height:82px!important}.progressValue{font-size:16px!important}
+    .metric{min-width:92px!important;padding:12px 14px!important}.metricValue{font-size:17px!important}.metricLabel{font-size:10px!important}
+    .tile{padding:20px 21px 21px!important;border-radius:26px!important}
+    .tilehead{min-height:24px!important;margin-bottom:13px!important}
+    .tile .ldot{width:9px!important;height:9px!important}.tile .lbl{font-size:12px!important}
+    .tile .content{font-size:14.5px!important}
+    .tile :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:14.5px!important;padding:10px 13px!important}
+    .tile :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button){min-height:36px!important;font-size:12.5px!important;padding:7px 12px!important}
+    .tile .goalRow{gap:10px!important;padding:5px 0!important}.tile .goalRow .goalTick{width:24px!important;height:24px!important;min-height:24px!important}
+    .tile .goalText,.tile .agName{font-size:14px!important}.tile .agSub,.tile .agWhen{font-size:11px!important}
+    .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{padding:14px!important}
+    .tile[data-tileid="weather"] .weatherMeta,.tile[data-tileid="weather"] .weatherTomorrowLabel{font-size:11px!important}
+    .tile[data-tileid="weather"] .weatherTomorrowTemps{font-size:13px!important}
+  }
+  @media (min-width:1600px){
+    .topbar{min-height:70px!important;padding:11px 13px 11px 16px!important;border-radius:22px!important}
+    .topnav{padding:4px!important;border-radius:14px!important}.navbtn{padding:12px 20px!important;font-size:14px!important;border-radius:11px!important}
+    .actionBtn{height:46px!important;padding-inline:19px!important;font-size:13.5px!important;border-radius:13px!important}
+    .actionBtn svg{width:17px!important;height:17px!important}
+    .dashboardHero{margin-bottom:32px!important}.heroEyebrow{font-size:13px!important;margin-bottom:8px!important}
+    .dashboardHero h1{font-size:clamp(40px,3.1vw,56px)!important}.heroStatus{font-size:15px!important}
+    .heroSummary{gap:12px!important}.progressOrb{width:90px!important;height:90px!important}.progressValue{font-size:18px!important}
+    .metric{min-width:104px!important;padding:14px 16px!important;border-radius:16px!important}.metricValue{font-size:19px!important}.metricLabel{font-size:10.5px!important}
+    .grid{grid-auto-rows:136px!important;gap:18px!important}
+    .tile{padding:24px 25px 25px!important;border-radius:29px!important}
+    .tilehead{min-height:27px!important;margin-bottom:16px!important}.tile .ldot{width:10px!important;height:10px!important;box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 13%,transparent)!important}
+    .tile .lbl{font-size:13.5px!important}.tile .content{font-size:16px!important}
+    .tile :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:16px!important;padding:12px 15px!important;border-radius:14px!important}
+    .tile :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button){min-height:42px!important;font-size:14px!important;padding:9px 15px!important;border-radius:13px!important}
+    .tile .goalRow{gap:12px!important;padding:7px 0!important}.tile .goalRow .goalTick{width:27px!important;height:27px!important;min-height:27px!important;font-size:14px!important}
+    .tile .goalText,.tile .agName{font-size:15.5px!important}.tile .agSub,.tile .agWhen{font-size:12px!important}
+    .tile .taskAgenda{gap:10px!important}.tile .taskAgenda .agRow{padding:12px 14px!important;border-radius:16px!important}
+    .tile .timerBig{font-size:clamp(42px,6.2cqi,64px)!important}.tile .pushCount{font-size:clamp(38px,10cqi,58px)!important}
+    .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{padding:17px!important;border-radius:22px!important}
+    .tile[data-tileid="weather"] .weatherEmoji{font-size:clamp(42px,9cqi,62px)!important}.tile[data-tileid="weather"] .wbig{font-size:clamp(38px,9cqi,58px)!important}
+    .tile[data-tileid="weather"] .weatherMeta,.tile[data-tileid="weather"] .weatherTomorrowLabel{font-size:12px!important}.tile[data-tileid="weather"] .weatherTomorrowEmoji{font-size:31px!important}.tile[data-tileid="weather"] .weatherTomorrowTemps{font-size:14px!important}
+    .tile[data-tileid="breathing"] .breathStage{min-height:172px!important}.tile[data-tileid="breathing"] .breathProgress{width:clamp(130px,34cqi,178px)!important}.tile[data-tileid="breathing"] .breathProgress::before{width:calc(clamp(130px,34cqi,178px) - 8px)!important}.tile[data-tileid="breathing"] .breathOrb{width:clamp(90px,24cqi,126px)!important}.tile[data-tileid="breathing"] .breathPhase{font-size:clamp(28px,6cqi,40px)!important}.tile[data-tileid="breathing"] .breathCue{font-size:13px!important}
+    .tile[data-tileid="events"] .eventHero{padding:14px 16px!important;border-radius:20px!important}.tile[data-tileid="events"] .eventTitle{font-size:17px!important}.tile[data-tileid="events"] .eventDate{font-size:13px!important}
+  }
+  @container tile (min-width:420px){
+    .tile[data-tileid="habits"] .hgrid{gap:13px!important;justify-content:center!important}
+    .tile[data-tileid="habits"] .hsq{flex-basis:98px!important;width:98px!important;height:98px!important;min-width:98px!important;min-height:98px!important;max-width:98px!important;max-height:98px!important}
+    .tile[data-tileid="habits"] .hsq .hicon{font-size:29px!important}.tile[data-tileid="habits"] .hsq .hname{font-size:13.5px!important}.tile[data-tileid="habits"] .hdel{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;font-size:15px!important}
+    .tile[data-tileid="shopping"] .shopShelf{grid-template-columns:repeat(auto-fit,minmax(50px,60px))!important;gap:10px!important}.tile[data-tileid="shopping"] .shopIcon{font-size:25px!important}.tile[data-tileid="shopping"] .shoppingSection{padding:12px 13px!important;border-radius:18px!important}.tile[data-tileid="shopping"] .shopSectionLabel{font-size:10.5px!important}
+  }
+  @container tile (min-width:700px){
+    .tile[data-tileid="habits"] .hsq{flex-basis:116px!important;width:116px!important;height:116px!important;min-width:116px!important;min-height:116px!important;max-width:116px!important;max-height:116px!important}
+    .tile[data-tileid="habits"] .hsq .hicon{font-size:35px!important}.tile[data-tileid="habits"] .hsq .hname{font-size:15px!important}
+    .tile[data-tileid="shopping"] .shopShelf{grid-template-columns:repeat(auto-fit,minmax(56px,68px))!important;gap:12px!important}.tile[data-tileid="shopping"] .shopIcon{font-size:29px!important}
+  }
   </style>
 </head>
 <body>
