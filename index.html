@@ -555,6 +555,11 @@
   body { max-width:100%; overflow-x:hidden; color:var(--text); background:#dfe3e7 !important; }
   body.theme-neutral { background:#dfe3e7 !important; }
   body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff) !important; }
+  body.theme-aurora { background:radial-gradient(circle at 12% 8%,rgba(255,140,200,.50),transparent 34%),radial-gradient(circle at 88% 16%,rgba(120,150,255,.48),transparent 36%),radial-gradient(circle at 62% 94%,rgba(110,232,220,.44),transparent 42%),linear-gradient(140deg,#fdeefb,#eef0ff 50%,#e6fbff) !important; background-attachment:fixed !important; }
+  body.theme-sunset { background:radial-gradient(circle at 14% 6%,rgba(255,178,116,.52),transparent 36%),radial-gradient(circle at 86% 20%,rgba(255,126,150,.44),transparent 40%),radial-gradient(circle at 70% 96%,rgba(255,205,140,.40),transparent 42%),linear-gradient(150deg,#fff3e8,#ffe9ef 55%,#fff7ec) !important; background-attachment:fixed !important; }
+  body.theme-ocean { background:radial-gradient(circle at 12% 10%,rgba(118,200,255,.46),transparent 36%),radial-gradient(circle at 90% 18%,rgba(120,160,255,.42),transparent 40%),radial-gradient(circle at 70% 94%,rgba(126,240,214,.42),transparent 42%),linear-gradient(150deg,#edf7ff,#eafaff 55%,#f0fff8) !important; background-attachment:fixed !important; }
+  body.theme-paper { background:#f2ece2 !important; }
+  body.theme-graphite { background:linear-gradient(160deg,#c6ccd6,#d9dee5 60%,#cdd3dd) !important; background-attachment:fixed !important; }
   button,input,textarea { -webkit-tap-highlight-color:transparent; }
   button:focus-visible,input:focus-visible,textarea:focus-visible { outline:3px solid rgba(99,102,241,.22); outline-offset:2px; }
   .wrap { width:100%; max-width:1800px; margin:0 auto; padding:18px clamp(16px,3vw,42px) 72px; box-sizing:border-box; }
@@ -2630,9 +2635,10 @@ function App(){
   const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
 
   useEffect(()=>{
-    document.body.classList.toggle("theme-atmospheric",backgroundTheme==="atmospheric");
-    document.body.classList.toggle("theme-neutral",backgroundTheme!=="atmospheric");
-    return ()=>document.body.classList.remove("theme-atmospheric","theme-neutral");
+    const themes=["neutral","atmospheric","aurora","sunset","ocean","paper","graphite"];
+    themes.forEach(t=>document.body.classList.remove("theme-"+t));
+    document.body.classList.add("theme-"+(themes.includes(backgroundTheme)?backgroundTheme:"neutral"));
+    return ()=>themes.forEach(t=>document.body.classList.remove("theme-"+t));
   },[backgroundTheme]);
 
   /* pull remote state on load; reload once if it was newer */
@@ -3505,8 +3511,14 @@ function App(){
               <div className="lab">Dashboard background</div>
               <select className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
                 <option value="neutral">Neutral grey</option>
+                <option value="paper">Warm paper</option>
+                <option value="graphite">Soft graphite</option>
                 <option value="atmospheric">Soft colour wash</option>
+                <option value="aurora">Aurora (vivid)</option>
+                <option value="sunset">Sunset (warm)</option>
+                <option value="ocean">Ocean (cool)</option>
               </select>
+              <p className="hint" style={{marginTop:6}}>Tip: colourful canvases (Aurora, Sunset, Ocean) show the glass refraction best; Paper and Graphite are calmest for reading.</p>
             </section>
             <section className="settingsCard">
               <h4>Location</h4>
