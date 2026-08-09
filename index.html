@@ -1846,6 +1846,19 @@
   .tile[data-tileid="habits"][data-cols="2"] .hsq{width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;max-height:none!important;flex-basis:auto!important;aspect-ratio:1/1!important}
   .tile[data-tileid="habits"][data-cols="2"] .hsq .hicon{font-size:clamp(22px,8cqi,32px)!important}
   .tile[data-tileid="habits"][data-cols="2"] .hsq .hname{font-size:clamp(11px,3.6cqi,14px)!important}
+  /* Stats tile: a clear 14-day chart — visible day tracks (so empty days read),
+     gradient accent bars with depth, and a highlighted "today" column. */
+  .tile[data-tileid="weekly"] .chartSec{min-height:128px}
+  .tile[data-tileid="weekly"] .bars{min-height:78px;gap:clamp(3px,1.8cqi,7px);align-items:flex-end;margin-top:9px}
+  .tile[data-tileid="weekly"] .barcol{gap:5px}
+  .tile[data-tileid="weekly"] .barTrack{border-radius:7px!important;background:color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.34))!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 10%,transparent)}
+  .tile[data-tileid="weekly"] .bar{border-radius:7px!important;opacity:1!important;min-height:5px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 72%,#fff),var(--accent))!important;box-shadow:0 2px 8px color-mix(in srgb,var(--accent) 26%,transparent)!important}
+  .tile[data-tileid="weekly"] .barcol.today .barTrack{box-shadow:inset 0 0 0 1.6px color-mix(in srgb,var(--accent) 52%,#fff)}
+  .tile[data-tileid="weekly"] .barcol.today .bar{background:linear-gradient(180deg,#fff,var(--accent))!important}
+  .tile[data-tileid="weekly"] .barval{color:var(--accentDark)!important;font-weight:800}
+  .tile.completed[data-tileid="weekly"] .barTrack{background:rgba(255,255,255,.16)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+  .tile.completed[data-tileid="weekly"] .bar{background:#fff!important;box-shadow:none!important}
+  .tile.completed[data-tileid="weekly"] .barval{color:#fff!important}
   </style>
 </head>
 <body>

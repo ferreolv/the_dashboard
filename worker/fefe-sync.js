@@ -78,7 +78,7 @@ var sharedGen = {
 
   music: async (env, avoid) => {
     const base = await callClaude(env, "You output ONLY valid minified JSON, no markdown.",
-      `Recommend ONE specific, real recording that is critically or technically excellent yet UNDERRATED — something most people don't know but that a musicologist or serious critic would admire (craft, innovation, influence, musicianship). Deliberately vary widely across genres, eras and cultures every time (e.g. modal jazz, West African highlife, ambient, post-punk, bossa nova, baroque, experimental electronic, Appalachian folk, dub). It MUST be findable as a track in Apple Music. Give the exact released track title. "artist" is the complete recording credit (all named performers, ensemble and/or conductor as appropriate), not automatically the composer and not artificially reduced to one person. For classical music, include the work's composer separately in "composer"; otherwise "composer" may be empty. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ") || "none"}. Shape:{"title":"","artist":"","composer":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, 420).then(extractJSON);
+      `Recommend ONE specific, real recording that is critically or technically excellent yet UNDERRATED — most people don't know it, but a musicologist or serious critic would admire its craft, innovation, influence or musicianship. ROTATE THE GENRE FAMILY EVERY DAY across the whole world of music — e.g. soul, West African highlife, chamber pop, modal jazz, flamenco, qawwali, bossa nova, baroque, gospel, Afrobeat, country, funk, folk, chanson, R&B, string quartet, singer-songwriter, dub, post-punk. IMPORTANT: do NOT default to ambient, minimalist, drone, or experimental/electronic music — those are massively overused in these picks; unless it is genuinely the single best choice, prefer music with melody, voice, or acoustic instrumentation. Pick a genre from a clearly DIFFERENT family than EACH recent pick listed below (each shows its genre in brackets). It MUST be findable as a track in Apple Music. Give the exact released track title. "artist" is the complete recording credit (all named performers, ensemble and/or conductor as appropriate), not automatically the composer and not artificially reduced to one person. For classical music, include the work's composer separately in "composer"; otherwise "composer" may be empty. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ") || "none"}. Shape:{"title":"","artist":"","composer":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, 420).then(extractJSON);
     if (!base || !base.title) return base;
     const match = await resolveMusic(base).catch(() => null);
     return match ? { ...base, ...match } : base;
@@ -105,7 +105,7 @@ var sharedHistLabel = {
   word: (v) => v && v.term_en,
   worth: (v) => v && v.title,
   spanish: (v) => v && v.tema,
-  music: (v) => v && `${v.title} — ${v.artist}`,
+  music: (v) => v && `${v.title} — ${v.artist} [${v.genre || "?"}]`,
   world: (v) => Array.isArray(v) ? v.map((x) => x.headline) : null,
   brainflex: (v) => v && v.format,
   philo: (v) => v && v.theme
