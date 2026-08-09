@@ -1891,18 +1891,24 @@ function logicalDateKeyInZone(date,timeZone){
 }
 function collectState(){ const o={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) o[k]=localStorage.getItem(k); } return o; }
 let _pushT=null;
-function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return; clearTimeout(_pushT);
+/* Don't upload before this session has taken the latest cloud state at least once,
+   so a device can never push its stale local data over a newer cloud version. */
+let _pulledOnce=false;
+function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return; if(token&&!_pulledOnce) return; clearTimeout(_pushT);
   _pushT=setTimeout(async()=>{ try{ const stamp=Date.now();
     const r=token?await fetch(SYNC_URL+"/account/data",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({updatedAt:stamp,data:collectState()})}):await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
-    if(r.ok) localStorage.setItem("fefe_syncStamp",String(stamp));
+    if(r.ok){ const out=await r.json().catch(()=>null);
+      /* The server may keep a newer version and reject this push — trust its updatedAt. */
+      localStorage.setItem("fefe_syncStamp",String(out&&out.updatedAt!=null?out.updatedAt:stamp)); }
   }catch(e){} },3500); }
-async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return false;
-  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok) return false; const doc=await r.json();
+async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token){ _pulledOnce=true; return false; }
+  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok){ _pulledOnce=true; return false; } const doc=await r.json();
+    _pulledOnce=true;
     const local=Number(localStorage.getItem("fefe_syncStamp")||0);
     if(doc&&doc.data&&((doc.updatedAt&&doc.updatedAt>local)||(!local&&Object.keys(doc.data).length>0))){
       Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
       localStorage.setItem("fefe_syncStamp",String(doc.updatedAt)); return true; }
-  }catch(e){}
+  }catch(e){ _pulledOnce=true; }
   return false; }
 /* Pull the token's health days from the ingest store. Returns a {date:entry} map or null.
    Read-only: it never writes back, so it can't disturb anything the script pushed. */
@@ -2578,7 +2584,28 @@ function App(){
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
-  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{ const fresh=authMode==="signup"; const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword}); localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token); localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase()); localStorage.removeItem("fefe_syncId"); localStorage.removeItem("fefe_syncStamp"); if(fresh) for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } setAccountSignedIn(true); location.reload(); }catch(e){ alert(e.message); } setAuthBusy(false); };
+  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{
+    const fresh=authMode==="signup";
+    const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword});
+    localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token);
+    localStorage.setItem(ACCOUNT_EMAIL_KEY,data.email||authEmailField.trim().toLowerCase());
+    localStorage.removeItem("fefe_syncId"); localStorage.removeItem("fefe_syncStamp");
+    /* Remove this device's synced keys (secrets like the API key / health token are kept, being in SYNC_EXCLUDE). */
+    const wipeLocal=()=>{ for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)&&k!==ACCOUNT_TOKEN_KEY&&k!==ACCOUNT_EMAIL_KEY) localStorage.removeItem(k); } };
+    if(fresh){ wipeLocal(); }
+    else {
+      /* Cloud wins on login: adopt the account's stored data and drop this device's
+         divergent copy, so an old local version can never overwrite the account. */
+      const cloud=await accountRequest("/account/data").catch(()=>null);
+      if(cloud&&cloud.data&&Object.keys(cloud.data).length>0){
+        wipeLocal();
+        Object.entries(cloud.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
+        localStorage.setItem("fefe_syncStamp",String(cloud.updatedAt||Date.now()));
+      }
+      /* else: the account has no cloud data yet — keep this device's data so it seeds the account. */
+    }
+    setAccountSignedIn(true); location.reload();
+  }catch(e){ alert(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
   const disconnectAccount=()=>{ localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); localStorage.removeItem("fefe_syncStamp"); localStorage.removeItem("fefe_healthToken"); location.reload(); };
   const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); disconnectAccount(); }catch(e){alert(e.message);} };

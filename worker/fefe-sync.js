@@ -260,7 +260,17 @@ var index_default = {
       const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const key = `account:${account.email}`;
       if (request.method === "GET") return sharedJson(await env.SYNC.get(key, "json") || { updatedAt: 0, data: {} });
-      if (request.method === "POST") { const body = await request.json().catch(() => null); if (!body || typeof body !== "object") return sharedJson({ error: "Invalid data" }, 400); await env.SYNC.put(key, JSON.stringify(body)); return sharedJson({ ok: true }); }
+      if (request.method === "POST") {
+        const body = await request.json().catch(() => null);
+        if (!body || typeof body !== "object") return sharedJson({ error: "Invalid data" }, 400);
+        // Refuse stale writes: an older push must never overwrite a newer stored version.
+        const current = await env.SYNC.get(key, "json");
+        const stored = current && Number(current.updatedAt || 0);
+        const incoming = Number(body.updatedAt || 0);
+        if (stored && incoming < stored) return sharedJson({ ok: true, stored: false, updatedAt: stored });
+        await env.SYNC.put(key, JSON.stringify(body));
+        return sharedJson({ ok: true, stored: true, updatedAt: incoming });
+      }
       return sharedJson({ error: "Method not allowed" }, 405);
     }
     // ---- cross-device sync (legacy sync-code compatibility) ----
