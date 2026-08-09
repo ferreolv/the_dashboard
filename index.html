@@ -1919,19 +1919,28 @@
   .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushBtns{grid-template-columns:1fr 1fr!important}
   .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushBtns .puBtn{min-height:33px!important;padding:6px 4px!important;font-size:12.5px!important}
 
-  /* --- Goals: clearer day grouping, a highlighted "today" rail,
-         tidy rows, pill day-counts. --- */
-  .tile[data-tileid="goals"] .goalDay{padding:9px 11px;border-radius:15px;background:color-mix(in srgb,var(--accent) 5%,rgba(255,255,255,.30));border:1px solid color-mix(in srgb,var(--accent) 12%,transparent)}
-  .tile[data-tileid="goals"] .goalDay+.goalDay{margin-top:9px}
-  .tile[data-tileid="goals"] .goalDay:first-child{background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.34));border-color:color-mix(in srgb,var(--accent) 26%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
-  .tile[data-tileid="goals"] .goalDayHead{margin-bottom:5px}
-  .tile[data-tileid="goals"] .goalDayHead .muted{padding:1px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,rgba(255,255,255,.4));color:var(--accentDark);font-weight:850;font-size:10px!important;opacity:1}
-  .tile[data-tileid="goals"] .goalRow{align-items:center;gap:9px;padding:3px 3px;border-radius:10px}
-  .tile[data-tileid="goals"] .goalRow.done .goalText{opacity:.62;text-decoration:line-through}
+  /* --- Goals: built-in, airy day groups. No boxy cards — days are separated by
+         hairlines and generous spacing; "Today" is set apart by an accent header;
+         future days get a quiet collapsible add instead of a full input. --- */
+  .tile[data-tileid="goals"] .goalDay{padding:0 0 14px!important;margin:0 0 14px!important;background:none!important;border:0!important;border-bottom:1px solid color-mix(in srgb,var(--accent) 14%,var(--hair))!important;box-shadow:none!important;border-radius:0!important}
+  .tile[data-tileid="goals"] .goalDay:last-child{margin-bottom:0!important;padding-bottom:0!important;border-bottom:0!important}
+  .tile[data-tileid="goals"] .goalDayHead{align-items:center;margin-bottom:7px}
+  .tile[data-tileid="goals"] .goalDayHead .lbl{font-size:11px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}
+  .tile[data-tileid="goals"] .goalDay:first-child .goalDayHead .lbl{color:var(--accentDark);font-size:12.5px}
+  .tile[data-tileid="goals"] .goalDayHead .muted{padding:1px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.35));color:var(--accentDark);font-weight:850;font-size:10px!important;opacity:1}
+  .tile[data-tileid="goals"] .goalRow{align-items:center;gap:10px;padding:5px 2px;border-radius:9px}
+  .tile[data-tileid="goals"] .goalRow+.goalRow{margin-top:1px}
+  .tile[data-tileid="goals"] .goalRow.done .goalText{opacity:.6;text-decoration:line-through}
   .tile[data-tileid="goals"] .goalTick{flex:none;border-radius:7px}
-  .tile.completed[data-tileid="goals"] .goalDay{background:rgba(255,255,255,.13)!important;border-color:rgba(255,255,255,.22)!important;box-shadow:none!important}
-  .tile.completed[data-tileid="goals"] .goalDay:first-child{box-shadow:inset 3px 0 0 rgba(255,255,255,.62)!important}
+  .tile[data-tileid="goals"] .goalInputRow{margin-top:8px}
+  /* quiet collapsible add for non-today days */
+  .goalAddGhost{display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:4px 4px;border:0;background:none;color:var(--dim);font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:.02em;cursor:pointer;opacity:.7;transition:opacity .15s,color .15s}
+  .goalAddGhost:hover{opacity:1;color:var(--accentDark)}
+  .tile.completed[data-tileid="goals"] .goalDay{border-bottom-color:rgba(255,255,255,.22)!important}
+  .tile.completed[data-tileid="goals"] .goalDayHead .lbl{color:rgba(255,255,255,.82)!important}
+  .tile.completed[data-tileid="goals"] .goalDay:first-child .goalDayHead .lbl{color:#fff!important}
   .tile.completed[data-tileid="goals"] .goalDayHead .muted{background:rgba(255,255,255,.20)!important;color:#fff!important}
+  .tile.completed[data-tileid="goals"] .goalAddGhost{color:rgba(255,255,255,.8)!important}
 
   /* --- Weather: seat the icon in a soft disc, strengthen the reading,
          give the panels a gentle luminous fill. --- */
@@ -2105,6 +2114,7 @@ async function pullHealth(token){ const t=(token||getHealthToken()).trim(); if(!
 const pad=n=>String(n).padStart(2,"0");
 const dateKey=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const formatDateKey=key=>{ const [y,m,d]=String(key||"").split("-").map(Number); return y&&m&&d?`${pad(d)}/${pad(m)}/${y}`:""; };
+const WEEKDAY_NAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const parseDateKey=value=>{
   const s=String(value||"").trim();
   let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if(m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
@@ -3524,7 +3534,7 @@ function App(){
   const pushTotal14=push14.reduce((a,b)=>a+b,0); const pushAvg14=Math.round(pushTotal14/14);
   let goalsHit7=0; for(let i=0;i<7;i++){ (goalsLog[addDays(todayKey,-i)]||[]).forEach(g=>{ if(g.done) goalsHit7++; }); }
   const learned7=recallList.filter(f=>f.addedOn>=addDays(todayKey,-6)).length;
-  const planDl=k=> k===todayKey ? "Today" : formatDateKey(k);
+  const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
   const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
@@ -3544,7 +3554,7 @@ function App(){
       {[0,1,2,3].map(i=>{ const k=addDays(todayKey,i); const list=goalsFor(k); const isToday=i===0; return (
         <div key={k} className="goalDay" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();try{const d=JSON.parse(e.dataTransfer.getData("text/plain"));moveGoal(d.day,k,d.id);}catch(_){}}}>
           <div className="goalDayHead">
-            <span className="lbl" style={isToday?{color:"var(--ink)",fontSize:11}:null}>{planDl(k)}</span>
+            <span className="lbl">{planDl(k)}</span>
             {list.length>0 && <span className="muted" style={{fontSize:11}}>{list.filter(g=>g.done).length}/{list.length}</span>}
           </div>
           {list.map(g=>(<div key={g.id} draggable className={"goalRow"+(g.done?" done":"")+(!g.carried&&!g.done?" fresh":"")} style={{cursor:"grab"}} onClick={e=>e.stopPropagation()} onDragStart={e=>e.dataTransfer.setData("text/plain",JSON.stringify({day:k,id:g.id}))}>
@@ -3873,8 +3883,13 @@ function App(){
 }
 
 /* inputs */
-function GoalInput({onAdd,placeholder,compact}){ const [v,setV]=useState(""); const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); } };
-  return <div className="addrow goalInputRow" style={compact?{opacity:.85}:null}><input className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onClick={s}>+</button></div>; }
+function GoalInput({onAdd,placeholder,compact}){
+  const [v,setV]=useState(""); const [open,setOpen]=useState(!compact); const ref=useRef(null);
+  const s=()=>{ const t=v.trim(); if(t){ onAdd(t); setV(""); if(ref.current) ref.current.focus(); } };
+  // Compact (future days): a quiet "+ add" that expands to an input only when
+  // tapped, then folds back if left empty — keeps the plan rows from cluttering.
+  if(compact && !open) return <button className="goalAddGhost" onClick={()=>setOpen(true)}>＋ add</button>;
+  return <div className="addrow goalInputRow"><input ref={ref} autoFocus={compact} className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") s(); if(e.key==="Escape"){ setV(""); if(compact) setOpen(false); } }} onBlur={()=>{ if(compact&&!v.trim()) setOpen(false); }} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onMouseDown={e=>e.preventDefault()} onClick={s}>+</button></div>; }
 function HabitAdd({onAdd}){
   const [open,setOpen]=useState(false), [emoji,setEmoji]=useState(""), [label,setLabel]=useState("");
   const close=()=>{ setOpen(false); setEmoji(""); setLabel(""); };
