@@ -194,7 +194,10 @@ var index_default = {
     const cors = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, X-Sync-Code"
+      // Authorization must be allowed here or the browser blocks every
+      // authenticated request (account data sync, password, delete) at the
+      // CORS preflight with a "Load failed" network error.
+      "Access-Control-Allow-Headers": "Content-Type, X-Sync-Code, Authorization"
     };
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
     const url = new URL(request.url);
