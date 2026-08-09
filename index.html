@@ -2685,7 +2685,22 @@ function App(){
   }catch(e){ alert(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
   const disconnectAccount=()=>{ localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); localStorage.removeItem("fefe_syncStamp"); localStorage.removeItem("fefe_healthToken"); location.reload(); };
-  const deleteAccount=async()=>{ if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return; try{ await accountRequest("/auth/delete",{}); disconnectAccount(); }catch(e){alert(e.message);} };
+  const [deleteBusy,setDeleteBusy]=useState(false);
+  const deleteAccount=async()=>{
+    if(deleteBusy) return;
+    if(!confirm("Delete this dashboard account and all of its stored cloud data? This cannot be undone.")) return;
+    setDeleteBusy(true);
+    try{
+      await accountRequest("/auth/delete",{});
+      alert("Account deleted. You'll be signed out.");
+      disconnectAccount();
+    }catch(e){
+      setDeleteBusy(false);
+      /* Surface the real reason (e.g. an out-of-date Worker returning 404/405),
+         and let the user still sign out locally if they want. */
+      if(confirm("Couldn't delete on the server: "+e.message+"\n\nSign out on this device anyway?")) disconnectAccount();
+    }
+  };
 
   const enableSync=async()=>{ const code=syncField.trim();
     if(code.length<6){ alert("Pick a code of at least 6 characters (letters, numbers, - or _)."); return; }
@@ -3608,7 +3623,7 @@ function App(){
               </div>
               {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={disconnectAccount}>Disconnect account</button>}
               <div className="srow" style={{marginTop:11}}><input id="account-new-password" className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
-              <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount}>Delete account</button>
+              <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount} disabled={deleteBusy}>{deleteBusy?"Deleting…":"Delete account"}</button>
               <div className="lab">Backup & restore</div>
               <div className="srow">
                 <button className="ghostbtn" onClick={exportBackup}>Download backup</button>
