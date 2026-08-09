@@ -863,7 +863,7 @@
   .tile .qopt{width:100%}
   .tile .tabbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(108px,100%),1fr))}
   .tile .tabbar .tab{width:100%}
-  .tile .hgrid{grid-template-columns:repeat(auto-fit,minmax(min(76px,100%),1fr))}
+  .tile .hgrid{grid-template-columns:repeat(auto-fill,minmax(min(76px,100%),1fr))}
   .tile .timerSteppers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(64px,100%),1fr))}
   .tile .timerSteppers .puBtn{width:100%}
   .tile .timerBig{font-size:clamp(25px,12cqi,38px);overflow-wrap:anywhere}
@@ -883,7 +883,7 @@
   .tile .peopleAddRow .addbtn,.tile .birthdayAddRow .addbtn{width:36px}
   .tile[data-cols="1"]{padding:14px}
   .tile[data-cols="1"] .tilehead{margin-bottom:9px}
-  .tile[data-cols="1"] .hgrid{grid-template-columns:repeat(auto-fit,minmax(min(66px,100%),1fr))}
+  .tile[data-cols="1"] .hgrid{grid-template-columns:repeat(auto-fill,minmax(min(66px,100%),1fr))}
   .tile[data-rows="1"]{padding-top:12px;padding-bottom:12px}
   .tile[data-rows="1"] .tilehead{margin-bottom:5px}
   .tile[data-rows="1"] .content{padding-bottom:8px}
@@ -2559,7 +2559,7 @@ const ROW=112, GAP=13;
    centred with a max-width) rather than adding a 6th column and rearranging. */
 const columnsForWidth=width=>width>=1000?5:width>=640?4:2;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
-const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:2,r:2},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
+const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:2,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
@@ -3301,8 +3301,12 @@ function App(){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","music","world","breathing","gmat"];
-  const ritualOK=k=>{ const r=ritualLog[k]||{}, active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:!!r[id]); };
+  const ritualScoreIds=["word","worth","spanish","music","world","breathing","gmat","note","recall","brainflex","philo"];
+  /* A scored tile counts as done if it was completed naturally (rToday) OR simply
+     clicked to full colour (manualTileDone) — e.g. GMAT done outside the app. */
+  const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
+  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return !!r[id]||!!manualDoneFor(k)[id]; };
+  const ritualOK=k=>{ const active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:ritualDoneOn(k,id)); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
   const isPerfectDay=k=>{ const active=activeForDay(k), checks=[];
@@ -3342,7 +3346,7 @@ function App(){
   const activeNow=new Set(activeTiles);
   const scoredRituals=ritualScoreIds.filter(id=>activeNow.has(id));
   const litTotal=scoredRituals.length+(activeNow.has("habits")?habits.length:0)+(activeNow.has("goals")?goals.length:0);
-  const litDone=scoredRituals.filter(id=>rToday[id]).length+(activeNow.has("habits")?habits.filter(h=>hToday[h.id]).length:0)+(activeNow.has("goals")?goals.filter(g=>g.done).length:0);
+  const litDone=scoredRituals.filter(id=>rToday[id]||manualTileDone[id]).length+(activeNow.has("habits")?habits.filter(h=>hToday[h.id]).length:0)+(activeNow.has("goals")?goals.filter(g=>g.done).length:0);
   const pctLit=litTotal?Math.round(litDone/litTotal*100):0;
   const ice=iceState();
   const expectedGenKeys=ALL_GEN_KEYS.filter(k=>activeNow.has(k)&&(k!=="academic"||courses.length>0));
