@@ -456,6 +456,8 @@
   .gmatOption.correct .gmatLetter { background:#24a66a; color:#fff; }
   .gmatOption.wrong .gmatLetter { background:#e15a75; color:#fff; }
   .gmatFeedback { margin-top:14px; padding:13px 14px; border-left:4px solid var(--gm); border-radius:12px; background:#f0edff; color:#5d5684; font-size:11.5px; line-height:1.5; }
+  .gmatReport { display:inline-block; margin-top:9px; padding:0; border:0; background:none; color:#8a6d2f; font:800 10.5px/1.2 'Nunito',sans-serif; cursor:pointer; opacity:.72; }
+  .gmatReport:hover { opacity:1; text-decoration:underline; }
   .gmatErrorWrap { margin-top:14px; }
   .gmatPromptLabel { margin-bottom:7px; color:#746d99; font-size:9px; font-weight:950; letter-spacing:.07em; text-transform:uppercase; }
   .gmatChips { display:flex; flex-wrap:wrap; gap:6px; }
@@ -1840,12 +1842,27 @@
   .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{height:100%!important}
   .tile[data-tileid="weather"] .weatherNow{display:flex!important;align-items:center!important;gap:14px!important}
   .tile[data-tileid="weather"] .wtomorrow{justify-content:center!important}
-  /* Habits: keep the circles big but stack four per row in a 2-unit-wide tile
-     (tight gap so each circle is as large as the cell allows). */
-  .tile[data-tileid="habits"][data-cols="2"] .hgrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;justify-content:stretch!important;align-content:start!important}
-  .tile[data-tileid="habits"][data-cols="2"] .hsq{width:auto!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:0!important;max-height:none!important;flex-basis:auto!important;aspect-ratio:1/1!important}
-  .tile[data-tileid="habits"][data-cols="2"] .hsq .hicon{font-size:clamp(22px,8cqi,32px)!important}
-  .tile[data-tileid="habits"][data-cols="2"] .hsq .hname{font-size:clamp(11px,3.6cqi,14px)!important}
+  /* Habits: ONE authoritative layout that overrides every earlier fixed-width /
+     flex rule. A uniform auto-fill grid — every circle is identical, they stack
+     neatly and wrap to as many per row as the tile width allows, at any column
+     span. auto-fill (not auto-fit) keeps circles from stretching when few. */
+  .tile[data-tileid="habits"] .hgrid{
+    display:grid!important;
+    grid-template-columns:repeat(auto-fill,minmax(clamp(62px,19cqi,92px),1fr))!important;
+    gap:clamp(7px,2.6cqi,13px)!important;
+    align-content:start!important;justify-content:start!important;
+    width:100%!important;height:auto!important;overflow:visible!important;
+  }
+  .tile[data-tileid="habits"] .hsq{
+    width:auto!important;min-width:0!important;max-width:none!important;
+    height:auto!important;min-height:0!important;max-height:none!important;
+    flex:initial!important;flex-basis:auto!important;
+    aspect-ratio:1/1!important;border-radius:50%!important;
+  }
+  .tile[data-tileid="habits"] .hsq .hicon{font-size:clamp(20px,7.5cqi,31px)!important}
+  .tile[data-tileid="habits"] .hsq .hname{font-size:clamp(10px,2.7cqi,13px)!important;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* the plus/add cell follows the same footprint so the grid stays even */
+  .tile[data-tileid="habits"] .hsq.plus{aspect-ratio:1/1!important}
   /* Stats tile: a clear 14-day chart — visible day tracks (so empty days read),
      gradient accent bars with depth, and a highlighted "today" column. */
   .tile[data-tileid="weekly"] .chartSec{min-height:128px}
@@ -1880,13 +1897,13 @@ const COL = {
   spanish:  {p:"#FFE4EB", v:"#FF3D77", d:"#B01E4E"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
-  pushups:  {p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
+  pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
   weather:  {p:"#DDF4FF", v:"#00B4DC", d:"#0E6E8C"},
   world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
   recall:   {p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
   weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
-  birthdays:{p:"#FFE3F0", v:"#FF4FA3", d:"#AC2A6C"},
+  birthdays:{p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
   timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
   breathing:{p:"#DCF7F6", v:"#0DB9B1", d:"#08736E"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
@@ -1897,7 +1914,7 @@ const COL = {
   brainflex:{p:"#FFF0D8", v:"#FF9A2E", d:"#B0560F"},
   philo:    {p:"#E8F4FF", v:"#178FE5", d:"#0B5D99"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
-  shopping: {p:"#FFF6D8", v:"#F2B705", d:"#7A5A00"},
+  shopping: {p:"#DDEFDC", v:"#3E9E5B", d:"#256B39"},
   health:   {p:"#E1F7EC", v:"#18B96E", d:"#0C7042"},
 };
 /* Every dashboard tile shares the same reversible full-colour presentation.
@@ -1926,7 +1943,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
 const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
-const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo"]);
+const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo","gmat"]);
 /* Garmin (and any scripted health source) push daily summaries to this token-keyed
    store; the dashboard pulls them in on load and merges into the local health log.
    Its own little Worker — separate from sync so a script write can never clobber the
@@ -2402,7 +2419,9 @@ const GMAT_SECTIONS={
   verbal:{name:"Verbal",full:"Verbal Reasoning",mark:"V",target:115},
   data:{name:"Data",full:"Data Insights",mark:"DI",target:135}
 };
-const GMAT_QUESTIONS=[
+/* Curated bank — the always-available fallback if the AI daily lesson hasn't
+   loaded (offline, first paint, or a generation hiccup). */
+const GMAT_QUESTIONS_BASE=[
   {id:"q-profit",section:"quant",skill:"Percents & ratios",type:"Problem solving",target:120,prompt:"A company’s revenue rises from $100,000 to $120,000 while costs rise from $60,000 to $66,000. By what percent does profit increase?",options:["20%","30%","35%","40%","45%"],answer:2,explain:"Profit rises from $40,000 to $54,000. The $14,000 increase is 35% of the original $40,000 profit."},
   {id:"q-work",section:"quant",skill:"Rates & averages",type:"Problem solving",target:120,prompt:"Machine A completes a job in 6 hours and Machine B in 4 hours. Working together at constant rates, how many hours do they need?",options:["2","2.4","2.5","3","5"],answer:1,explain:"Their combined hourly rate is 1/6 + 1/4 = 5/12 of the job, so time is 12/5 = 2.4 hours."},
   {id:"q-remainder",section:"quant",skill:"Numbers & algebra",type:"Problem solving",target:135,prompt:"What is the least positive integer that leaves remainder 2 when divided by 5 and remainder 4 when divided by 7?",options:["12","18","25","32","39"],answer:3,explain:"Numbers congruent to 2 mod 5 are 2, 7, 12, 17, 22, 27, 32… and 32 leaves remainder 4 when divided by 7."},
@@ -2422,6 +2441,51 @@ const GMAT_QUESTIONS=[
   {id:"d-twopart",section:"data",skill:"Sufficiency & constraints",type:"Two-part analysis",target:140,prompt:"A firm sells Basic units for $30 and Pro units for $50. It sells 100 units for $3,800 total. How many Basic and Pro units are sold?",options:["70 Basic, 30 Pro","60 Basic, 40 Pro","55 Basic, 45 Pro","50 Basic, 50 Pro","40 Basic, 60 Pro"],answer:1,explain:"Let Pro = p. Then 30(100−p)+50p=3,800, so 20p=800 and p=40; Basic=60."},
   {id:"d-synthesis",section:"data",skill:"Multi-source synthesis",type:"Data synthesis",target:125,prompt:"A portfolio is 40% Fund X returning 8% and 60% Fund Y returning −2%. What is the portfolio’s overall return?",options:["0.8%","1.2%","2.0%","3.2%","6.0%"],answer:2,explain:"The weighted return is .40(8%) + .60(−2%) = 3.2% − 1.2% = 2.0%."}
 ];
+/* The live pool. GMAT_QUESTIONS is reassigned in place when the AI daily lesson
+   arrives (fresh questions first, curated bank behind), so every consumer —
+   session builder, focus picker, analytics, mistake review — keeps working with
+   no changes. Flagged questions (reported as wrong) are filtered out. */
+let GMAT_AI_QUESTIONS=[];
+let GMAT_FLAGGED=(()=>{ try{ return load("gmatFlagged",[]); }catch(e){ return []; } })();
+let GMAT_QUESTIONS=GMAT_QUESTIONS_BASE.slice();
+const GMAT_SECTION_TARGET={quant:120,verbal:120,data:130};
+function rebuildGmatPool(){
+  const flagged=new Set(GMAT_FLAGGED);
+  GMAT_QUESTIONS=[...GMAT_AI_QUESTIONS,...GMAT_QUESTIONS_BASE].filter(q=>!flagged.has(q.id));
+  if(!GMAT_QUESTIONS.length) GMAT_QUESTIONS=GMAT_QUESTIONS_BASE.slice();
+}
+function normalizeGmatAI(list,dateKey){
+  if(!Array.isArray(list)) return [];
+  const out=[];
+  list.forEach((raw,i)=>{
+    if(!raw||typeof raw!=="object") return;
+    const section=["quant","verbal","data"].includes(raw.section)?raw.section:"quant";
+    const options=Array.isArray(raw.options)?raw.options.map(o=>String(o)).filter(Boolean):[];
+    let answer=Number(raw.answer);
+    if(options.length<2||!(answer>=0&&answer<options.length)) return; // skip malformed
+    const prompt=String(raw.prompt||"").trim(); if(!prompt) return;
+    out.push({
+      id:"ai-"+dateKey+"-"+i,
+      section,
+      skill:String(raw.skill||GMAT_SECTIONS[section].name).slice(0,60),
+      type:String(raw.type||"Problem solving").slice(0,40),
+      target:Number(raw.target)>0?Number(raw.target):GMAT_SECTION_TARGET[section],
+      prompt,
+      options,
+      answer,
+      explain:String(raw.explain||"").trim()||"See the worked reasoning above.",
+      ai:true,
+      genDate:dateKey,
+    });
+  });
+  return out;
+}
+function flagGmatQuestion(id){
+  if(!id||GMAT_FLAGGED.includes(id)) return;
+  GMAT_FLAGGED=[...GMAT_FLAGGED,id].slice(-300);
+  try{ save("gmatFlagged",GMAT_FLAGGED); }catch(e){}
+  rebuildGmatPool();
+}
 const defaultGmatState=()=>({version:1,examDate:"",weeklyGoal:180,history:[],sessions:[],memory:{},mocks:[]});
 const gmatStateOf=state=>({...defaultGmatState(),...(state||{}),history:Array.isArray(state&&state.history)?state.history:[],sessions:Array.isArray(state&&state.sessions)?state.sessions:[],memory:(state&&state.memory)||{},mocks:Array.isArray(state&&state.mocks)?state.mocks:[]});
 const gmatHistoryFor=(state,id)=>gmatStateOf(state).history.filter(h=>h.questionId===id);
@@ -2572,7 +2636,7 @@ const ROW=112, GAP=13;
    centred with a max-width) rather than adding a 6th column and rearranging. */
 const columnsForWidth=width=>width>=1000?5:width>=640?4:2;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
-const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:2,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
+const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:1,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
@@ -2823,6 +2887,16 @@ function App(){
   };
 
   const [daily,setDaily]=useState(()=>load("daily:"+todayKey, null));
+  /* Merge the AI daily GMAT lesson into the live question pool whenever it
+     arrives. Fresh questions surface first (the priority model favours unseen
+     ones); analytics, recap and mistake-repair keep working unchanged. */
+  const [gmatPoolVersion,setGmatPoolVersion]=useState(0);
+  useEffect(()=>{
+    const list=daily&&daily.gmat;
+    const next=normalizeGmatAI(list,todayKey);
+    const changed=JSON.stringify(next.map(q=>q.prompt))!==JSON.stringify(GMAT_AI_QUESTIONS.map(q=>q.prompt));
+    if(changed){ GMAT_AI_QUESTIONS=next; rebuildGmatPool(); setGmatPoolVersion(v=>v+1); }
+  },[daily]);
   const haveKey=!!getKey();
   const view=daily||{};
   const [weather,setWeather]=useState(()=>load("weather",null));
@@ -4441,6 +4515,13 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
       setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now());
     }
   };
+  const reportBad=()=>{
+    if(!current)return;
+    flagGmatQuestion(current.id);
+    const last=session.index>=session.questionIds.length-1;
+    if(last){ setSession({...session,complete:true}); onComplete(); }
+    else{ setSession({...session,index:session.index+1}); setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now()); }
+  };
   const addMock=()=>{
     const total=Number(mockForm.total), quant=Number(mockForm.quant), verbal=Number(mockForm.verbal), data=Number(mockForm.data);
     if(total<205||total>805||[quant,verbal,data].some(n=>n<60||n>90)){ alert("Use a total score from 205–805 and section scores from 60–90."); return; }
@@ -4458,7 +4539,7 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
   return <div className="ovl gmatOverlay" onClick={onClose}>
     <div className="ovlcard gmatWorkspace" onClick={e=>e.stopPropagation()}>
       <div className="gmatTop">
-        <div className="gmatBrand"><div className="gmatBrandMark">GMAT</div><div><h2>GMAT workspace</h2><p>Adaptive practice · original questions · FSRS review</p></div></div>
+        <div className="gmatBrand"><div className="gmatBrandMark">GMAT</div><div><h2>GMAT workspace</h2><p>Fresh daily lesson · adaptive practice · FSRS review</p></div></div>
         <button className="gmatClose" aria-label="Close GMAT workspace" onClick={onClose}>×</button>
       </div>
       <div className="gmatBody">
@@ -4496,7 +4577,7 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
               <div className="gmatDueList">{dueSkills.length?dueSkills.map(([skill,m])=><div className="gmatDueRow" key={skill}><b>{skill}</b><span>{m.nextReview&&m.nextReview<todayKey?"overdue":"today"}</span></div>):<div className="gmatEmpty">No learned skills are due yet. Your first sprint creates the schedule.</div>}</div>
             </section>
             <section className="gmatPanel">
-              <h3>Practice source</h3><p className="gmatPanelSub">Questions here are original training material, not official GMAT questions. Use official mocks for score estimates.</p>
+              <h3>Practice source</h3><p className="gmatPanelSub">A new AI-written lesson is generated every day, with a curated bank as backup. These are original training questions, not official GMAT items — use official mocks for score estimates. Hit “Report a wrong question” on anything that looks off.</p>
               <div className="gmatHeroActions"><a className="gmatBtn soft" href="https://www.mba.com/exam-prep/gmat-official-starter-kit" target="_blank" rel="noreferrer">Official practice ↗</a></div>
             </section>
           </div>
@@ -4512,7 +4593,7 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
           <div className="gmatSessionProgress"><span style={{width:`${(session.index+(selected!==null ? 0.45 : 0))/session.questionIds.length*100}%`}}/></div>
           <p className="gmatQuestion">{current.prompt}</p>
           <div className="gmatOptions">{current.options.map((option,i)=>{ let cls="gmatOption"; if(selected!==null){ if(i===current.answer)cls+=" correct"; else if(i===selected)cls+=" wrong"; else cls+=" dim"; } return <button className={cls} disabled={selected!==null} key={i} onClick={()=>choose(i)}><span className="gmatLetter">{answerLetters[i]}</span><span>{option}</span></button>; })}</div>
-          {selected!==null&&<><div className="gmatFeedback"><b>{selected===current.answer?"Correct.":"Not quite."}</b> {current.explain}</div>
+          {selected!==null&&<><div className="gmatFeedback"><b>{selected===current.answer?"Correct.":"Not quite."}</b> {current.explain}{current.ai&&<button className="gmatReport" type="button" onClick={reportBad} title="Hide this question and skip it — it won't come back">⚑ Report a wrong question</button>}</div>
             {selected!==current.answer&&<div className="gmatErrorWrap"><div className="gmatPromptLabel">What broke?</div><div className="gmatChips">{["Concept","Setup","Calculation","Timing","Trap"].map(reason=><button className={"gmatChip"+(errorType===reason?" on":"")} key={reason} onClick={()=>setErrorType(reason)}>{reason}</button>)}</div></div>}
             <div className="gmatPromptLabel" style={{marginTop:14,marginBottom:0}}>How did the reasoning feel?</div>
             <div className="gmatFeelings">{[

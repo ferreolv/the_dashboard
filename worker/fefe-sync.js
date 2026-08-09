@@ -9,7 +9,7 @@
 // namespaced `shared:*` so they never collide with the `dashboard:<code>` sync blobs.
 
 /* ---------------- shared-content config ---------------- */
-var SHARED_KEYS = ["word", "worth", "spanish", "music", "world", "brainflex", "philo"];
+var SHARED_KEYS = ["word", "worth", "spanish", "music", "world", "brainflex", "philo", "gmat"];
 var MODEL = "claude-haiku-4-5-20251001";
 var TZ = "Europe/Paris"; // the shared "day" flips at local midnight here
 var RSS_FEEDS = [
@@ -98,7 +98,12 @@ var sharedGen = {
     `Create ONE hard, self-contained thinking game for a smart 24-year-old. It must be playable mentally or by choosing or manipulating a few options, never an essay or writing exercise. Vary sharply from recent formats: ${(avoid || []).join(" | ") || "none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, counterfactual choices, ranking constraints, code-breaking, mental maths or lateral riddles. Vary domain and reasoning skill. Shape:{"format":"2-4 word game name","prompt":"concise challenge with all needed information and no hint","solution":"worked answer or decisive insight"}.`, 500).then(extractJSON),
 
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
-    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, 220).then(extractJSON)
+    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, 220).then(extractJSON),
+
+  gmat: (env, avoid) => callClaude(env,
+    "You are a meticulous GMAT item writer. You output ONLY a valid minified JSON array, no markdown. Accuracy of the answer key is paramount: solve every question yourself step by step BEFORE writing options, make sure EXACTLY ONE option is correct, and set \"answer\" to that option's 0-based index. If unsure a question is airtight, replace it with a simpler one you can fully verify.",
+    `Write today's GMAT practice lesson: 6 fresh, original, self-contained multiple-choice questions for a serious test-taker — 2 Quantitative Reasoning ("quant"), 2 Verbal Reasoning ("verbal"), and 2 Data Insights ("data"). Cover a spread of skills and vary from recent lessons; avoid re-using these skills/topics: ${(avoid || []).join(" | ") || "none"}. Requirements: each question fully self-contained (all data needed is in the prompt — no external tables/images); realistic GMAT difficulty (medium-to-hard); 5 options for quant and data, 4 or 5 for verbal; distractors must be plausible and reflect real mistakes, never absurd. Verbal = critical reasoning or reading-style inference stated inline. Data Insights = quantitative reasoning over numbers given in the prompt (two-part, table-style described in words, or data sufficiency). Each "explain" is 1-2 sentences giving the decisive reasoning. Output a JSON array of exactly 6 objects, each: {"section":"quant|verbal|data","skill":"3-5 word skill tag","type":"e.g. Problem solving / Critical reasoning / Data sufficiency","target":seconds_as_integer,"prompt":"","options":["",""],"answer":0,"explain":""}. "target" is a realistic per-question time in seconds (quant ~120, verbal ~110, data ~135).`,
+    2200).then(extractJSON).then((a) => Array.isArray(a) ? a : null)
 };
 
 var sharedHistLabel = {
@@ -108,7 +113,8 @@ var sharedHistLabel = {
   music: (v) => v && `${v.title} — ${v.artist} [${v.genre || "?"}]`,
   world: (v) => Array.isArray(v) ? v.map((x) => x.headline) : null,
   brainflex: (v) => v && v.format,
-  philo: (v) => v && v.theme
+  philo: (v) => v && v.theme,
+  gmat: (v) => Array.isArray(v) ? v.map((x) => x && x.skill).filter(Boolean) : null
 };
 
 /* ---------------- news (server-side RSS, no CORS) ---------------- */
