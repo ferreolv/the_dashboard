@@ -1779,12 +1779,14 @@
      the surface read as real refracting glass rather than flat translucency. */
   .tile{
     background:linear-gradient(150deg,
-      color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.46)),
-      color-mix(in srgb,var(--accent) 5%,rgba(255,255,255,.14)))!important;
+      color-mix(in srgb,var(--accent) 9%,rgba(255,255,255,.22)),
+      color-mix(in srgb,var(--accent) 5%,rgba(255,255,255,.05)))!important;
+    -webkit-backdrop-filter:blur(17px) saturate(185%)!important;
+    backdrop-filter:blur(17px) saturate(185%)!important;
     box-shadow:
       0 8px 24px color-mix(in srgb,var(--accent) 9%,rgba(40,36,72,.06)),
-      inset 0 1px 1px rgba(255,255,255,.9),
-      inset 0 -14px 26px color-mix(in srgb,var(--accent) 9%,transparent)!important;
+      inset 0 1px 1px rgba(255,255,255,.7),
+      inset 0 -14px 26px color-mix(in srgb,var(--accent) 8%,transparent)!important;
   }
   .tile::after{
     opacity:.92!important;
