@@ -370,6 +370,11 @@
   .timerWrap.isRunning .timerRingFg { stroke:var(--accent); }
   .timerWrap.isPaused .timerRingFg { stroke:color-mix(in srgb,var(--accent) 55%,#9aa0ad); }
   .timerWrap.isFired .timerDialTime { color:var(--accent); }
+  /* vivid (completed / fired) state: white ring + white face on the bordeaux fill */
+  .tile.completed[data-tileid="timer"] .timerRingBg { stroke:rgba(255,255,255,.28)!important; }
+  .tile.completed[data-tileid="timer"] .timerRingFg { stroke:#fff!important; filter:drop-shadow(0 2px 6px rgba(0,0,0,.18))!important; }
+  .tile.completed[data-tileid="timer"] .timerDialTime { color:#fff!important; }
+  .tile.completed[data-tileid="timer"] .timerSub { color:rgba(255,255,255,.82)!important; }
 
   /* ---- agenda tile ---- */
   .agRow { display:flex; align-items:center; gap:9px; padding:7px 0; border-bottom:1px solid var(--hair); }
@@ -1890,6 +1895,67 @@
   .tile.completed[data-tileid="weekly"] .pushDot{background:#fff!important;box-shadow:none!important}
   .tile.completed[data-tileid="weekly"] .pushDot.today{background:var(--accent)!important;border-color:#fff!important}
   .tile.completed[data-tileid="weekly"] .pushDotVal{color:#fff!important}
+
+  /* ============================================================
+     Design boost — pushups (1×1), goals, weather, stats.
+     Every rule is checked in BOTH the pastel (undone) and vivid
+     (.completed) states so contrast holds either way.
+     ============================================================ */
+
+  /* --- Push-ups: a clean vertical layout for the 1-wide tile — a count hero
+         above a compact button pad. Short (1×1) → one button row; taller → 2×2. --- */
+  .tile[data-tileid="pushups"][data-cols="1"] .pushWrap{flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:8px!important;padding:2px 0!important}
+  .tile[data-tileid="pushups"][data-cols="1"] .pushCount{text-align:center!important;letter-spacing:-.045em;line-height:.82!important}
+  .tile[data-tileid="pushups"][data-cols="1"] .pushBtns{display:grid!important;gap:5px!important;width:100%!important;flex:none!important;align-self:stretch!important;height:auto!important}
+  .tile[data-tileid="pushups"][data-cols="1"] .pushBtns .puBtn{width:100%!important;min-width:0!important;height:auto!important;font-weight:850!important;border-radius:11px!important}
+  .tile[data-tileid="pushups"][data-cols="1"] .pushBtns .puReset{width:100%!important;flex:none!important}
+  /* short 1×1: number moderate, all four controls in a single row */
+  .tile[data-tileid="pushups"][data-cols="1"][data-rows="1"] .pushCount{font-size:clamp(22px,22cqi,34px)!important}
+  .tile[data-tileid="pushups"][data-cols="1"][data-rows="1"] .pushBtns{grid-template-columns:repeat(4,1fr)!important}
+  .tile[data-tileid="pushups"][data-cols="1"][data-rows="1"] .pushBtns .puBtn{min-height:27px!important;padding:4px 2px!important;font-size:11px!important}
+  /* taller 1-wide (1×2+): big hero number, a 2×2 pad, and a "reps" cue */
+  .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushCount{font-size:clamp(34px,32cqi,54px)!important}
+  .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushCount::after{content:"reps today";display:block;margin-top:6px;font:900 8.5px/1 'Nunito',sans-serif;letter-spacing:.16em;text-transform:uppercase;opacity:.62}
+  .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushBtns{grid-template-columns:1fr 1fr!important}
+  .tile[data-tileid="pushups"][data-cols="1"]:not([data-rows="1"]) .pushBtns .puBtn{min-height:33px!important;padding:6px 4px!important;font-size:12.5px!important}
+
+  /* --- Goals: clearer day grouping, a highlighted "today" rail,
+         tidy rows, pill day-counts. --- */
+  .tile[data-tileid="goals"] .goalDay{padding:9px 11px;border-radius:15px;background:color-mix(in srgb,var(--accent) 5%,rgba(255,255,255,.30));border:1px solid color-mix(in srgb,var(--accent) 12%,transparent)}
+  .tile[data-tileid="goals"] .goalDay+.goalDay{margin-top:9px}
+  .tile[data-tileid="goals"] .goalDay:first-child{background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.34));border-color:color-mix(in srgb,var(--accent) 26%,transparent);box-shadow:inset 3px 0 0 var(--accent)}
+  .tile[data-tileid="goals"] .goalDayHead{margin-bottom:5px}
+  .tile[data-tileid="goals"] .goalDayHead .muted{padding:1px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,rgba(255,255,255,.4));color:var(--accentDark);font-weight:850;font-size:10px!important;opacity:1}
+  .tile[data-tileid="goals"] .goalRow{align-items:center;gap:9px;padding:3px 3px;border-radius:10px}
+  .tile[data-tileid="goals"] .goalRow.done .goalText{opacity:.62;text-decoration:line-through}
+  .tile[data-tileid="goals"] .goalTick{flex:none;border-radius:7px}
+  .tile.completed[data-tileid="goals"] .goalDay{background:rgba(255,255,255,.13)!important;border-color:rgba(255,255,255,.22)!important;box-shadow:none!important}
+  .tile.completed[data-tileid="goals"] .goalDay:first-child{box-shadow:inset 3px 0 0 rgba(255,255,255,.62)!important}
+  .tile.completed[data-tileid="goals"] .goalDayHead .muted{background:rgba(255,255,255,.20)!important;color:#fff!important}
+
+  /* --- Weather: seat the icon in a soft disc, strengthen the reading,
+         give the panels a gentle luminous fill. --- */
+  .tile[data-tileid="weather"]:not([data-rows="1"]) .weatherEmoji{display:grid;place-items:center;width:clamp(46px,18cqi,66px);height:clamp(46px,18cqi,66px);border-radius:50%;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.6),color-mix(in srgb,var(--accent) 16%,rgba(255,255,255,.2)));box-shadow:inset 0 1px 2px rgba(255,255,255,.6),0 4px 12px color-mix(in srgb,var(--accent) 16%,transparent)}
+  .tile[data-tileid="weather"] .weatherReading .wbig{font-weight:900;letter-spacing:-.03em;color:var(--accentDark)}
+  .tile[data-tileid="weather"][data-cols="2"][data-rows="2"] .weatherNow,
+  .tile[data-tileid="weather"][data-cols="3"] .weatherNow{background:linear-gradient(150deg,rgba(255,255,255,.34),color-mix(in srgb,var(--accent) 9%,rgba(255,255,255,.14)))!important}
+  .tile.completed[data-tileid="weather"]:not([data-rows="1"]) .weatherEmoji{background:rgba(255,255,255,.20);box-shadow:inset 0 1px 2px rgba(255,255,255,.4)}
+  .tile.completed[data-tileid="weather"] .weatherReading .wbig{color:#fff!important}
+  .tile.completed[data-tileid="weather"] .weatherNow,.tile.completed[data-tileid="weather"] .wtomorrow{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.3)!important}
+
+  /* --- Stats: richer achievement cards with a clear number hierarchy. --- */
+  .tile[data-tileid="weekly"] .wrevAch{gap:9px}
+  .tile[data-tileid="weekly"] .achCard{padding:12px 10px;border-radius:15px!important;background:linear-gradient(155deg,rgba(255,255,255,.55),color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.28)))!important;border:1px solid color-mix(in srgb,var(--accent) 18%,#fff)!important;box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 8%,transparent)}
+  .tile[data-tileid="weekly"] .achN{font-size:26px!important;letter-spacing:-.03em;color:var(--accentDark)}
+  .tile[data-tileid="weekly"] .achL{opacity:.7}
+  .tile[data-tileid="weekly"] .achCard.achGold{background:linear-gradient(150deg,#FDE9A7,#F5A623)!important;border-color:#efb54a!important}
+  .tile[data-tileid="weekly"] .achCard.achGold .achN{color:#5a3a05}
+  .tile[data-tileid="weekly"] .wrevTitle{font-weight:850;letter-spacing:.01em}
+  .tile[data-tileid="weekly"] .pushChartLegend b{color:var(--accentDark);font-weight:900}
+  .tile.completed[data-tileid="weekly"] .achCard{background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.26)!important;box-shadow:none!important}
+  .tile.completed[data-tileid="weekly"] .achN,.tile.completed[data-tileid="weekly"] .pushChartLegend b{color:#fff!important}
+  .tile.completed[data-tileid="weekly"] .achCard.achGold{background:linear-gradient(150deg,#FDE9A7,#F5A623)!important}
+  .tile.completed[data-tileid="weekly"] .achCard.achGold .achN{color:#5a3a05!important}
   </style>
 </head>
 <body>
@@ -1918,7 +1984,7 @@ const COL = {
   weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
   birthdays:{p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
-  timer:    {p:"#E3EBFF", v:"#4A6BFF", d:"#2A45BE"},
+  timer:    {p:"#F1DBE0", v:"#7A1F35", d:"#5A1526"},
   breathing:{p:"#DCF7F6", v:"#0DB9B1", d:"#08736E"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
   events:   {p:"#FFF3D6", v:"#FFB000", d:"#9A5B00"},
