@@ -1,9 +1,13 @@
 # Shared community content — deploy guide
 
 The communal daily tiles (**word, knowledge, spanish, music, news, brainflex,
-philosophy prompt**) are generated **once per day server-side** and reused by every
-dashboard. No visitor needs their own API key for them, and the whole community costs
-~7 Haiku calls/day instead of N-per-user.
+philosophy prompt, and the GMAT daily lesson**) are generated **once per day
+server-side** and reused by every dashboard. No visitor needs their own API key for
+them, and the whole community costs ~8 Haiku calls/day instead of N-per-user. The GMAT
+generator writes 6 fresh questions (2 Quant / 2 Verbal / 2 Data Insights) that feed the
+existing adaptive session, recap, FSRS recall and analytics; the curated question bank
+stays in the app as an offline fallback, and a "Report a wrong question" control lets you
+hide any item whose AI-written answer key looks off.
 
 This is merged into your **existing `fefe-sync` Worker** — the file to deploy is
 [`fefe-sync.js`](fefe-sync.js). It keeps `/data` (sync) and `/rss` (news proxy)
