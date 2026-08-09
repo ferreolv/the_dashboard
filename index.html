@@ -270,7 +270,15 @@
   .barval { font:700 10px/1 'Nunito',monospace; color:var(--dim); }
   .barday { font:700 9px/1 'Nunito',monospace; color:var(--dim); }
   .statn { font-size:22px; font-weight:700; color:var(--ink); }
-  .wrevSection.chartSec { flex:1 1 auto; min-height:100px; display:flex; flex-direction:column; }
+  /* push-up trend: a compact line-with-dots (scatter) chart */
+  .pushLine { position:relative; width:100%; flex:1 1 auto; min-height:52px; margin:8px 0 2px; }
+  .pushLineSvg { position:absolute; inset:0; width:100%; height:100%; }
+  .pushLinePath { fill:none; stroke:var(--accent); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; opacity:.85; }
+  .pushDot { position:absolute; width:7px; height:7px; border-radius:50%; background:var(--accent); transform:translate(-50%,50%); box-shadow:0 1px 3px color-mix(in srgb,var(--accent) 40%,transparent); }
+  .pushDot.zero { width:4px; height:4px; background:color-mix(in srgb,var(--accent) 35%,#c8ccd6); box-shadow:none; }
+  .pushDot.today { width:11px; height:11px; background:#fff; border:3px solid var(--accent); box-shadow:0 2px 7px color-mix(in srgb,var(--accent) 45%,transparent); }
+  .pushDotVal { position:absolute; left:50%; bottom:calc(100% + 3px); transform:translateX(-50%); font:800 10.5px/1 'Nunito',sans-serif; color:var(--accentDark); white-space:nowrap; }
+  .wrevSection.chartSec { flex:1 1 auto; min-height:84px; display:flex; flex-direction:column; }
 
   .tabbar { display:flex; gap:6px; margin-bottom:9px; flex-wrap:wrap; }
   .tab { font:700 10.5px/1 'Nunito',monospace; padding:7px 11px; border-radius:99px; border:1px solid var(--btnbd); background:var(--btnbg); color:var(--ink); cursor:pointer; transition:all .15s; }
@@ -347,10 +355,21 @@
 
   /* ---- timer tile ---- */
   .timerBig { font:800 36px/1 'Nunito',sans-serif; letter-spacing:-0.03em; }
-  .timerRow { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .timerRow { display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
   .timerSet { display:flex; align-items:center; gap:8px; margin-top:11px; }
   .timerInput { background:var(--field); border:1px solid var(--fieldbd); border-radius:9px; padding:7px 10px; color:var(--ink); font-family:inherit; font-size:14px; width:92px; }
   .timerHit { animation:pulse 1.2s ease-in-out infinite; }
+  /* circular countdown dial — looks like a real timer, same controls */
+  .timerDial { position:relative; width:100%; max-width:158px; aspect-ratio:1; margin:0 auto; display:grid; place-items:center; container-type:inline-size; }
+  .timerRingSvg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
+  .timerRingBg { fill:none; stroke:color-mix(in srgb,var(--accent) 15%,rgba(255,255,255,.4)); stroke-width:6.5; }
+  .timerRingFg { fill:none; stroke:var(--accent); stroke-width:6.5; stroke-linecap:round; transition:stroke-dashoffset .45s linear,stroke .3s ease; filter:drop-shadow(0 2px 5px color-mix(in srgb,var(--accent) 34%,transparent)); }
+  .timerDialCenter { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .timerDialTime { font:800 clamp(20px,27cqi,36px)/1 'Nunito',sans-serif; letter-spacing:-.035em; color:var(--accentDark); font-variant-numeric:tabular-nums; }
+  .timerSub { font:900 clamp(7px,8.5cqi,9.5px)/1 'Nunito',sans-serif; letter-spacing:.15em; text-transform:uppercase; color:var(--dim); }
+  .timerWrap.isRunning .timerRingFg { stroke:var(--accent); }
+  .timerWrap.isPaused .timerRingFg { stroke:color-mix(in srgb,var(--accent) 55%,#9aa0ad); }
+  .timerWrap.isFired .timerDialTime { color:var(--accent); }
 
   /* ---- agenda tile ---- */
   .agRow { display:flex; align-items:center; gap:9px; padding:7px 0; border-bottom:1px solid var(--hair); }
@@ -1863,19 +1882,14 @@
   .tile[data-tileid="habits"] .hsq .hname{font-size:clamp(10px,2.7cqi,13px)!important;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   /* the plus/add cell follows the same footprint so the grid stays even */
   .tile[data-tileid="habits"] .hsq.plus{aspect-ratio:1/1!important}
-  /* Stats tile: a clear 14-day chart — visible day tracks (so empty days read),
-     gradient accent bars with depth, and a highlighted "today" column. */
-  .tile[data-tileid="weekly"] .chartSec{min-height:128px}
-  .tile[data-tileid="weekly"] .bars{min-height:78px;gap:clamp(3px,1.8cqi,7px);align-items:flex-end;margin-top:9px}
-  .tile[data-tileid="weekly"] .barcol{gap:5px}
-  .tile[data-tileid="weekly"] .barTrack{border-radius:7px!important;background:color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.34))!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 10%,transparent)}
-  .tile[data-tileid="weekly"] .bar{border-radius:7px!important;opacity:1!important;min-height:5px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 72%,#fff),var(--accent))!important;box-shadow:0 2px 8px color-mix(in srgb,var(--accent) 26%,transparent)!important}
-  .tile[data-tileid="weekly"] .barcol.today .barTrack{box-shadow:inset 0 0 0 1.6px color-mix(in srgb,var(--accent) 52%,#fff)}
-  .tile[data-tileid="weekly"] .barcol.today .bar{background:linear-gradient(180deg,#fff,var(--accent))!important}
-  .tile[data-tileid="weekly"] .barval{color:var(--accentDark)!important;font-weight:800}
-  .tile.completed[data-tileid="weekly"] .barTrack{background:rgba(255,255,255,.16)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-  .tile.completed[data-tileid="weekly"] .bar{background:#fff!important;box-shadow:none!important}
-  .tile.completed[data-tileid="weekly"] .barval{color:#fff!important}
+  /* Stats tile: a compact push-up trend as a line-with-dots (scatter) chart.
+     Takes less vertical room than the old bars and reads the trend at a glance. */
+  .tile[data-tileid="weekly"] .chartSec{min-height:0}
+  .tile[data-tileid="weekly"] .pushLine{min-height:46px;max-height:88px}
+  .tile.completed[data-tileid="weekly"] .pushLinePath{stroke:#fff!important;opacity:.9}
+  .tile.completed[data-tileid="weekly"] .pushDot{background:#fff!important;box-shadow:none!important}
+  .tile.completed[data-tileid="weekly"] .pushDot.today{background:var(--accent)!important;border-color:#fff!important}
+  .tile.completed[data-tileid="weekly"] .pushDotVal{color:#fff!important}
   </style>
 </head>
 <body>
@@ -3920,16 +3934,23 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
   })}</div>;
 }
 function PushBars({values}){
-  const max=Math.max(...values,1); const n=values.length;
+  const n=values.length, max=Math.max(...values,1), last=n-1;
+  // map each day to a point: x across the width, y as a % height off the floor
+  const xOf=i=>n<=1?50:(i/(last))*100;
+  const yOf=v=>7+(v/max)*76; // 7%..83% — leaves headroom for the value label
+  const pts=values.map((v,i)=>`${xOf(i).toFixed(2)},${(100-yOf(v)).toFixed(2)}`).join(" ");
   return (
-    <div className="bars">
+    <div className="pushLine">
+      <svg className="pushLineSvg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline className="pushLinePath" points={pts}/>
+      </svg>
       {values.map((v,i)=>(
-        <div key={i} className={"barcol"+(i===n-1?" today":"")} title={`${v}`}>
-          <span className="barval">{v>0?v:""}</span>
-          <div className="barTrack">
-            <div className="bar" style={{height:`${Math.max(v/max*100,v>0?6:2)}%`}}/>
-          </div>
-        </div>
+        <span key={i}
+          className={"pushDot"+(i===last?" today":"")+(v>0?"":" zero")}
+          style={{left:`${xOf(i)}%`,bottom:`${yOf(v)}%`}}
+          title={`${v} push-ups`}>
+          {(i===last||v===max)&&v>0&&<b className="pushDotVal">{v}</b>}
+        </span>
       ))}
     </div>
   );
@@ -4055,12 +4076,27 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   const running=end>now.getTime()&&!fired;
   const paused=remaining>0&&!running&&!fired;
   const shownMs=running?diffMs:paused?remaining:duration*60000;
-  const h=Math.floor(shownMs/3600000), m=Math.floor((shownMs%3600000)/60000);
+  const totalSec=Math.ceil(shownMs/1000);
+  const hh=Math.floor(totalSec/3600), mm=Math.floor((totalSec%3600)/60), ss=totalSec%60;
+  const big=fired?"Done":hh>0?`${hh}:${pad(mm)}`:`${pad(mm)}:${pad(ss)}`;
+  const unit=fired?"time's up":hh>0?"h · m":"m · s";
+  const frac=fired?0:(running||paused)?Math.max(0,Math.min(1,shownMs/(duration*60000||1))):1;
+  const C=2*Math.PI*44; // ring circumference (r=44)
   const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
   return (
     <div className={"timerWrap "+(running?"isRunning":paused?"isPaused":fired?"isFired":"isIdle")}>
       <div className={"timerRow"+(fired?" timerHit":"")}>
-        <span className="timerBig">{fired?"Done":`${h}h ${pad(m)}m`}</span>
+        <div className="timerDial">
+          <svg className="timerRingSvg" viewBox="0 0 100 100" aria-hidden="true">
+            <circle className="timerRingBg" cx="50" cy="50" r="44"/>
+            <circle className="timerRingFg" cx="50" cy="50" r="44"
+              style={{strokeDasharray:C,strokeDashoffset:C*(1-frac)}}/>
+          </svg>
+          <div className="timerDialCenter">
+            <span className="timerDialTime">{big}</span>
+            <span className="timerSub">{running?"remaining":paused?"paused":fired?unit:unit}</span>
+          </div>
+        </div>
       </div>
       <div className="timerControls">
         {!running && !paused && !fired && (
