@@ -1782,38 +1782,62 @@
      Keeps each tile's own hue: light frosted glass at rest → vivid glass when
      ticked. A faint hue tint + two-layer specular highlight + inner depth make
      the surface read as real refracting glass rather than flat translucency. */
+  /* Near-clear glass: the background shows through; colour lives in a faint tint
+     + the luminous rim. Thin border; the bright edge comes from the ::before ring. */
   .tile{
-    background:linear-gradient(150deg,
-      color-mix(in srgb,var(--accent) 9%,rgba(255,255,255,.22)),
-      color-mix(in srgb,var(--accent) 5%,rgba(255,255,255,.05)))!important;
-    -webkit-backdrop-filter:blur(17px) saturate(185%)!important;
-    backdrop-filter:blur(17px) saturate(185%)!important;
+    background:color-mix(in srgb,var(--accent) 8%,rgba(255,255,255,.12))!important;
+    border:1px solid color-mix(in srgb,var(--accent) 20%,rgba(255,255,255,.45))!important;
+    -webkit-backdrop-filter:blur(14px) saturate(180%) brightness(1.06)!important;
+    backdrop-filter:blur(14px) saturate(180%) brightness(1.06)!important;
     box-shadow:
-      0 8px 24px color-mix(in srgb,var(--accent) 9%,rgba(40,36,72,.06)),
-      inset 0 1px 1px rgba(255,255,255,.7),
-      inset 0 -14px 26px color-mix(in srgb,var(--accent) 8%,transparent)!important;
+      inset 0 1.5px 1px rgba(255,255,255,.85),
+      inset 0 -10px 24px color-mix(in srgb,var(--accent) 10%,transparent),
+      inset 0 0 20px rgba(255,255,255,.10),
+      0 14px 34px rgba(26,26,54,.14),
+      0 2px 6px rgba(26,26,54,.07)!important;
   }
+  /* The signature liquid-glass rim: a bright top-left edge fading into the tile's hue,
+     drawn only on the 1.4px border via a mask (centre stays clear). */
+  .tile::before{
+    content:""!important; display:block!important; position:absolute; inset:0; z-index:2;
+    border-radius:inherit; padding:1.4px; pointer-events:none; opacity:1; transform:none;
+    background:linear-gradient(135deg,
+      rgba(255,255,255,.98) 0%,
+      rgba(255,255,255,.28) 32%,
+      transparent 55%,
+      color-mix(in srgb,var(--accent) 55%,transparent) 100%)!important;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); mask-composite:exclude;
+  }
+  /* Specular glint: a bright top-corner highlight + a diagonal sheen streak. */
   .tile::after{
-    opacity:.92!important;
+    opacity:.95!important;
     background:
-      radial-gradient(130% 78% at 86% -10%,rgba(255,255,255,.72),transparent 44%),
-      linear-gradient(122deg,rgba(255,255,255,.26) 5%,transparent 30%),
-      linear-gradient(300deg,color-mix(in srgb,var(--accent) 12%,transparent),transparent 42%)!important;
+      radial-gradient(120% 70% at 82% -12%,rgba(255,255,255,.85),transparent 46%),
+      linear-gradient(122deg,rgba(255,255,255,.30) 4%,transparent 26%)!important;
   }
+  .tile:not(.editing):hover{border-color:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.7))!important}
+  /* Completed: vivid but still glassy — a translucent hue fill with a bright white rim. */
   .tile.completed{
     background:linear-gradient(150deg,
-      color-mix(in srgb,var(--accent) 84%,rgba(255,255,255,.22)),
-      color-mix(in srgb,var(--accent) 70%,var(--accentDark)))!important;
+      color-mix(in srgb,var(--accent) 78%,rgba(255,255,255,.20)),
+      color-mix(in srgb,var(--accent) 64%,var(--accentDark)))!important;
+    border-color:rgba(255,255,255,.5)!important;
     box-shadow:
-      0 16px 36px color-mix(in srgb,var(--accent) 28%,transparent),
-      inset 0 1px 1px rgba(255,255,255,.82),
-      inset 0 -16px 32px color-mix(in srgb,var(--accent) 34%,transparent)!important;
+      inset 0 1.5px 1px rgba(255,255,255,.8),
+      inset 0 -16px 32px color-mix(in srgb,var(--accent) 34%,transparent),
+      0 16px 38px color-mix(in srgb,var(--accent) 30%,transparent),
+      0 2px 6px rgba(26,26,54,.10)!important;
+  }
+  .tile.completed::before{
+    background:linear-gradient(135deg,
+      rgba(255,255,255,1) 0%,rgba(255,255,255,.4) 34%,transparent 60%,rgba(255,255,255,.28) 100%)!important;
   }
   .tile.completed::after{
     opacity:1!important;
     background:
-      radial-gradient(130% 76% at 84% -8%,rgba(255,255,255,.6),transparent 42%),
-      linear-gradient(122deg,rgba(255,255,255,.36) 4%,transparent 26%)!important;
+      radial-gradient(120% 70% at 82% -10%,rgba(255,255,255,.7),transparent 44%),
+      linear-gradient(122deg,rgba(255,255,255,.4) 3%,transparent 24%)!important;
   }
   /* Accessibility: a clear keyboard-focus ring in the tile's hue (skill priority #1). */
   .tile a:focus-visible,.tile button:focus-visible,.tile input:focus-visible,
