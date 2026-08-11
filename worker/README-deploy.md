@@ -33,6 +33,13 @@ notes), philosophy **chat** (each conversation is unique → still uses a person
    - **Settings → Variables**: encrypted **`ANTHROPIC_API_KEY`**. ✅
    - *(optional)* add encrypted **`ADMIN_TOKEN`** to protect `/shared/regenerate`.
 
+2b. **(optional) Limit which tiles are generated** — to avoid spending API
+   calls on tiles you don't use, add a plain-text **`SHARED_TILES`** variable
+   (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`.
+   Only those are generated each day; unset = generate everything. Takes effect
+   on save (no redeploy needed), but today's already-cached day only reflects it
+   after the next cron run or a `POST /shared/regenerate`.
+
 3. **Add the daily cron** (this is the only new setting)
    - **Settings → Triggers → Cron Triggers → Add** → `0 4 * * *`
      (04:00 UTC ≈ 05:00–06:00 Paris). Pre-generates the day each morning.
