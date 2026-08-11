@@ -3634,10 +3634,16 @@ function App(){
         </div>
         <div className="wrevSection habitStatsSection">
           <div className="wrevRow"><div className="wrevTitle">Habit history</div><div className="wrevMeta">🧊 <b>{ice.available}</b></div></div>
-          <div className="habitHistoryGrid">{habits.map((h,index)=>{ const st=habitStreak(h.id), color=HABIT_STREAK_COLORS[index%HABIT_STREAK_COLORS.length], history=Array.from({length:28},(_,i)=>addDays(todayKey,27-i)); return <div key={h.id} className="habitHistoryCard" style={{"--habit-color":color}}>
-            <div className="habitHistoryHead"><span className="habitHistoryName" title={h.name}>{h.name}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>🧊</button></div>
-            <div className="habitSquares" aria-label={`${h.name}: ${st} day streak`}>{history.map(day=>{ const done=!!(habitLog[day]&&habitLog[day][h.id]), frozen=(freezes[h.id]||[]).includes(day); return <span key={day} className={`habitSquare${done?" done":""}${frozen?" frozen":""}`} title={`${day}: ${done?"completed":frozen?"covered":"not completed"}`}/>; })}</div>
-          </div>; })}</div>
+          <div className="habitHistoryGrid">
+            {habits.map((h,index)=>{ const st=habitStreak(h.id), color=HABIT_STREAK_COLORS[index%HABIT_STREAK_COLORS.length], history=Array.from({length:28},(_,i)=>addDays(todayKey,i-27)); return <div key={h.id} className="habitHistoryCard" style={{"--habit-color":color}}>
+              <div className="habitHistoryHead"><span className="habitHistoryName" title={h.name}>{h.name}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>🧊</button></div>
+              <div className="habitSquares" aria-label={`${h.name}: ${st} day streak`}>{history.map(day=>{ const done=!!(habitLog[day]&&habitLog[day][h.id]), frozen=(freezes[h.id]||[]).includes(day); return <span key={day} className={`habitSquare${done?" done":""}${frozen?" frozen":""}`} title={`${day}: ${done?"completed":frozen?"covered":"not completed"}`}/>; })}</div>
+            </div>; })}
+            {[{id:"gmat",label:"GMAT",emoji:"🎓",color:COL.gmat.v},{id:"breathing",label:"Breathing",emoji:"🌬️",color:COL.breathing.v}].map(r=>{ const st=streakOf(ritualLog,r.id), history=Array.from({length:28},(_,i)=>addDays(todayKey,i-27)); return <div key={r.id} className="habitHistoryCard" style={{"--habit-color":r.color}}>
+              <div className="habitHistoryHead"><span className="habitHistoryName" title={r.label}>{r.emoji} {r.label}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span></div>
+              <div className="habitSquares" aria-label={`${r.label}: ${st} day streak`}>{history.map(day=>{ const done=!!(ritualLog[day]&&ritualLog[day][r.id]); return <span key={day} className={`habitSquare${done?" done":""}`} title={`${day}: ${done?"completed":"not completed"}`}/>; })}</div>
+            </div>; })}
+          </div>
         </div>
       </div>, ()=>toggleRitual("weekly")),
     birthdays: T("birthdays","Birthdays",false,null,
