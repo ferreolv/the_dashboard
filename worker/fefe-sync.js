@@ -174,16 +174,28 @@ async function resolveMusic(m) {
   return { url: best.t.trackViewUrl, trackId: best.t.trackId || "", catalogTitle: best.t.trackName || title, catalogArtist: best.t.artistName || artist, catalogComposer: best.t.composerName || composer, catalogMatched: true };
 }
 
+/* Which shared tiles to actually generate. Set the `SHARED_TILES` Worker
+   variable to a comma-separated list (e.g. "word,gmat") to only spend API
+   calls on the tiles you use. Unset/empty = generate everything (default). */
+function activeSharedKeys(env) {
+  const raw = (env && env.SHARED_TILES) ? String(env.SHARED_TILES) : "";
+  const wanted = raw.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+  if (!wanted.length) return SHARED_KEYS;
+  const filtered = SHARED_KEYS.filter((k) => wanted.includes(k));
+  return filtered.length ? filtered : SHARED_KEYS;
+}
+
 /* ---------------- generate + cache the whole day (namespaced in SYNC KV) ---------------- */
 async function generateSharedDay(env, date) {
+  const keys = activeSharedKeys(env);
   const hist = JSON.parse((await env.SYNC.get("shared_history")) || "{}");
-  const results = await Promise.all(SHARED_KEYS.map((k) => {
+  const results = await Promise.all(keys.map((k) => {
     const avoid = (hist[k] || []).slice(-20);
     return sharedGen[k](env, avoid).catch(() => null);
   }));
   const content = {};
-  SHARED_KEYS.forEach((k, i) => { if (results[i]) content[k] = results[i]; });
-  SHARED_KEYS.forEach((k, i) => {
+  keys.forEach((k, i) => { if (results[i]) content[k] = results[i]; });
+  keys.forEach((k, i) => {
     const v = results[i]; if (!v) return;
     const lab = sharedHistLabel[k] ? sharedHistLabel[k](v) : null;
     if (!lab) return;
