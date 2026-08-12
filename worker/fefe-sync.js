@@ -174,20 +174,27 @@ async function resolveMusic(m) {
   return { url: best.t.trackViewUrl, trackId: best.t.trackId || "", catalogTitle: best.t.trackName || title, catalogArtist: best.t.artistName || artist, catalogComposer: best.t.composerName || composer, catalogMatched: true };
 }
 
-/* Which shared tiles to actually generate. Set the `SHARED_TILES` Worker
-   variable to a comma-separated list (e.g. "word,gmat") to only spend API
-   calls on the tiles you use. Unset/empty = generate everything (default). */
-function activeSharedKeys(env) {
-  const raw = (env && env.SHARED_TILES) ? String(env.SHARED_TILES) : "";
-  const wanted = raw.split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
-  if (!wanted.length) return SHARED_KEYS;
+/* Which shared tiles to actually generate, so API tokens aren't spent on tiles
+   nobody reads. Precedence:
+     1. the `shared_config` KV key {tiles:[...]} — set from the dashboard's
+        Settings → "Daily AI content" checklist (per-tile, no Cloudflare edits);
+     2. the `SHARED_TILES` Worker variable (comma-separated), as a manual fallback;
+     3. everything (default). */
+async function activeSharedKeys(env) {
+  let wanted = null;
+  try {
+    const c = await env.SYNC.get("shared_config");
+    if (c) { const p = JSON.parse(c); if (Array.isArray(p.tiles)) wanted = p.tiles.map((s) => String(s).trim().toLowerCase()).filter(Boolean); }
+  } catch (e) {}
+  if (!wanted && env && env.SHARED_TILES) wanted = String(env.SHARED_TILES).split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+  if (!wanted || !wanted.length) return SHARED_KEYS;
   const filtered = SHARED_KEYS.filter((k) => wanted.includes(k));
   return filtered.length ? filtered : SHARED_KEYS;
 }
 
 /* ---------------- generate + cache the whole day (namespaced in SYNC KV) ---------------- */
 async function generateSharedDay(env, date) {
-  const keys = activeSharedKeys(env);
+  const keys = await activeSharedKeys(env);
   const hist = JSON.parse((await env.SYNC.get("shared_history")) || "{}");
   const results = await Promise.all(keys.map((k) => {
     const avoid = (hist[k] || []).slice(-20);
@@ -239,6 +246,21 @@ var index_default = {
       const date = sharedDayKey();
       const content = await generateSharedDay(env, date);
       return sharedJson({ date, content });
+    }
+    // Which shared tiles to generate daily — driven by the dashboard's
+    // Settings → "Daily AI content" checklist so tokens aren't spent on
+    // tiles nobody reads.
+    if (url.pathname === "/shared/config" && request.method === "GET") {
+      const c = await env.SYNC.get("shared_config");
+      return sharedJson({ tiles: c ? (JSON.parse(c).tiles || null) : null, all: SHARED_KEYS });
+    }
+    if (url.pathname === "/shared/config" && request.method === "POST") {
+      const body = await request.json().catch(() => ({}));
+      const tiles = Array.isArray(body.tiles)
+        ? body.tiles.map((s) => String(s).trim().toLowerCase()).filter((k) => SHARED_KEYS.includes(k))
+        : null;
+      await env.SYNC.put("shared_config", JSON.stringify({ tiles }));
+      return sharedJson({ ok: true, tiles });
     }
 
     // ---- account authentication and account-scoped data ----

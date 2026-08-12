@@ -34,11 +34,15 @@ notes), philosophy **chat** (each conversation is unique → still uses a person
    - *(optional)* add encrypted **`ADMIN_TOKEN`** to protect `/shared/regenerate`.
 
 2b. **(optional) Limit which tiles are generated** — to avoid spending API
-   calls on tiles you don't use, add a plain-text **`SHARED_TILES`** variable
-   (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`.
-   Only those are generated each day; unset = generate everything. Takes effect
-   on save (no redeploy needed), but today's already-cached day only reflects it
-   after the next cron run or a `POST /shared/regenerate`.
+   calls on tiles you don't use. Two ways, in precedence order:
+   - **In-app (recommended):** the dashboard's **Settings → "Daily AI content"**
+     checklist. Unticking a tile writes a `shared_config` KV key the cron reads,
+     so you control it per-tile with no Cloudflare edits.
+   - **Manual fallback:** a plain-text **`SHARED_TILES`** variable
+     (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`.
+   Unset both = generate everything. Either takes effect on save, but today's
+   already-cached day only reflects it after the next cron run or a
+   `POST /shared/regenerate` (the checklist's "apply now" does this for you).
 
 3. **Add the daily cron** (this is the only new setting)
    - **Settings → Triggers → Cron Triggers → Add** → `0 4 * * *`

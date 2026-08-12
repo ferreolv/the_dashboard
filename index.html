@@ -88,6 +88,12 @@
   .hint { color:rgba(29,32,48,0.5); font-size:12px; }
   .settingsGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:16px; }
   .settingsCard { min-width:0; padding:16px 17px; border:1px solid rgba(31,36,55,.08); border-radius:18px; background:rgba(255,255,255,.78); }
+  .genTileList { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin:2px 0 2px; }
+  .genTileRow { display:flex; align-items:center; gap:8px; min-height:34px; padding:6px 10px; border:1px solid rgba(31,36,55,.10); border-radius:11px; background:rgba(255,255,255,.6); cursor:pointer; font-size:12.5px; font-weight:750; color:#5a6072; user-select:none; transition:background .15s,border-color .15s,color .15s; }
+  .genTileRow.on { border-color:color-mix(in srgb,#4a6bff 40%,#fff); background:color-mix(in srgb,#4a6bff 9%,rgba(255,255,255,.7)); color:#2a3350; }
+  .genTileRow input { width:15px; height:15px; flex:none; accent-color:#4a6bff; cursor:pointer; }
+  .linklike { border:0; background:none; padding:0; color:var(--accent,#4a6bff); font:inherit; font-weight:800; cursor:pointer; text-decoration:underline; }
+  .linklike:disabled { opacity:.55; cursor:default; }
   .settingsCard h4 { margin:0 0 4px; font-size:15px; line-height:1.2; color:#23263a; }
   .settingsCard p { margin:0 0 10px; }
   .settingsCard .lab:first-of-type { margin-top:0; }
@@ -2821,6 +2827,42 @@ function App(){
   const [newPassword,setNewPassword]=useState("");
   const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
 
+  /* Daily AI content: which shared server-generated tiles to actually produce
+     each day. null = all (default). Untick a tile → the worker stops spending
+     tokens on it. Persisted to the worker (shared_config) so its cron obeys. */
+  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"],["gmat","GMAT lesson"]];
+  const [genPrefs,setGenPrefs]=useState(()=>load("genPrefs",null));
+  const [genCfgStatus,setGenCfgStatus]=useState("");
+  const [genCfgBusy,setGenCfgBusy]=useState(false);
+  const genEnabled=id=> genPrefs===null || genPrefs.includes(id);
+  const pushGenConfig=async(tiles)=>{
+    if(!SHARED_URL) return;
+    setGenCfgStatus("Saving…");
+    try{ const r=await fetch(SHARED_URL+"/shared/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tiles})}); if(!r.ok) throw new Error("bad"); setGenCfgStatus("Saved ✓ — applies on tomorrow's refresh"); }
+    catch(e){ setGenCfgStatus("Saved on this device (worker unreachable — redeploy it)"); }
+  };
+  const toggleGenTile=(id)=>{
+    const base = genPrefs===null ? SHARED_AI_TILES.map(t=>t[0]) : genPrefs.slice();
+    const next = base.includes(id) ? base.filter(x=>x!==id) : [...base,id];
+    setGenPrefs(next); save("genPrefs",next); pushGenConfig(next);
+  };
+  const applyGenNow=async()=>{
+    if(!SHARED_URL||genCfgBusy) return;
+    setGenCfgBusy(true); setGenCfgStatus("Refreshing today…");
+    try{
+      await pushGenConfig(genPrefs===null?SHARED_AI_TILES.map(t=>t[0]):genPrefs);
+      const rg=await fetch(SHARED_URL+"/shared/regenerate",{method:"POST"});
+      const doc=await rg.json().catch(()=>null);
+      if(doc&&doc.error){ setGenCfgStatus("Config saved, but couldn't force a refresh ("+doc.error+"). It'll apply tomorrow."); }
+      else{
+        const c=doc&&doc.content;
+        setDaily(prev=>{ const next={...(prev||{})}; SHARED_KEYS.forEach(k=>{ next[k]=(c&&c[k]!=null)?c[k]:null; }); save("daily:"+todayKey,next); return next; });
+        setGenCfgStatus("Applied ✓ — only ticked tiles were generated");
+      }
+    }catch(e){ setGenCfgStatus("Couldn't reach the worker — is it deployed?"); }
+    setGenCfgBusy(false);
+  };
+
   useEffect(()=>{
     const themes=["neutral","atmospheric","aurora","sunset","ocean","paper","graphite"];
     themes.forEach(t=>document.body.classList.remove("theme-"+t));
@@ -3741,6 +3783,20 @@ function App(){
                 <option value="ocean">Ocean (cool)</option>
               </select>
               <p className="hint" style={{marginTop:6}}>Tip: colourful canvases (Aurora, Sunset, Ocean) show the glass refraction best; Paper and Graphite are calmest for reading.</p>
+            </section>
+            <section className="settingsCard">
+              <h4>Daily AI content</h4>
+              <p className="hint">Untick any tile you don't read — the server stops generating it, saving API tokens. (This controls generation, not visibility — hide a tile from the board with the Today panel's edit mode.)</p>
+              <div className="genTileList">
+                {SHARED_AI_TILES.map(([id,label])=>(
+                  <label key={id} className={"genTileRow"+(genEnabled(id)?" on":"")}>
+                    <input type="checkbox" checked={genEnabled(id)} onChange={()=>toggleGenTile(id)} />
+                    <span>{label}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="hint" style={{marginTop:8}}>Takes effect on tomorrow's refresh, or <button type="button" className="linklike" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"applying…":"apply now"}</button>.{genCfgStatus?` · ${genCfgStatus}`:""}</p>
+              <p className="hint" style={{marginTop:4,opacity:.7}}>Needs the worker deployed to take effect on the server.</p>
             </section>
             <section className="settingsCard">
               <h4>Location</h4>
