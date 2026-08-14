@@ -179,7 +179,10 @@ async function resolveMusic(m) {
      1. the `shared_config` KV key {tiles:[...]} — set from the dashboard's
         Settings → "Daily AI content" checklist (per-tile, no Cloudflare edits);
      2. the `SHARED_TILES` Worker variable (comma-separated), as a manual fallback;
-     3. everything (default). */
+     3. DEFAULT_SHARED (word + gmat) when neither is set — a minimal, token-frugal
+        default so a fresh deploy never generates tiles nobody asked for. To
+        generate everything, set the in-app checklist or SHARED_TILES explicitly. */
+const DEFAULT_SHARED = ["word", "gmat"];
 async function activeSharedKeys(env) {
   let wanted = null;
   try {
@@ -187,9 +190,10 @@ async function activeSharedKeys(env) {
     if (c) { const p = JSON.parse(c); if (Array.isArray(p.tiles)) wanted = p.tiles.map((s) => String(s).trim().toLowerCase()).filter(Boolean); }
   } catch (e) {}
   if (!wanted && env && env.SHARED_TILES) wanted = String(env.SHARED_TILES).split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
-  if (!wanted || !wanted.length) return SHARED_KEYS;
+  if (!wanted) return SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
+  if (!wanted.length) return SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
   const filtered = SHARED_KEYS.filter((k) => wanted.includes(k));
-  return filtered.length ? filtered : SHARED_KEYS;
+  return filtered.length ? filtered : SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
 }
 
 /* ---------------- generate + cache the whole day (namespaced in SYNC KV) ---------------- */
