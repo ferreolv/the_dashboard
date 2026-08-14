@@ -33,16 +33,20 @@ notes), philosophy **chat** (each conversation is unique → still uses a person
    - **Settings → Variables**: encrypted **`ANTHROPIC_API_KEY`**. ✅
    - *(optional)* add encrypted **`ADMIN_TOKEN`** to protect `/shared/regenerate`.
 
-2b. **(optional) Limit which tiles are generated** — to avoid spending API
-   calls on tiles you don't use. Two ways, in precedence order:
+2b. **Which tiles get generated** — by default this build is **token-frugal**:
+   with nothing configured it generates only **`word` + `gmat`**, so a fresh
+   deploy never spends API calls on tiles nobody asked for. To change the set,
+   two ways, in precedence order:
    - **In-app (recommended):** the dashboard's **Settings → "Daily AI content"**
-     checklist. Unticking a tile writes a `shared_config` KV key the cron reads,
-     so you control it per-tile with no Cloudflare edits.
+     checklist. Ticking/unticking a tile writes a `shared_config` KV key the cron
+     reads, so you control it per-tile with no Cloudflare edits. The card's
+     **"Check server"** button confirms the worker is honoring your selection.
    - **Manual fallback:** a plain-text **`SHARED_TILES`** variable
-     (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`.
-   Unset both = generate everything. Either takes effect on save, but today's
-   already-cached day only reflects it after the next cron run or a
-   `POST /shared/regenerate` (the checklist's "apply now" does this for you).
+     (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`, or
+     all eight to generate everything.
+   Either takes effect on save, but today's already-cached day only reflects it
+   after the next cron run or a `POST /shared/regenerate` (the checklist's
+   "apply now" does this for you).
 
 3. **Add the daily cron** (this is the only new setting)
    - **Settings → Triggers → Cron Triggers → Add** → `0 4 * * *`
@@ -58,8 +62,9 @@ notes), philosophy **chat** (each conversation is unique → still uses a person
 
 ## Notes
 
-- **Cost:** cron generates all 7 keys once/day on Haiku (cents/month), regardless of
-  how many people use the dashboard.
+- **Cost:** cron generates only the active keys once/day on Haiku (cents/month),
+  regardless of how many people use the dashboard. The default active set is
+  `word` + `gmat`; widen it from the in-app checklist or `SHARED_TILES`.
 - **The key never reaches the browser** — it stays a Worker secret. Visitors read
   finished content only.
 - **Abuse guard:** `/shared` only *reads* cache; the lazy first-hit generation is locked
