@@ -2846,6 +2846,23 @@ function App(){
     const next = base.includes(id) ? base.filter(x=>x!==id) : [...base,id];
     setGenPrefs(next); save("genPrefs",next); pushGenConfig(next);
   };
+  const [genServerState,setGenServerState]=useState(null); // null unknown | "old" | {tiles,all}
+  const verifyGenConfig=async()=>{
+    if(!SHARED_URL) return;
+    setGenCfgStatus("Checking the server…");
+    try{
+      const r=await fetch(SHARED_URL+"/shared/config",{cache:"no-store"});
+      if(!r.ok) throw new Error("no-route");
+      const doc=await r.json();
+      if(!doc||!Array.isArray(doc.tiles)) throw new Error("no-route");
+      setGenServerState({tiles:doc.tiles,all:doc.all||SHARED_AI_TILES.map(t=>t[0])});
+      const labels=doc.tiles.map(id=>{ const f=SHARED_AI_TILES.find(t=>t[0]===id); return f?f[1]:id; });
+      setGenCfgStatus("✓ Server is honoring your selection — generating only: "+(labels.length?labels.join(", "):"nothing"));
+    }catch(e){
+      setGenServerState("old");
+      setGenCfgStatus("⚠ Server still on the old version — it ignores this list and generates every tile. Update the worker once (below) to save tokens.");
+    }
+  };
   const applyGenNow=async()=>{
     if(!SHARED_URL||genCfgBusy) return;
     setGenCfgBusy(true); setGenCfgStatus("Refreshing today…");
@@ -3795,8 +3812,14 @@ function App(){
                   </label>
                 ))}
               </div>
-              <p className="hint" style={{marginTop:8}}>Takes effect on tomorrow's refresh, or <button type="button" className="linklike" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"applying…":"apply now"}</button>.{genCfgStatus?` · ${genCfgStatus}`:""}</p>
-              <p className="hint" style={{marginTop:4,opacity:.7}}>Needs the worker deployed to take effect on the server.</p>
+              <p className="hint" style={{marginTop:8}}>
+                <button type="button" className="linklike" onClick={verifyGenConfig}>Check server</button>
+                {" · "}
+                <button type="button" className="linklike" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"applying…":"apply now"}</button>
+                {genCfgStatus?<span style={{display:"block",marginTop:6}}>{genCfgStatus}</span>:null}
+              </p>
+              {genServerState==="old" && <p className="hint" style={{marginTop:6,opacity:.85}}>Your ticks are saved, but the token spend happens on the server, so it can't take effect until the worker runs the current code. This is a one-time paste — open Cloudflare → Workers → <b>fefe-sync</b> → Edit code, replace all with <code>worker/fefe-sync.js</code>, Save &amp; Deploy. After that, "Check server" will read ✓.</p>}
+              <p className="hint" style={{marginTop:4,opacity:.7}}>Tokens for these tiles are spent once/day by the server, not by your browser — so this list only bites once the worker is updated.</p>
             </section>
             <section className="settingsCard">
               <h4>Location</h4>
