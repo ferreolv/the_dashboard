@@ -1190,8 +1190,25 @@
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayTodayMessage{display:none}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayStatus{font-size:13px}
   .tile[data-tileid="birthdays"][data-rows="1"] .birthdayNext{font-size:9.5px;white-space:nowrap}
-  /* Library is a catalogue: clean widget previews grouped by availability, with actions in-foot. */
+  /* Library discovery keeps the existing widget previews and corner actions. */
   .libraryShelves{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+  .libraryTools{display:flex;flex-direction:column;gap:13px;padding:17px;border:1px solid rgba(68,72,95,.12);border-radius:20px;background:rgba(255,255,255,.62)}
+  .librarySearchRow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .librarySearchField{display:flex;align-items:center;gap:10px;flex:1 1 240px;min-width:0;padding:11px 13px;border:1px solid rgba(68,72,95,.2);border-radius:13px;background:rgba(255,255,255,.76);color:#5650bd}
+  .librarySearchField:focus-within{outline:2px solid #7368df;outline-offset:3px}
+  .librarySearchField svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2}
+  .librarySearchField input{width:100%;min-width:0;padding:0;border:0;outline:0;background:transparent;color:#292c40;line-height:1.4;font-family:inherit;font-size:14px;font-weight:700}
+  .librarySearchField input::-webkit-search-cancel-button{display:none}
+  .librarySearchField input::placeholder{color:#777c8d;font-weight:600}
+  .librarySearchClear{display:grid;place-items:center;flex:none;width:24px;height:24px;padding:0;border:0;background:transparent;color:#5650bd;line-height:1;font-size:23px;font-weight:700;font-family:inherit;cursor:pointer}
+  .libraryResultCount{margin:0;color:#565b70;font-size:12px;font-weight:750}
+  .libraryCategories{display:flex;gap:8px;flex-wrap:wrap}
+  .libraryCategory{padding:8px 13px;border:1px solid rgba(86,80,189,.22);border-radius:999px;background:rgba(255,255,255,.55);color:#5650bd;line-height:1.3;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer}
+  .libraryCategory[aria-pressed="true"]{border-color:#6658d1;background:#6658d1;color:#fff}
+  .libraryCategory:focus-visible,.librarySearchClear:focus-visible{outline:2px solid #7368df;outline-offset:3px}
+  .libraryResults{display:flex;flex-direction:column;gap:28px;min-width:0}
+  .libraryNoResults{display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 18px;overflow-wrap:anywhere}
+  .libraryNoResults p{margin:0;color:#565b70}
   .libraryShelf{min-width:0}
   .libraryShelfHead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 2px 12px}
   .libraryShelfHead h2{margin:0;color:#292c40;font-size:19px;line-height:1.15;letter-spacing:-.025em}
@@ -2737,6 +2754,41 @@ const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{
 const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:1,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
 const ALL=Object.keys(DEFSIZE);
+const LIBRARY_CATEGORIES=[{id:"all",label:"All widgets"},{id:"plan",label:"Plan"},{id:"discover",label:"Discover"},{id:"wellbeing",label:"Wellbeing"},{id:"life",label:"Life"}];
+// Search widget descriptions only; personal notes and account data stay out of the index.
+const LIBRARY_META={
+  goals:["plan","goals tasks checklist planning tomorrow"],
+  habits:["plan","habits routine streak daily"],
+  agenda:["plan","reminders agenda calendar appointment recurring tasks"],
+  events:["plan","events countdown plans trips holidays"],
+  shopping:["plan","shopping groceries supermarket list"],
+  note:["plan","note notes journal writing diary"],
+  timer:["plan","timer focus pomodoro countdown"],
+  worth:["discover","knowledge lessons facts learn"],
+  word:["discover","word vocabulary english french"],
+  spanish:["discover","español spanish language vocabulary"],
+  world:["discover","world news headlines current affairs"],
+  recall:["discover","recall flashcards memory review revision"],
+  brain:["discover","memory second brain knowledge notes mind map"],
+  academic:["discover","study academic course notes material"],
+  gmat:["discover","gmat exam practice quant verbal data insights"],
+  brainflex:["discover","brainflex puzzle logic riddle challenge"],
+  philo:["discover","philosophy philosopher socrates ideas conversation"],
+  breathing:["wellbeing","breathing breath relax calm exercise"],
+  health:["wellbeing","health garmin apple sleep steps heart activity"],
+  pushups:["wellbeing","push-ups pushups fitness exercise workout"],
+  weather:["life","weather forecast temperature city tomorrow"],
+  music:["life","song music classical recording listening"],
+  birthdays:["life","birthdays birthday contacts cake"],
+  people:["life","people met names connections places"],
+  weekly:["life","stats statistics weekly history progress review"],
+};
+const normaliseLibrarySearch=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const matchesLibraryWidget=(id,label,query,category)=>{
+  const [group,keywords]=LIBRARY_META[id]||["life",""];
+  const text=normaliseLibrarySearch(`${label} ${keywords}`);
+  return (category==="all"||group===category)&&normaliseLibrarySearch(query).trim().split(/\s+/).every(term=>text.includes(term));
+};
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
 const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
@@ -2770,6 +2822,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,
 
 function App(){
   const [edit,setEdit]=useState(false);
+  const [libraryQuery,setLibraryQuery]=useState("");
+  const [libraryCategory,setLibraryCategory]=useState("all");
+  const librarySearchRef=useRef(null);
   const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","settings"].includes(route)?route:"dashboard"; });
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
@@ -3741,6 +3796,12 @@ function App(){
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
   };
 
+  const libraryIds=order.filter(id=>widgets[id]&&matchesLibraryWidget(id,widgets[id].props.label,libraryQuery,libraryCategory));
+  const libraryResting=libraryIds.filter(id=>!activeNow.has(id));
+  const libraryActive=libraryIds.filter(id=>activeNow.has(id));
+  const libraryFiltered=libraryQuery.trim()!==""||libraryCategory!=="all";
+  const resetLibraryFilters=()=>{setLibraryQuery("");setLibraryCategory("all");librarySearchRef.current?.focus();};
+
   return (
     <div className="wrap">
       {!accountSignedIn && <div className="authGate"><div className="authCard"><div className="ldot"/><h2>{authMode==="login"?"Sign in to your dashboard":"Create your dashboard account"}</h2><p className="hint">Your memories, settings and dashboard data stay with this account on every device.</p><input className="sinput" type="email" autoComplete="email" placeholder="Email" value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)} /><input className="sinput" type="password" autoComplete={authMode==="login"?"current-password":"new-password"} placeholder="Password (8+ characters)" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submitAccount()} /><button className="savebtn" onClick={submitAccount} disabled={authBusy}>{authBusy?"…":authMode==="login"?"Sign in":"Create account"}</button><button className="link" onClick={()=>setAuthMode(authMode==="login"?"signup":"login")}>{authMode==="login"?"Create a new account":"I already have an account"}</button></div></div>}
@@ -3910,14 +3971,31 @@ function App(){
 
       {page==="settings" ? null : page==="library" ? (
         <div className="libraryShelves">
-          <section className="libraryShelf">
-            <div className="libraryShelfHead"><div><h2>Not on Today</h2><p>Explore the widgets that are resting outside your daily dashboard.</p></div><span className="libraryShelfCount">{order.filter(id=>!activeNow.has(id)&&widgets[id]).length} widgets</span></div>
-            {order.some(id=>!activeNow.has(id)&&widgets[id]) ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>!activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Every widget is currently on Today.</div>}
-          </section>
-          <section className="libraryShelf">
-            <div className="libraryShelfHead"><div><h2>On Today</h2><p>Your current daily set, shown here without corner stickers.</p></div><span className="libraryShelfCount">{order.filter(id=>activeNow.has(id)&&widgets[id]).length} widgets</span></div>
-            <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div>
-          </section>
+          <div className="libraryTools">
+            <div className="librarySearchRow">
+              <div className="librarySearchField" role="search" aria-label="Widget library">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+                <input ref={librarySearchRef} type="search" aria-label="Search widgets" aria-controls="library-results" aria-describedby="library-result-count" placeholder="Find a widget…" value={libraryQuery} onChange={e=>setLibraryQuery(e.target.value)} onKeyDown={e=>{if(e.key==="Escape"){e.preventDefault();setLibraryQuery("");}}} />
+                {libraryQuery&&<button className="librarySearchClear" aria-label="Clear widget search" onClick={()=>{setLibraryQuery("");librarySearchRef.current?.focus();}}>×</button>}
+              </div>
+              <p id="library-result-count" className="libraryResultCount" role="status" aria-live="polite" aria-atomic="true">{libraryIds.length} of {ALL.length} widgets</p>
+            </div>
+            <div className="libraryCategories" role="group" aria-label="Widget categories">
+              {LIBRARY_CATEGORIES.map(category=><button key={category.id} className="libraryCategory" aria-pressed={libraryCategory===category.id} onClick={()=>setLibraryCategory(category.id)}>{category.label}</button>)}
+            </div>
+          </div>
+          <div id="library-results" className="libraryResults">
+            {libraryIds.length===0 ? <div className="libraryShelfEmpty libraryNoResults"><p>No widgets match. Try another name or category.</p><button className="ghostbtn" onClick={resetLibraryFilters}>Reset filters</button></div> : <>
+              {(!libraryFiltered||libraryResting.length>0)&&<section className="libraryShelf">
+                <div className="libraryShelfHead"><div><h2>Not on Today</h2><p>Find a widget, then tap + to add it.</p></div><span className="libraryShelfCount">{libraryResting.length} widget{libraryResting.length===1?"":"s"}</span></div>
+                {libraryResting.length ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{libraryResting.map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Every widget is currently on Today.</div>}
+              </section>}
+              {(!libraryFiltered||libraryActive.length>0)&&<section className="libraryShelf">
+                <div className="libraryShelfHead"><div><h2>On Today</h2><p>Your daily set. Tap × to move a widget off Today.</p></div><span className="libraryShelfCount">{libraryActive.length} widget{libraryActive.length===1?"":"s"}</span></div>
+                {libraryActive.length ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{libraryActive.map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Add widgets from the shelf above to build your day.</div>}
+              </section>}
+            </>}
+          </div>
         </div>
       ) : (
         <div className="grid" ref={gridRef} style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div>
@@ -4000,15 +4078,12 @@ function BirthdayInput({onAdd}){ const [name,setName]=useState(""); const [day,s
   return (<div className="addrow birthdayAddRow"><input className="addinput" style={{flex:2}} placeholder="Name" value={name} onChange={e=>setName(e.target.value)} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="DD" value={day} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="MM" value={month} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" onClick={s}>+</button></div>); }
 
 function NoteCard({saved,onSave,onView}){
-  const [draft,setDraft]=useState(saved);
-  useEffect(()=>{ setDraft(saved); },[saved]);
-  const dirty=(draft||"")!==(saved||"");
-  useEffect(()=>{ if(!dirty) return; const t=setTimeout(()=>onSave(draft),650); return ()=>clearTimeout(t); },[draft,saved]);
+  // Persist each edit before navigation or Library filtering can unmount this card.
   return (
     <div className="noteCard">
-      <textarea className="notearea" placeholder="Something to remember…" value={draft} onChange={e=>setDraft(e.target.value)} />
+      <textarea className="notearea" aria-label="Today’s note" placeholder="Something to remember…" value={saved} onChange={e=>onSave(e.target.value)} />
       <div className="noteActions" style={{marginTop:8}}>
-        <button className={"pill"+(dirty?" primary":"")} disabled={!dirty} onClick={()=>onSave(draft)}>{dirty?"Saving…":"Saved ✓"}</button>
+        <button className="pill" disabled>Saved ✓</button>
         <button className="link" onClick={onView}>View all notes →</button>
       </div>
     </div>
