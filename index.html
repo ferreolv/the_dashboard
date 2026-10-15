@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#E4E4E9" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
@@ -1990,7 +1990,128 @@
   .tile.completed[data-tileid="weekly"] .achN,.tile.completed[data-tileid="weekly"] .pushChartLegend b{color:#fff!important}
   .tile.completed[data-tileid="weekly"] .achCard.achGold{background:linear-gradient(150deg,#FDE9A7,#F5A623)!important}
   .tile.completed[data-tileid="weekly"] .achCard.achGold .achN{color:#5a3a05!important}
-  </style>
+  /* Separate habit actions preserve the circular toggle and keyboard access. */
+  .tile[data-tileid="habits"] .habitControl{position:relative;display:grid;min-width:0;aspect-ratio:1/1}
+  .tile[data-tileid="habits"] .habitControl>.hsq{width:100%!important;height:100%!important}
+  .tile[data-tileid="habits"] .habitControl>.hdel{top:-4px!important;right:-4px!important;width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;opacity:1!important}
+  .tile.completed[data-tileid="habits"] .habitControl>.hdel{color:#fff!important}
+  .tile[data-tileid="habits"] .habitControl>button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+  /* Dashboard finish: quiet navigation, readable fields, and colour-led tiles. */
+  :root{--shell-ink:#30362f;--shell-muted:#626b66;--shell-line:rgba(43,53,47,.14)}
+  .wrap{padding:16px clamp(16px,2.2vw,40px) 56px!important}
+  .wrap .topbar{top:10px;min-height:56px!important;margin-bottom:28px!important;padding:6px!important;border:1px solid rgba(255,255,255,.65);border-radius:16px!important;background:rgba(255,255,255,.6);box-shadow:0 2px 12px rgba(30,38,32,.035);backdrop-filter:blur(16px)}
+  .topbar .topnav{padding:3px!important;gap:3px;background:transparent;border:0;box-shadow:none;order:0;width:auto}
+  .topbar .navbtn{min-height:40px;padding:8px 15px!important;border-radius:10px!important;font-size:13px!important;font-weight:650;color:var(--shell-muted)}
+  .topbar .navbtn.active{background:rgba(255,255,255,.82);color:var(--shell-ink);box-shadow:0 1px 4px rgba(30,38,32,.07)}
+  .topbar .actionBtn{height:40px!important;padding:0 14px!important;gap:7px;border-radius:10px!important;box-shadow:none;font-size:12.5px!important;font-weight:650}
+  .topbar .actionBtn.primary{background:#3e4842;border-color:#3e4842;color:#fff}
+  .topbar .actionBtn svg{width:16px!important;height:16px!important}
+  .dashboardHero{gap:22px;margin-bottom:26px!important;align-items:center}
+  .dashboardHero h1{font-size:clamp(29px,2.7vw,42px)!important;font-weight:750!important;letter-spacing:-.035em;line-height:1.12}
+  .heroEyebrow{margin-bottom:7px!important;font-size:12px!important;font-weight:600;letter-spacing:.01em;text-transform:none;color:var(--shell-muted)}
+  .heroStatus{margin-top:8px;font-size:13px!important;color:var(--shell-muted);line-height:1.5}
+  .heroSummary{gap:0!important;flex-wrap:wrap;min-width:0}
+  .heroSummary .metric{min-width:0!important;padding:3px 17px!important;border:0!important;border-left:1px solid var(--shell-line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+  .heroSummary .metric:first-child{padding-left:0!important;border-left:0!important}
+  .heroSummary .metricValue,.heroSummary .heroClock{font-size:18px!important;font-weight:650;line-height:1.3;font-variant-numeric:tabular-nums;color:var(--shell-ink);letter-spacing:-.02em}
+  .heroSummary .metricLabel{margin-top:4px;font-size:11px!important;font-weight:500;letter-spacing:0;text-transform:none;color:var(--shell-muted)}
+  .heroSummary .progressOrb{width:54px!important;height:54px!important;margin-right:17px;background:conic-gradient(#536f61 calc(var(--p)*1%),rgba(69,90,77,.12) 0);box-shadow:none}
+  .heroSummary .progressOrb::before{inset:4px;background:#edf0ed;box-shadow:none}
+  .heroSummary .progressValue{font-size:12px!important;font-weight:700;color:#3e4842}
+  .tile{border:2px solid color-mix(in srgb,var(--accent) 60%,rgba(255,255,255,.45))!important;border-radius:21px!important;background:linear-gradient(145deg,rgba(255,255,255,.35),rgba(255,255,255,.12))!important;box-shadow:0 4px 17px rgba(34,40,36,.065),inset 0 1px 1px rgba(255,255,255,.5)!important;font-weight:600;transition:background .2s,border-color .2s,box-shadow .2s,color .2s}
+  .tile::after{opacity:.35!important}
+  .tile:not(.editing):hover{transform:none!important;border-color:var(--accent)!important;box-shadow:0 5px 19px rgba(34,40,36,.09),inset 0 1px 1px rgba(255,255,255,.5)!important}
+  .tile.completed{background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 64%,var(--accentDark)),color-mix(in srgb,var(--accentDark) 78%,var(--accent)))!important;border-color:color-mix(in srgb,var(--accentDark) 65%,var(--accent))!important;box-shadow:0 5px 18px color-mix(in srgb,var(--accentDark) 19%,transparent)!important}
+  .tilehead{margin-bottom:12px!important;min-height:21px!important}
+  .tilehead .lbl{font-size:13px!important;font-weight:750!important;letter-spacing:0!important;text-transform:none!important}
+  .tilehead .ldot{width:6px!important;height:6px!important;box-shadow:none!important;background:var(--accentDark)!important}
+  .tile.completed .tilehead .ldot{background:#fff!important}
+  .tile :where(.content,.story,.qprompt,.agName,.goalText){font-weight:600}
+  .tile .goalRow.done .goalText{opacity:.8;text-decoration:none!important}
+  .tile input,.tile textarea,.tile select{border-radius:10px!important;box-shadow:none!important}
+  .tile button.goalAddGhost{min-height:28px!important;padding:4px 0!important;border:0!important;border-radius:6px!important;background:transparent!important;box-shadow:none!important}
+  .tile .lbl{text-transform:none!important;letter-spacing:.01em!important}
+  .tile :where(.pill,.mark,.puBtn,.qopt,.savebtn,.ghostbtn,.addbtn,.goalAddGhost,.taskAddLink,.eventAdd){box-shadow:none!important;border-radius:10px!important;font-weight:650!important;letter-spacing:0!important}
+  .tile button:hover,.tile .pill:hover,.tile .mark:hover,.tile .puBtn:hover,.tile .qopt:hover:not(:disabled),.tile .ghostbtn:hover{transform:none!important;filter:none}
+  .tile button.genBtn{display:inline-flex;flex-direction:row;align-items:center;justify-content:center;gap:8px!important;width:auto;align-self:center;min-height:40px!important;padding:9px 14px!important;border:1px solid var(--fieldbd)!important;border-radius:10px;background:var(--field)!important}
+  .tile button.genBtn:hover{border:1px solid var(--accent)!important;background:var(--field)!important}
+  .tile .genGlyph{display:none!important}
+  .tile .genCap{font-size:13px;font-weight:650;letter-spacing:0;text-transform:none;color:var(--ink)}
+  .tile .genState{gap:9px;font-size:12px;color:var(--dim)}
+  .noteSaved{font-size:11px;font-weight:600;color:var(--dim);line-height:1.4}
+  .tile .noteActions{gap:7px}
+  .libraryTools{padding:0 0 20px;border:0;border-bottom:1px solid var(--shell-line);border-radius:0;background:none}
+  .librarySearchField{flex-basis:240px;padding:12px 13px;border-color:var(--shell-line);border-radius:11px;color:var(--shell-muted);background:rgba(255,255,255,.55)}
+  .librarySearchField input{font-weight:600;color:var(--shell-ink)}
+  .libraryCategories{gap:7px}
+  .libraryCategory{padding:8px 12px;border-radius:8px;border-color:var(--shell-line);font-weight:600;color:var(--shell-muted);background:rgba(255,255,255,.25)}
+  .libraryCategory[aria-pressed="true"]{border-color:#53675c;background:#53675c;color:#fff}
+  .libraryResultCount{font-size:12px;font-weight:600;color:var(--shell-muted)}
+  .libraryShelfHead h2{font-size:18px;font-weight:700;letter-spacing:-.02em}
+  .libraryShelfHead p{font-size:12px;color:var(--shell-muted)}
+  .libraryShelfCount{padding:0;border:0;background:none;font-size:12px;color:var(--shell-muted);font-weight:600}
+  .settings{padding:0;border:0;background:transparent;box-shadow:none;backdrop-filter:none}
+  .settingsGrid{gap:18px;margin-top:0;align-items:start}
+  .settingsCard{padding:22px;border:1px solid rgba(255,255,255,.66);border-radius:16px;background:rgba(255,255,255,.68);box-shadow:none}
+  .settingsCard h4,.settingsCard h2{margin:0 0 14px;font-size:17px;font-weight:750;letter-spacing:-.02em;line-height:1.3}
+  .settingsCard p{font-size:13px;line-height:1.6;color:var(--shell-muted)}
+  .settings .lab,.settings .accountField label{display:block;margin:16px 0 6px;font-size:12px;font-weight:650;letter-spacing:0;text-transform:none;color:#444e47}
+  .settings .accountField{gap:0}
+  .settings .accountField label{margin-top:8px}
+  .settings .sinput,.authCard .sinput{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid rgba(56,66,58,.2);border-radius:9px;background:rgba(255,255,255,.55);font-size:14px;line-height:1.4;color:#30362f;box-shadow:none}
+  .settings .srow{gap:8px}
+  .settings .srow .sinput{flex:1 1 180px}
+  .settings .ghostbtn,.settings .savebtn{min-height:40px;font-size:12.5px;font-weight:650;border-radius:9px;box-shadow:none}
+  .settings .savebtn{background:#3e4842}
+  .settings .linklike{font-weight:650;color:#475f52;text-decoration:none!important}
+  .settingsDetails{margin-top:17px;padding-top:14px;border-top:1px solid var(--shell-line)}
+  .settingsDetails summary,.settingsHelp summary{cursor:pointer;min-height:30px;font-size:13px;font-weight:650;color:#475f52;line-height:1.5}
+  .settingsDetails[open] summary,.settingsHelp[open] summary{margin-bottom:10px}
+  .settingsHelp{border:0;border-radius:10px;background:rgba(255,255,255,.35)}
+  .settingsHelp ol{font-size:12.5px;line-height:1.65}
+  .settings .locationBadge{padding:0;margin-bottom:6px;border:0;border-radius:0;background:none;font-weight:650;font-size:13px}
+  .settings .genTileRow{min-height:40px;padding:8px 10px;border-radius:8px;font-weight:600}
+  .settings .genTileRow.on{border-color:rgba(71,95,82,.3);background:rgba(83,111,97,.08);color:#344b3d}
+  .settings .genTileRow input{accent-color:#536f61;width:16px;height:16px}
+  .settingsActions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:15px}
+  .settingsSaveBar{position:sticky;z-index:90;bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px;padding:12px 14px;border:1px solid rgba(255,255,255,.7);border-radius:13px;background:rgba(246,248,245,.94);box-shadow:0 3px 18px rgba(30,38,32,.07);backdrop-filter:blur(18px)}
+  .settingsSaveBar .saveState{margin-right:auto;color:var(--shell-muted);font-size:12px}
+  .settingsSaveBar .savebtn:disabled{background:#54645a;opacity:.55}
+  .settings .dangerLink{min-height:36px;padding:7px 0;font-weight:600}
+  .ovl.authGate{display:grid;place-items:center;align-items:center;padding:20px;background:rgba(244,246,245,.9)}
+  .authCard{width:min(420px,100%);padding:30px;box-shadow:0 12px 45px rgba(30,38,32,.12);border-radius:20px}
+  .authCard h2{font-weight:750;letter-spacing:-.03em}
+  .authCard .authLabel{display:block;text-align:left;margin:15px 0 6px;font-size:12px;font-weight:650;color:#444e47}
+  .authCard .authError{margin:12px 0;color:#a1323b;font-size:13px;line-height:1.5}
+  .authCard .savebtn{min-height:44px;margin-top:18px;background:#3e4842}
+  .authCard .link{min-height:40px;justify-content:center;color:#475f52}
+  .skipLink{position:fixed;z-index:2000;left:16px;top:-90px;padding:12px 18px;border-radius:9px;background:#303e35;color:#fff;text-decoration:none}
+  .skipLink:focus{top:12px}
+  .pageContent:focus{outline:none}
+  .dashboardNotice{position:fixed;z-index:450;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;max-width:calc(100% - 32px);padding:13px 18px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:#34453b;color:#fff;box-shadow:0 5px 24px rgba(30,38,32,.18);font-size:13px;line-height:1.5}
+  .dashboardNotice button{min-height:32px;padding:3px 6px;border:0;background:transparent;color:#fff;font:inherit;font-weight:750;cursor:pointer;white-space:nowrap}
+  .todayEmpty{padding:36px 24px;border:1px dashed var(--shell-line);border-radius:18px;background:rgba(255,255,255,.35);text-align:center}
+  .todayEmpty h2{margin:0 0 8px;font-size:20px;font-weight:700}.todayEmpty p{margin:0 0 16px;color:var(--shell-muted);font-size:13px}
+  :where(button,a,input,textarea,select,summary,[tabindex]):focus-visible{outline:2px solid #475f52!important;outline-offset:3px!important}
+  .tile :where(button,a,input,textarea,select,[tabindex]):focus-visible{outline-color:var(--ink)!important}
+  button{touch-action:manipulation}
+  button:disabled{cursor:default}
+  @media(max-width:760px){
+    .wrap{padding:10px 14px 40px!important}.wrap .topbar{top:6px;gap:5px;margin-bottom:22px!important;flex-wrap:nowrap}
+    .topbar .topnav{width:auto;flex:1;order:0}.topbar .navbtn{min-height:42px;padding:8px 10px!important;font-size:12.5px!important}
+    .topbar .topActions{width:auto;flex:none;margin-left:auto;gap:4px}.topbar .actionBtn{display:inline-flex!important;width:40px!important;height:42px!important;padding:0!important;justify-content:center}
+    .topbar .actionBtn span{display:none!important}.topbar .actionBtn:last-child{display:inline-flex!important}
+    .dashboardHero{display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:22px!important}.dashboardHero h1{font-size:31px!important}
+    .heroSummary{display:flex;justify-content:flex-start;width:100%;margin-top:0;gap:0!important}.heroSummary .metric{padding:3px 13px!important}.heroSummary .metricValue,.heroSummary .heroClock{font-size:17px!important}.heroSummary .metricLabel{font-size:10.5px!important}
+    .heroSummary .progressOrb{width:46px!important;height:46px!important;margin-right:12px}.heroSummary .progressValue{font-size:11px!important}
+    .tile{border-radius:18px!important}.settingsGrid{grid-template-columns:1fr;gap:14px}.settingsCard{padding:19px}.settingsSaveBar{bottom:8px;padding:10px;gap:8px}.settingsSaveBar .saveState{flex-basis:100%;font-size:11.5px}
+    .settings .sinput,.authCard .sinput,.librarySearchField input{font-size:16px}.librarySearchRow{gap:10px}.libraryTools{padding-bottom:16px}.librarySearchClear{width:28px;height:28px}
+    .authCard{padding:25px 22px}.dashboardNotice{bottom:14px;width:max-content;gap:10px}
+  }
+  @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}.dashboardHero *, .topbar *, .libraryTools *{transition:none!important}}
+
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -2649,11 +2770,11 @@ const IconBtn=({title,onClick,children,spin})=> <button title={title} onClick={o
 const Note=({children})=>{
   const txt=typeof children==="string"?children:"";
   const busy=/…\s*$/.test(txt);
-  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating today's content"><span className="genSpin" aria-hidden="true"></span></div>;
-  return <button type="button" className="emptyState genState genBtn" title="Generate today" onClick={()=>{ try{ window.__fefeGenerate && window.__fefeGenerate(); }catch(e){} }}><span className="genGlyph">✦</span><span className="genCap">Generate</span></button>;
+  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating today's content"><span className="genSpin" aria-hidden="true"></span><span>Loading…</span></div>;
+  return <button type="button" className="emptyState genState genBtn" title="Load today’s content" onClick={()=>{ try{ window.__fefeGenerate && window.__fefeGenerate(); }catch(e){} }}><span className="genGlyph">✦</span><span className="genCap">Load today</span></button>;
 };
-const GenerateEmpty=({busy,onGenerate,label="Generate"})=>{
-  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating content"><span className="genSpin" aria-hidden="true"></span></div>;
+const GenerateEmpty=({busy,onGenerate,label="Load today"})=>{
+  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating content"><span className="genSpin" aria-hidden="true"></span><span>Loading…</span></div>;
   return <button type="button" className="emptyState genState genBtn" title={label} onClick={onGenerate}><span className="genGlyph">✦</span><span className="genCap">{label}</span></button>;
 };
 const PlainEmpty=({children})=><div className="plainEmpty">{children}</div>;
@@ -2749,7 +2870,7 @@ const ROW=112, GAP=13;
 /* Cap at 5 columns so a large desktop monitor lays out the same as a laptop/Mac
    of the same window width; bigger screens just scale the tiles wider (grid is
    centred with a max-width) rather than adding a 6th column and rearranging. */
-const columnsForWidth=width=>width>=1000?5:width>=640?4:2;
+const columnsForWidth=width=>width>=1000?6:width>=640?4:2;
 const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
 const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:1,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
 const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
@@ -2804,6 +2925,66 @@ const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=ne
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
 const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"health"); return next; };
 
+// Dialogs share a stack so only the frontmost overlay handles focus and Escape.
+const dashboardDialogStack=[];
+let dashboardDialogPageState=null;
+const dashboardDialogFocusables=element=>Array.from(element.querySelectorAll('a[href],button,input,textarea,select,[tabindex],[contenteditable="true"]')).filter(node=>node.tabIndex>=0&&!node.disabled&&!node.closest('[inert]')&&node.getClientRects().length>0&&getComputedStyle(node).visibility!=="hidden");
+const focusDashboardDialog=entry=>{
+  const target=entry.element.querySelector('[autofocus]')||dashboardDialogFocusables(entry.element)[0]||entry.element;
+  target.focus({preventScroll:true});
+};
+const syncDashboardDialogs=()=>dashboardDialogStack.forEach((entry,index)=>{
+  const top=index===dashboardDialogStack.length-1;
+  entry.overlay.style.zIndex=String(300+index);
+  entry.element.inert=!top;
+  entry.element.setAttribute("aria-modal",String(top));
+  if(top) entry.overlay.removeAttribute("aria-hidden"); else entry.overlay.setAttribute("aria-hidden","true");
+});
+function DashboardModal({label,onClose,overlayClassName="",className="ovlcard",as:Card="div",onSubmit,children}){
+  const cardRef=useRef(null), overlayRef=useRef(null), closeRef=useRef(onClose), openerRef=useRef(document.activeElement);
+  closeRef.current=onClose;
+  useLayoutEffect(()=>{
+    const entry={element:cardRef.current,overlay:overlayRef.current};
+    const first=dashboardDialogStack.length===0;
+    if(first){ const root=document.getElementById("root"); dashboardDialogPageState={overflow:document.body.style.overflow,root,inert:root&&root.inert,hidden:root&&root.getAttribute("aria-hidden")}; }
+    dashboardDialogStack.push(entry);
+    syncDashboardDialogs();
+    if(!entry.element.contains(document.activeElement)) focusDashboardDialog(entry);
+    if(first){ document.body.style.overflow="hidden"; const root=dashboardDialogPageState.root; if(root){root.inert=true;root.setAttribute("aria-hidden","true");} }
+    const onKeyDown=event=>{
+      if(dashboardDialogStack[dashboardDialogStack.length-1]!==entry)return;
+      if(event.key==="Escape"){event.preventDefault();event.stopPropagation();closeRef.current();return;}
+      if(event.key!=="Tab")return;
+      const choices=dashboardDialogFocusables(entry.element), firstChoice=choices[0], lastChoice=choices[choices.length-1], active=document.activeElement;
+      if(!choices.length){event.preventDefault();entry.element.focus({preventScroll:true});}
+      else if(event.shiftKey&&(active===firstChoice||!entry.element.contains(active)||active===entry.element)){event.preventDefault();lastChoice.focus();}
+      else if(!event.shiftKey&&(active===lastChoice||!entry.element.contains(active))){event.preventDefault();firstChoice.focus();}
+    };
+    const onFocus=event=>{if(dashboardDialogStack[dashboardDialogStack.length-1]===entry&&!entry.element.contains(event.target))focusDashboardDialog(entry);};
+    document.addEventListener("keydown",onKeyDown,true);
+    document.addEventListener("focusin",onFocus,true);
+    return()=>{
+      document.removeEventListener("keydown",onKeyDown,true);
+      document.removeEventListener("focusin",onFocus,true);
+      const wasTop=dashboardDialogStack[dashboardDialogStack.length-1]===entry, index=dashboardDialogStack.indexOf(entry);
+      if(index!==-1)dashboardDialogStack.splice(index,1);
+      syncDashboardDialogs();
+      if(!dashboardDialogStack.length&&dashboardDialogPageState){
+        const previous=dashboardDialogPageState;
+        document.body.style.overflow=previous.overflow;
+        if(previous.root){previous.root.inert=previous.inert;if(previous.hidden===null)previous.root.removeAttribute("aria-hidden");else previous.root.setAttribute("aria-hidden",previous.hidden);}
+        dashboardDialogPageState=null;
+      }
+      if(wasTop){const opener=openerRef.current, top=dashboardDialogStack[dashboardDialogStack.length-1];if(opener&&opener.isConnected&&!opener.closest('[inert]')&&(!top||top.element.contains(opener)))opener.focus({preventScroll:true});else if(top)focusDashboardDialog(top);}
+    };
+  },[]);
+  return ReactDOM.createPortal(<div ref={overlayRef} className={"ovl "+overlayClassName} onClick={event=>{event.stopPropagation();if(event.target===event.currentTarget&&dashboardDialogStack[dashboardDialogStack.length-1]?.element===cardRef.current)closeRef.current();}}>
+    <Card ref={cardRef} className={className} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1} onClick={event=>event.stopPropagation()} onSubmit={onSubmit}>{children}</Card>
+  </div>,document.body);
+}
+const DASHBOARD_ROUTES=["dashboard","library","settings"];
+const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");return DASHBOARD_ROUTES.includes(route)?route:"dashboard";};
+
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
   const tileCols=Math.min(size.c,cols);
@@ -2825,7 +3006,7 @@ function App(){
   const [libraryQuery,setLibraryQuery]=useState("");
   const [libraryCategory,setLibraryCategory]=useState("all");
   const librarySearchRef=useRef(null);
-  const [page,setPage]=useState(()=>{ const route=location.hash.replace(/^#\/?/,""); return ["dashboard","library","settings"].includes(route)?route:"dashboard"; });
+  const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
   const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",5); return DEFSIZE; }
@@ -2880,6 +3061,12 @@ function App(){
   const [authPassword,setAuthPassword]=useState("");
   const [authBusy,setAuthBusy]=useState(false);
   const [newPassword,setNewPassword]=useState("");
+  const [authError,setAuthError]=useState("");
+  const [locationFeedback,setLocationFeedback]=useState("");
+  const [notice,setNotice]=useState(null);
+  const notify=(message,action=null,actionLabel="Undo")=>setNotice({message,action,actionLabel});
+  useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(null),6500);return()=>clearTimeout(timer);},[notice]);
+  useEffect(()=>{document.title=page==="dashboard"?"Today":page==="library"?"Library":"Settings";},[page]);
   const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
 
   /* Daily AI content: which shared server-generated tiles to actually produce
@@ -2944,7 +3131,7 @@ function App(){
 
   /* pull remote state on load; reload once if it was newer */
   useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
-  const submitAccount=async()=>{ if(authBusy)return; setAuthBusy(true); try{
+  const submitAccount=async()=>{ if(authBusy)return; setAuthError(""); setAuthBusy(true); try{
     const fresh=authMode==="signup";
     const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword});
     localStorage.setItem(ACCOUNT_TOKEN_KEY,data.token);
@@ -2965,7 +3152,7 @@ function App(){
       /* else: the account has no cloud data yet — keep this device's data so it seeds the account. */
     }
     setAccountSignedIn(true); location.reload();
-  }catch(e){ alert(e.message); } setAuthBusy(false); };
+  }catch(e){ setAuthError(e.message); } setAuthBusy(false); };
   const changePassword=async()=>{ if(newPassword.length<8){alert("Password must be at least 8 characters.");return;} try{ await accountRequest("/auth/password",{password:newPassword}); setNewPassword(""); alert("Password updated."); }catch(e){alert(e.message);} };
   const disconnectAccount=()=>{ localStorage.removeItem(ACCOUNT_TOKEN_KEY); localStorage.removeItem(ACCOUNT_EMAIL_KEY); localStorage.removeItem("fefe_syncStamp"); localStorage.removeItem("fefe_healthToken"); location.reload(); };
   const [deleteBusy,setDeleteBusy]=useState(false);
@@ -3106,11 +3293,12 @@ function App(){
   const haveKey=!!getKey();
   const view=daily||{};
   const [weather,setWeather]=useState(()=>load("weather",null));
+  const weatherRequestRef=useRef(0);
   const [appDays,setAppDays]=useState(()=>load("appDays",[]));
   useEffect(()=>{
     if(weather) return;
-    let alive=true;
-    fetchWeather(getLocationProfile()).then(fresh=>{ if(alive){ setWeather(fresh); save("weather",fresh); } }).catch(()=>{});
+    let alive=true;const request=++weatherRequestRef.current;
+    fetchWeather(getLocationProfile()).then(fresh=>{ if(alive&&request===weatherRequestRef.current){ setWeather(fresh); save("weather",fresh); } }).catch(()=>{});
     return ()=>{ alive=false; };
   },[]);
 
@@ -3295,8 +3483,18 @@ function App(){
     setActiveTiles(ordered); save("activeTiles",ordered);
     const history={...tileSets,[todayKey]:ordered}; setTileSets(history); save("activeTileHistory",history);
   };
-  const openPage=next=>{ setEdit(false); setPage(next); if(location.hash!=="#/"+next)history.replaceState(null,"","#/"+next); window.scrollTo({top:0,behavior:"smooth"}); };
-  useEffect(()=>{ const route=location.hash.replace(/^#\/?/,""); if(!["dashboard","library","settings"].includes(route))history.replaceState(null,"","#/dashboard"); },[]);
+  const openPage=next=>{
+    if(!DASHBOARD_ROUTES.includes(next))return;
+    setEdit(false);setPage(next);
+    if(location.hash!=="#/"+next)history.pushState(null,"","#/"+next);
+    window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  };
+  useEffect(()=>{
+    const syncRoute=()=>{const next=dashboardPageFromHash();setPage(next);setEdit(false);if(location.hash!=="#/"+next)history.replaceState(null,"","#/"+next);window.scrollTo({top:0,behavior:"auto"});};
+    if(location.hash!=="#/"+dashboardPageFromHash())history.replaceState(null,"","#/"+dashboardPageFromHash());
+    window.addEventListener("hashchange",syncRoute);window.addEventListener("popstate",syncRoute);
+    return()=>{window.removeEventListener("hashchange",syncRoute);window.removeEventListener("popstate",syncRoute);};
+  },[]);
 
   const goSettings=()=>openPage("settings");
   const [genBusy,setGenBusy]=useState(false);
@@ -3557,6 +3755,7 @@ function App(){
   };
 
   const saveSettings=()=>{
+    const locationChanged=JSON.stringify(locationProfile)!==JSON.stringify(getLocationProfile());
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
     save("profileUsername",usernameField.trim());
@@ -3566,21 +3765,32 @@ function App(){
     localStorage.setItem("fefe_apiKey",keyField.trim());
     save("garminKey",garminKeyField.trim());
     save("location",locationProfile);
+    setLocationFeedback("");
+    notify("Changes saved.");
+    if(locationChanged){
+      const request=++weatherRequestRef.current;
+      fetchWeather(locationProfile).then(fresh=>{if(request===weatherRequestRef.current){setWeather(fresh);save("weather",fresh);}}).catch(()=>{if(request===weatherRequestRef.current)notify("Changes saved. Weather couldn’t update; try Refresh.");});
+    }
   };
-  const resetLayout=()=>{ save("widgetOrder",ALL); save("sizes",DEFSIZE); setOrder(ALL); setSizes(DEFSIZE); };
+  const resetLayout=()=>{
+    const previousOrder=order,previousSizes=sizes;
+    save("widgetOrder",ALL);save("sizes",DEFSIZE);setOrder(ALL);setSizes(DEFSIZE);
+    notify("Layout reset.",()=>{save("widgetOrder",previousOrder);save("sizes",previousSizes);setOrder(previousOrder);setSizes(previousSizes);notify("Layout restored.");});
+  };
   const findLocations=async()=>{
-    const query=locationQuery.trim();
-    if(!query){ setLocationMatches([]); return; }
-    setLocationBusy(true);
-    try{ setLocationMatches(await searchPlaces(query)); }
-    catch(e){ alert("Couldn't find that place right now."); }
-    setLocationBusy(false);
+    if(locationBusy)return;const query=locationQuery.trim();setLocationFeedback("");
+    if(!query){setLocationMatches([]);return;}
+    setLocationBusy(true);setLocationMatches([]);
+    try{const matches=await searchPlaces(query);setLocationMatches(matches);if(!matches.length)setLocationFeedback("No cities found. Try a nearby city.");}
+    catch(e){setLocationFeedback("Couldn’t search for cities. Please try again.");}
+    finally{setLocationBusy(false);}
   };
   const pickLocation=place=>{
     const next={ name:place.name, region:place.region||"", country:place.country||"", latitude:place.latitude, longitude:place.longitude, timezone:place.timezone||"UTC" };
     setLocationProfile(next);
     setLocationQuery([next.name,next.region].filter(Boolean).join(", "));
     setLocationMatches([]);
+    setLocationFeedback("City selected. Save changes to use it.");
   };
   const importVcf=(file)=>{ if(!file) return; const r=new FileReader();
     r.onload=()=>{ try{
@@ -3676,7 +3886,7 @@ function App(){
           {list.map(g=>(<div key={g.id} draggable className={"goalRow"+(g.done?" done":"")+(!g.carried&&!g.done?" fresh":"")} style={{cursor:"grab"}} onClick={e=>e.stopPropagation()} onDragStart={e=>e.dataTransfer.setData("text/plain",JSON.stringify({day:k,id:g.id}))}>
             <button className={"tick goalTick"+(g.done?" on":"")} aria-label={g.done?"Mark goal incomplete":"Mark goal complete"} onClick={()=>setGoalsDay(k,list.map(x=>x.id===g.id?{...x,done:!x.done}:x))}>{g.done?"✓":""}</button>
             <span className="goalText" style={{fontSize:isToday?14.5:13.5}}>{g.text}{g.carried && <span className="carry" title="Carried from a previous day"> ↩</span>}</span>
-            <button className="del" onClick={()=>setGoalsDay(k,list.filter(x=>x.id!==g.id))}>×</button>
+            <button className="del" aria-label={"Delete goal: "+g.text} onClick={()=>setGoalsDay(k,list.filter(x=>x.id!==g.id))}>×</button>
           </div>))}
           <GoalInput compact={!isToday} placeholder={isToday?"Add a goal for today…":"Plan…"} onAdd={text=>setGoalsDay(k,[...goalsFor(k),{id:uid(),text,done:false}])} />
         </div>
@@ -3711,10 +3921,12 @@ function App(){
     habits: T("habits","Habits",habitsLit,null,<>
       <div className="hgrid">
         {habits.map(h=>{ const on=!!hToday[h.id],parts=h.name.trim().split(/\s+/),hasIcon=/[\p{Extended_Pictographic}\p{Emoji_Presentation}]/u.test(parts[0]||""),icon=hasIcon?parts.shift():"",label=hasIcon?parts.join(" "):h.name; return (
-          <button key={h.id} className={"hsq"+(on?" on":"")} onClick={()=>toggleHabit(h.id)}>
-            {icon&&<span className="hicon">{icon}</span>}{label&&<span className="hname">{label}</span>}
-            <span className="hdel" onClick={(e)=>{e.stopPropagation(); persistHabits(habits.filter(x=>x.id!==h.id));}}>×</span>
-          </button>
+          <div className="habitControl" key={h.id}>
+            <button className={"hsq"+(on?" on":"")} aria-label={h.name} aria-pressed={on} onClick={()=>toggleHabit(h.id)}>
+              {icon&&<span className="hicon" aria-hidden="true">{icon}</span>}{label&&<span className="hname">{label}</span>}
+            </button>
+            <button type="button" className="hdel" aria-label={"Delete habit "+h.name} title={"Delete "+h.name} onClick={()=>persistHabits(habits.filter(x=>x.id!==h.id))}>×</button>
+          </div>
         ); })}
         <HabitAdd onAdd={name=>persistHabits([...habits,{id:uid(),name}])} />
       </div></>),
@@ -3796,6 +4008,7 @@ function App(){
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
   };
 
+  const settingsDirty=(nameField.trim()||"Fefe")!==profileName||usernameField.trim()!==load("profileUsername","")||keyField.trim()!==getKey()||garminKeyField.trim()!==load("garminKey","")||backgroundTheme!==load("backgroundTheme","neutral")||JSON.stringify(locationProfile)!==JSON.stringify(getLocationProfile());
   const libraryIds=order.filter(id=>widgets[id]&&matchesLibraryWidget(id,widgets[id].props.label,libraryQuery,libraryCategory));
   const libraryResting=libraryIds.filter(id=>!activeNow.has(id));
   const libraryActive=libraryIds.filter(id=>activeNow.has(id));
@@ -3804,170 +4017,118 @@ function App(){
 
   return (
     <div className="wrap">
-      {!accountSignedIn && <div className="authGate"><div className="authCard"><div className="ldot"/><h2>{authMode==="login"?"Sign in to your dashboard":"Create your dashboard account"}</h2><p className="hint">Your memories, settings and dashboard data stay with this account on every device.</p><input className="sinput" type="email" autoComplete="email" placeholder="Email" value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)} /><input className="sinput" type="password" autoComplete={authMode==="login"?"current-password":"new-password"} placeholder="Password (8+ characters)" value={authPassword} onChange={e=>setAuthPassword(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submitAccount()} /><button className="savebtn" onClick={submitAccount} disabled={authBusy}>{authBusy?"…":authMode==="login"?"Sign in":"Create account"}</button><button className="link" onClick={()=>setAuthMode(authMode==="login"?"signup":"login")}>{authMode==="login"?"Create a new account":"I already have an account"}</button></div></div>}
+      <a className="skipLink" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus();}}>Skip to content</a>
+      {!accountSignedIn&&<DashboardModal label={authMode==="login"?"Sign in":"Create account"} onClose={()=>{}} overlayClassName="authGate" className="authCard" as="form" onSubmit={e=>{e.preventDefault();submitAccount();}}>
+        <h2>{authMode==="login"?"Welcome back":"Create your account"}</h2>
+        <p className="hint">{authMode==="login"?"Sign in to your dashboard.":"Keep your dashboard with you across devices."}</p>
+        <label className="authLabel" htmlFor="auth-email">Email</label><input id="auth-email" className="sinput" type="email" autoComplete="email" required value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)}/>
+        <label className="authLabel" htmlFor="auth-password">Password</label><input id="auth-password" className="sinput" type="password" required minLength={authMode==="signup"?8:undefined} autoComplete={authMode==="login"?"current-password":"new-password"} aria-describedby={authMode==="signup"?"auth-password-help":undefined} value={authPassword} onChange={e=>setAuthPassword(e.target.value)}/>
+        {authMode==="signup"&&<p id="auth-password-help" className="hint">At least 8 characters.</p>}
+        {authError&&<p className="authError" role="alert">{authError}</p>}
+        <button type="submit" className="savebtn" disabled={authBusy}>{authBusy?(authMode==="login"?"Signing in…":"Creating account…"):authMode==="login"?"Sign in":"Create account"}</button>
+        <button type="button" className="link" onClick={()=>{setAuthMode(authMode==="login"?"signup":"login");setAuthError("");}}>{authMode==="login"?"Create an account":"Already have an account? Sign in"}</button>
+      </DashboardModal>}
       <nav className="topbar" aria-label="Primary navigation">
         <div className="topnav">
-          <button className={"navbtn"+(page==="dashboard"?" active":"")} onClick={()=>openPage("dashboard")}>Today</button>
-          <button className={"navbtn"+(page==="library"?" active":"")} onClick={()=>openPage("library")}>Library</button>
-          <button className={"navbtn"+(page==="settings"?" active":"")} onClick={()=>openPage("settings")}>Settings</button>
+          <button className={"navbtn"+(page==="dashboard"?" active":"")} aria-current={page==="dashboard"?"page":undefined} onClick={()=>openPage("dashboard")}>Today</button>
+          <button className={"navbtn"+(page==="library"?" active":"")} aria-current={page==="library"?"page":undefined} onClick={()=>openPage("library")}>Library</button>
+          <button className={"navbtn"+(page==="settings"?" active":"")} aria-current={page==="settings"?"page":undefined} onClick={()=>openPage("settings")}>Settings</button>
         </div>
         <div className="topActions">
-          {page!=="settings"&&<button className="actionBtn primary" onClick={generateToday} disabled={genBusy}><AppIcon name="sparkle"/><span>{genBusy?"Generating":contentReady?"Refresh":"Generate"}</span></button>}
-          {page==="dashboard"&&<button className={"actionBtn"+(edit?" active":"")} title="Arrange dashboard" onClick={()=>setEdit(a=>!a)}><AppIcon name={edit?"check":"layout"}/><span>{edit?"Done":"Arrange"}</span></button>}
+          {page!=="settings"&&<button className="actionBtn primary" aria-label={genBusy?"Updating today’s content":contentReady?"Refresh today’s content":"Load today’s content"} title={contentReady?"Refresh today’s content":"Load today’s content"} onClick={generateToday} disabled={genBusy}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1"/></svg><span>{genBusy?"Updating…":contentReady?"Refresh":"Load today"}</span></button>}
+          {page==="dashboard"&&<button className={"actionBtn"+(edit?" active":"")} title={edit?"Finish arranging":"Arrange dashboard"} aria-label={edit?"Finish arranging":"Arrange dashboard"} aria-pressed={edit} onClick={()=>setEdit(a=>!a)}><AppIcon name={edit?"check":"layout"}/><span>{edit?"Done":"Arrange"}</span></button>}
         </div>
       </nav>
 
+      <main id="main-content" className="pageContent" tabIndex="-1">
       <header className="dashboardHero">
         <div className="heroCopy">
-          <div className="heroEyebrow">{page==="library"?"Your workspace":page==="settings"?"Your preferences":displayDateLabel}</div>
-          <h1>{page==="library"?"Tile library":page==="settings"?"Settings":`${greeting}, ${profileName}`}</h1>
-          <p className="heroStatus">{page==="library"?"Explore, test and curate what belongs on your daily dashboard.":page==="settings"?"Keep birthdays, location, sync and your name in one place.":genBusy?"Preparing today's content…":contentReady?"Everything is ready when you are.":getKey()?"Your dashboard is ready to generate.":"Add your API key in Settings to enable daily content."}</p>
+          {page==="dashboard"&&<div className="heroEyebrow">{displayDateLabel}</div>}
+          <h1>{page==="library"?"Library":page==="settings"?"Settings":`${greeting}, ${profileName}`}</h1>
+          <p className="heroStatus">{page==="library"?"Choose what appears on Today.":page==="settings"?"Your profile, preferences and connections.":genBusy?"Updating today’s content…":litTotal?`${litDone} of ${litTotal} daily actions complete.`:"Choose a few tiles to start your day."}</p>
           {lateNight&&page==="dashboard"&&<div className="bedtime">Past midnight. Today rolls over at 1am.</div>}
         </div>
-        <div className="heroSummary">
-          {page==="dashboard"&&<div className="progressOrb" style={{"--p":pctLit}} title={`${pctLit}% complete`}><span className="progressValue">{pctLit}%</span></div>}
+        <div className="heroSummary" aria-label="Daily summary">
+          {page==="dashboard"&&<div className="progressOrb" style={{"--p":pctLit}} role="progressbar" aria-label="Daily progress" aria-valuenow={pctLit} aria-valuemin="0" aria-valuemax="100" title={`${pctLit}% complete`}><span className="progressValue">{pctLit}%</span></div>}
           <div className="metric"><span className="metricValue">{page==="library"?activeTiles.length:page==="settings"?birthdays.length:appDaysStreak}</span><span className="metricLabel">{page==="library"?"Active tiles":page==="settings"?"Birthdays":"Day streak"}</span></div>
           <div className="metric"><span className="metricValue">{page==="library"?ALL.length-activeTiles.length:page==="settings"?locationProfile.name:ice.perfect}</span><span className="metricLabel">{page==="library"?"Resting":page==="settings"?"Location":"Perfect days"}</span></div>
           <div className="metric"><span className="heroClock">{displayClock}</span><span className="metricLabel">{locationProfile.name}</span></div>
         </div>
       </header>
 
-      {page==="settings" && (
+      {page==="settings"&&(
         <div className="settings">
-          <h3>Settings</h3>
-          <p>Everything here is stored only in this browser.</p>
           <div className="settingsGrid">
             <section className="settingsCard">
-              <h4>Identity</h4>
-              <p className="hint">Your greeting, AI features and backups all stay tied to this profile.</p>
-              <div className="lab">Your name</div>
-              <div className="srow"><input className="sinput" autoComplete="name" placeholder="Your name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
-              <div className="lab">Claude API key</div>
-              <div className="srow"><input className="sinput" type="password" placeholder="Same Claude key, if used" value={keyField} onChange={e=>setKeyField(e.target.value)} /></div>
-              <div className="lab">Garmin Connect key</div>
-              <div className="srow"><input className="sinput" type="password" placeholder="Optional Garmin key" value={garminKeyField} onChange={e=>setGarminKeyField(e.target.value)} /></div>
-            </section>
-            <section className="settingsCard">
-              <h4>Appearance</h4>
-              <p className="hint">Choose the canvas behind your glass tiles.</p>
-              <div className="lab">Dashboard background</div>
-              <select className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
-                <option value="neutral">Neutral grey</option>
-                <option value="paper">Warm paper</option>
-                <option value="graphite">Soft graphite</option>
-                <option value="atmospheric">Soft colour wash</option>
-                <option value="aurora">Aurora (vivid)</option>
-                <option value="sunset">Sunset (warm)</option>
-                <option value="ocean">Ocean (cool)</option>
-              </select>
-              <p className="hint" style={{marginTop:6}}>Tip: colourful canvases (Aurora, Sunset, Ocean) show the glass refraction best; Paper and Graphite are calmest for reading.</p>
-            </section>
-            <section className="settingsCard">
-              <h4>Daily AI content</h4>
-              <p className="hint">Untick any tile you don't read — the server stops generating it, saving API tokens. (This controls generation, not visibility — hide a tile from the board with the Today panel's edit mode.)</p>
-              <div className="genTileList">
-                {SHARED_AI_TILES.map(([id,label])=>(
-                  <label key={id} className={"genTileRow"+(genEnabled(id)?" on":"")}>
-                    <input type="checkbox" checked={genEnabled(id)} onChange={()=>toggleGenTile(id)} />
-                    <span>{label}</span>
-                  </label>
-                ))}
-              </div>
-              <p className="hint" style={{marginTop:8}}>
-                <button type="button" className="linklike" onClick={verifyGenConfig}>Check server</button>
-                {" · "}
-                <button type="button" className="linklike" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"applying…":"apply now"}</button>
-                {genCfgStatus?<span style={{display:"block",marginTop:6}}>{genCfgStatus}</span>:null}
-              </p>
-              {genServerState==="old" && <p className="hint" style={{marginTop:6,opacity:.85}}>Your ticks are saved, but the token spend happens on the server, so it can't take effect until the worker runs the current code. This is a one-time paste — open Cloudflare → Workers → <b>fefe-sync</b> → Edit code, replace all with <code>worker/fefe-sync.js</code>, Save &amp; Deploy. After that, "Check server" will read ✓.</p>}
-              <p className="hint" style={{marginTop:4,opacity:.7}}>Tokens for these tiles are spent once/day by the server, not by your browser — so this list only bites once the worker is updated.</p>
-            </section>
-            <section className="settingsCard">
-              <h4>Location</h4>
-              <p className="hint">This drives the weather tile and the dashboard clock.</p>
-              <div className="locationBadge">{locationProfile.name}{locationProfile.region?` · ${locationProfile.region}`:""} · {locationProfile.country}</div>
-              <div className="lab">Find a city</div>
-              <div className="srow">
-                <input className="sinput" placeholder="Sydney, Paris, New York…" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findLocations()} />
-                <button className="ghostbtn" onClick={findLocations} disabled={locationBusy}>{locationBusy?"…":"Find"}</button>
-              </div>
-              {!!locationMatches.length && <div className="placeResults">{locationMatches.map((place,i)=><button key={`${place.name}-${i}`} className="placeOption" onClick={()=>pickLocation(place)}><b>{place.name}{place.region?`, ${place.region}`:""}</b><span>{place.country} · {place.timezone}</span></button>)}</div>}
-            </section>
-            <section className="settingsCard">
-              <h4>Birthdays</h4>
-              <p className="hint">The Birthdays widget stays clean and glanceable. Import lives here instead.</p>
-              <div className="srow">
-                <button className="ghostbtn" onClick={()=>{ const input=document.createElement('input'); input.type='file'; input.accept='.vcf,.vcard,text/vcard,text/x-vcard,text/directory,*/*'; input.onchange=()=>{ const file=input.files&&input.files[0]; if(file) importVcf(file); }; input.click(); }}>Import contacts</button>
-                <button className="ghostbtn" onClick={()=>setShowBirthdayHelp(v=>!v)}>{showBirthdayHelp?"Hide tuto":"Tuto"}</button>
-              </div>
-              {showBirthdayHelp && <div className="settingsHelp">
-                <div className="hint">Small guide</div>
-                <ol className="settingsList">
-                  <li>Export your contacts as a `.vcf` or vCard file from your phone or contacts app.</li>
-                  <li>Make sure birthdays are filled in before exporting.</li>
-                  <li>Come back here, press `Import contacts`, and pick that file.</li>
-                </ol>
-              </div>}
-            </section>
-            <section className="settingsCard">
-              <h4>Health bridge</h4>
-              <p className="hint">Garmin pulls in automatically once connected. No Garmin? An iOS Shortcut can export Apple Health as JSON and you import the file by hand.</p>
-              <div className="lab">Garmin — automatic</div>
-              {healthToken ? (
-                <div>
-                  <p className="hint" style={{margin:"0 0 6px"}}>Auto-pull is ON. Your scheduled script pushes to this token; the dashboard pulls it in on every load.</p>
-                  <div className="srow">
-                    <input className="sinput" readOnly value={healthToken} onFocus={e=>e.target.select()} />
-                    <button className="ghostbtn" onClick={syncHealthNow} disabled={healthBusy}>{healthBusy?"…":"Sync now"}</button>
-                    <button className="ghostbtn" onClick={disableHealthToken}>Disable</button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <div className="srow"><input className="sinput" placeholder="Secret token — 8+ chars, same as the script" value={healthTokenField} onChange={e=>setHealthTokenField(e.target.value)} /></div>
-                  <div className="srow" style={{marginTop:8}}><button className="savebtn" onClick={connectHealthToken} disabled={healthBusy}>{healthBusy?"…":"Connect Garmin"}</button></div>
-                </div>
-              )}
-              <div className="lab">Connection help</div>
-              <div className="srow">
-                <button className="ghostbtn" onClick={()=>setShowHealthHelp(v=>!v)}>{showHealthHelp?"Hide tuto":"Tuto"}</button>
-              </div>
-              {showHealthHelp && <div className="settingsHelp">
-                <div className="hint">Garmin — one-time setup</div>
-                <ol className="settingsList">
-                  <li>Pick any secret token (8+ chars). Paste it above and press `Connect Garmin`.</li>
-                  <li>Put the SAME token, plus your Garmin email &amp; password, into the script at `scripts/garmin_to_dashboard.py` (as secrets — never in the file).</li>
-                  <li>Let it run on a schedule (the included GitHub Action, or your own cron). It pushes each day to the store; the dashboard pulls it in automatically.</li>
-                </ol>
-              </div>}
-            </section>
-            <section className="settingsCard">
-              <h4>Account</h4>
-              <p className="hint">Your dashboard memory and settings belong to this account.</p>
+              <h2>Profile</h2>
               <div className="accountFields">
-                <div className="accountField"><label>Full name</label><input className="sinput" autoComplete="name" value={nameField} onChange={e=>setNameField(e.target.value)} /></div>
-                <div className="accountField"><label>Username</label><input className="sinput" autoComplete="username" placeholder="Choose a username" value={usernameField} onChange={e=>setUsernameField(e.target.value)} /></div>
-                <div className="accountField"><label>Email</label><input className="sinput" type="email" value={accountEmail||"Signed-in account"} readOnly /></div>
-                <div className="accountField"><label>Password</label><div className="accountPassword"><span className="accountDots">••••••</span><button className="link" onClick={()=>document.getElementById("account-new-password")?.focus()}>Change</button></div></div>
+                <div className="accountField"><label htmlFor="profile-name">Display name</label><input id="profile-name" className="sinput" autoComplete="name" value={nameField} onChange={e=>setNameField(e.target.value)}/></div>
+                <div className="accountField"><label htmlFor="profile-username">Username</label><input id="profile-username" className="sinput" autoComplete="username" value={usernameField} onChange={e=>setUsernameField(e.target.value)}/></div>
+                <div className="accountField"><label htmlFor="profile-email">Email</label><input id="profile-email" className="sinput" type="email" value={accountEmail} readOnly/></div>
               </div>
-              {accountSignedIn && <button className="ghostbtn" style={{marginTop:11}} onClick={disconnectAccount}>Disconnect account</button>}
-              <div className="srow" style={{marginTop:11}}><input id="account-new-password" className="sinput" type="password" placeholder="New password (8+ characters)" value={newPassword} onChange={e=>setNewPassword(e.target.value)} /><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
-              <button className="link dangerLink" style={{marginTop:12}} onClick={deleteAccount} disabled={deleteBusy}>{deleteBusy?"Deleting…":"Delete account"}</button>
-              <div className="lab">Backup & restore</div>
-              <div className="srow">
-                <button className="ghostbtn" onClick={exportBackup}>Download backup</button>
-                <button className="ghostbtn" onClick={importBackup}>Restore backup</button>
-              </div>
+              <details className="settingsDetails"><summary>Change password</summary>
+                <label className="lab" htmlFor="account-new-password">New password</label>
+                <div className="srow"><input id="account-new-password" className="sinput" type="password" autoComplete="new-password" aria-describedby="new-password-help" value={newPassword} onChange={e=>setNewPassword(e.target.value)}/><button className="ghostbtn" onClick={changePassword}>Update password</button></div>
+                <p id="new-password-help" className="hint" style={{marginTop:8}}>At least 8 characters.</p>
+              </details>
+              {accountSignedIn&&<div className="settingsActions"><button className="ghostbtn" onClick={disconnectAccount}>Sign out</button></div>}
+            </section>
+            <section className="settingsCard">
+              <h2>Appearance</h2>
+              <label className="lab" htmlFor="background-theme">Background</label>
+              <select id="background-theme" className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
+                <option value="neutral">Neutral grey</option><option value="paper">Warm paper</option><option value="graphite">Soft graphite</option><option value="atmospheric">Soft colour wash</option><option value="aurora">Aurora</option><option value="sunset">Sunset</option><option value="ocean">Ocean</option>
+              </select>
+              <p style={{marginTop:10}}>Preview a background here, then save your choice.</p>
+            </section>
+            <section className="settingsCard">
+              <h2>Daily content</h2>
+              <p>Choose which tiles get new content each day. Add or remove tiles from Today in the Library.</p>
+              <div className="genTileList">{SHARED_AI_TILES.map(([id,label])=><label key={id} className={"genTileRow"+(genEnabled(id)?" on":"")}><input type="checkbox" checked={genEnabled(id)} onChange={()=>toggleGenTile(id)}/><span>{label}</span></label>)}</div>
+              <div className="settingsActions"><button type="button" className="ghostbtn" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"Applying…":"Apply preferences"}</button><button type="button" className="linklike" onClick={verifyGenConfig}>Check connection</button></div>
+              <p role="status" aria-live="polite" style={{marginTop:10}}>{genCfgStatus||"These preferences save separately from your profile."}</p>
+              {genServerState==="old"&&<details className="settingsHelp"><summary>Finish connection setup</summary><p>Your preferences are saved. Update the sync service to apply them: in Cloudflare, open Workers → fefe-sync → Edit code. Replace the code with worker/fefe-sync.js, then Save &amp; Deploy.</p></details>}
+            </section>
+            <section className="settingsCard">
+              <h2>API keys</h2>
+              <p>For personal content and connected services.</p>
+              <label className="lab" htmlFor="claude-key">Claude API key</label><input id="claude-key" className="sinput" type="password" autoComplete="off" spellCheck="false" placeholder="Paste your API key" value={keyField} onChange={e=>setKeyField(e.target.value)}/>
+              <label className="lab" htmlFor="garmin-key">Garmin Connect key</label><input id="garmin-key" className="sinput" type="password" autoComplete="off" spellCheck="false" placeholder="Optional" value={garminKeyField} onChange={e=>setGarminKeyField(e.target.value)}/>
+            </section>
+            <section className="settingsCard">
+              <h2>Location</h2>
+              <p>For your clock and weather.</p>
+              <div className="locationBadge">{locationProfile.name}{locationProfile.region?` · ${locationProfile.region}`:""} · {locationProfile.country}</div>
+              <form onSubmit={e=>{e.preventDefault();findLocations();}}><label className="lab" htmlFor="location-search">Find a city</label><div className="srow"><input id="location-search" className="sinput" placeholder="City name" aria-describedby="location-feedback" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)}/><button type="submit" className="ghostbtn" disabled={locationBusy}>{locationBusy?"Searching…":"Search"}</button></div></form>
+              <p id="location-feedback" role="status" aria-live="polite" style={{marginTop:8}}>{locationFeedback}</p>
+              {!!locationMatches.length&&<div className="placeResults">{locationMatches.map((place,i)=><button key={`${place.name}-${i}`} className="placeOption" onClick={()=>pickLocation(place)}><b>{place.name}{place.region?`, ${place.region}`:""}</b><span>{place.country} · {place.timezone}</span></button>)}</div>}
+            </section>
+            <section className="settingsCard">
+              <h2>Health</h2>
+              <p>Connect Garmin to bring in your daily health summary.</p>
+              {healthToken?<><label className="lab" htmlFor="health-token">Connected token</label><input id="health-token" className="sinput" type="password" autoComplete="off" readOnly value={healthToken} onFocus={e=>e.target.select()}/><div className="settingsActions"><button className="ghostbtn" onClick={syncHealthNow} disabled={healthBusy}>{healthBusy?"Syncing…":"Sync now"}</button><button className="linklike" onClick={disableHealthToken}>Disconnect</button></div></>:<><label className="lab" htmlFor="health-token">Garmin sync token</label><input id="health-token" className="sinput" type="password" autoComplete="off" placeholder="Token from your Garmin setup" value={healthTokenField} onChange={e=>setHealthTokenField(e.target.value)}/><div className="settingsActions"><button className="ghostbtn" onClick={connectHealthToken} disabled={healthBusy}>{healthBusy?"Connecting…":"Connect Garmin"}</button></div></>}
+              <div className="settingsActions"><button className="ghostbtn" onClick={importHealthJson}>Import Health JSON</button></div>
+              <button className="linklike" style={{marginTop:14}} aria-expanded={showHealthHelp} aria-controls="health-setup-help" onClick={()=>setShowHealthHelp(v=>!v)}>{showHealthHelp?"Hide setup guide":"Show setup guide"}</button>
+              {showHealthHelp&&<div className="settingsHelp" id="health-setup-help"><ol className="settingsList"><li>Choose a token of at least 8 characters and enter it above.</li><li>Save the same token and your Garmin credentials as secrets for scripts/garmin_to_dashboard.py.</li><li>Run the included GitHub Action on a schedule. Your dashboard checks for new data when it opens.</li></ol><p>An iOS Shortcut can also export Apple Health summaries as JSON.</p></div>}
+            </section>
+            <section className="settingsCard">
+              <h2>Birthdays</h2>
+              <p>Import birthdays from your contacts.</p>
+              <div className="settingsActions"><button className="ghostbtn" onClick={()=>{const input=document.createElement('input');input.type='file';input.accept='.vcf,.vcard,text/vcard,text/x-vcard,text/directory,*/*';input.onchange=()=>{const file=input.files&&input.files[0];if(file)importVcf(file);};input.click();}}>Import contacts</button><button className="linklike" aria-expanded={showBirthdayHelp} aria-controls="birthday-import-help" onClick={()=>setShowBirthdayHelp(v=>!v)}>{showBirthdayHelp?"Hide guide":"Show guide"}</button></div>
+              {showBirthdayHelp&&<div className="settingsHelp" id="birthday-import-help"><ol className="settingsList"><li>Check that your contacts have birthdays saved.</li><li>Export your contacts as a vCard (.vcf) file.</li><li>Choose Import contacts and select the file.</li></ol></div>}
+            </section>
+            <section className="settingsCard">
+              <h2>Backup &amp; restore</h2>
+              <p>Keep a copy of your dashboard data.</p>
+              <div className="settingsActions"><button className="ghostbtn" onClick={exportBackup}>Download backup</button><button className="ghostbtn" onClick={importBackup}>Restore backup</button></div>
+              <details className="settingsDetails"><summary>Delete account</summary><p>This permanently removes your account and its cloud data.</p><button className="link dangerLink" onClick={deleteAccount} disabled={deleteBusy}>{deleteBusy?"Deleting…":"Delete account"}</button></details>
             </section>
           </div>
-          <div className="srow" style={{marginTop:14}}>
-            <button className="savebtn" onClick={saveSettings}>Save</button>
-            <button className="ghostbtn" onClick={resetLayout}>Reset layout</button>
-          </div>
+          <div className="settingsSaveBar"><span className="saveState" role="status" aria-live="polite">{settingsDirty?"You have unsaved changes":"All changes saved"}</span><button className="ghostbtn" onClick={resetLayout}>Reset layout</button><button className="savebtn" onClick={saveSettings} disabled={!settingsDirty}>Save changes</button></div>
         </div>
       )}
 
-      {page==="dashboard" && edit && <div className="edithint">✦ Drag a tile to move it · drag the bottom-right corner to resize · tap “Done” when finished.</div>}
+      {page==="dashboard" && edit && <div className="edithint">Drag tiles to move them. Use the bottom-right corner to resize. Choose Done to finish.</div>}
 
       {page==="settings" ? null : page==="library" ? (
         <div className="libraryShelves">
@@ -3998,12 +4159,14 @@ function App(){
           </div>
         </div>
       ) : (
-        <div className="grid" ref={gridRef} style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div>
+        <>{activeNow.size===0&&<section className="todayEmpty"><h2>No tiles on Today yet</h2><p>Choose a few tiles to get started.</p><button className="ghostbtn" onClick={()=>openPage("library")}>Browse Library</button></section>}<div className="grid" ref={gridRef} style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{order.filter(id=>activeNow.has(id)&&widgets[id]).map(id=>widgets[id])}</div></>
       )}
 
+      </main>
+      {notice&&<div className="dashboardNotice" role="status" aria-live="polite"><span>{notice.message}</span>{notice.action&&<button onClick={notice.action}>{notice.actionLabel}</button>}</div>}
+
       {showJournal && (
-        <div className="ovl" onClick={()=>setShowJournal(false)}>
-          <div className="ovlcard" onClick={e=>e.stopPropagation()}>
+        <DashboardModal label="Journal" onClose={()=>setShowJournal(false)}>
             <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Journal</h3><button className="ghostbtn" onClick={()=>setShowJournal(false)}>Close</button></div>
             {Object.keys(notes).filter(k=>(notes[k]||"").trim()).length===0 && <p className="hint">No notes yet — write today's in the “Note du jour” tile.</p>}
             {Object.keys(notes).filter(k=>(notes[k]||"").trim()).sort().reverse().map(k=>{ const [y,m,d]=k.split("-").map(Number);
@@ -4011,37 +4174,32 @@ function App(){
                 <div className="jdate">{formatDateKey(k)}</div>
                 <div className="jtext">{notes[k]}</div>
               </div>); })}
-          </div>
-        </div>
+        </DashboardModal>
       )}
 
       {showBankBrowser && (
-        <div className="ovl" onClick={()=>setShowBankBrowser(false)}>
-          <div className="ovlcard" onClick={e=>e.stopPropagation()}>
+        <DashboardModal label="Memory" onClose={()=>setShowBankBrowser(false)}>
             <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Memory</h3><div style={{display:"flex",gap:8}}><button className="ghostbtn" disabled={bankBusy||!Object.keys(brainBank.topics||{}).length} onClick={reorganizeBank}>{bankBusy?"Reorganising…":"Reorganise map"}</button><button className="ghostbtn" onClick={()=>setShowBankBrowser(false)}>Close</button></div></div>
             {Object.keys(brainBank.topics||{}).length===0 && <p className="hint">Nothing filed yet — add what you learn from the tile on the board.</p>}
             <MindMap topics={brainBank.topics||{}} onRemove={(topic,id)=>{ const list=(brainBank.topics[topic]||[]).filter(x=>x.id!==id); const nt={...brainBank.topics}; if(list.length)nt[topic]=list;else delete nt[topic]; persistBank({topics:nt}); }}/>
-          </div>
-        </div>
+        </DashboardModal>
       )}
 
       {showCourseEditor && (
-        <div className="ovl" onClick={()=>setShowCourseEditor(false)}>
-          <div className="ovlcard" onClick={e=>e.stopPropagation()}>
+        <DashboardModal label="Course material" onClose={()=>setShowCourseEditor(false)}>
             <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Course material</h3><button className="ghostbtn" onClick={()=>setShowCourseEditor(false)}>Close</button></div>
             <p className="hint" style={{marginBottom:12}}>Paste notes, slide text, or a syllabus per course. The Academic tile rotates through your courses and studies a little further into each one every day.</p>
             {courses.map(c=>(
               <div key={c.id} className="jitem">
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                   <b>{c.name}</b>
-                  <button className="del" onClick={()=>removeCourse(c.id)}>×</button>
+                  <button className="del" aria-label={"Delete course: "+c.name} onClick={()=>removeCourse(c.id)}>×</button>
                 </div>
                 <p className="muted" style={{fontSize:12,marginTop:4}}>{c.content.length.toLocaleString()} characters of notes</p>
               </div>
             ))}
             <CourseAddForm onAdd={addCourse} />
-          </div>
-        </div>
+        </DashboardModal>
       )}
     </div>
   );
@@ -4059,23 +4217,31 @@ function HabitAdd({onAdd}){
   const [open,setOpen]=useState(false), [emoji,setEmoji]=useState(""), [label,setLabel]=useState("");
   const close=()=>{ setOpen(false); setEmoji(""); setLabel(""); };
   const s=()=>{ const value=[emoji.trim(),label.trim()].filter(Boolean).join(" "); if(value){ onAdd(value); close(); } };
-  useEffect(()=>{ if(!open)return; const esc=e=>e.key==="Escape"&&close(); window.addEventListener("keydown",esc); return()=>window.removeEventListener("keydown",esc); },[open]);
-  return <><button className="hsq plus" aria-label="Add habit" onClick={()=>setOpen(true)}>＋</button>{open&&ReactDOM.createPortal(
-    <div className="ovl habitAddOverlay" onClick={close}>
-      <form className="habitAddModal" onClick={e=>e.stopPropagation()} onSubmit={e=>{e.preventDefault();s();}}>
-        <h3>Add a habit</h3><p>Choose an emoji, a name, or both.</p>
-        <div className="habitAddFields">
-          <input autoFocus className="habitModalInput habitModalEmoji" aria-label="Habit emoji" placeholder="😊" maxLength="8" value={emoji} onChange={e=>setEmoji(e.target.value)} />
-          <input className="habitModalInput" aria-label="Habit name" placeholder="Habit name (optional)" value={label} onChange={e=>setLabel(e.target.value)} />
-        </div>
-        <div className="habitAddActions"><button type="button" className="habitModalCancel" onClick={close}>Cancel</button><button type="submit" className="habitModalSave" disabled={!emoji.trim()&&!label.trim()}>Add habit</button></div>
-      </form>
-    </div>,document.body
-  )}</>;
+  return <><button className="hsq plus" aria-label="Add habit" aria-haspopup="dialog" aria-expanded={open} onClick={()=>setOpen(true)}>＋</button>{open&&
+    <DashboardModal label="Add a habit" onClose={close} overlayClassName="habitAddOverlay" className="habitAddModal" as="form" onSubmit={e=>{e.preventDefault();s();}}>
+      <h3>Add a habit</h3><p>Choose an emoji, a name, or both.</p>
+      <div className="habitAddFields">
+        <input autoFocus className="habitModalInput habitModalEmoji" aria-label="Habit emoji" placeholder="😊" maxLength="8" value={emoji} onChange={e=>setEmoji(e.target.value)} />
+        <input className="habitModalInput" aria-label="Habit name" placeholder="Habit name (optional)" value={label} onChange={e=>setLabel(e.target.value)} />
+      </div>
+      <div className="habitAddActions"><button type="button" className="habitModalCancel" onClick={close}>Cancel</button><button type="submit" className="habitModalSave" disabled={!emoji.trim()&&!label.trim()}>Add habit</button></div>
+    </DashboardModal>
+  }</>;
 }
-function BirthdayInput({onAdd}){ const [name,setName]=useState(""); const [day,setDay]=useState(""); const [month,setMonth]=useState("");
-  const s=()=>{ const d=Number(day),m=Number(month); if(name.trim()&&d>=1&&d<=31&&m>=1&&m<=12){ onAdd({name:name.trim(),day:d,month:m}); setName(""); setDay(""); setMonth(""); } };
-  return (<div className="addrow birthdayAddRow"><input className="addinput" style={{flex:2}} placeholder="Name" value={name} onChange={e=>setName(e.target.value)} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="DD" value={day} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} /><input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} placeholder="MM" value={month} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} onKeyDown={e=>e.key==="Enter"&&s()} /><button className="addbtn" onClick={s}>+</button></div>); }
+function BirthdayInput({onAdd}){
+  const [name,setName]=useState(""),[day,setDay]=useState(""),[month,setMonth]=useState("");
+  const nameRef=useRef(null),d=Number(day),m=Number(month);
+  // A leap year permits 29 February while rejecting dates such as 31 April.
+  const validDate=/^\d{1,2}$/.test(day)&&/^\d{1,2}$/.test(month)&&m>=1&&m<=12&&d>=1&&d<=new Date(2000,m,0).getDate();
+  const valid=!!name.trim()&&validDate;
+  const submit=event=>{event.preventDefault();if(!valid)return;onAdd({name:name.trim(),day:d,month:m});setName("");setDay("");setMonth("");nameRef.current?.focus();};
+  return <form className="addrow birthdayAddRow" onSubmit={submit}>
+    <input ref={nameRef} className="addinput" style={{flex:2}} aria-label="Birthday name" placeholder="Name" autoComplete="off" required value={name} onChange={e=>setName(e.target.value)} />
+    <input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} aria-label="Birthday day" inputMode="numeric" pattern="[0-9]*" maxLength={2} placeholder="DD" required value={day} aria-invalid={!!day&&!!month&&!validDate||undefined} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} />
+    <input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} aria-label="Birthday month" inputMode="numeric" pattern="[0-9]*" maxLength={2} placeholder="MM" required value={month} aria-invalid={!!day&&!!month&&!validDate||undefined} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} />
+    <button type="submit" className="addbtn" aria-label="Add birthday" disabled={!valid}>+</button>
+  </form>;
+}
 
 function NoteCard({saved,onSave,onView}){
   // Persist each edit before navigation or Library filtering can unmount this card.
@@ -4083,7 +4249,7 @@ function NoteCard({saved,onSave,onView}){
     <div className="noteCard">
       <textarea className="notearea" aria-label="Today’s note" placeholder="Something to remember…" value={saved} onChange={e=>onSave(e.target.value)} />
       <div className="noteActions" style={{marginTop:8}}>
-        <button className="pill" disabled>Saved ✓</button>
+        <span className="noteSaved">Saved</span>
         <button className="link" onClick={onView}>View all notes →</button>
       </div>
     </div>
@@ -4144,7 +4310,7 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
     setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; });
     setRevealed(results=>{ const n={...results}; delete n[item.id]; return n; });
   };
-  if(snap.length===0) return <PlainEmpty>Nothing due. Finished words and lessons return when FSRS predicts they need refreshing.</PlainEmpty>;
+  if(snap.length===0) return <PlainEmpty>Nothing due. Saved cards return here for review.</PlainEmpty>;
   return <div>{snap.map(item=>{
     const quiz=item.quiz||{};
     const prompts=(quiz.prompts&&quiz.prompts.length)?quiz.prompts:[quiz.prompt||item.title||"What do you remember?"];
@@ -4224,16 +4390,14 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
           {next && <div className="muted birthdayNext">Next: {next.name} on {pad(next.day)}/{pad(next.month)}</div>}
         </div>}
       </button>
-      {open&&ReactDOM.createPortal(<div className="ovl" onClick={()=>setOpen(false)}>
-        <div className="ovlcard birthdayManager" onClick={e=>e.stopPropagation()}>
+      {open&&<DashboardModal label="Birthdays" onClose={()=>setOpen(false)} className="ovlcard birthdayManager">
           <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Birthdays</h3><div style={{display:"flex",gap:7,flexWrap:"wrap",justifyContent:"flex-end"}}><button className="ghostbtn" onClick={()=>setOpen(false)}>Close</button></div></div>
           <BirthdayInput onAdd={onAdd} />
           <div className="birthdayManagerList">
             {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Add someone by hand here, or import your contacts from Settings.</div></div>}
             {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
           </div>
-        </div>
-      </div>,document.body)}
+      </DashboardModal>}
     </>
   );
 }
@@ -4538,7 +4702,7 @@ function PositiveEventsCard({events,onAdd,onRemove}){
   const typeFor=event=>POSITIVE_EVENT_TYPES[event.type]||POSITIVE_EVENT_TYPES.other;
   return (
     <div className="positiveEvents">
-      {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>Give future you something to look forward to.</b><span>Sport, concerts, holidays—anything good.</span></div>}
+      {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b><span>Add a plan to count down to.</span></div>}
       {shown.length>0 && <div className="eventList">{shown.map(event=><div className="eventHero" key={event.id}>
         <div className="eventHeroTop"><span className="eventType">{typeFor(event).icon} {typeFor(event).label}</span><button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button></div>
         <div className="eventCountdown"><strong>{event.days===0?"TODAY":event.days}</strong><span>{event.days===0?"It’s here":event.days===1?"day to go":"days to go"}</span></div>
@@ -4546,7 +4710,7 @@ function PositiveEventsCard({events,onAdd,onRemove}){
         <div className="eventDate">{positiveEventDate(event.date)}</div>
       </div>)}</div>}
       {!showAdd
-        ? <button className="eventAddToggle" onClick={()=>setShowAdd(true)}>+ Something exciting</button>
+        ? <button className="eventAddToggle" onClick={()=>setShowAdd(true)}>+ Add event</button>
         : <PositiveEventForm onAdd={(label,date,type)=>{onAdd(label,date,type);setShowAdd(false);}} onClose={()=>setShowAdd(false)} />}
     </div>
   );
@@ -4612,7 +4776,7 @@ function HealthCard({data,latest}){
       </div>
       {workouts.length>0
         ? <div className="healthWorkout"><Sym name="stopwatch" className="workoutIcon" /><span>{workouts.slice(0,2).map(w=>`${w.type} ${Math.round(Number(w.durationMinutes)||0)}m`).join(" · ")}</span></div>
-        : <div className="healthHint">{has?"No workout logged for this day.":"Connect Garmin in Settings to pull steps, sleep, HR, Body Battery, stress and HRV automatically."}</div>}
+        : <div className="healthHint">{has?"No workout logged for this day.":"Connect Garmin in Settings, or import a health summary."}</div>}
     </div>
   );
 }
@@ -4698,7 +4862,7 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEdit
   if(!hasCourses) return (
     <div className="academicSetup">
       <span className="academicSetupGlyph" aria-hidden="true">📚</span>
-      <p>Paste your class or course notes and this tile studies from them daily — built for broad chapter understanding, not isolated facts.</p>
+      <p>Add course notes for a short daily study session.</p>
       <button className="pill primary" onClick={onOpenEditor}>📄 Add study files</button>
     </div>
   );
@@ -4815,8 +4979,7 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
   const weeklyMinutes=safe.sessions.filter(s=>s.date>=addDays(todayKey,-6)).reduce((sum,s)=>sum+(s.minutes||0),0);
   const sessionSeconds=current&&selected===null?Math.max(0,Math.round((tick-questionStarted)/1000)):answerSeconds;
   const answerLetters=["A","B","C","D","E"];
-  return <div className="ovl gmatOverlay" onClick={onClose}>
-    <div className="ovlcard gmatWorkspace" onClick={e=>e.stopPropagation()}>
+  return <DashboardModal label="GMAT workspace" onClose={onClose} overlayClassName="gmatOverlay" className="ovlcard gmatWorkspace">
       <div className="gmatTop">
         <div className="gmatBrand"><div className="gmatBrandMark">GMAT</div><div><h2>GMAT workspace</h2><p>Fresh daily lesson · adaptive practice · FSRS review</p></div></div>
         <button className="gmatClose" aria-label="Close GMAT workspace" onClick={onClose}>×</button>
@@ -4890,8 +5053,7 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
           <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{formatDateKey(mock.date)}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip del" aria-label="Delete mock score" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
         </div>}
       </div>
-    </div>
-  </div>;
+  </DashboardModal>;
 }
 
 function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){

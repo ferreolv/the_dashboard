@@ -37,6 +37,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 
 ## Durable design preferences
 
+- The dashboard shell stays quiet: lighter headings, inline summary metrics, plain language, restrained shadows and modest control shapes; vivid tile identities and glass completion states remain the visual focus. Settings uses labelled fields, a visible save state, optional setup details, and reversible layout resets.
 - Dashboard uses a softly atmospheric pastel canvas so transparent clear-glass tiles visibly refract the background. Resting tile surfaces stay translucent white glass (never hue-filled), but each tile commits hard to ONE vivid hue that shows up in a thick coloured border, the label/heading, the body text, the glow, and chunky interactive objects. Typeface is Nunito (rounded, neutral-playful).
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
