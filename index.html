@@ -2111,9 +2111,93 @@
   }
   @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}.dashboardHero *, .topbar *, .libraryTools *{transition:none!important}}
 
+
+  /* Coloured liquid glass. Refraction stays behind the content, never on text. */
+  body{isolation:isolate}
+  body::before{content:'';position:fixed;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 65% at 0% 80%,rgba(148,175,196,.2),transparent 75%),linear-gradient(124deg,transparent 22%,rgba(255,255,255,.36) 22.2%,rgba(255,255,255,.12) 37%,transparent 37.2%)}
+  body::after{content:'';position:fixed;z-index:-1;pointer-events:none;width:110vw;height:64vw;left:16vw;top:10vh;border:2px solid rgba(255,255,255,.32);border-radius:50%;transform:rotate(-28deg)}
+  .tile[data-tileid]{
+    --glass-radius:34px;
+    border:1px solid rgba(255,255,255,.46)!important;border-radius:var(--glass-radius)!important;
+    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,0) 46%,rgba(255,255,255,.035)),linear-gradient(125deg,rgba(var(--glass-rgb),.38),rgba(var(--glass-rgb),.2));
+    background:transparent!important;
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    box-shadow:inset 1px 1px 1px rgba(255,255,255,.66),inset -1px -1px 1px rgba(var(--glass-depth),.18),0 12px 28px -12px rgba(var(--glass-depth),.22),0 2px 6px rgba(30,40,50,.04)!important;
+    color:var(--ink)!important;transition:background .25s,border-color .25s,box-shadow .25s;
+  }
+  .tile[data-tileid]::before{
+    content:''!important;display:block!important;position:absolute;z-index:-1;inset:0!important;width:auto!important;height:auto!important;margin:0!important;border-radius:inherit;pointer-events:none;opacity:1!important;transform:none!important;
+    background:var(--glass-surface)!important;box-shadow:inset 0 0 12px 2px rgba(255,255,255,.08);
+    -webkit-backdrop-filter:blur(5px) saturate(130%);backdrop-filter:blur(5px) saturate(130%);
+    -webkit-backdrop-filter:blur(5px) saturate(130%) url('#dashboard-glass-refraction');backdrop-filter:blur(5px) saturate(130%) url('#dashboard-glass-refraction');
+  }
+  .tile[data-tileid]::after{
+    content:'';display:block!important;position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;opacity:1!important;
+    background:linear-gradient(155deg,rgba(255,255,255,.2),transparent 13%,transparent 87%,rgba(255,255,255,.08))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 1px 0 0 rgba(255,255,255,.2);
+  }
+  .tile[data-tileid]:not(.editing):hover{transform:none!important;border-color:rgba(255,255,255,.7)!important;box-shadow:inset 1px 1px 1px rgba(255,255,255,.8),inset -1px -1px 1px rgba(var(--glass-depth),.2),0 14px 32px -12px rgba(var(--glass-depth),.26)!important}
+  .tile.completed[data-tileid]{
+    --glass-surface:linear-gradient(145deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.04)),linear-gradient(130deg,rgba(var(--glass-depth),.86),rgba(var(--glass-depth),.8));
+    background:transparent!important;
+    border-color:rgba(255,255,255,.38)!important;
+    box-shadow:inset 1px 1px 1px rgba(255,255,255,.44),inset -1px -1px 1px rgba(var(--glass-depth),.3),0 12px 30px -12px rgba(var(--glass-depth),.35)!important;
+  }
+  .tile.completed[data-tileid]::after{background:linear-gradient(155deg,rgba(255,255,255,.08),transparent 12%,transparent 88%,rgba(255,255,255,.04))!important}
+  .tile[data-tileid] .tilehead .ldot{background:currentColor!important;opacity:.65}
+  .tile[data-tileid] .tilehead .lbl{color:var(--ink)!important;font-size:13px!important;font-weight:800!important}
+  .tile[data-tileid] .content{color:var(--ink)!important;text-shadow:none!important}
+  .tile[data-tileid] .content :where(p,span,div,label):not(button *){color:inherit}
+  .tile[data-tileid] :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.goalText,.pushCount,.wbig,.weatherTomorrowTemps,.eventCountdown strong,.agName,.miniCalHead,.miniCalNum,.shopSectionLabel,.wcTerm,.wcDef,.wcTermFr,.philoModeRow,.plainEmpty,.gmatTileMeta){color:var(--ink)!important}
+  .tile[data-tileid] :is(.muted,.noteSaved,.agSub,.weatherMeta,.weatherTomorrowLabel){opacity:.82}
+  .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventHero,.eventEmpty,.insight,.examLink,.wrevSection,.placeBranch,.flameCard,.achCard,.plainEmpty,.recallFlash,.recallAnswer,.miniCalendar,.habitHistoryCard,.gmatFocus,.gmatFocusCard){background:transparent!important;border-color:var(--hair)!important;box-shadow:none!important}
+  .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventEmpty,.plainEmpty,.wrevSection){border:0!important}
+  .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.eventEmpty){border-radius:0!important}
+  .tile[data-tileid] .content .weatherEmoji{background:none!important;box-shadow:none!important}
+  .tile[data-tileid] .content .achCard.achGold{background:rgba(255,255,255,.06)!important;color:var(--ink)!important}
+  .tile[data-tileid] .content .achCard.achGold .achN{color:var(--ink)!important}
+  .tile[data-tileid] .goalDay{border-bottom-color:var(--hair)!important}
+  .tile[data-tileid] .goalDayHead :is(.lbl,.muted){color:var(--ink)!important;background:transparent!important}
+  .tile[data-tileid] .content .taskRow{background:rgba(255,255,255,.06)!important;border-color:var(--hair)!important;box-shadow:none!important}
+  .tile[data-tileid] input,.tile[data-tileid] textarea,.tile[data-tileid] select{
+    color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;background:var(--field)!important;border:1px solid var(--fieldbd)!important;border-radius:16px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)!important;caret-color:var(--ink);
+  }
+  .tile[data-tileid] input::placeholder,.tile[data-tileid] textarea::placeholder{color:var(--dim)!important;-webkit-text-fill-color:var(--dim)!important}
+  .tile[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn),.tile[data-tileid] a.pill{
+    color:var(--ink)!important;background:rgba(255,255,255,.12)!important;border:1px solid var(--fieldbd)!important;border-radius:16px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important;
+  }
+  .tile[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn):hover{background:rgba(255,255,255,.24)!important;border-color:var(--ink)!important;transform:none!important}
+  .tile[data-tileid] button:is(.addbtn,.chatSend),.tile[data-tileid] .tick.on,.tile[data-tileid] .hsq.on,.tile[data-tileid] .eventEmptyGlyph,.tile[data-tileid] button:is(.mark.on,.qopt.correct){
+    color:#fff!important;background:rgba(var(--glass-depth),.84)!important;border-color:rgba(255,255,255,.36)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 3px 10px rgba(var(--glass-depth),.12)!important;
+  }
+  .tile[data-tileid] .tick:not(.on){background:rgba(255,255,255,.08)!important;border:1.5px solid var(--tickbd)!important;color:var(--ink)!important}
+  .tile[data-tileid] .hsq{background:rgba(255,255,255,.1)!important;border:1px solid var(--fieldbd)!important;color:var(--ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)!important}
+  .tile[data-tileid] .hsq.plus{background:transparent!important;border-style:dashed!important}
+  .tile[data-tileid] .hsq.on{background:rgba(var(--glass-depth),.84)!important;color:#fff!important}
+  .tile[data-tileid] .hsq.on :is(.hname,.hicon){color:#fff!important}
+  .tile.completed[data-tileid] .tick.on,.tile.completed[data-tileid] .hsq.on,.tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){color:var(--glass-ink)!important;background:rgba(255,255,255,.86)!important;border-color:rgba(255,255,255,.65)!important}
+  .tile.completed[data-tileid] .hsq.on :is(.hname,.hicon){color:var(--glass-ink)!important}
+  .tile[data-tileid] .qopt.wrong{color:#8b1736!important;background:rgba(255,220,228,.75)!important;border-color:rgba(139,23,54,.4)!important}
+  .tile[data-tileid] button:is(.del,.hdel,.tileUndo),.tile[data-tileid] button.taskMain,.tile[data-tileid] button.goalAddGhost{color:var(--ink)!important;background:transparent!important;border:0!important;box-shadow:none!important}
+  .tile[data-tileid] button:is(.miniCalNav,.miniCalTitle,.miniCalToday,.miniCalDay){color:var(--ink)!important;background:transparent!important;box-shadow:none!important}
+  .tile[data-tileid] .miniCalChip{color:var(--ink)!important;background:rgba(255,255,255,.18)!important}
+  .tile[data-tileid] .miniCalDay.today .miniCalNum{color:var(--ink)!important;background:rgba(255,255,255,.24)!important}
+  .tile[data-tileid] .miniCalChip.due{color:#fff!important;background:rgba(var(--glass-depth),.85)!important}
+  .tile[data-tileid] .shopIcon{color:var(--ink)!important;background:rgba(255,255,255,.08)!important;border-color:var(--hair)!important;box-shadow:none!important}
+  .tile[data-tileid] .shopIcon.on{background:rgba(255,255,255,.34)!important;border-color:var(--ink)!important}
+  .tile[data-tileid] :where(button,a,input,textarea,select,[tabindex]):focus-visible{outline-color:var(--ink)!important}
+  .tile[data-tileid]>.libraryAddToday,.tile[data-tileid]>.libraryRemoveToday{background:rgba(255,255,255,.52)!important;border:1px solid rgba(255,255,255,.7)!important;color:var(--glass-ink)!important;backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 9px rgba(var(--glass-depth),.15)!important}
+  .tile.completed[data-tileid] :is(.muted,.noteSaved,.agSub,.weatherMeta,.weatherTomorrowLabel,.goalRow.done .goalText,.taskRow.done){opacity:1!important}
+  .tile.completed[data-tileid] .content .taskRow{background:transparent!important}
+  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn),.tile.completed[data-tileid] a.pill{background:rgba(0,0,0,.08)!important}
+  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn):hover{background:rgba(0,0,0,.16)!important}
+  .tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){background:rgba(255,255,255,.86)!important}
+  @media(max-width:760px){.tile[data-tileid]{--glass-radius:30px}}
+
 </style>
 </head>
 <body>
+<svg class="glassFilterDefs" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;pointer-events:none"><defs><filter id="dashboard-glass-refraction" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise"/><feGaussianBlur in="noise" stdDeviation="0.4" result="softNoise"/><feDisplacementMap in="SourceGraphic" in2="softNoise" scale="12" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 <div id="root"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -2159,10 +2243,26 @@ const TASK = new Set(Object.keys(COL));
 const uid=()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);
 
 function themeVars(id, done){
-  const c=COL[id]||{p:"#e6e6ea",v:"#666",d:"#444"};
+  const c=COL[id]||{p:'#e6e6ea',v:'#666666',d:'#444444'};
   const complete=TASK.has(id)&&done;
-  if(complete) return { "--bg":c.p, "--accent":c.v, "--accentDark":c.d, "--tileBg":`linear-gradient(145deg,color-mix(in srgb,${c.v} 88%,white),${c.v} 48%,${c.d})`, "--ink":"#fff", "--dim":"rgba(255,255,255,.78)", "--lbl":"rgba(255,255,255,.96)", "--hair":"rgba(255,255,255,.17)", "--field":"rgba(255,255,255,.15)", "--fieldbd":"rgba(255,255,255,.25)", "--tickbd":"rgba(255,255,255,.76)", "--tickfill":"#fff", "--tickmark":c.d, "--btnbg":"rgba(255,255,255,.16)", "--btnbd":"rgba(255,255,255,.27)", "--glow":`0 20px 45px -22px color-mix(in srgb,${c.v} 70%,transparent)`, "--candyShadow":c.v };
-  return { "--bg":c.p, "--accent":c.v, "--accentDark":c.d, "--tileBg":`linear-gradient(140deg,color-mix(in srgb,${c.p} 84%,white),${c.p} 58%,color-mix(in srgb,${c.p} 88%,${c.v}))`, "--ink":c.d, "--dim":`color-mix(in srgb,${c.d} 68%,transparent)`, "--lbl":c.d, "--hair":`color-mix(in srgb,${c.v} 24%,transparent)`, "--field":"rgba(255,255,255,.52)", "--fieldbd":`color-mix(in srgb,${c.v} 26%,transparent)`, "--tickbd":c.v, "--tickfill":c.v, "--tickmark":"#fff", "--btnbg":"rgba(255,255,255,.62)", "--btnbd":"rgba(23,24,44,.10)", "--glow":`0 16px 38px -28px ${c.v}`, "--candyShadow":c.v };
+  const rgb=hex=>hex.match(/[a-f0-9]{2}/gi).map(value=>parseInt(value,16));
+  const hue=rgb(c.v), dark=rgb(c.d);
+  const ink=dark.map((value,i)=>Math.round(value*.3+[15,23,32][i]*.7));
+  const depth=hue.map((value,i)=>Math.round(value*.18+[12,21,30][i]*.82));
+  return {
+    '--bg':c.p,'--accent':c.v,'--accentDark':complete?c.d:'rgb('+ink.join(',')+')',
+    '--glass-rgb':hue.join(','),'--glass-depth':depth.join(','),'--glass-ink':'rgb('+ink.join(',')+')',
+    '--ink':complete?'#fff':'rgb('+ink.join(',')+')','--lbl':complete?'#fff':'rgb('+ink.join(',')+')',
+    '--dim':complete?'#fff':'rgba('+ink.join(',')+',.82)',
+    '--hair':complete?'rgba(255,255,255,.19)':'rgba('+ink.join(',')+',.15)',
+    '--field':complete?'rgba(0,0,0,.10)':'rgba(255,255,255,.14)',
+    '--fieldbd':complete?'rgba(255,255,255,.3)':'rgba('+ink.join(',')+',.2)',
+    '--tickbd':complete?'rgba(255,255,255,.76)':'rgba('+ink.join(',')+',.4)',
+    '--tickfill':complete?'#fff':'rgba('+depth.join(',')+',.88)',
+    '--tickmark':complete?c.d:'#fff','--btnbg':'rgba(255,255,255,.12)',
+    '--btnbd':complete?'rgba(255,255,255,.26)':'rgba('+ink.join(',')+',.18)',
+    '--glow':'0 16px 40px -25px '+c.v,'--candyShadow':c.v
+  };
 }
 
 /* localStorage */

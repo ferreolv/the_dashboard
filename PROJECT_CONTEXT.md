@@ -38,7 +38,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 ## Durable design preferences
 
 - The dashboard shell stays quiet: lighter headings, inline summary metrics, plain language, restrained shadows and modest control shapes; vivid tile identities and glass completion states remain the visual focus. Settings uses labelled fields, a visible save state, optional setup details, and reversible layout resets.
-- Dashboard uses a softly atmospheric pastel canvas so transparent clear-glass tiles visibly refract the background. Resting tile surfaces stay translucent white glass (never hue-filled), but each tile commits hard to ONE vivid hue that shows up in a thick coloured border, the label/heading, the body text, the glow, and chunky interactive objects. Typeface is Nunito (rounded, neutral-playful).
+- Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep transparent, deeper coloured glass with high-contrast white text. Typeface remains Nunito.
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
 - A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
@@ -62,14 +62,14 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Philosophy keeps its standard below-the-surface Socratic mode and also offers a per-topic philosopher dropdown with a distinct relevant icon for every mode. Named-philosopher replies must reconstruct only textually grounded views, admit when the source basis is unclear, and end with short source notes rather than inventing positions.
 - Song recommendations name an exact recording and retain complete performer/ensemble/conductor credits plus a separate classical composer when relevant. Apple Music links use conservative catalog matching on both title and credits; an uncertain result opens a precise search instead of linking to a different recording.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
-- Accents (borders, text, icons, buttons, chips) use the tile's vivid hue at rest — not pastel, and text is never plain black/grey. On completion the whole tile fills with its hue as coloured glass and every accent flips to white.
+- Tile colour comes primarily from the transparent glass background. Resting text uses a very dark hue-tinted ink for contrast; buttons can carry a stronger version of the tile hue. Completion deepens the glass tint and uses white foreground text.
 - No visible scrollbars; scrolling must still work.
 - Never underline interface text.
 - Inputs must always inherit readable contrast from their tile.
 - Minimal note-like writing: few words, little filler.
 - No unnecessary application branding or invented product name in the UI.
 - Preserve colour identity, tactile completion reward, and individual character without inconsistency.
-- Every dashboard tile follows one reversible visual-state contract: informative tiles can be tapped to toggle full colour, task tiles return to clear glass when their answer, button, or checkbox is undone, and no tile type is excluded from the full-colour treatment.
+- Every dashboard tile follows one reversible visual-state contract: informative tiles can be tapped to toggle full colour, task tiles return to lighter tinted glass when their answer, button, or checkbox is undone, and no tile type is excluded from the full-colour treatment.
 - Resized widgets use deliberate compact summaries and edge-to-edge internal layouts. At every supported tile shape, controls either reflow or secondary detail progressively hides; borders must never slice through buttons, text, or cards.
 - Compact tiles never use horizontal scrolling: content reflows into the tile width and only the tile body scrolls vertically when more detail is present.
 - Delete and close glyphs inside widgets are bare, centred, minimalist crosses rather than pill or rounded-rectangle buttons.
