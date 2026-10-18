@@ -2119,29 +2119,29 @@
   .tile[data-tileid]{
     --glass-radius:34px;
     border:1px solid rgba(255,255,255,.46)!important;border-radius:var(--glass-radius)!important;
-    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,0) 46%,rgba(255,255,255,.035)),linear-gradient(125deg,rgba(var(--glass-rgb),.38),rgba(var(--glass-rgb),.2));
+    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,0) 46%,rgba(255,255,255,.015)),linear-gradient(125deg,rgba(var(--glass-rgb),.15),rgba(var(--glass-rgb),.08));
     background:transparent!important;
     -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
-    box-shadow:inset 1px 1px 1px rgba(255,255,255,.66),inset -1px -1px 1px rgba(var(--glass-depth),.18),0 12px 28px -12px rgba(var(--glass-depth),.22),0 2px 6px rgba(30,40,50,.04)!important;
+    box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.1),0 10px 26px -14px rgba(var(--glass-depth),.16),0 2px 6px rgba(30,40,50,.025)!important;
     color:var(--ink)!important;transition:background .25s,border-color .25s,box-shadow .25s;
   }
   .tile[data-tileid]::before{
     content:''!important;display:block!important;position:absolute;z-index:-1;inset:0!important;width:auto!important;height:auto!important;margin:0!important;border-radius:inherit;pointer-events:none;opacity:1!important;transform:none!important;
-    background:var(--glass-surface)!important;box-shadow:inset 0 0 12px 2px rgba(255,255,255,.08);
-    -webkit-backdrop-filter:blur(5px) saturate(130%);backdrop-filter:blur(5px) saturate(130%);
-    -webkit-backdrop-filter:blur(5px) saturate(130%) url('#dashboard-glass-refraction');backdrop-filter:blur(5px) saturate(130%) url('#dashboard-glass-refraction');
+    background:var(--glass-surface)!important;box-shadow:inset 0 0 12px 2px rgba(255,255,255,.035);
+    -webkit-backdrop-filter:blur(3px) saturate(125%);backdrop-filter:blur(3px) saturate(125%);
+    -webkit-backdrop-filter:blur(3px) saturate(125%) url('#dashboard-glass-refraction');backdrop-filter:blur(3px) saturate(125%) url('#dashboard-glass-refraction');
   }
   .tile[data-tileid]::after{
     content:'';display:block!important;position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;opacity:1!important;
-    background:linear-gradient(155deg,rgba(255,255,255,.2),transparent 13%,transparent 87%,rgba(255,255,255,.08))!important;
+    background:linear-gradient(155deg,rgba(255,255,255,.1),transparent 13%,transparent 87%,rgba(255,255,255,.035))!important;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 1px 0 0 rgba(255,255,255,.2);
   }
-  .tile[data-tileid]:not(.editing):hover{transform:none!important;border-color:rgba(255,255,255,.7)!important;box-shadow:inset 1px 1px 1px rgba(255,255,255,.8),inset -1px -1px 1px rgba(var(--glass-depth),.2),0 14px 32px -12px rgba(var(--glass-depth),.26)!important}
+  .tile[data-tileid]:not(.editing):hover{transform:none!important;border-color:rgba(255,255,255,.7)!important;box-shadow:inset 1px 1px 1px rgba(255,255,255,.65),inset -1px -1px 1px rgba(var(--glass-depth),.12),0 12px 28px -14px rgba(var(--glass-depth),.2)!important}
   .tile.completed[data-tileid]{
-    --glass-surface:linear-gradient(145deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.04)),linear-gradient(130deg,rgba(var(--glass-depth),.86),rgba(var(--glass-depth),.8));
+    --glass-surface:linear-gradient(145deg,rgba(var(--glass-depth),.02),rgba(var(--glass-depth),.01)),linear-gradient(125deg,rgba(var(--glass-rgb),.5),rgba(var(--glass-rgb),.35));
     background:transparent!important;
     border-color:rgba(255,255,255,.38)!important;
-    box-shadow:inset 1px 1px 1px rgba(255,255,255,.44),inset -1px -1px 1px rgba(var(--glass-depth),.3),0 12px 30px -12px rgba(var(--glass-depth),.35)!important;
+    box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.15),0 12px 28px -14px rgba(var(--glass-depth),.23)!important;
   }
   .tile.completed[data-tileid]::after{background:linear-gradient(155deg,rgba(255,255,255,.08),transparent 12%,transparent 88%,rgba(255,255,255,.04))!important}
   .tile[data-tileid] .tilehead .ldot{background:currentColor!important;opacity:.65}
@@ -2175,8 +2175,8 @@
   .tile[data-tileid] .hsq.plus{background:transparent!important;border-style:dashed!important}
   .tile[data-tileid] .hsq.on{background:rgba(var(--glass-depth),.84)!important;color:#fff!important}
   .tile[data-tileid] .hsq.on :is(.hname,.hicon){color:#fff!important}
-  .tile.completed[data-tileid] .tick.on,.tile.completed[data-tileid] .hsq.on,.tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){color:var(--glass-ink)!important;background:rgba(255,255,255,.86)!important;border-color:rgba(255,255,255,.65)!important}
-  .tile.completed[data-tileid] .hsq.on :is(.hname,.hicon){color:var(--glass-ink)!important}
+  .tile.completed[data-tileid] .tick.on,.tile.completed[data-tileid] .hsq.on,.tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){color:#fff!important;background:rgba(var(--glass-depth),.88)!important;border-color:rgba(255,255,255,.36)!important}
+  .tile.completed[data-tileid] .hsq.on :is(.hname,.hicon){color:#fff!important}
   .tile[data-tileid] .qopt.wrong{color:#8b1736!important;background:rgba(255,220,228,.75)!important;border-color:rgba(139,23,54,.4)!important}
   .tile[data-tileid] button:is(.del,.hdel,.tileUndo),.tile[data-tileid] button.taskMain,.tile[data-tileid] button.goalAddGhost{color:var(--ink)!important;background:transparent!important;border:0!important;box-shadow:none!important}
   .tile[data-tileid] button:is(.miniCalNav,.miniCalTitle,.miniCalToday,.miniCalDay){color:var(--ink)!important;background:transparent!important;box-shadow:none!important}
@@ -2189,11 +2189,39 @@
   .tile[data-tileid]>.libraryAddToday,.tile[data-tileid]>.libraryRemoveToday{background:rgba(255,255,255,.52)!important;border:1px solid rgba(255,255,255,.7)!important;color:var(--glass-ink)!important;backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 3px 9px rgba(var(--glass-depth),.15)!important}
   .tile.completed[data-tileid] :is(.muted,.noteSaved,.agSub,.weatherMeta,.weatherTomorrowLabel,.goalRow.done .goalText,.taskRow.done){opacity:1!important}
   .tile.completed[data-tileid] .content .taskRow{background:transparent!important}
-  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn),.tile.completed[data-tileid] a.pill{background:rgba(0,0,0,.08)!important}
-  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn):hover{background:rgba(0,0,0,.16)!important}
-  .tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){background:rgba(255,255,255,.86)!important}
+  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn),.tile.completed[data-tileid] a.pill{color:var(--ink)!important;background:rgba(255,255,255,.08)!important}
+  .tile.completed[data-tileid] button:is(.pill,.mark,.puBtn,.qopt,.ghostbtn,.genBtn,.pillBtn,.taskAddLink,.eventAddToggle,.tileRetryBtn):hover{background:rgba(255,255,255,.18)!important}
+  .tile.completed[data-tileid] button:is(.mark.on,.qopt.correct){color:#fff!important;background:rgba(var(--glass-depth),.88)!important}
+  /* Bright transparent glass needs ink, including older tile-specific completion rules. */
+  .tile.completed[data-tileid] button{color:var(--ink)!important}
+  .tile.completed[data-tileid] button:is(.addbtn,.chatSend){color:#fff!important}
+  .tile.completed[data-tileid] .content :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.healthDate,.healthHint,.healthSteps,.healthMetric b,.healthMetric span,.healthWorkout,.healthUnitIcon,.metricIcon,.workoutIcon,.habitHistoryName,.habitHistoryStreak,.philoModeIcon,.genCap,.miniCalWeek span,.miniCalMore){color:var(--ink)!important}
+  .tile[data-tileid] .content :is(.healthMetric,.healthWorkout){background:transparent!important;border-color:var(--hair)!important}
+  .tile.completed[data-tileid="goals"] .goalDayHead :is(.lbl,.muted),.tile.completed[data-tileid="goals"] .goalDay:first-child .goalDayHead .lbl,.tile.completed[data-tileid="goals"] .goalAddGhost{color:var(--ink)!important;background:transparent!important}
+  .tile.completed[data-tileid="goals"] .goalDay{border-bottom-color:var(--hair)!important}
+  .tile.completed[data-tileid="weather"] .weatherReading .wbig{color:var(--ink)!important}
+  .tile.completed[data-tileid="weekly"] :is(.achN,.pushChartLegend b,.pushDotVal),.tile.completed[data-tileid="weekly"] .achCard.achGold .achN{color:var(--ink)!important}
+  .tile.completed[data-tileid="weekly"] .pushLinePath{stroke:var(--ink)!important}
+  .tile.completed[data-tileid="weekly"] .pushDot{background:var(--ink)!important}
+  .tile.completed[data-tileid="weekly"] .pushDot.today{background:var(--accent)!important;border-color:var(--ink)!important}
+  .tile.completed[data-tileid="timer"] :is(.timerDialTime,.timerSub){color:var(--ink)!important}
+  .tile.completed[data-tileid="timer"] .timerRingBg{stroke:var(--hair)!important}
+  .tile.completed[data-tileid="timer"] .timerRingFg{stroke:var(--ink)!important;filter:none!important}
+  .tile.completed[data-tileid] .taskAgenda .agWhen,.tile.completed[data-tileid] button.taskMain[aria-pressed="true"],.tile.completed[data-tileid="habits"] .habitControl>.hdel{color:var(--ink)!important;background:transparent!important}
+  .tile.completed[data-tileid] .genSpin{border-color:var(--hair)!important;border-top-color:var(--ink)!important}
   @media(max-width:760px){.tile[data-tileid]{--glass-radius:30px}}
 
+/* Saved daily content and honest missing-data states. */
+.dailySafety{display:flex;align-items:center;gap:10px;margin:-8px 0 22px;padding:11px 15px;border:1px solid rgba(32,48,59,.09);border-radius:18px;background:rgba(255,255,255,.18);color:#38444c;font-size:12px;line-height:1.5}
+.dailySafetyIcon{display:grid;place-items:center;width:23px;height:23px;flex:none;border:1px solid rgba(32,48,59,.18);border-radius:50%;font-size:12px}
+.dailySafety strong{font-weight:800;margin-right:10px}.dailySafety span:not(.dailySafetyIcon){opacity:.85}
+.tilehead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dailySaved{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.02em;opacity:.7;white-space:nowrap}
+.dailyLoadState{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px;min-height:65px;height:100%;padding:3px 0;color:var(--ink);font-size:12px;line-height:1.45}
+.dailyLoadCopy strong{display:block;font-size:14px;font-weight:800;line-height:1.3}.dailyLoadCopy p{margin:5px 0 0;opacity:.83;max-width:46ch}.dailyLoadState .pill{font-size:11px;padding:7px 13px;min-height:32px;white-space:normal;text-align:left}.dailyLoadCopy .genSpin{display:inline-block;width:13px;height:13px;margin-bottom:7px}
+.dailyDependency,.gmatSourceHelp{font-size:11px;line-height:1.5;opacity:.85;margin:4px 0 9px}.dailyDependency .link{margin-left:5px}.gmatSource{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:10px;font-weight:800;margin-bottom:9px;opacity:.8}.gmatSource .link{font-size:10px}
+@media(max-width:639px){.dailySafety{align-items:flex-start;padding:11px 13px}.dailySafety strong,.dailySafety span:not(.dailySafetyIcon){display:block}.dailySafetyIcon{margin-top:1px}.dailyLoadState{gap:10px}.dailyLoadCopy strong{font-size:13px}.dailySaved{font-size:8px}}
+.dailyProblemCard{position:relative;width:min(540px,calc(100vw - 28px));max-height:85vh;overflow-y:auto;padding:26px;color:#26333d}.dailyProblemCard h2{font-size:22px;line-height:1.25;margin:0 28px 7px 0}.dailyProblemIntro{font-size:12px;line-height:1.5;opacity:.72;margin:0 0 18px}.dailyProblemClose{position:absolute;right:14px;top:12px;display:grid;place-items:center;width:30px;height:30px;background:none;border:0;font-family:inherit;font-size:26px;line-height:1;color:inherit;cursor:pointer}.dailyProblemList{list-style:none;padding:0;margin:0;display:grid;gap:14px}.dailyProblemList li{padding:15px;border:1px solid rgba(31,48,60,.12);border-radius:18px;background:rgba(255,255,255,.26)}.dailyProblemTile{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;opacity:.63;margin-bottom:5px}.dailyProblemList h3{font-size:15px;margin:0 0 6px}.dailyProblemList p{font-size:12px;line-height:1.5;margin:0 0 12px}.dailyProblemList .ghostbtn{font-size:12px;min-height:36px}.dailyProblemFooter{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.dailyLoadActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.settingsHelp a{font-weight:800;color:inherit}#daily-content:focus{outline:2px solid rgba(50,72,90,.35);outline-offset:5px}
+@media(max-width:639px){.dailyProblemCard{padding:22px 18px}.dailyProblemCard h2{font-size:20px}.dailyProblemList li{padding:13px}}
 </style>
 </head>
 <body>
@@ -2247,20 +2275,21 @@ function themeVars(id, done){
   const complete=TASK.has(id)&&done;
   const rgb=hex=>hex.match(/[a-f0-9]{2}/gi).map(value=>parseInt(value,16));
   const hue=rgb(c.v), dark=rgb(c.d);
-  const ink=dark.map((value,i)=>Math.round(value*.3+[15,23,32][i]*.7));
+  const inkBase=complete?[4,8,12]:[15,23,32], inkMix=complete?.1:.3;
+  const ink=dark.map((value,i)=>Math.round(value*inkMix+inkBase[i]*(1-inkMix)));
   const depth=hue.map((value,i)=>Math.round(value*.18+[12,21,30][i]*.82));
   return {
-    '--bg':c.p,'--accent':c.v,'--accentDark':complete?c.d:'rgb('+ink.join(',')+')',
+    '--bg':c.p,'--accent':c.v,'--accentDark':'rgb('+ink.join(',')+')',
     '--glass-rgb':hue.join(','),'--glass-depth':depth.join(','),'--glass-ink':'rgb('+ink.join(',')+')',
-    '--ink':complete?'#fff':'rgb('+ink.join(',')+')','--lbl':complete?'#fff':'rgb('+ink.join(',')+')',
-    '--dim':complete?'#fff':'rgba('+ink.join(',')+',.82)',
-    '--hair':complete?'rgba(255,255,255,.19)':'rgba('+ink.join(',')+',.15)',
-    '--field':complete?'rgba(0,0,0,.10)':'rgba(255,255,255,.14)',
-    '--fieldbd':complete?'rgba(255,255,255,.3)':'rgba('+ink.join(',')+',.2)',
-    '--tickbd':complete?'rgba(255,255,255,.76)':'rgba('+ink.join(',')+',.4)',
-    '--tickfill':complete?'#fff':'rgba('+depth.join(',')+',.88)',
-    '--tickmark':complete?c.d:'#fff','--btnbg':'rgba(255,255,255,.12)',
-    '--btnbd':complete?'rgba(255,255,255,.26)':'rgba('+ink.join(',')+',.18)',
+    '--ink':'rgb('+ink.join(',')+')','--lbl':'rgb('+ink.join(',')+')',
+    '--dim':'rgba('+ink.join(',')+',.82)',
+    '--hair':'rgba('+ink.join(',')+','+(complete?'.18':'.15')+')',
+    '--field':'rgba(255,255,255,.08)',
+    '--fieldbd':'rgba('+ink.join(',')+',.2)',
+    '--tickbd':'rgba('+ink.join(',')+',.4)',
+    '--tickfill':'rgba('+depth.join(',')+',.88)',
+    '--tickmark':'#fff','--btnbg':'rgba(255,255,255,.1)',
+    '--btnbd':'rgba('+ink.join(',')+',.18)',
     '--glow':'0 16px 40px -25px '+c.v,'--candyShadow':c.v
   };
 }
@@ -2285,7 +2314,7 @@ const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex",
    whole-state snapshot. See worker/health-ingest.js. Set to "" to disable. */
 const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
 const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
-const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken"]);
+const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken","fefe_accountToken","fefe_accountEmail"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
 const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
@@ -2332,6 +2361,8 @@ let _pushT=null;
 /* Don't upload before this session has taken the latest cloud state at least once,
    so a device can never push its stale local data over a newer cloud version. */
 let _pulledOnce=false;
+let _syncReadOK=false;
+let _syncIssue=null;
 function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token) return; if(token&&!_pulledOnce) return; clearTimeout(_pushT);
   _pushT=setTimeout(async()=>{ try{ const stamp=Date.now();
     const r=token?await fetch(SYNC_URL+"/account/data",{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({updatedAt:stamp,data:collectState()})}):await fetch(SYNC_URL+"/data",{method:"POST",headers:{"Content-Type":"application/json","X-Sync-Code":id},body:JSON.stringify({updatedAt:stamp,data:collectState()})});
@@ -2339,14 +2370,14 @@ function schedulePush(){ const id=getSyncId(), token=getAccountToken(); if(!id&&
       /* The server may keep a newer version and reject this push — trust its updatedAt. */
       localStorage.setItem("fefe_syncStamp",String(out&&out.updatedAt!=null?out.updatedAt:stamp)); }
   }catch(e){} },3500); }
-async function pullSync(){ const id=getSyncId(), token=getAccountToken(); if(!id&&!token){ _pulledOnce=true; return false; }
-  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok){ _pulledOnce=true; return false; } const doc=await r.json();
-    _pulledOnce=true;
+async function pullSync(){ _syncReadOK=false;_syncIssue=null;const id=getSyncId(), token=getAccountToken(); if(!id&&!token){ _pulledOnce=true; _syncReadOK=true; return false; }
+  try{ const r=token?await fetch(SYNC_URL+"/account/data",{headers:{Authorization:`Bearer ${token}`}}):await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":id}}); if(!r.ok){ _syncIssue={state:r.status===401||r.status===403?"signin_required":"sync_pending",message:"Account service returned HTTP "+r.status};return false; } const doc=await r.json();
+    _pulledOnce=true; _syncReadOK=true;
     const local=Number(localStorage.getItem("fefe_syncStamp")||0);
     if(doc&&doc.data&&((doc.updatedAt&&doc.updatedAt>local)||(!local&&Object.keys(doc.data).length>0))){
-      Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
+      for(const [k,v] of Object.entries(doc.data)){if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k))await adoptSyncedValue(k,v);}
       localStorage.setItem("fefe_syncStamp",String(doc.updatedAt)); return true; }
-  }catch(e){ _pulledOnce=true; }
+  }catch(e){_syncIssue={state:navigator.onLine===false?"offline":"sync_pending"};}
   return false; }
 /* Pull the token's health days from the ingest store. Returns a {date:entry} map or null.
    Read-only: it never writes back, so it can't disturb anything the script pushed. */
@@ -2370,8 +2401,113 @@ const parseDateKey=value=>{
 function addDays(key,n){ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt); }
 function daysBetween(fromKey,toKey){ const [ay,am,ad]=fromKey.split("-").map(Number); const [by,bm,bd]=toKey.split("-").map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000); }
 const logicalDateKey=(d=new Date())=>{ const dt=new Date(d); if(dt.getHours()<1) dt.setDate(dt.getDate()-1); return dateKey(dt); };
-const todayKey=logicalDateKey();
+const todayKey=logicalDateKeyInZone(new Date(),getLocationProfile().timezone);
 const isWeeHours=(d=new Date())=>d.getHours()===0;
+
+/* DAILY_CONTENT_CONTRACT_START */
+// A daily result is a validated record, never a truthy placeholder. First success wins.
+const dailyText=value=>typeof value==="string"&&value.trim().length>0;
+const dailyQuiz=q=>!!q&&dailyText(q.prompt)&&Array.isArray(q.options)&&q.options.length>=2&&q.options.every(dailyText)&&Number.isInteger(q.answer)&&q.answer>=0&&q.answer<q.options.length;
+function validDailyTile(key,value){
+  if(!value||typeof value!=="object") return false;
+  switch(key){
+    case "word": return dailyText(value.term_en)&&dailyText(value.def_en)&&dailyText(value.term_fr)&&!!value.quiz&&Array.isArray(value.quiz.options)&&value.quiz.options.length>=2&&value.quiz.options.every(dailyText)&&Number.isInteger(value.quiz.answer)&&value.quiz.answer>=0&&value.quiz.answer<value.quiz.options.length;
+    case "worth": return dailyText(value.title)&&dailyText(value.story)&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
+    case "spanish": return dailyText(value.tema)&&dailyText(value.punto)&&Array.isArray(value.vocab)&&value.vocab.length>0&&value.vocab.every(v=>v&&dailyText(v.es)&&dailyText(v.en))&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
+    case "music": return dailyText(value.title)&&dailyText(value.artist)&&dailyText(value.why);
+    case "world": return Array.isArray(value)&&value.length>0&&value.every(v=>v&&dailyText(v.headline)&&dailyText(v.summary));
+    case "weather": return !!value.tomorrow&&[value.temp,value.code,value.hi,value.lo,value.tomorrow.hi,value.tomorrow.lo,value.tomorrow.code].every(v=>typeof v==="number"&&Number.isFinite(v))&&dailyText(value.place);
+    case "brainflex": return dailyText(value.format)&&dailyText(value.prompt)&&dailyText(value.solution);
+    case "philo": return dailyText(value.theme)&&dailyText(value.question);
+    case "academic": return dailyText(value.concept)&&dailyText(value.explain)&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
+    case "gmat": return Array.isArray(value)&&value.length>0&&value.every(q=>dailyQuiz(q)&&dailyText(q.explain));
+    default: return false;
+  }
+}
+function mergeDailyContent(existing,incoming){
+  const next={...(existing&&typeof existing==="object"&&!Array.isArray(existing)?existing:{})};
+  Object.entries(incoming||{}).forEach(([key,value])=>{if(!validDailyTile(key,next[key])&&validDailyTile(key,value))next[key]=value;});
+  return next;
+}
+const dailyRequestKeys=(keys,content)=>[...new Set(keys)].filter(key=>!validDailyTile(key,(content||{})[key]));
+const DAILY_CONTENT_KEYS=["word","worth","spanish","music","world","weather","brainflex","philo","academic","gmat"];
+/* DAILY_CONTENT_CONTRACT_END */
+/* DAILY_UX_CONTRACT_START */
+const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",gmat:"GMAT lesson",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
+const DAILY_SETUP_STATES=new Set(["disabled","personal_key","missing_key","invalid_key","missing_course","server_unconfigured","service_update","browser_lock_unavailable","signin_required"]);
+function dailyIssueInfo(key,state,message="",personalOverride=false){
+  const personal=key==="academic"||personalOverride;
+  const info={
+    disabled:["Daily content is off","This tile is switched off in Settings → Daily content. Adding it to Today does not enable daily generation.","enable","Enable & load"],
+    personal_key:["API key missing","Add your Claude API key in Settings to create this personal content.","key","Add API key"],
+    missing_key:personal?["API key missing","Add your Claude API key in Settings to create today’s study content.","key","Add API key"]:["Service API key missing","The shared daily service has no Claude API key. The app owner needs to add it in Cloudflare; adding a personal key won’t fix this tile.","settings","View connection setup"],
+    invalid_key:personal?["API key rejected","Claude rejected your personal key. Update it in Settings, then retry.","key","Update API key"]:["Service API key rejected","Claude rejected the shared service’s key. The app owner needs to update it in Cloudflare.","settings","View connection setup"],
+    missing_course:["Course notes missing","Add a course with notes so Study can use your own material.","courses","Add course notes"],
+    server_unconfigured:["Daily service needs setup","The daily service is missing its safe-loading coordinator. Deploy the updated worker and connect DAILY_COORDINATOR in Cloudflare.","settings","View connection setup"],
+    service_update:["Daily service needs an update","The service could not return content for this day. Deploy the updated daily service, then retry. Saved tiles stay as they are.","settings","View connection setup"],
+    browser_lock_unavailable:["Browser update needed","This browser cannot safely coordinate daily saves. Open the dashboard in an up-to-date Chrome, Edge, Safari or Firefox.","none",null],
+    signin_required:["Sign-in expired","Sign in again to check your saved day before loading missing tiles. Your saved content remains on this device.","signin","Sign in"],
+    sync_pending:["Couldn’t check your saved day","The account service could not be reached. Reconnect, then retry. No new content will replace your saved day.","retry","Retry connection"],
+    offline:["You’re offline","Reconnect to the internet, then retry this tile. Saved content and progress are kept.","retry","Retry tile"],
+    timeout:["The request timed out","The service took too long to respond. It may still be saving your tile; retry will check the saved result first.","retry","Retry tile"],
+    rate_limit:["Service limit reached","The content service is busy or its allowance is exhausted. Wait a little; the app owner may need to check service credit.","retry","Retry tile"],
+    invalid_content:["Incomplete response","The service returned incomplete content, so it was not shown or marked as loaded. Retry to fetch a valid tile.","retry","Retry tile"],
+    bad_response:["Unexpected service response","The service returned an unreadable response. Retry; if it continues, check the daily service deployment.","retry","Retry tile"],
+    server_storage_error:["The service couldn’t save this tile","Server storage is unavailable. Nothing unsaved is shown as a real tile. Retry when storage is working.","retry","Retry tile"],
+    storage_error:["This browser couldn’t save the tile","Browser storage may be full or blocked. Allow site storage or free some space, then retry. Saved tiles are kept.","retry","Retry tile"],
+    feed_unavailable:["News sources unavailable","The news feeds could not be reached, so no invented briefing was shown. Retry when the feeds are available.","retry","Retry tile"],
+    processing:["Content is still loading","Another request may be finishing this tile. Check again shortly; a saved result will be reused.","retry","Check again"],
+    interrupted:["Loading was interrupted","No successful result was saved. Retry will fill this gap and keep every saved tile.","retry","Retry tile"],
+    service_error:["Daily service unavailable",message||"The service returned an error. Retry shortly; if it continues, the service needs attention.","retry","Retry tile"],
+    error:["Couldn’t load today",message||"The request failed. Check your connection, then retry. Saved tiles and progress are kept.","retry","Retry tile"]
+  }[state]||["Not loaded yet",key==="weather"?"Weather needs an internet connection, no API key.":"Load this tile once. Its content stays for the day.","retry","Load tile"];
+  return {key,state,title:info[0],detail:info[1],actionType:info[2],action:info[3]};
+}
+function dailyRefreshPlan(keys,content,status,hydrated=true,busy=false){
+  const unique=[...new Set(keys)], missing=dailyRequestKeys(unique,content);
+  const blocked=missing.filter(key=>DAILY_SETUP_STATES.has(status[key]?.state));
+  const loadable=missing.filter(key=>!blocked.includes(key));
+  const failed=loadable.filter(key=>status[key]&&!["missing","ready"].includes(status[key].state));
+  let label=!hydrated?"Reconnect":busy?"Loading tiles…":!unique.length?"No daily tiles":!missing.length?"All saved ✓":!loadable.length?"Finish setup ("+blocked.length+")":failed.length?"Retry "+loadable.length+" tile"+(loadable.length===1?"":"s"):missing.length===unique.length&&!blocked.length?"Load all tiles":"Load missing ("+loadable.length+")";
+  const detail=!hydrated?"Check your saved account day before loading content.":!missing.length?"All daily tiles on Today are saved. Nothing will be replaced.":"Loads "+loadable.length+" missing tile"+(loadable.length===1?"":"s")+" on Today. "+blocked.length+" need setup. Saved content and progress are kept.";
+  return {label,detail,missing,loadable,blocked,failed};
+}
+function dailyRequestFailure(error){
+  if(error?.dailyState)return {state:error.dailyState,message:error.message};
+  if(error?.name==="TimeoutError"||error?.name==="AbortError")return {state:"timeout"};
+  if(error?.name==="QuotaExceededError"||error?.name==="SecurityError")return {state:"storage_error"};
+  if(error?.message==="browser_lock_unavailable")return {state:"browser_lock_unavailable"};
+  if(error?.message==="wrong_day")return {state:"service_update"};
+  if(error?.message==="invalid_content")return {state:"invalid_content"};
+  return {state:typeof navigator!=="undefined"&&navigator.onLine===false?"offline":"error",message:"Couldn’t connect to the content service. Check the connection and retry."};
+}
+async function readDailyResponse(response){
+  if(response.status===401||response.status===403)throw Object.assign(new Error("Your account session was rejected (HTTP "+response.status+")."),{dailyState:"signin_required"});
+  const doc=await response.json().catch(()=>{throw Object.assign(new Error("Unreadable service response (HTTP "+response.status+")."),{dailyState:"bad_response"});});
+  if(!response.ok&&!doc?.status){
+    const state=response.status===401||response.status===403?"signin_required":response.status===404||response.status===405?"service_update":response.status===429?"rate_limit":"service_error";
+    throw Object.assign(new Error("The daily service returned HTTP "+response.status+". Retry shortly; if it continues, check the service deployment."),{dailyState:state});
+  }
+  return doc;
+}
+/* DAILY_UX_CONTRACT_END */
+
+// Web Locks serialize this browser's tabs. The server serializes shared and account content.
+async function withDailyLock(day,key,task){
+  if(!navigator.locks) throw new Error("browser_lock_unavailable");
+  return navigator.locks.request("fefe:daily:"+day,task);
+}
+function storeDailyContent(day,incoming){
+  const next=mergeDailyContent(load("daily:"+day,{}),incoming);
+  // A failed disk write must never be shown as a saved, replaceable result.
+  localStorage.setItem("fefe_daily:"+day,JSON.stringify(next)); schedulePush(); return next;
+}
+async function adoptSyncedValue(key,value){
+  if(key.startsWith("fefe_daily:")){
+    const apply=()=>{try{const old=JSON.parse(localStorage.getItem(key)||"{}");localStorage.setItem(key,JSON.stringify(mergeDailyContent(old,JSON.parse(value))));}catch{}};
+    if(navigator.locks)await navigator.locks.request("fefe:daily:"+key.slice(11),apply);else apply();
+  }else localStorage.setItem(key,String(value));
+}
 
 /* Claude API (browser key) */
 function extractJSON(text){ if(!text) return null; let t=text.replace(/```json|```/g,"").trim(); const s=[t.indexOf("{"),t.indexOf("[")].filter(i=>i>=0); const a=s.length?Math.min(...s):-1; const b=Math.max(t.lastIndexOf("}"),t.lastIndexOf("]")); if(a===-1||b===-1) return null; try{ return JSON.parse(t.slice(a,b+1)); }catch{ return null; } }
@@ -2385,7 +2521,7 @@ async function callClaude(system,user,opts={}){
   const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
     headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
     body:JSON.stringify(body) });
-  if(!res.ok) throw new Error("API "+res.status);
+  if(!res.ok)throw Object.assign(new Error("Claude returned HTTP "+res.status),{dailyState:[401,403].includes(res.status)?"invalid_key":res.status===429?"rate_limit":"service_error"});
   const data=await res.json();
   return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
 }
@@ -2471,7 +2607,7 @@ async function philoReply(question,history,mode="standard"){
 /* Every daily-generated tile, keyed the same way it's stored on `daily`. Each task reads its
    own history straight from localStorage so it always sees the latest state, matching the rest
    of this file's convention. Used by both the full "Generate today" and single-tile retries. */
-const ALL_GEN_KEYS=["word","worth","spanish","music","world","weather","brainflex","philo","academic"];
+const ALL_GEN_KEYS=[...DAILY_CONTENT_KEYS];
 const GEN_TASKS={
   word:    ()=>genWord(load("wordHistory",[]).slice(-12)),
   worth:   ()=>genLesson(load("lessonHistory",[]).slice(-15)),
@@ -2604,7 +2740,8 @@ async function searchPlaces(query){
 async function fetchWeather(profile=getLocationProfile()){
   const lat=Number(profile.latitude), lon=Number(profile.longitude);
   const tz=encodeURIComponent(profile.timezone||"auto");
-  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=${tz}&forecast_days=2`);
+  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=${tz}&forecast_days=2`,{signal:AbortSignal.timeout(25000)});
+  if(!r.ok)throw Error("weather_unavailable");
   const d=await r.json();
   const temp=Math.round(d.current.temperature_2m);
   const hi=Math.max(temp,Math.round(d.daily.temperature_2m_max[0]));
@@ -2867,30 +3004,45 @@ const Readout=({children})=> <span className="ro">{children}</span>;
 const IconBtn=({title,onClick,children,spin})=> <button title={title} onClick={onClick} className="iconbtn" style={{animation:spin?"spin .9s linear infinite":"none"}}>{children}</button>;
 /* Empty / generating tile state. Instead of a sentence, show a loading spinner while
    generating, or a centered ✦ generate button when there's nothing yet. */
-const Note=({children})=>{
-  const txt=typeof children==="string"?children:"";
-  const busy=/…\s*$/.test(txt);
-  if(busy) return <div className="emptyState genState" role="status" aria-label="Generating today's content"><span className="genSpin" aria-hidden="true"></span><span>Loading…</span></div>;
-  return <button type="button" className="emptyState genState genBtn" title="Load today’s content" onClick={()=>{ try{ window.__fefeGenerate && window.__fefeGenerate(); }catch(e){} }}><span className="genGlyph">✦</span><span className="genCap">Load today</span></button>;
-};
+const Note=({children})=><div className="plainEmpty" role="status">{children}</div>;
 const GenerateEmpty=({busy,onGenerate,label="Load today"})=>{
   if(busy) return <div className="emptyState genState" role="status" aria-label="Generating content"><span className="genSpin" aria-hidden="true"></span><span>Loading…</span></div>;
   return <button type="button" className="emptyState genState genBtn" title={label} onClick={onGenerate}><span className="genGlyph">✦</span><span className="genCap">{label}</span></button>;
 };
 const PlainEmpty=({children})=><div className="plainEmpty">{children}</div>;
+function DailyLoadState({state,title,detail,action,onAction,secondaryAction,onSecondary,disabled=false}){
+  return <div className="dailyLoadState" role="status"><div className="dailyLoadCopy">{state==="loading"&&<span className="genSpin" aria-hidden="true"/>}<strong>{title}</strong><p>{detail}</p></div>{(action||secondaryAction)&&<div className="dailyLoadActions">{action&&<button type="button" className="pill" disabled={disabled} onClick={onAction}>{action}</button>}{secondaryAction&&<button type="button" className="link" disabled={disabled} onClick={onSecondary}>{secondaryAction}</button>}</div>}</div>;
+}
 const AppIcon=({name})=>{ const paths={sparkle:<><path d="M12 3l1.15 3.1L16 7.5l-2.85 1.4L12 12l-1.15-3.1L8 7.5l2.85-1.4L12 3Z"/><path d="M5 13l.8 2.2L8 16l-2.2.8L5 19l-.8-2.2L2 16l2.2-.8L5 13Z"/><path d="M18 12l.65 1.35L20 14l-1.35.65L18 16l-.65-1.35L16 14l1.35-.65L18 12Z"/></>,settings:<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.6v-.1A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3V9.6h.1A1.7 1.7 0 0 0 4.6 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.5 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.17.35.38.68.68.94.3.26.68.4 1.08.42H21v4h-.1A1.7 1.7 0 0 0 19.4 15Z"/></>,layout:<><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M9 10h12"/></>,check:<path d="m5 12 4 4L19 6"/>}; return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>; };
 function buildMindTree(topics){ const root={children:{},entries:[]}; Object.entries(topics||{}).forEach(([path,list])=>{ let node=root; path.split(" › ").filter(Boolean).forEach(part=>{ node.children[part]=node.children[part]||{children:{},entries:[]}; node=node.children[part]; }); (list||[]).forEach(e=>node.entries.push({...e,_topic:path})); }); return root; }
 function MindNode({name,node,depth,onRemove}){ const colours=["#6257e7","#0891b2","#059669","#db2777","#ea580c"],accent=colours[depth%colours.length]; return <div className="mindNode" style={{"--depth":depth,"--mindAccent":accent}}><div className="mindNodeHead"><span className="mindNodeDot"/><span>{name}</span></div>{node.entries.length>0&&<div className="mindEntries">{node.entries.map(e=><div className="mindEntry" key={e.id}><span>{e.text}</span><button className="del" aria-label="Delete note" onClick={()=>onRemove(e._topic,e.id)}>×</button></div>)}</div>}{Object.entries(node.children).sort(([a],[b])=>a.localeCompare(b)).map(([child,childNode])=><MindNode key={child} name={child} node={childNode} depth={depth+1} onRemove={onRemove}/>)}</div>; }
 function MindMap({topics,onRemove}){ const tree=buildMindTree(topics); return <div className="mindTree">{Object.entries(tree.children).sort(([a],[b])=>a.localeCompare(b)).map(([name,node])=><MindNode key={name} name={name} node={node} depth={0} onRemove={onRemove}/>)}</div>; }
 
+function savedDailyQuizAnswers(questions){
+  const saved=load("quizAnswers:"+todayKey,{}),answers={};
+  questions.forEach((question,index)=>{const selected=saved[JSON.stringify([question.prompt,question.options,question.answer])];if(Number.isInteger(selected)&&selected>=0&&selected<question.options.length)answers[index]=selected===question.answer;});
+  return answers;
+}
 function Quiz({prompt,options,answer,explain,onDone,onUndo}){
-  const [sel,setSel]=useState(null); const done=sel!==null;
+  const answerKey=JSON.stringify([prompt,options,answer]);
+  const [sel,setSel]=useState(()=>{const saved=load("quizAnswers:"+todayKey,{})[answerKey];return Number.isInteger(saved)&&saved>=0&&saved<options.length?saved:null;});
+  const choose=async value=>{
+    if(logicalDateKeyInZone(new Date(),getLocationProfile().timezone)!==todayKey){location.reload();return false;}
+    try{
+      const apply=()=>{const answers={...load("quizAnswers:"+todayKey,{})};if(value===null)delete answers[answerKey];else answers[answerKey]=value;localStorage.setItem("fefe_quizAnswers:"+todayKey,JSON.stringify(answers));schedulePush();};
+      if(navigator.locks)await navigator.locks.request("fefe:progress:quizAnswers:"+todayKey,apply);else apply();
+      setSel(value);return true;
+    }catch(error){window.dispatchEvent(new CustomEvent("dashboard-storage-error",{detail:{key:"answers",state:"storage_error"}}));return false;}
+  };
+  useEffect(()=>{const sync=event=>{if(event.key==="fefe_quizAnswers:"+todayKey){const saved=load("quizAnswers:"+todayKey,{})[answerKey];setSel(Number.isInteger(saved)&&saved>=0&&saved<options.length?saved:null);}};window.addEventListener("storage",sync);return()=>window.removeEventListener("storage",sync);},[answerKey]);
+
+  const done=sel!==null;
   return (
     <div>
       {prompt && <p className="qprompt">{prompt}</p>}
       <div className="qopts">
         {options.map((o,i)=>{ let cls="qopt"; if(done){ if(i===answer)cls+=" correct"; else if(i===sel)cls+=" wrong"; else cls+=" dim"; }
-          return <button key={i} className={cls} onClick={()=>{ if(sel===i){ setSel(null); onUndo&&onUndo(); } else if(!done){ setSel(i); onDone&&onDone(i===answer); } }}>{o}</button>; })}
+          return <button key={i} className={cls} onClick={async()=>{if(sel===i){if(await choose(null))onUndo&&onUndo();}else if(!done){if(await choose(i))onDone&&onDone(i===answer);}}}>{o}</button>; })}
       </div>
       {done && explain && <p className="qexplain">{explain}</p>}
     </div>
@@ -2917,12 +3069,11 @@ function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
   );
 }
 function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
-  const [n,setN]=useState(0);
-  useEffect(()=>{ setN(0); },[lesson && lesson.title]);
+
   if(!lesson) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=lesson.quiz||[];
-  const mark=()=>{ setN(v=>{ const nv=v+1; if(nv>=qs.length) onLearned(lesson); return nv; }); };
-  const undo=()=>{ setN(v=>Math.max(0,v-1)); onUnlearned&&onUnlearned(lesson); };
+  const mark=()=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(lesson);};
+  const undo=()=>onUnlearned&&onUnlearned(lesson);
   return (
     <div>
       <div style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginBottom:2}}>{lesson.title}</div>
@@ -3085,14 +3236,14 @@ function DashboardModal({label,onClose,overlayClassName="",className="ovlcard",a
 const DASHBOARD_ROUTES=["dashboard","library","settings"];
 const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");return DASHBOARD_ROUTES.includes(route)?route:"dashboard";};
 
-function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,onTap,onMoveStart,onResizeStart,children}){
+function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onResizeStart,children}){
   const t=themeVars(id,done);
   const tileCols=Math.min(size.c,cols);
   const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
   return (
-    <section data-tileid={id} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
+    <section data-tileid={id} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
       {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
-      <div className={"tbody"} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span></div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
+      <div className={"tbody"} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span>{status&&<span className="dailySaved" title={statusHelp||"This content is saved for this day. Refresh only retries missing tiles."}>{status}</span>}</div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
       {edit && <>
         <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
         <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
@@ -3164,7 +3315,11 @@ function App(){
   const [authError,setAuthError]=useState("");
   const [locationFeedback,setLocationFeedback]=useState("");
   const [notice,setNotice]=useState(null);
+  const [loadProblems,setLoadProblems]=useState(null);
+  const [showServiceSetup,setShowServiceSetup]=useState(false);
+  const showLoadProblems=(issues,title="Loading needs attention")=>setLoadProblems({title,issues:[...new Map(issues.map(issue=>[issue.key+":"+issue.state,issue])).values()]});
   const notify=(message,action=null,actionLabel="Undo")=>setNotice({message,action,actionLabel});
+  useEffect(()=>{const show=event=>{const issue=dailyIssueInfo(event.detail?.key||"answers","storage_error");showLoadProblems([{...issue,actionType:"none",action:null}]);};window.addEventListener("dashboard-storage-error",show);return()=>window.removeEventListener("dashboard-storage-error",show);},[]);
   useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(null),6500);return()=>clearTimeout(timer);},[notice]);
   useEffect(()=>{document.title=page==="dashboard"?"Today":page==="library"?"Library":"Settings";},[page]);
   const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
@@ -3176,50 +3331,43 @@ function App(){
   const [genPrefs,setGenPrefs]=useState(()=>load("genPrefs",null));
   const [genCfgStatus,setGenCfgStatus]=useState("");
   const [genCfgBusy,setGenCfgBusy]=useState(false);
-  const genEnabled=id=> genPrefs===null || genPrefs.includes(id);
+  const genEnabled=id=> (genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs).includes(id);
   const pushGenConfig=async(tiles)=>{
     if(!SHARED_URL) return;
     setGenCfgStatus("Saving…");
-    try{ const r=await fetch(SHARED_URL+"/shared/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tiles})}); if(!r.ok) throw new Error("bad"); setGenCfgStatus("Saved ✓ — applies on tomorrow's refresh"); }
-    catch(e){ setGenCfgStatus("Saved on this device (worker unreachable — redeploy it)"); }
+    try{ const r=await fetch(SHARED_URL+"/shared/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tiles}),signal:AbortSignal.timeout(15000)}); if(!r.ok) throw new Error("bad"); setGenCfgStatus("Preferences saved. Today’s saved tiles stay available."); return true; }
+    catch(e){ setGenCfgStatus("Couldn’t save to the daily service. Your selection remains on this device; apply again to finish.");showLoadProblems([{...dailyIssueInfo("settings","service_error","Your selection could not be saved to the daily service. Check your connection, then Apply preferences again."),actionType:"settings",action:"Open daily settings"}]); return false; }
   };
   const toggleGenTile=(id)=>{
-    const base = genPrefs===null ? SHARED_AI_TILES.map(t=>t[0]) : genPrefs.slice();
+    const base = genPrefs===null ? (genServerState?.tiles||["word","gmat"]) : genPrefs.slice();
     const next = base.includes(id) ? base.filter(x=>x!==id) : [...base,id];
     setGenPrefs(next); save("genPrefs",next); pushGenConfig(next);
   };
   const [genServerState,setGenServerState]=useState(null); // null unknown | "old" | {tiles,all}
-  const verifyGenConfig=async()=>{
+  const verifyGenConfig=async({silent=false}={})=>{
     if(!SHARED_URL) return;
     setGenCfgStatus("Checking the server…");
     try{
-      const r=await fetch(SHARED_URL+"/shared/config",{cache:"no-store"});
+      const r=await fetch(SHARED_URL+"/shared/config",{cache:"no-store",signal:AbortSignal.timeout(15000)});
       if(!r.ok) throw new Error("no-route");
       const doc=await r.json();
-      if(!doc||!Array.isArray(doc.tiles)) throw new Error("no-route");
-      setGenServerState({tiles:doc.tiles,all:doc.all||SHARED_AI_TILES.map(t=>t[0])});
-      const labels=doc.tiles.map(id=>{ const f=SHARED_AI_TILES.find(t=>t[0]===id); return f?f[1]:id; });
-      setGenCfgStatus("✓ Server is honoring your selection — generating only: "+(labels.length?labels.join(", "):"nothing"));
+      const effective=doc&&(Array.isArray(doc.active)?doc.active:doc.tiles);
+      if(!Array.isArray(effective))throw new Error("no-route");
+      setGenServerState({tiles:effective,all:doc.all||SHARED_AI_TILES.map(t=>t[0])});
+      const labels=effective.map(id=>{ const f=SHARED_AI_TILES.find(t=>t[0]===id); return f?f[1]:id; });
+      setGenCfgStatus((doc.safeRetry?"Safe daily loading is connected. Enabled: ":"The daily service needs its safe-loading update. Enabled: ")+(labels.length?labels.join(", "):"none"));
     }catch(e){
       setGenServerState("old");
-      setGenCfgStatus("⚠ Server still on the old version — it ignores this list and generates every tile. Update the worker once (below) to save tokens.");
+      setGenCfgStatus("Couldn’t verify daily preferences. Check your connection and the service setup below.");
+      if(!silent)showLoadProblems([{...dailyIssueInfo("settings","service_error","Couldn’t check daily preferences. The service may be unreachable or needs its update."),actionType:"settings",action:"Open daily settings"}]);
     }
   };
+  useEffect(()=>{if(SHARED_URL)verifyGenConfig({silent:true});},[]);
   const applyGenNow=async()=>{
-    if(!SHARED_URL||genCfgBusy) return;
-    setGenCfgBusy(true); setGenCfgStatus("Refreshing today…");
-    try{
-      await pushGenConfig(genPrefs===null?SHARED_AI_TILES.map(t=>t[0]):genPrefs);
-      const rg=await fetch(SHARED_URL+"/shared/regenerate",{method:"POST"});
-      const doc=await rg.json().catch(()=>null);
-      if(doc&&doc.error){ setGenCfgStatus("Config saved, but couldn't force a refresh ("+doc.error+"). It'll apply tomorrow."); }
-      else{
-        const c=doc&&doc.content;
-        setDaily(prev=>{ const next={...(prev||{})}; SHARED_KEYS.forEach(k=>{ next[k]=(c&&c[k]!=null)?c[k]:null; }); save("daily:"+todayKey,next); return next; });
-        setGenCfgStatus("Applied ✓ — only ticked tiles were generated");
-      }
-    }catch(e){ setGenCfgStatus("Couldn't reach the worker — is it deployed?"); }
-    setGenCfgBusy(false);
+    if(!SHARED_URL||genCfgBusy)return;
+    setGenCfgBusy(true);
+    try{if(!await pushGenConfig(genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs))return;await runGen((genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs),{silent:true});setGenCfgStatus("Preferences applied. Saved content is kept; only missing tiles were retried.");}
+    finally{setGenCfgBusy(false);}
   };
 
   useEffect(()=>{
@@ -3229,8 +3377,10 @@ function App(){
     return ()=>themes.forEach(t=>document.body.classList.remove("theme-"+t));
   },[backgroundTheme]);
 
-  /* pull remote state on load; reload once if it was newer */
-  useEffect(()=>{ (async()=>{ if(await pullSync()) location.reload(); })(); },[]);
+  const [dailyHydrated,setDailyHydrated]=useState(()=>!getAccountToken()&&!getSyncId());
+  const [syncChecked,setSyncChecked]=useState(false);
+  // Adopt the account's saved day before any request can create missing content.
+  useEffect(()=>{let alive=true;(async()=>{const changed=await pullSync();if(!alive)return;if(changed){location.reload();return;}setDailyHydrated(_syncReadOK);setSyncChecked(true);if(!_syncReadOK)showLoadProblems([dailyIssueInfo("account",_syncIssue?.state||"sync_pending")]);})();return()=>{alive=false;};},[]);
   const submitAccount=async()=>{ if(authBusy)return; setAuthError(""); setAuthBusy(true); try{
     const fresh=authMode==="signup";
     const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword});
@@ -3246,7 +3396,7 @@ function App(){
       const cloud=await accountRequest("/account/data").catch(()=>null);
       if(cloud&&cloud.data&&Object.keys(cloud.data).length>0){
         wipeLocal();
-        Object.entries(cloud.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); });
+        for(const [k,v] of Object.entries(cloud.data)){if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k))await adoptSyncedValue(k,v);}
         localStorage.setItem("fefe_syncStamp",String(cloud.updatedAt||Date.now()));
       }
       /* else: the account has no cloud data yet — keep this device's data so it seeds the account. */
@@ -3289,7 +3439,7 @@ function App(){
     try{ const r=await fetch(SYNC_URL+"/data",{headers:{"X-Sync-Code":code}}); if(!r.ok) throw new Error("server returned "+r.status);
       const doc=await r.json(); if(!doc||!doc.data) throw new Error("No dashboard account was found for that code.");
       localStorage.setItem("fefe_syncId",code);
-      if(doc&&doc.data){ Object.entries(doc.data).forEach(([k,v])=>{ if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k)) localStorage.setItem(k,String(v)); }); }
+      if(doc&&doc.data){ for(const [k,v] of Object.entries(doc.data)){if(k.indexOf("fefe_")===0&&!SYNC_EXCLUDE.has(k))await adoptSyncedValue(k,v);} }
       localStorage.setItem("fefe_syncStamp",String((doc&&doc.updatedAt)||Date.now()));
       location.reload();
     }catch(e){ alert("Couldn't connect: "+e.message); setSyncBusy(false); } };
@@ -3379,7 +3529,16 @@ function App(){
     }; input.click();
   };
 
-  const [daily,setDaily]=useState(()=>load("daily:"+todayKey, null));
+  const [daily,setDaily]=useState(()=>{
+    const saved=load("daily:"+todayKey,{}), oldWeather=load("weather",null);
+    const weatherDay=oldWeather&&Number.isFinite(oldWeather.at)?logicalDateKeyInZone(new Date(oldWeather.at),oldWeather.timezone||getLocationProfile().timezone):null;
+    return weatherDay===todayKey?storeDailyContent(todayKey,{weather:oldWeather}):saved;
+  });
+  const [loadStatus,setLoadStatus]=useState(()=>load("dailyStatus:"+todayKey,{}));
+  const [loadingKeys,setLoadingKeys]=useState([]);
+  const genBusyRef=useRef(false);
+  const updateLoadStatus=patch=>setLoadStatus(previous=>{const next={...previous,...patch};save("dailyStatus:"+todayKey,next);return next;});
+  const acceptDaily=content=>{const next=storeDailyContent(todayKey,content);setDaily(next);return next;};
   /* Merge the AI daily GMAT lesson into the live question pool whenever it
      arrives. Fresh questions surface first (the priority model favours unseen
      ones); analytics, recap and mistake-repair keep working unchanged. */
@@ -3391,37 +3550,22 @@ function App(){
     if(changed){ GMAT_AI_QUESTIONS=next; rebuildGmatPool(); setGmatPoolVersion(v=>v+1); }
   },[daily]);
   const haveKey=!!getKey();
-  const view=daily||{};
-  const [weather,setWeather]=useState(()=>load("weather",null));
-  const weatherRequestRef=useRef(0);
-  const [appDays,setAppDays]=useState(()=>load("appDays",[]));
+  const view=Object.fromEntries(Object.entries(daily||{}).filter(([key,value])=>validDailyTile(key,value)));
+  const weather=view.weather||null;
+  // Another tab may have finished a tile or a completion while this tab was open.
   useEffect(()=>{
-    if(weather) return;
-    let alive=true;const request=++weatherRequestRef.current;
-    fetchWeather(getLocationProfile()).then(fresh=>{ if(alive&&request===weatherRequestRef.current){ setWeather(fresh); save("weather",fresh); } }).catch(()=>{});
-    return ()=>{ alive=false; };
+    const onStorage=event=>{
+      if(event.key==="fefe_daily:"+todayKey)setDaily(load("daily:"+todayKey,{}));
+      if(event.key==="fefe_dailyStatus:"+todayKey)setLoadStatus(load("dailyStatus:"+todayKey,{}));
+      if(event.key==="fefe_ritualLog")setRitualLog(load("ritualLog",{}));
+      if(event.key==="fefe_manualTileDone:"+todayKey)setManualTileDone(load("manualTileDone:"+todayKey,{}));
+      if(event.key==="fefe_recall")setRecallList(load("recall",[]));
+    };
+    window.addEventListener("storage",onStorage);return()=>window.removeEventListener("storage",onStorage);
   },[]);
-
-  /* Shared community content: pull the day's communal tiles (word/knowledge/spanish/music/
-     news/brainflex/philo-prompt) generated once server-side for everyone. No personal key
-     needed for these — they simply appear. Personal tiles (academic, philosophy chat) are
-     untouched. Falls back silently to per-user generation if the endpoint is unavailable. */
-  useEffect(()=>{ if(!SHARED_URL) return; let alive=true;
-    (async()=>{
-      try{
-        const r=await fetch(SHARED_URL+"/shared"); if(!r.ok) return;
-        const doc=await r.json(); const c=doc&&doc.content; if(!c||typeof c!=="object") return;
-        if(!alive) return;
-        setDaily(prev=>{
-          const next={...(prev||{})}; let changed=false;
-          SHARED_KEYS.forEach(k=>{ if(c[k]!=null && JSON.stringify(c[k])!==JSON.stringify(next[k])){ next[k]=c[k]; changed=true; } });
-          if(!changed) return prev;
-          save("daily:"+todayKey,next); return next;
-        });
-      }catch(e){}
-    })();
-    return ()=>{ alive=false; };
-  },[]);
+  const [appDays,setAppDays]=useState(()=>load("appDays",[]));
+  // Check the day's server snapshot and free weather once. Successful tiles make no requests.
+  useEffect(()=>{if(dailyHydrated)runGen(activeTiles.filter(key=>ALL_GEN_KEYS.includes(key)),{silent:true});},[dailyHydrated]);
 
   /* academic tile */
   const [courses,setCourses]=useState(()=>load("courses",[]));
@@ -3477,7 +3621,10 @@ function App(){
   /* On load, quietly pull any Garmin days the script has pushed for this token. */
   useEffect(()=>{ let alive=true; (async()=>{ const days=await pullHealth(); if(alive&&days) mergeHealthDays(days); })(); return ()=>{ alive=false; }; },[]);
   const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
-  const toggleManualTile=id=>{ const next={...manualTileDone,[id]:!manualTileDone[id]}; setManualTileDone(next); save("manualTileDone:"+todayKey,next); };
+  const toggleManualTile=id=>updateStoredProgress("manualTileDone:"+todayKey,setManualTileDone,previous=>{
+    if(DAILY_CONTENT_KEYS.includes(id)&&id!=="gmat"&&!validDailyTile(id,load("daily:"+todayKey,{})[id]))return previous;
+    return {...previous,[id]:!previous[id]};
+  },{});
 
   /* positive events: future experiences to anticipate, never tasks */
   const [positiveEvents,setPositiveEvents]=useState(()=>load("positiveEvents",[]));
@@ -3487,6 +3634,7 @@ function App(){
   const [philoChat,setPhiloChat]=useState(()=>({initial:"",messages:[],mode:"standard",...load("philoChat:"+todayKey,{})}));
   const persistPhiloChat=v=>{ setPhiloChat(v); save("philoChat:"+todayKey,v); };
   const [philoBusy,setPhiloBusy]=useState(false);
+  const [philoError,setPhiloError]=useState("");
 
   /* duration timer: default 7h30 from whenever Start is pressed */
   const [timerDuration,setTimerDuration]=useState(()=>load("timerDuration",450));
@@ -3499,7 +3647,7 @@ function App(){
   const [timerFired,setTimerFired]=useState(false);
 
   /* which of today's generated tiles are missing/failed, so they can be retried individually */
-  const [genErrors,setGenErrors]=useState(()=>load("genErrors:"+todayKey,[]));
+  // Daily error states are date-scoped; saved successes are independent of them.
 
   const [now,setNow]=useState(new Date());
   useEffect(()=>{ const t=setInterval(()=>{ const current=new Date(); setNow(current); if(logicalDateKeyInZone(current,locationProfile.timezone)!==todayKey) location.reload(); },15000); return ()=>clearInterval(t); },[locationProfile.timezone]);
@@ -3550,13 +3698,13 @@ function App(){
   const persistHabits=v=>{ setHabits(v); save("habits",v); };
   const persistBirthdays=v=>{ setBirthdays(v); save("birthdays",v); };
   const persistPeople=v=>{ setPeople(v); save("peopleMet",v); };
-  const persistRecall=v=>{
-    if(typeof v==="function"){
-      setRecallList(previous=>{ const next=v(previous); save("recall",next); return next; });
-      return;
-    }
-    setRecallList(v); save("recall",v);
+  const updateStoredProgress=async(key,setter,update,fallback)=>{
+    if(logicalDateKeyInZone(new Date(),getLocationProfile().timezone)!==todayKey){location.reload();return;}
+    const apply=()=>{const next=update(load(key,fallback));save(key,next);setter(next);};
+    if(navigator.locks)await navigator.locks.request("fefe:progress:"+key,apply);else apply();
   };
+  const persistRecall=update=>updateStoredProgress("recall",setRecallList,previous=>typeof update==="function"?update(previous):update,[]);
+  const appendDailyRecall=(type,additions)=>persistRecall(previous=>previous.some(item=>item.type===type&&item.addedOn===todayKey)?previous:[...previous,...additions.map((item,index)=>({...item,id:"daily-"+todayKey+"-"+type+"-"+index}))]);
   const persistGmat=v=>{
     if(typeof v==="function"){
       setGmat(previous=>{ const next=gmatStateOf(v(gmatStateOf(previous))); save("gmat",next); return next; });
@@ -3565,10 +3713,14 @@ function App(){
     const next=gmatStateOf(v); setGmat(next); save("gmat",next);
   };
   const toggleHabit=id=>{ const day={...hToday,[id]:!hToday[id]}; const m={...habitLog,[todayKey]:day}; setHabitLog(m); save("habitLog",m); };
-  const setRitual=k=>{ if(rToday[k]) return; const day={...rToday,[k]:true}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
-  const unsetRitual=k=>{ const day={...rToday,[k]:false}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
-  /* used by manually-clicked mark buttons (Listened, Read, Celebrated…) so a misclick is never permanent */
-  const toggleRitual=k=>{ const day={...rToday,[k]:!rToday[k]}; const m={...ritualLog,[todayKey]:day}; setRitualLog(m); save("ritualLog",m); };
+  const updateRitual=(key,mode)=>updateStoredProgress("ritualLog",setRitualLog,previous=>{
+    if(DAILY_CONTENT_KEYS.includes(key)&&key!=="gmat"&&mode!==false&&!validDailyTile(key,load("daily:"+todayKey,{})[key]))return previous;
+    const day=previous[todayKey]||{};
+    return {...previous,[todayKey]:{...day,[key]:mode==="toggle"?!day[key]:mode}};
+  },{});
+  const setRitual=key=>updateRitual(key,true);
+  const unsetRitual=key=>updateRitual(key,false);
+  const toggleRitual=key=>updateRitual(key,"toggle");
   const addPush=n=>{ const v=Math.max(0,pToday+n); const m={...pushLog,[todayKey]:v}; setPushLog(m); save("pushLog",m); };
   const setPushExact=n=>{ const v=Math.max(0,n|0); const m={...pushLog,[todayKey]:v}; setPushLog(m); save("pushLog",m); };
 
@@ -3599,64 +3751,92 @@ function App(){
   const goSettings=()=>openPage("settings");
   const [genBusy,setGenBusy]=useState(false);
 
-  /* Shared generation engine: runs the requested keys, merges what comes back into `daily`
-     (leaving everything else untouched), and tracks which keys are still broken so individual
-     tiles can offer their own retry rather than forcing a full regenerate. */
-  const runGen=async(keys,{silent}={})=>{
-    if(!getKey()){ goSettings(); return; }
-    setGenBusy(true);
+  // Every entry point uses this engine; a ready tile is never a generation request.
+  const runGen=async(requested,{silent=false}={})=>{
+    if(genBusyRef.current){notify("Tiles are still loading. Saved content is kept; wait for this request to finish.");return;}
+    if(!dailyHydrated){
+      genBusyRef.current=true;setGenBusy(true);
+      try{const changed=await pullSync();if(changed){location.reload();return;}setDailyHydrated(_syncReadOK);setSyncChecked(true);if(!_syncReadOK)showLoadProblems([dailyIssueInfo("account",_syncIssue?.state||"sync_pending")]);}
+      finally{genBusyRef.current=false;setGenBusy(false);}return;
+    }
+    if(logicalDateKeyInZone(new Date(),getLocationProfile().timezone)!==todayKey){location.reload();return;}
+    const initial=mergeDailyContent(daily,load("daily:"+todayKey,{}));
+    const keys=dailyRequestKeys(requested,initial);
+    if(!keys.length){if(!silent)notify("Everything is saved for today. Your content and progress are unchanged.");return;}
+    genBusyRef.current=true;setGenBusy(true);setLoadingKeys(keys);
+    const issues={};
+    const failed=(key,code,message)=>{updateLoadStatus({[key]:{state:code,message}});if(code==="ready")delete issues[key];else issues[key]=dailyIssueInfo(key,code,message);};
+    const localPrefs=load("genPrefs",null);
+    const skipped=new Set(keys.filter(key=>SHARED_KEYS.has(key)&&SHARED_URL&&Array.isArray(localPrefs)&&!localPrefs.includes(key)));
+    skipped.forEach(key=>failed(key,"disabled",""));
+    const remember=(key,value)=>{
+      const before=load("daily:"+todayKey,{}), next=acceptDaily({[key]:value});
+      if(!validDailyTile(key,before[key])&&validDailyTile(key,next[key])){
+        const history={word:["wordHistory",value.term_en],worth:["lessonHistory",value.title],spanish:["spanishHistory",value.tema],music:["musicHistory",value.title+" — "+value.artist],brainflex:["brainHistory",value.format],philo:["philoHistory",value.theme]};
+        if(history[key]){const [name,item]=history[key];save(name,[...new Set([...load(name,[]),item])].slice(-80));}
+        if(key==="world")save("worldHistory",[...new Set([...load("worldHistory",[]),...value.map(item=>item.headline)])].slice(-40));
+      }
+      failed(key,"ready","");
+    };
     try{
-      const results=await Promise.all(keys.map(k=>(GEN_TASKS[k]?GEN_TASKS[k]():Promise.resolve(null)).catch(()=>null)));
-      const musicIdx=keys.indexOf("music");
-      if(musicIdx>-1 && results[musicIdx]){
-        const match=await resolveMusicTrack(results[musicIdx]).catch(()=>null);
-        if(match) results[musicIdx]={...results[musicIdx],...match};
-      }
-      const prev=daily||{}; const next={...prev};
-      keys.forEach((k,i)=>{ if(k==="weather") return; next[k]=results[i]||prev[k]||null; });
-      setDaily(next); save("daily:"+todayKey,next);
-      const weatherIdx=keys.indexOf("weather");
-      if(weatherIdx>-1 && results[weatherIdx]){ setWeather(results[weatherIdx]); save("weather",results[weatherIdx]); }
-      keys.forEach((k,i)=>{ const v=results[i]; if(!v) return;
-        if(k==="word") save("wordHistory",[...load("wordHistory",[]),v.term_en].slice(-40));
-        if(k==="worth") save("lessonHistory",[...load("lessonHistory",[]),v.title].slice(-40));
-        if(k==="spanish") save("spanishHistory",[...load("spanishHistory",[]),v.tema].slice(-40));
-        if(k==="music") save("musicHistory",[...load("musicHistory",[]),`${v.title} — ${v.artist}`].slice(-80));
-        if(k==="world") save("worldHistory",[...load("worldHistory",[]),...v.map(x=>x.headline)].slice(-40));
-        if(k==="brainflex") save("brainHistory",[...load("brainHistory",[]),v.format].slice(-30));
-        if(k==="philo") save("philoHistory",[...load("philoHistory",[]),v.theme].slice(-30));
-      });
-      const applicable=keys.filter(k=>k!=="academic"||load("courses",[]).length>0);
-      const failedNow=applicable.filter(k=>!results[keys.indexOf(k)]);
-      const carried=load("genErrors:"+todayKey,[]).filter(k=>!keys.includes(k));
-      const merged=[...new Set([...carried,...failedNow])];
-      setGenErrors(merged); save("genErrors:"+todayKey,merged);
-      if(!silent){
-        if(applicable.length>0 && failedNow.length===applicable.length) alert("Nothing came back this time. Check your internet or API key and try again.");
-        else if(failedNow.length) alert("Updated the tiles that worked. Couldn't refresh: "+failedNow.join(", ")+".\nEach affected tile now has its own retry note — no need to regenerate everything.");
-      }
-    }catch(e){ if(!silent) alert("Generation failed: "+e.message); }
-    setGenBusy(false);
+      const shared=keys.filter(key=>!skipped.has(key)&&SHARED_URL&&SHARED_KEYS.has(key));
+      const jobs=keys.filter(key=>!skipped.has(key)&&!shared.includes(key)).map(key=>withDailyLock(todayKey,key,async()=>{
+        const saved=load("daily:"+todayKey,{});
+        if(validDailyTile(key,saved[key])){acceptDaily(saved);return;}
+        if(key==="academic"&&!SHARED_URL&&!load("courses",[]).length){failed(key,"missing_course","Add course notes to load your study tile.");return;}
+        if(key!=="weather"&&!(key==="academic"&&SHARED_URL)&&!getKey()){failed(key,"personal_key","Add your Claude API key in Settings.");return;}
+        try{
+          let value;
+          if(key==="academic"&&SHARED_URL){
+            const cs=load("courses",[]),ptr=load("academicPtr",0),course=cs[ptr%cs.length];
+            const response=await fetch(SHARED_URL+"/daily/personal",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+getAccountToken()},body:JSON.stringify({date:todayKey,key,apiKey:getKey(),course,avoid:(load("courseCoverage",{})[course?.id]||[]).slice(-12)}),signal:AbortSignal.timeout(65000)});
+            const doc=await readDailyResponse(response);
+            if(doc.date!==todayKey)throw Error("wrong_day");
+            value=doc.content&&doc.content[key];
+            if(!validDailyTile(key,value)){const status=doc.status&&doc.status[key];failed(key,status?.state||"invalid_content",status?.message);return;}
+            remember(key,value);
+            if(course){save("academicPtr",ptr+1);const coverage=load("courseCoverage",{});save("courseCoverage",{...coverage,[course.id]:[...new Set([...(coverage[course.id]||[]),value.concept])].slice(-30)});}return;
+          }
+          value=await GEN_TASKS[key]?.();
+          if(!validDailyTile(key,value))throw Error("invalid_content");
+          if(key==="music"){const match=await resolveMusicTrack(value).catch(()=>null);if(match)value={...value,...match};}
+          remember(key,value);
+        }catch(error){const issue=dailyRequestFailure(error);failed(key,issue.state,issue.message);}
+      }).catch(error=>{const issue=dailyRequestFailure(error);failed(key,issue.state,issue.message);}));
+      if(shared.length)jobs.push(withDailyLock(todayKey,"shared",async()=>{
+        const needed=dailyRequestKeys(shared,load("daily:"+todayKey,{}));
+        if(!needed.length){acceptDaily(load("daily:"+todayKey,{}));return;}
+        try{
+          let response=await fetch(SHARED_URL+"/shared/retry?date="+encodeURIComponent(todayKey),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({keys:needed}),signal:AbortSignal.timeout(65000)});
+          if(response.status===404||response.status===405)response=await fetch(SHARED_URL+"/shared?date="+encodeURIComponent(todayKey),{cache:"no-store",signal:AbortSignal.timeout(65000)});
+          const doc=await readDailyResponse(response);
+          if(doc.date!==todayKey)throw Error("wrong_day");
+          for(const key of needed){
+            if(validDailyTile(key,doc.content&&doc.content[key]))remember(key,doc.content[key]);
+            else{const status=doc.status&&doc.status[key];failed(key,status?.state||"invalid_content",status?.message);}
+          }
+        }catch(error){const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}
+      }).catch(error=>{const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}));
+      await Promise.all(jobs);
+      const saved=load("daily:"+todayKey,{}),remaining=keys.filter(key=>!validDailyTile(key,saved[key]));
+      const problems=remaining.map(key=>issues[key]||dailyIssueInfo(key,"error"));
+      if(problems.length)showLoadProblems(problems);
+      else if(!silent)notify("Today's content is saved. Nothing was replaced; your progress is kept.");
+    }finally{genBusyRef.current=false;setGenBusy(false);setLoadingKeys([]);}
   };
-
-  const generateToday=async()=>{
-    if(!getKey()){ goSettings(); return; }
-    if(genBusy) return;
-    if(daily && !confirm("Today's content is already generated. Regenerate the tiles currently on Today?")) return;
-    const keys=ALL_GEN_KEYS.filter(k=>activeTiles.includes(k)&&(k!=="academic"||courses.length>0)&&!(SHARED_URL&&SHARED_KEYS.has(k)));
-    if(!keys.length){ alert("None of your active Today tiles need generated content right now."); return; }
-    await runGen(keys);
+  const generateToday=()=>{
+    const selected=ALL_GEN_KEYS.filter(key=>activeTiles.includes(key));
+    const plan=dailyRefreshPlan(selected,mergeDailyContent(daily,load("daily:"+todayKey,{})),effectiveDailyStatus,dailyHydrated,genBusy);
+    if(dailyHydrated&&plan.blocked.length&&plan.loadable.length===0){showLoadProblems(plan.blocked.map(key=>dailyIssueInfo(key,effectiveDailyStatus[key].state,effectiveDailyStatus[key].message)),"Finish setting up your tiles");return;}
+    return runGen(selected);
   };
-  /* Retry just one broken tile — never touches the others, never re-prompts, never advances the day. */
-  const regenerateOne=async(key)=>{ if(genBusy) return; await runGen([key],{silent:true}); };
-  /* expose the generate-all handler so empty-state ✦ buttons inside tiles can trigger it */
-  if(typeof window!=="undefined") window.__fefeGenerate=generateToday;
+  const regenerateOne=key=>runGen([key]);
 
   /* recall scheduling — store alt prompts so review looks different each time */
-  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) persistRecall([...recallList,newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
-  const unlearnWord=w=>{ unsetRitual("word"); persistRecall(recallList.filter(x=>!(x.type==="word"&&x.addedOn===todayKey&&x.term===(w&&w.term_en)))); };
-  const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; persistRecall([...recallList,newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
-  const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(recallList.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
+  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) appendDailyRecall("word",[newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
+  const unlearnWord=w=>{ unsetRitual("word"); persistRecall(previous=>previous.filter(x=>!(x.type==="word"&&x.addedOn===todayKey&&x.term===(w&&w.term_en)))); };
+  const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; appendDailyRecall("lesson",[newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
+  const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(previous=>previous.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
   /* Spanish feeds recall harder than the others on purpose — both quiz questions AND each
      vocab word (using the day's other vocab as natural decoys) — so a day of Spanish doesn't
      just evaporate after the tile is marked done. */
@@ -3673,14 +3853,14 @@ function App(){
       const options=order.map(idx=>base[idx]); const answer=order.indexOf(0);
       additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Vocab · "+sp.tema, quiz:{ prompts:[`¿Qué significa “${v.es}”?`], options, answer, explain:`“${v.es}” = ${v.en}.` } }));
     });
-    if(additions.length) persistRecall([...recallList,...additions]);
+    if(additions.length) appendDailyRecall("spanish",additions);
   };
   const learnAcademic=a=>{ setRitual("academic"); if(a&&a.quiz&&a.quiz.length && !recallList.some(x=>x.type==="academic"&&x.addedOn===todayKey)){
     const additions=a.quiz.filter(Boolean).map(q=>newRecallItem({ id:uid(), type:"academic", addedOn:todayKey, title:(a.courseName?a.courseName+" · ":"")+a.concept, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }));
-    if(additions.length) persistRecall([...recallList,...additions]);
+    if(additions.length) appendDailyRecall("academic",additions);
   } };
-  const unlearnAcademic=a=>{ unsetRitual("academic"); persistRecall(recallList.filter(x=>!(x.type==="academic"&&x.addedOn===todayKey&&x.title===((a&&a.courseName?a.courseName+" · ":"")+(a&&a.concept||""))))); };
-  const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall([...recallList,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
+  const unlearnAcademic=a=>{ unsetRitual("academic"); persistRecall(previous=>previous.filter(x=>!(x.type==="academic"&&x.addedOn===todayKey&&x.title===((a&&a.courseName?a.courseName+" · ":"")+(a&&a.concept||""))))); };
+  const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall(previous=>[...previous,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
   const gradeRecall=(item,rating)=>{ const scheduled=scheduleRecall(item,rating); persistRecall(list=>list.map(x=>x.id===item.id?scheduled:x)); return scheduled; };
   const restoreRecall=item=>{ persistRecall(list=>list.map(x=>x.id===item.id?item:x)); };
 
@@ -3705,7 +3885,7 @@ function App(){
 
   /* ---- second brain: file one learned thing, never inventing new content ---- */
   const addBankEntry=async(raw)=>{
-    if(!getKey()){ goSettings(); return; }
+    if(!getKey()){showLoadProblems([dailyIssueInfo("brain","personal_key")]);return false;}
     setBankBusy(true);
     try{
       const r=await genFileEntry(brainBank,raw);
@@ -3715,18 +3895,18 @@ function App(){
         const topics={}; old.forEach(e=>{ const path=placements.get(e.id)||e._path, key=path.join(" › "); const clean={...e}; delete clean._path; topics[key]=[...(topics[key]||[]),clean]; });
         const topic=r.path.slice(0,4).join(" › "); const bankEntry={id:uid(),text:r.entry,date:todayKey}; topics[topic]=[...(topics[topic]||[]),bankEntry];
         persistBank({topics});
-        learnBank(topic,r.quiz);
-      } else alert("Couldn't file that just now — try again in a moment.");
-    }catch(e){ alert("Couldn't file that just now — try again in a moment."); }
-    setBankBusy(false);
+        learnBank(topic,r.quiz);setBankBusy(false);return true;
+      }else throw Object.assign(new Error("Incomplete filing response"),{dailyState:"invalid_content"});
+    }catch(e){const failure=dailyRequestFailure(e);showLoadProblems([dailyIssueInfo("brain",failure.state,failure.message,true)]);}
+    setBankBusy(false);return false;
   };
-  const reorganizeBank=async()=>{ if(!getKey()){goSettings();return;} if(!Object.keys(brainBank.topics||{}).length)return; setBankBusy(true);
+  const reorganizeBank=async()=>{ if(!getKey()){showLoadProblems([dailyIssueInfo("brain","personal_key")]);return;} if(!Object.keys(brainBank.topics||{}).length)return; setBankBusy(true);
     try{ const r=await genBankReorg(brainBank); const placements=new Map((r&&r.structure||[]).filter(x=>x&&x.id&&Array.isArray(x.path)&&x.path.length).map(x=>[x.id,x.path.slice(0,4)])); const topics={};
       Object.entries(brainBank.topics||{}).forEach(([oldPath,list])=>(list||[]).forEach(e=>{const key=(placements.get(e.id)||oldPath.split(" › ")).join(" › ");topics[key]=[...(topics[key]||[]),e];})); persistBank({topics});
-    }catch(e){alert("Couldn't reorganise the map just now. Check your connection and API key.");} setBankBusy(false); };
+    }catch(e){const failure=dailyRequestFailure(e);showLoadProblems([dailyIssueInfo("brain",failure.state,failure.message,true)]);} setBankBusy(false); };
 
   /* ---- academic: course material management ---- */
-  const addCourse=(name,content)=>{ const course={id:uid(),name,content,addedOn:todayKey}; persistCourses([...courses,course]); };
+  const addCourse=(name,content)=>{ const course={id:uid(),name,content,addedOn:todayKey}; persistCourses([...courses,course]);updateLoadStatus({academic:{state:"missing"}}); };
   const removeCourse=id=>{ persistCourses(courses.filter(c=>c.id!==id));
     const cov=load("courseCoverage",{}); if(cov[id]){ const nc={...cov}; delete nc[id]; save("courseCoverage",nc); } };
 
@@ -3734,20 +3914,20 @@ function App(){
   const setPhiloMode=mode=>persistPhiloChat({...philoChat,mode});
   const philoSubmitInitial=async(text)=>{
     const q=daily && daily.philo && daily.philo.question; if(!q) return;
-    const base={initial:text,messages:[],mode:philoChat.mode||"standard"}; persistPhiloChat(base); setRitual("philo"); setPhiloBusy(true);
+    const base={initial:text,messages:[],mode:philoChat.mode||"standard"}; persistPhiloChat(base); setRitual("philo"); setPhiloError("");if(!getKey()){setPhiloError("Your reflection is saved. Add your Claude API key in Settings to receive replies.");showLoadProblems([dailyIssueInfo("philo","personal_key")]);return;}setPhiloBusy(true);
     try{ const reply=await philoReply(q,[{role:"user",text}],base.mode); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
-    catch(e){ persistPhiloChat({...base,messages:[{role:"assistant",text:"Couldn't reach the model just now — say something else to try again, or check your key in ⚙."}]}); }
+    catch(e){setPhiloError("Your reflection is saved. Couldn’t receive a reply; check your connection and API key, then retry.");const issue=dailyRequestFailure(e);showLoadProblems([dailyIssueInfo("philo",issue.state,issue.message,true)]);}
     setPhiloBusy(false);
   };
-  const philoSend=async(text)=>{
+  const philoSend=async(text,retry=false)=>{
     const q=daily && daily.philo && daily.philo.question; if(!q) return;
-    const withUser={...philoChat,messages:[...philoChat.messages,{role:"user",text}]};
-    persistPhiloChat(withUser); setPhiloBusy(true);
+    const withUser=retry?philoChat:{...philoChat,messages:[...philoChat.messages,{role:"user",text}]};
+    persistPhiloChat(withUser);setPhiloError("");if(!getKey()){setPhiloError("Your message is saved. Add your Claude API key in Settings to receive replies.");showLoadProblems([dailyIssueInfo("philo","personal_key")]);return;}setPhiloBusy(true);
     try{
       const history=[{role:"user",text:philoChat.initial},...withUser.messages];
       const reply=await philoReply(q,history,philoChat.mode||"standard");
       persistPhiloChat({...withUser,messages:[...withUser.messages,{role:"assistant",text:reply}]});
-    }catch(e){ persistPhiloChat({...withUser,messages:[...withUser.messages,{role:"assistant",text:"Couldn't reach the model just now — try again in a moment."}]}); }
+    }catch(e){setPhiloError("Your message is saved. Couldn’t receive a reply; check your connection and API key, then retry.");const issue=dailyRequestFailure(e);showLoadProblems([dailyIssueInfo("philo",issue.state,issue.message,true)]);}
     setPhiloBusy(false);
   };
 
@@ -3855,6 +4035,7 @@ function App(){
   };
 
   const saveSettings=()=>{
+    const keyChanged=keyField.trim()!==getKey();
     const locationChanged=JSON.stringify(locationProfile)!==JSON.stringify(getLocationProfile());
     const nextName=nameField.trim()||"Fefe";
     save("profileName",nextName);
@@ -3863,13 +4044,13 @@ function App(){
     setProfileName(nextName);
     setNameField(nextName);
     localStorage.setItem("fefe_apiKey",keyField.trim());
+    if(keyChanged)updateLoadStatus({academic:{state:keyField.trim()?"missing":"personal_key"}});
     save("garminKey",garminKeyField.trim());
     save("location",locationProfile);
     setLocationFeedback("");
     notify("Changes saved.");
     if(locationChanged){
-      const request=++weatherRequestRef.current;
-      fetchWeather(locationProfile).then(fresh=>{if(request===weatherRequestRef.current){setWeather(fresh);save("weather",fresh);}}).catch(()=>{if(request===weatherRequestRef.current)notify("Changes saved. Weather couldn’t update; try Refresh.");});
+      notify(weather?"City saved. Today’s weather snapshot is kept; the new city applies tomorrow.":"City saved. Retry Weather to load it for this location.");
     }
   };
   const resetLayout=()=>{
@@ -3908,7 +4089,7 @@ function App(){
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. GMAT done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
-  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return !!r[id]||!!manualDoneFor(k)[id]; };
+  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return (k!==todayKey||!DAILY_CONTENT_KEYS.includes(id)||id==="gmat"||validDailyTile(id,view[id]))&&(!!r[id]||!!manualDoneFor(k)[id]); };
   const ritualOK=k=>{ const active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:ritualDoneOn(k,id)); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
@@ -3949,12 +4130,52 @@ function App(){
   const activeNow=new Set(activeTiles);
   const scoredRituals=ritualScoreIds.filter(id=>activeNow.has(id));
   const litTotal=scoredRituals.length+(activeNow.has("habits")?habits.length:0)+(activeNow.has("goals")?goals.length:0);
-  const litDone=scoredRituals.filter(id=>rToday[id]||manualTileDone[id]).length+(activeNow.has("habits")?habits.filter(h=>hToday[h.id]).length:0)+(activeNow.has("goals")?goals.filter(g=>g.done).length:0);
+  const litDone=scoredRituals.filter(id=>ritualDoneOn(todayKey,id)).length+(activeNow.has("habits")?habits.filter(h=>hToday[h.id]).length:0)+(activeNow.has("goals")?goals.filter(g=>g.done).length:0);
   const pctLit=litTotal?Math.round(litDone/litTotal*100):0;
   const ice=iceState();
-  const expectedGenKeys=ALL_GEN_KEYS.filter(k=>activeNow.has(k)&&(k!=="academic"||courses.length>0));
-  const contentReady=expectedGenKeys.every(k=>k==="weather"?!!weather:!!daily&&!!daily[k]);
-  const genStatus = genBusy ? "GENERATING…" : (contentReady ? "TODAY'S CONTENT READY ✓" : (getKey() ? "TAP GENERATE TO LOAD TODAY" : "ADD KEY IN ⚙ TO ENABLE AI"));
+  const expectedGenKeys=ALL_GEN_KEYS.filter(key=>activeNow.has(key));
+  const readyGenCount=expectedGenKeys.filter(key=>validDailyTile(key,view[key])).length;
+  const contentReady=readyGenCount===expectedGenKeys.length;
+  const effectiveDailyStatus={...loadStatus};
+  ALL_GEN_KEYS.filter(key=>!validDailyTile(key,view[key])).forEach(key=>{
+    if(SHARED_URL&&SHARED_KEYS.has(key)&&Array.isArray(genPrefs)&&!genPrefs.includes(key))effectiveDailyStatus[key]={state:"disabled"};
+    else if(key==="academic"&&!DAILY_SETUP_STATES.has(loadStatus[key]?.state)){
+      if(!courses.some(course=>course.content?.trim()))effectiveDailyStatus[key]={state:"missing_course"};
+      else if(!getKey())effectiveDailyStatus[key]={state:"personal_key"};
+    }
+  });
+  const refreshPlan=dailyRefreshPlan(expectedGenKeys,view,effectiveDailyStatus,dailyHydrated,genBusy);
+  const openDailySettings=target=>{
+    setShowServiceSetup(target==="daily-content");openPage("settings");
+    setTimeout(()=>{const control=document.getElementById(target||"daily-content");if(control){control.scrollIntoView({block:"center",behavior:"smooth"});control.focus({preventScroll:true});}},80);
+  };
+  const enableDailyTile=async key=>{
+    const base=load("genPrefs",null)||genServerState?.tiles||["word","gmat"],next=[...new Set([...base,key])];
+    setGenCfgBusy(true);
+    try{
+      if(!await pushGenConfig(next)){showLoadProblems([dailyIssueInfo(key,"service_error","The daily setting could not be saved to the service. Check the connection, then try enabling it again.")]);return;}
+      setGenPrefs(next);save("genPrefs",next);updateLoadStatus({[key]:{state:"missing"}});
+      await runGen([key]);
+    }finally{setGenCfgBusy(false);}
+  };
+  const handleDailyIssue=issue=>{
+    setLoadProblems(null);
+    if(issue.actionType==="enable")return enableDailyTile(issue.key);
+    if(issue.actionType==="key")return openDailySettings("claude-key");
+    if(issue.actionType==="courses")return setShowCourseEditor(true);
+    if(issue.actionType==="settings")return openDailySettings("daily-content");
+    if(issue.actionType==="signin"){setAuthError("");setAccountSignedIn(false);return;}
+    if(issue.actionType==="retry")return issue.key==="account"?generateToday():regenerateOne(issue.key);
+  };
+  const dailyStateFor=key=>{
+    if(!dailyHydrated){
+      if(!syncChecked)return {state:"loading",title:"Checking your saved day",detail:"Your existing content stays safe while the account connects."};
+      const issue=dailyIssueInfo(key,_syncIssue?.state||"sync_pending");return {...issue,onAction:()=>handleDailyIssue({...issue,key:"account"})};
+    }
+    if(loadingKeys.includes(key))return {state:"loading",title:"Loading today’s content",detail:"Checking saved content first. Your progress stays as it is."};
+    const status=effectiveDailyStatus[key]||{},issue=dailyIssueInfo(key,status.state||"missing",status.message);
+    return {...issue,disabled:(genBusy||genCfgBusy)&&["retry","enable"].includes(issue.actionType),onAction:()=>handleDailyIssue(issue),secondaryAction:["missing_key","invalid_key","server_unconfigured","service_update"].includes(issue.state)&&key!=="academic"?"Check again":null,onSecondary:()=>regenerateOne(key)};
+  };
   const push14=(()=>{ const a=[]; for(let i=13;i>=0;i--) a.push(pushLog[addDays(todayKey,-i)]||0); return a; })();
   const pushStreak=(()=>{ let s=0,start=pToday>0?0:1; for(let d=start;d<400;d++){ if((pushLog[addDays(todayKey,-d)]||0)>0)s++;else break; } return s; })();
   const pushTotal14=push14.reduce((a,b)=>a+b,0); const pushAvg14=Math.round(pushTotal14/14);
@@ -3967,13 +4188,12 @@ function App(){
     const libraryCorner=page==="library"?(onDaily
       ? <button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>
       : <button className="libraryAddToday" aria-label={`Add ${label} to Today`} title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+</button>):null;
-    const visualDone=!!done||!!manualTileDone[id];
-    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} onTap={onTap||(()=>toggleManualTile(id))} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{children}</Tile>;
+    const generated=DAILY_CONTENT_KEYS.includes(id)&&id!=="gmat", ready=!generated||validDailyTile(id,view[id]);
+    const state=generated&&!ready?dailyStateFor(id):null;
+    const visualDone=ready&&(!!done||!!manualTileDone[id]);
+    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{state?<DailyLoadState {...state}/>:children}</Tile>;
   };
-  /* dropped into any daily-generated tile; only renders once that key is known to have failed */
-  const RetryNote=({tileKey})=> genErrors.includes(tileKey) ? (
-    <div className="tileRetry"><span>Didn't come through last time.</span><button className="tileRetryBtn" disabled={genBusy} onClick={()=>regenerateOne(tileKey)}>{genBusy?"…":"Retry"}</button></div>
-  ) : null;
+  const RetryNote=()=>null;
 
   const widgets={
     goals: T("goals","Goals",goalsLit,null,<>
@@ -4081,7 +4301,7 @@ function App(){
     breathing: T("breathing","Breathing",!!rToday.breathing,null,
       <BreathingCard done={!!rToday.breathing} onComplete={()=>setRitual("breathing")} onIncomplete={()=>unsetRitual("breathing")} />),
     health: T("health","Health",false,null,
-      <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} />),
+      <HealthCard data={healthLog[todayKey]} latest={Object.values(healthLog||{}).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0]} connected={!!healthToken} busy={healthBusy} onSetup={goSettings} onSync={syncHealthNow} />),
     shopping: T("shopping","Shopping",shoppingLit,null,
       <ShoppingCard items={shoppingList} onChange={persistShopping} />),
     agenda: T("agenda","Reminders",agendaLit,null,
@@ -4092,17 +4312,17 @@ function App(){
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     brain: T("brain","Memory",false,null,
-      <BrainBankCard bank={brainBank} busy={bankBusy} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
+      <BrainBankCard bank={brainBank} busy={bankBusy} haveKey={haveKey} onSetup={()=>openDailySettings("claude-key")} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
       <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onUnlearned={unlearnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} onGenerate={()=>regenerateOne("academic")} />
       <RetryNote tileKey="academic"/></>),
     gmat: T("gmat","GMAT",!!rToday.gmat,null,
-      <GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} onIncomplete={()=>unsetRitual("gmat")} />),
+      <><div className="gmatSource">{view.gmat?"Today’s lesson + practice library":"Practice library · daily lesson not loaded"}{!view.gmat&&<button className="link" disabled={loadingKeys.includes("gmat")} onClick={()=>regenerateOne("gmat")}>{loadingKeys.includes("gmat")?"Loading…":"Load daily lesson"}</button>}</div>{!view.gmat&&loadStatus.gmat&&<div className="gmatSourceHelp">{dailyStateFor("gmat").title}. {dailyStateFor("gmat").detail}</div>}<GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} onIncomplete={()=>unsetRitual("gmat")} /></>),
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
       <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onHide={()=>unsetRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
-      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onReset={()=>unsetRitual("philo")} onGenerate={()=>regenerateOne("philo")} />
+      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} error={philoError} haveKey={haveKey} onSetup={goSettings} onRetry={()=>philoSend("",true)} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onReset={()=>unsetRitual("philo")} onGenerate={()=>regenerateOne("philo")} />
       <RetryNote tileKey="philo"/></>),
     people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
@@ -4135,7 +4355,7 @@ function App(){
           <button className={"navbtn"+(page==="settings"?" active":"")} aria-current={page==="settings"?"page":undefined} onClick={()=>openPage("settings")}>Settings</button>
         </div>
         <div className="topActions">
-          {page!=="settings"&&<button className="actionBtn primary" aria-label={genBusy?"Updating today’s content":contentReady?"Refresh today’s content":"Load today’s content"} title={contentReady?"Refresh today’s content":"Load today’s content"} onClick={generateToday} disabled={genBusy}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1"/></svg><span>{genBusy?"Updating…":contentReady?"Refresh":"Load today"}</span></button>}
+          {page!=="settings"&&<button className="actionBtn primary" aria-label={refreshPlan.label} title={refreshPlan.detail} onClick={generateToday} disabled={genBusy||expectedGenKeys.length===0}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1"/></svg><span>{refreshPlan.label}</span></button>}
           {page==="dashboard"&&<button className={"actionBtn"+(edit?" active":"")} title={edit?"Finish arranging":"Arrange dashboard"} aria-label={edit?"Finish arranging":"Arrange dashboard"} aria-pressed={edit} onClick={()=>setEdit(a=>!a)}><AppIcon name={edit?"check":"layout"}/><span>{edit?"Done":"Arrange"}</span></button>}
         </div>
       </nav>
@@ -4145,7 +4365,7 @@ function App(){
         <div className="heroCopy">
           {page==="dashboard"&&<div className="heroEyebrow">{displayDateLabel}</div>}
           <h1>{page==="library"?"Library":page==="settings"?"Settings":`${greeting}, ${profileName}`}</h1>
-          <p className="heroStatus">{page==="library"?"Choose what appears on Today.":page==="settings"?"Your profile, preferences and connections.":genBusy?"Updating today’s content…":litTotal?`${litDone} of ${litTotal} daily actions complete.`:"Choose a few tiles to start your day."}</p>
+          <p className="heroStatus">{page==="library"?"Choose what appears on Today.":page==="settings"?"Your profile, preferences and connections.":genBusy?"Loading missing tiles. Saved content stays put.":litTotal?`${litDone} of ${litTotal} daily actions complete.`:"Choose a few tiles to start your day."}</p>
           {lateNight&&page==="dashboard"&&<div className="bedtime">Past midnight. Today rolls over at 1am.</div>}
         </div>
         <div className="heroSummary" aria-label="Daily summary">
@@ -4155,6 +4375,7 @@ function App(){
           <div className="metric"><span className="heroClock">{displayClock}</span><span className="metricLabel">{locationProfile.name}</span></div>
         </div>
       </header>
+      {page==="dashboard"&&<div className="dailySafety"><span className="dailySafetyIcon" aria-hidden="true">✓</span><div><strong>{expectedGenKeys.length?readyGenCount+" of "+expectedGenKeys.length+" daily tiles saved":"Your day is saved as you go"}</strong><span>Saved tiles, answers and streaks stay put. The button only loads gaps or explains the setup needed. New content arrives after 1am.</span></div></div>}
 
       {page==="settings"&&(
         <div className="settings">
@@ -4181,17 +4402,17 @@ function App(){
               </select>
               <p style={{marginTop:10}}>Preview a background here, then save your choice.</p>
             </section>
-            <section className="settingsCard">
+            <section className="settingsCard" id="daily-content" tabIndex="-1">
               <h2>Daily content</h2>
-              <p>Choose which tiles get new content each day. Add or remove tiles from Today in the Library.</p>
-              <div className="genTileList">{SHARED_AI_TILES.map(([id,label])=><label key={id} className={"genTileRow"+(genEnabled(id)?" on":"")}><input type="checkbox" checked={genEnabled(id)} onChange={()=>toggleGenTile(id)}/><span>{label}</span></label>)}</div>
+              <p>Choose which shared tiles get daily content. Saved content stays for the whole day; applying preferences only fills missing tiles. Add tiles to Today in the Library.</p>
+              <div className="genTileList">{SHARED_AI_TILES.map(([id,label])=><label key={id} className={"genTileRow"+(genEnabled(id)?" on":"")}><input id={"daily-enabled-"+id} type="checkbox" checked={genEnabled(id)} onChange={()=>toggleGenTile(id)}/><span>{label}</span></label>)}</div>
               <div className="settingsActions"><button type="button" className="ghostbtn" onClick={applyGenNow} disabled={genCfgBusy}>{genCfgBusy?"Applying…":"Apply preferences"}</button><button type="button" className="linklike" onClick={verifyGenConfig}>Check connection</button></div>
               <p role="status" aria-live="polite" style={{marginTop:10}}>{genCfgStatus||"These preferences save separately from your profile."}</p>
-              {genServerState==="old"&&<details className="settingsHelp"><summary>Finish connection setup</summary><p>Your preferences are saved. Update the sync service to apply them: in Cloudflare, open Workers → fefe-sync → Edit code. Replace the code with worker/fefe-sync.js, then Save &amp; Deploy.</p></details>}
+              <details className="settingsHelp" open={showServiceSetup} onToggle={event=>setShowServiceSetup(event.currentTarget.open)}><summary>Service connection setup</summary><p>Shared daily tiles need the service’s Claude key and its daily-save coordinator. A personal key powers Study, Memory filing and Philosophy replies.</p><p>The app owner can <a href="https://github.com/ferreolv/the_dashboard/blob/main/worker/README-deploy.md" target="_blank" rel="noreferrer">follow the worker deployment guide</a> to connect the coordinator and service key. Today’s saved tiles are kept.</p></details>
             </section>
             <section className="settingsCard">
               <h2>API keys</h2>
-              <p>For personal content and connected services.</p>
+              <p>Your Claude key is needed for Study, Memory filing and Philosophy replies. Shared daily tiles use the service key; Weather needs no key.</p>
               <label className="lab" htmlFor="claude-key">Claude API key</label><input id="claude-key" className="sinput" type="password" autoComplete="off" spellCheck="false" placeholder="Paste your API key" value={keyField} onChange={e=>setKeyField(e.target.value)}/>
               <label className="lab" htmlFor="garmin-key">Garmin Connect key</label><input id="garmin-key" className="sinput" type="password" autoComplete="off" spellCheck="false" placeholder="Optional" value={garminKeyField} onChange={e=>setGarminKeyField(e.target.value)}/>
             </section>
@@ -4263,6 +4484,12 @@ function App(){
       )}
 
       </main>
+      {loadProblems&&<DashboardModal label={loadProblems.title} onClose={()=>setLoadProblems(null)} className="ovlcard dailyProblemCard">
+        <button className="dailyProblemClose" aria-label="Close loading message" onClick={()=>setLoadProblems(null)}>×</button>
+        <h2>{loadProblems.title}</h2><p className="dailyProblemIntro">Your saved tiles, answers and streaks are kept.</p>
+        <ul className="dailyProblemList">{loadProblems.issues.map(issue=><li key={issue.key+":"+issue.state}><span className="dailyProblemTile">{DAILY_TILE_LABELS[issue.key]||issue.key}</span><h3>{issue.title}</h3><p>{issue.detail}</p>{issue.action&&<button className="ghostbtn" onClick={()=>handleDailyIssue(issue)} disabled={genBusy||genCfgBusy}>{issue.action}</button>}</li>)}</ul>
+        <div className="dailyProblemFooter">{loadProblems.issues.some(issue=>ALL_GEN_KEYS.includes(issue.key)&&issue.state!=="disabled"&&issue.state!=="browser_lock_unavailable")&&<button className="ghostbtn" disabled={genBusy||genCfgBusy} onClick={()=>{const keys=loadProblems.issues.filter(issue=>ALL_GEN_KEYS.includes(issue.key)).map(issue=>issue.key);setLoadProblems(null);runGen(keys);}}>Check again</button>}<button className="savebtn" onClick={()=>setLoadProblems(null)}>Got it</button></div>
+      </DashboardModal>}
       {notice&&<div className="dashboardNotice" role="status" aria-live="polite"><span>{notice.message}</span>{notice.action&&<button onClick={notice.action}>{notice.actionLabel}</button>}</div>}
 
       {showJournal && (
@@ -4356,23 +4583,10 @@ function NoteCard({saved,onSave,onView}){
   );
 }
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
-  const [answered,setAnswered]=useState({});
-  useEffect(()=>{ setAnswered({}); },[sp && sp.tema]);
-  if(!sp) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
+  if(!sp)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
   const qs=sp.quiz||[];
-  const mark=i=>correct=>setAnswered(prev=>{
-    if(prev[i]) return prev;
-    const next={...prev,[i]:correct};
-    if(Object.keys(next).length>=qs.length) onLearned(sp);
-    return next;
-  });
-  const undo=i=>setAnswered(prev=>{
-    if(!prev[i]) return prev;
-    const next={...prev};
-    delete next[i];
-    onUnlearned&&onUnlearned(sp);
-    return next;
-  });
+  const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(sp);};
+  const undo=index=>onUnlearned&&onUnlearned(sp);
   return (
     <div>
       <div style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{sp.tema}</div>
@@ -4846,8 +5060,9 @@ function Sym({name,className}){ const p=HEALTH_ICONS[name]; if(!p) return null; 
 function HealthMetric({icon,value,unit,label}){
   return <div className="healthMetric"><Sym name={icon} className="metricIcon" /><b>{value}{value!=="—"&&unit?<span style={{fontSize:"9.5px",fontWeight:800}}>{unit}</span>:null}</b><span>{label}</span></div>;
 }
-function HealthCard({data,latest}){
+function HealthCard({data,latest,connected,busy,onSetup,onSync}){
   const d=data||latest||null;
+  if(!d)return <DailyLoadState state="missing" title={connected?"No health data for today":"Connect your health data"} detail={connected?"Your health source hasn’t sent a summary yet. Sync again or import a Health JSON file in Settings.":"Connect Garmin with a sync token, or import a Health JSON file in Settings."} action={connected?(busy?"Syncing…":"Sync health"):"Open settings"} onAction={connected?onSync:onSetup}/>;
   const steps=d&&Number.isFinite(Number(d.steps))?Number(d.steps):null;
   const sleep=d&&Number.isFinite(Number(d.sleepHours))?Number(d.sleepHours):null;
   const rhr=d&&Number.isFinite(Number(d.restingHeartRate))?Number(d.restingHeartRate):null;
@@ -4864,7 +5079,7 @@ function HealthCard({data,latest}){
           <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Garmin bridge"}</div>
           <div className="healthSteps">{steps!=null?steps.toLocaleString("en-GB"):"—"} <span><Sym name="steps" className="healthUnitIcon" />steps</span></div>
         </div>
-        <span className="healthSync">{has?"Connected":"Not connected"}</span>
+        <span className="healthSync">{data?"Today’s summary":"Last available summary"}</span>
       </div>
       <div className="healthGrid">
         <HealthMetric icon="moon" value={sleep!=null?sleep.toFixed(1):"—"} unit="h" label="sleep" />
@@ -4939,14 +5154,15 @@ function PeopleMetCard({people,onAdd,onRemove}){
   return <div><div className="addrow peopleAddRow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div>{people.filter(p=>p.place===pl).map(p=><div className="bankEntry" key={p.id}><span><b>{p.name}</b>{p.desc?` · ${p.desc}`:""}</span><button className="del" onClick={()=>onRemove(p.id)}>×</button></div>)}</div>)}</div></div>;
 }
 
-function BrainBankCard({bank,busy,onAdd,onOpenBrowser}){
-  const [v,setV]=useState("");
+function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){
+  const [v,setV]=useState(()=>load("brainDraft",""));
   const topics=Object.keys(bank.topics||{});
   const total=topics.reduce((n,t)=>n+(bank.topics[t]||[]).length,0);
-  const submit=()=>{ const t=v.trim(); if(!t||busy) return; onAdd(t); setV(""); };
+  const submit=async()=>{const t=v.trim();if(!t||busy)return;if(await onAdd(t)){setV("");save("brainDraft","");}};
   return (
     <div>
-      <textarea className="notearea" style={{minHeight:64}} placeholder="Something you just learned…" value={v} onChange={e=>setV(e.target.value)} />
+      {!haveKey&&<p className="dailyDependency">Memory filing needs your Claude API key. Your draft stays here if filing fails. <button className="link" onClick={onSetup}>Add key</button></p>}
+      <textarea className="notearea" style={{minHeight:64}} placeholder="Something you just learned…" value={v} onChange={e=>{setV(e.target.value);save("brainDraft",e.target.value);}} />
       <div style={{display:"flex",gap:8,marginTop:8,alignItems:"center"}}>
         <button className="pill primary" disabled={!v.trim()||busy} onClick={submit}>{busy?"Filing…":"Add to bank"}</button>
         <button className="link" onClick={onOpenBrowser}>Browse bank →</button>
@@ -4957,9 +5173,8 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser}){
 }
 
 function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEditor,onGenerate}){
-  const [n,setN]=useState(0);
-  useEffect(()=>{ setN(0); },[academic && academic.concept]);
-  if(!hasCourses) return (
+
+  if(!hasCourses&&!academic) return (
     <div className="academicSetup">
       <span className="academicSetupGlyph" aria-hidden="true">📚</span>
       <p>Add course notes for a short daily study session.</p>
@@ -4968,8 +5183,8 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEdit
   );
   if(!academic) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=academic.quiz||[];
-  const mark=()=>{ setN(v=>{ const nv=v+1; if(nv>=qs.length) onLearned(academic); return nv; }); };
-  const undo=()=>{ setN(v=>Math.max(0,v-1)); onUnlearned&&onUnlearned(academic); };
+  const mark=()=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(academic);};
+  const undo=()=>onUnlearned&&onUnlearned(academic);
   return (
     <div>
       {academic.courseName && <span className="lbl">{academic.courseName}</span>}
@@ -5169,7 +5384,7 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
   );
 }
 
-function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
+function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
   const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
   const logRef=useRef(null);
@@ -5182,6 +5397,8 @@ function PhilosophyCard({philo,busy,chat,sending,onModeChange,onSubmitInitial,on
   return (
     <div className="philoCard">
       <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
+      {!haveKey&&<p className="dailyDependency">Replies need your Claude API key. Your own reflection still saves. <button className="link" onClick={onSetup}>Add key</button></p>}
+      {error&&<div className="dailyDependency" role="alert">{error}{haveKey&&<button className="link" onClick={onRetry} disabled={sending}>Retry reply</button>}</div>}
       <div className="philoModeBar">
         <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
         <label className="philoModeRow">

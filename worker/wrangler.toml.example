@@ -1,0 +1,18 @@
+# Copy to wrangler.toml and keep the existing SYNC namespace ID and secrets.
+name = "fefe-sync"
+main = "fefe-sync.js"
+compatibility_date = "2026-10-17"
+
+[[kv_namespaces]]
+binding = "SYNC"
+id = "REPLACE_WITH_EXISTING_SYNC_NAMESPACE_ID"
+
+[durable_objects]
+bindings = [{ name = "DAILY_COORDINATOR", class_name = "DailyCoordinator" }]
+
+[[migrations]]
+tag = "daily-freeze-v1"
+new_sqlite_classes = ["DailyCoordinator"]
+
+[triggers]
+crons = ["0 4 * * *"]

@@ -17,4 +17,12 @@ The live implementation remains in the root `index.html` during the compatibilit
 
 - `themeVars` provides each tile’s hue, deep tint, and readable foreground. The rounded tile shell stays transparent; `::before` owns the translucent coloured surface and backdrop refraction, and `::after` adds a restrained edge reflection. Content is never filtered.
 - The embedded `dashboard-glass-refraction` SVG adapts the supplied design helper’s turbulence/displacement method at a gentler scale. A CSS blur fallback remains when SVG backdrop filtering is unavailable.
-- Resting tiles use dark ink over coloured glass; completed tiles retain alpha transparency with a deeper tint and white text. Nested panels should not introduce opaque white backgrounds.
+- Resting tiles use a light coloured tint and dark ink; completion increases the vivid hue at partial alpha, retaining dark ink and a visible backdrop. Nested panels should not introduce opaque white backgrounds.
+
+## Daily loading contract
+
+- `validDailyTile` rejects empty or malformed results. `mergeDailyContent` preserves the first valid success; the Worker validator is tested against the same fixture matrix.
+- Every load entry point uses `runGen`, date-scoped records and a day-level Web Lock. Account hydration happens before missing-content requests. Weather is a dated snapshot, including migration of a same-day legacy cache.
+- Missing generated content has an honest setup/retry state and cannot count as completed. Loading never changes ritual logs or streak history. Quiz selections persist by exact day and question; partial completion and undo use those saved answers.
+- `dailyIssueInfo` supplies tile and popup reasons/recovery. `dailyRefreshPlan` supplies the main action label. User-initiated retries must not suppress errors.
+- Backend changes require the SQLite `DAILY_COORDINATOR` binding; use `worker/wrangler.toml` for this deployment. Also publish the live public HTML/assets, since a GitHub push alone does not update `SYNC.__html__`.

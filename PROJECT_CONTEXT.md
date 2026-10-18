@@ -16,7 +16,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - React 18 and Babel are loaded from CDNs; no build step is currently required.
 - Data persists in browser `localStorage` with `fefe_` keys.
 - Learn owns `fefe_learnDB`; Dashboard does not load or display Learn navigation or progress.
-- Optional Cloudflare sync stores a snapshot while excluding API and sync credentials.
+- Optional Cloudflare sync stores a snapshot while excluding API and sync credentials. The Worker can also serve the live dashboard from the public `SYNC` key `__html__`; publishing must update that HTML copy as well as GitHub.
 - Settings presents a classic Account section with sign out, password change, account deletion, and separate backup/restore; legacy sync-code controls are no longer exposed.
 - JSON backup and restore are available in Settings.
 - Settings lives on its own top-level dashboard page at `#/settings`.
@@ -27,9 +27,10 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Configurable tile library with date-aware active-tile history.
 - New dashboards start Today with only Goals, Habits, Weather, Word, and World; existing customized Today layouts are preserved.
 - Active tiles determine daily progress and perfect-day requirements.
+- A validated daily tile freezes at its first success for the profile’s logical day (1am rollover). Reload retries gaps only; it never replaces saved content or resets answers/streaks. Missing content cannot be marked complete. Shared and account-specific daily records use a durable coordinator; provider failures remain retryable.
 - Habits may use an emoji, text label, or both; emoji-only habits remain valid.
 - Goals, habits, shopping list, Health import bridge, task reminders, positive event countdowns, notes, weather, timer, Knowledge, Recall, Academic, Memory, Philosophy, People Met, and weekly review.
-- AI-generated content uses a user-provided Anthropic API key.
+- Shared daily content uses the Worker’s Anthropic service key. Private Study capsules, Memory filing and Philosophy conversations use the user’s personal key.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 - The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
 - Breathing is a guided one-minute daily widget: six rounds of a 4-second nasal inhale and 6-second gentle exhale, shown through an expanding/contracting visual, phase countdown, and round progress.
@@ -38,7 +39,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 ## Durable design preferences
 
 - The dashboard shell stays quiet: lighter headings, inline summary metrics, plain language, restrained shadows and modest control shapes; vivid tile identities and glass completion states remain the visual focus. Settings uses labelled fields, a visible save state, optional setup details, and reversible layout resets.
-- Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep transparent, deeper coloured glass with high-contrast white text. Typeface remains Nunito.
+- Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep a stronger, vivid transparent hue and readable dark ink; the background must remain visible through both states. Typeface remains Nunito.
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
 - A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
@@ -55,6 +56,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
+- Loading failures show a grouped, actionable popup and a reason in each affected tile (personal/service key, disabled content, missing notes, connection, account, provider or storage failure). The main load control names its actual action and count; Library membership and daily generation settings are distinct.
 - Dashboard Recall uses FSRS-6 at 90% desired retention, presented as flashcards: prompt first, reveal answer, then emoji-only grading. Existing fixed-ladder cards migrate into FSRS memory state without losing their due date or content, review history remains local, and at most eight due items are shown per session.
 - Goals use a light list style: completing a goal only ticks a small box; the goal text is not struck through and goal rows avoid heavy separators.
 - A saved location profile (city + timezone) drives the dashboard clock and weather tile.
@@ -62,7 +64,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Philosophy keeps its standard below-the-surface Socratic mode and also offers a per-topic philosopher dropdown with a distinct relevant icon for every mode. Named-philosopher replies must reconstruct only textually grounded views, admit when the source basis is unclear, and end with short source notes rather than inventing positions.
 - Song recommendations name an exact recording and retain complete performer/ensemble/conductor credits plus a separate classical composer when relevant. Apple Music links use conservative catalog matching on both title and credits; an uncertain result opens a precise search instead of linking to a different recording.
 - Learn deliberately keeps a more expressive game-like visual world than the dashboard.
-- Tile colour comes primarily from the transparent glass background. Resting text uses a very dark hue-tinted ink for contrast; buttons can carry a stronger version of the tile hue. Completion deepens the glass tint and uses white foreground text.
+- Tile colour comes from transparent glass. Resting tiles have a very light tint; completion increases the vivid hue while retaining transparency and dark ink. Dark buttons keep white text.
 - No visible scrollbars; scrolling must still work.
 - Never underline interface text.
 - Inputs must always inherit readable contrast from their tile.
@@ -73,7 +75,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Resized widgets use deliberate compact summaries and edge-to-edge internal layouts. At every supported tile shape, controls either reflow or secondary detail progressively hides; borders must never slice through buttons, text, or cards.
 - Compact tiles never use horizontal scrolling: content reflows into the tile width and only the tile body scrolls vertically when more detail is present.
 - Delete and close glyphs inside widgets are bare, centred, minimalist crosses rather than pill or rounded-rectangle buttons.
-- Full-colour tiles use a deeper hue-aware glass fill with high-contrast content and translucent internal surfaces, including for naturally light accents such as yellow, mint, and cyan.
+- Full-colour tiles use a vivid hue-aware transparent fill with high-contrast dark content and translucent internal surfaces, including for yellow, mint and cyan.
 
 ## Learn direction
 

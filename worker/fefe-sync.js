@@ -2,7 +2,8 @@
 //
 // UNCHANGED: /data (cross-device sync) and /rss (feed proxy) and __html__ fallback.
 // ADDED:     /shared            -> the day's communal tiles, generated ONCE server-side
-//            /shared/regenerate -> owner-only force refresh (needs ?token= if ADMIN_TOKEN set)
+//            /shared/retry      -> fill missing tiles; successful content never changes
+//            /shared/regenerate -> backwards-compatible safe retry alias
 //            scheduled()        -> daily cron that pre-generates the communal tiles
 //
 // Reuses the existing SYNC KV binding and ANTHROPIC_API_KEY secret. New KV keys are
@@ -17,6 +18,15 @@ var RSS_FEEDS = [
   "https://feeds.skynews.com/feeds/rss/world.xml",
   "https://www.france24.com/en/rss"
 ];
+// Public page assets only. Never turn a URL into an unrestricted KV lookup.
+const DASHBOARD_ASSETS = new Map([
+  ["/dashboard.webmanifest", "application/manifest+json; charset=utf-8"],
+  ["/assets/icons/favicon-32.png", "image/png"],
+  ["/assets/icons/apple-touch-icon.png", "image/png"],
+  ["/assets/icons/dashboard-192.png", "image/png"],
+  ["/assets/icons/dashboard-512.png", "image/png"],
+  ["/assets/icons/dashboard-maskable-512.png", "image/png"]
+]);
 
 function sharedCors() {
   return {
@@ -26,7 +36,7 @@ function sharedCors() {
   };
 }
 function sharedJson(obj, status = 200) {
-  return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", ...sharedCors() } });
+  return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...sharedCors() } });
 }
 function authEmail(value) { return String(value || "").trim().toLowerCase(); }
 async function authHash(email, password, salt) {
@@ -58,9 +68,9 @@ async function callClaude(env, system, user, max = 600) {
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body), signal: AbortSignal.timeout(45000)
   });
-  if (!res.ok) throw new Error("API " + res.status);
+  if (!res.ok) { const error = new Error("API " + res.status); error.status = res.status; throw error; }
   const data = await res.json();
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
@@ -86,7 +96,7 @@ var sharedGen = {
 
   world: async (env, avoid) => {
     const items = await fetchSharedRss();
-    if (!items || !items.length) return null;
+    if (!items || !items.length) throw dailyFailure("feed_unavailable");
     const raw = items.slice(0, 16).map((it, i) => `${i + 1}. ${it.title} — ${it.desc}`).join("\n");
     const out = await callClaude(env, "You output ONLY a valid JSON array, no markdown.",
       `Here are today's raw news headlines from several wire services (may include near-duplicates covering the same event):\n${raw}\n\nPick the 5 most important DISTINCT stories — if two items describe the same event, count that as one. Avoid re-covering stories already picked recently: ${(avoid || []).join(" | ") || "none"}. For each pick write a "headline" (max 9 words, your own words) and a "summary" (2-3 sentences) covering what happened AND why it matters, using only the information given above. Do not end the summary with a generic closing line that just restates the obvious (e.g. "this shows/highlights/underscores…") — add a closing thought only if it's genuinely non-obvious insight; otherwise stop after the facts. Plain prose only — NO markdown, NO citation numbers, NO URLs, NO special symbols. JSON array of {"headline":"","summary":""}.`, 950);
@@ -120,7 +130,7 @@ var sharedHistLabel = {
 /* ---------------- news (server-side RSS, no CORS) ---------------- */
 async function fetchSharedRss() {
   const per = await Promise.allSettled(RSS_FEEDS.map(async (url) => {
-    const r = await fetch(url, { headers: { "user-agent": "fefe-dashboard/1.0" } });
+    const r = await fetch(url, { headers: { "user-agent": "fefe-dashboard/1.0" }, signal: AbortSignal.timeout(10000) });
     if (!r.ok) throw new Error("feed " + r.status);
     const text = await r.text();
     const items = [];
@@ -154,7 +164,7 @@ async function resolveMusic(m) {
   const cand = /* @__PURE__ */ new Map();
   for (const q of queries) {
     try {
-      const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=au&media=music&entity=song&limit=25`);
+      const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=au&media=music&entity=song&limit=25`, { signal: AbortSignal.timeout(4000) });
       if (!r.ok) continue;
       const d = await r.json();
       (d.results || []).forEach((t) => { if (t.trackViewUrl) cand.set(String(t.trackId || t.trackViewUrl), t); });
@@ -191,30 +201,227 @@ async function activeSharedKeys(env) {
   } catch (e) {}
   if (!wanted && env && env.SHARED_TILES) wanted = String(env.SHARED_TILES).split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
   if (!wanted) return SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
-  if (!wanted.length) return SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
-  const filtered = SHARED_KEYS.filter((k) => wanted.includes(k));
-  return filtered.length ? filtered : SHARED_KEYS.filter((k) => DEFAULT_SHARED.includes(k));
+  return SHARED_KEYS.filter((k) => wanted.includes(k));
 }
 
-/* ---------------- generate + cache the whole day (namespaced in SYNC KV) ---------------- */
-async function generateSharedDay(env, date) {
-  const keys = await activeSharedKeys(env);
-  const hist = JSON.parse((await env.SYNC.get("shared_history")) || "{}");
-  const results = await Promise.all(keys.map((k) => {
-    const avoid = (hist[k] || []).slice(-20);
-    return sharedGen[k](env, avoid).catch(() => null);
-  }));
-  const content = {};
-  keys.forEach((k, i) => { if (results[i]) content[k] = results[i]; });
-  keys.forEach((k, i) => {
-    const v = results[i]; if (!v) return;
-    const lab = sharedHistLabel[k] ? sharedHistLabel[k](v) : null;
-    if (!lab) return;
-    hist[k] = [...(hist[k] || []), ...(Array.isArray(lab) ? lab : [lab])].slice(-40);
+/* ---------------- immutable daily records ---------------- */
+const textPresent = v => typeof v === "string" && v.trim().length > 0;
+const validQuiz = q => !!q && textPresent(q.prompt) && Array.isArray(q.options) && q.options.length >= 2 && q.options.every(textPresent) && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.options.length;
+function validDailyContent(key, value) {
+  if (!value || typeof value !== "object") return false;
+  switch (key) {
+    case "word": return textPresent(value.term_en) && textPresent(value.def_en) && textPresent(value.term_fr) && !!value.quiz && Array.isArray(value.quiz.options) && value.quiz.options.length >= 2 && value.quiz.options.every(textPresent) && Number.isInteger(value.quiz.answer) && value.quiz.answer >= 0 && value.quiz.answer < value.quiz.options.length;
+    case "worth": return textPresent(value.title) && textPresent(value.story) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
+    case "spanish": return textPresent(value.tema) && textPresent(value.punto) && Array.isArray(value.vocab) && value.vocab.length > 0 && value.vocab.every(v => v && textPresent(v.es) && textPresent(v.en)) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
+    case "music": return textPresent(value.title) && textPresent(value.artist) && textPresent(value.why);
+    case "world": return Array.isArray(value) && value.length > 0 && value.every(v => v && textPresent(v.headline) && textPresent(v.summary));
+    case "brainflex": return textPresent(value.format) && textPresent(value.prompt) && textPresent(value.solution);
+    case "philo": return textPresent(value.theme) && textPresent(value.question);
+    case "academic": return textPresent(value.concept) && textPresent(value.explain) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
+    case "gmat": return Array.isArray(value) && value.length > 0 && value.every(q => validQuiz(q) && textPresent(q.explain));
+    case "weather": return !!value.tomorrow && [value.temp, value.code, value.hi, value.lo, value.tomorrow.hi, value.tomorrow.lo, value.tomorrow.code].every(v => typeof v === "number" && Number.isFinite(v)) && textPresent(value.place);
+    default: return false;
+  }
+}
+function parseObject(value) {
+  try { const result = typeof value === "string" ? JSON.parse(value) : value; return result && typeof result === "object" && !Array.isArray(result) ? result : {}; } catch { return {}; }
+}
+function validDate(date) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(date || "") && !Number.isNaN(Date.parse(date + "T12:00:00Z")) && new Date(date + "T12:00:00Z").toISOString().slice(0, 10) === date;
+}
+function canGenerateDate(date) {
+  // A profile's 01:00 logical rollover can be either side of the server's day.
+  return validDate(date) && Math.abs(Date.parse(date + "T12:00:00Z") - Date.now()) <= 36 * 60 * 60 * 1000;
+}
+function dailyFailure(code) {
+  const error = new Error(code);
+  error.code = code;
+  return error;
+}
+function protectedDailyStorage(storage) {
+  const guarded = {};
+  for (const method of ["get", "put", "deleteAll"]) {
+    guarded[method] = async (...args) => {
+      try { return await storage[method](...args); }
+      catch { throw dailyFailure("server_storage_error"); }
+    };
+  }
+  return guarded;
+}
+function generationError(error) {
+  if (error && [401, 403].includes(error.status)) return { state: "invalid_key", message: "The API key was rejected. Update it before retrying." };
+  if (error && error.status === 429) return { state: "rate_limit", message: "The content service reached its request limit. Wait a moment, then retry. Saved tiles are kept." };
+  if (error && error.status >= 500) return { state: "service_error", message: "The content provider is temporarily unavailable. Try again later. Saved tiles are kept." };
+  if (error && (error.code === "invalid_content" || error instanceof SyntaxError)) return { state: "invalid_content", message: "The service returned incomplete content. Retry this tile; saved tiles are kept." };
+  if (error && error.code === "feed_unavailable") return { state: "feed_unavailable", message: "The news sources are unavailable. Try again later; no stories have been invented." };
+  if (error && ["AbortError", "TimeoutError"].includes(error.name)) return { state: "service_error", message: "The content service timed out. Retry later; saved tiles are kept." };
+  if (error && error.status) return { state: "service_error", message: "The content provider rejected the request. Check the service setup, then retry." };
+  return { state: "error", message: "Today's content could not be loaded. Retry keeps every tile already loaded." };
+}
+function sharedResult(date, record, keys, fallback) {
+  const content = {}, status = {};
+  SHARED_KEYS.forEach(key => {
+    if (validDailyContent(key, record.content && record.content[key])) {
+      content[key] = record.content[key]; status[key] = { state: "ready" };
+    } else if (!keys.includes(key)) status[key] = { state: "disabled", message: "Enable this tile in Settings → Daily content." };
+    else status[key] = record.status && record.status[key] || fallback || { state: "missing", message: "Today's content has not loaded yet." };
   });
-  await env.SYNC.put("shared:" + date, JSON.stringify(content));
-  await env.SYNC.put("shared_history", JSON.stringify(hist));
-  return content;
+  return { date, content, status, frozen: true, retryMissingOnly: true };
+}
+function coordinator(env, name) {
+  return env.DAILY_COORDINATOR && env.DAILY_COORDINATOR.get(env.DAILY_COORDINATOR.idFromName(name));
+}
+async function sharedRequest(env, date, requested, generate = true) {
+  const stub = coordinator(env, "shared-daily-v1");
+  if (stub) return stub.fetch("https://daily.internal/shared", { method: "POST", body: JSON.stringify({ date, keys: requested, generate }) });
+  // KV's eventual consistency cannot enforce a lock. Keep old cache readable,
+  // but never spend API calls without the durable coordinator binding.
+  const content = parseObject(await env.SYNC.get("shared:" + date));
+  const keys = await activeSharedKeys(env);
+  return sharedJson(sharedResult(date, { content }, keys, { state: "server_unconfigured", message: "Daily content needs a server update. Your loaded tiles are safe." }));
+}
+function mergeDailySnapshot(current, incoming) {
+  const result = { ...incoming, data: { ...(incoming.data || {}) } };
+  const existing = current && current.data || {};
+  // Never sync credentials, including snapshots from older clients.
+  const privateKeys = ["fefe_apiKey", "fefe_garminKey", "fefe_syncId", "fefe_syncStamp", "fefe_healthToken", "fefe_accountToken"];
+  for (const name of new Set([...Object.keys(existing), ...Object.keys(result.data)])) {
+    if (!/^fefe_daily:\d{4}-\d{2}-\d{2}$/.test(name)) continue;
+    const before = parseObject(existing[name]), after = parseObject(result.data[name]);
+    for (const key of [...SHARED_KEYS, "academic", "weather"]) {
+      if (validDailyContent(key, before[key])) after[key] = before[key];
+      else if (!validDailyContent(key, after[key])) delete after[key];
+    }
+    result.data[name] = JSON.stringify(after);
+  }
+  privateKeys.forEach(key => { delete result.data[key]; });
+  return result;
+}
+
+// One object owns all shared dates; account objects own a person's daily lessons
+// and snapshot. The promise queue covers external I/O, where DO input gates alone
+// do not prevent a second request from entering. Durable records survive restarts.
+class DailyCoordinator {
+  constructor(state, env) { this.storage = protectedDailyStorage(state.storage); this.env = env; this.queue = Promise.resolve(); }
+  fetch(request) {
+    const work = this.queue.then(() => this.handle(request));
+    this.queue = work.catch(() => {});
+    return work;
+  }
+  async handle(request) {
+    const path = new URL(request.url).pathname;
+    const body = parseObject(await request.json().catch(() => ({})));
+    try {
+      if (path === "/shared") return await this.shared(body);
+      if (path === "/personal") return await this.personal(body);
+      if (path === "/account") return await this.account(body);
+      if (path === "/delete") { await this.storage.deleteAll(); return sharedJson({ ok: true }); }
+      return sharedJson({ error: "Not found" }, 404);
+    } catch (error) {
+      if (!error || error.code !== "server_storage_error") throw error;
+      const problem = { state: "server_storage_error", message: "The daily server could not access its saved data. Try again later; loaded tiles and progress stay safe." };
+      if (path === "/shared" || path === "/personal") {
+        const keys = path === "/personal" ? ["academic"] : SHARED_KEYS.filter(key => !Array.isArray(body.keys) || body.keys.includes(key));
+        // Never expose an in-memory candidate whose durable commit failed.
+        return sharedJson({ date: body.date, content: {}, status: Object.fromEntries(keys.map(key => [key, problem])), frozen: true, retryMissingOnly: true }, 503);
+      }
+      return sharedJson({ error: problem.message, code: problem.state }, 503);
+    }
+  }
+  async shared({ date, keys: requested, generate }) {
+    if (!validDate(date)) return sharedJson({ error: "Invalid date" }, 400);
+    const env = this.env, active = await activeSharedKeys(env), storageKey = "day:" + date;
+    let record = await this.storage.get(storageKey);
+    if (!record) record = { content: parseObject(await env.SYNC.get("shared:" + date)), status: {} };
+    record.status = record.status || {};
+    const keys = active.filter(key => !Array.isArray(requested) || requested.includes(key));
+    let history = await this.storage.get("history") || parseObject(await env.SYNC.get("shared_history"));
+    const pending = keys.filter(key => !validDailyContent(key, record.content[key]) && generate && canGenerateDate(date));
+    for (const key of pending) record.status[key] = env.ANTHROPIC_API_KEY
+      ? { state: "processing", startedAt: Date.now() }
+      : { state: "missing_key", message: "The server API key is missing. Your personal API key is not required for this tile." };
+    // Reserve the batch before any provider call. Independent tiles can load in
+    // parallel; commits stay ordered so a slow tile cannot overwrite its neighbour.
+    await this.storage.put(storageKey, record);
+    let commits = Promise.resolve();
+    const commit = task => { const work = commits.then(task); commits = work.catch(() => {}); return work; };
+    const outcomes = await Promise.allSettled((env.ANTHROPIC_API_KEY ? pending : []).map(async key => {
+      let value, problem;
+      try {
+        value = await sharedGen[key](env, (Array.isArray(history[key]) ? history[key] : []).slice(-20));
+        if (!validDailyContent(key, value)) throw dailyFailure("invalid_content");
+      } catch (error) { problem = generationError(error); }
+      await commit(async () => {
+        const next = { ...record, content: { ...record.content }, status: { ...record.status, [key]: problem || { state: "ready" } } };
+        let nextHistory = history;
+        if (!problem) {
+          next.content[key] = value;
+          const label = sharedHistLabel[key](value);
+          nextHistory = { ...history, [key]: [...(Array.isArray(history[key]) ? history[key] : []), ...(Array.isArray(label) ? label : [label]).filter(Boolean)].slice(-40) };
+        }
+        // Publish only committed content. A failed save never changes the
+        // in-memory authority or leaks a candidate through a neighbouring commit.
+        await this.storage.put({ [storageKey]: next, history: nextHistory });
+        record = next; history = nextHistory;
+      });
+    }));
+    // Wait for every in-flight task before releasing the request queue, including
+    // when one commit failed. The next request cannot race unfinished work.
+    const failed = outcomes.find(result => result.status === "rejected");
+    if (failed) throw failed.reason;
+    // Compatibility mirrors are never the authority after migration.
+    await env.SYNC.put("shared:" + date, JSON.stringify(record.content)).catch(() => {});
+    await env.SYNC.put("shared_history", JSON.stringify(history)).catch(() => {});
+    return sharedJson(sharedResult(date, record, active));
+  }
+  async account({ email, snapshot }) {
+    let current = await this.storage.get("account");
+    if (!current) current = await this.env.SYNC.get("account:" + email, "json") || { updatedAt: 0, data: {} };
+    if (!snapshot) return sharedJson(mergeDailySnapshot(null, current));
+    const stored = Number(current.updatedAt || 0), incoming = Number(snapshot.updatedAt || 0);
+    if (stored && incoming < stored) return sharedJson({ ok: true, stored: false, updatedAt: stored });
+    const next = mergeDailySnapshot(current, snapshot);
+    // Personal generation and snapshot sync share the same immutable record.
+    for (const name of Object.keys(next.data)) {
+      if (!/^fefe_daily:\d{4}-\d{2}-\d{2}$/.test(name)) continue;
+      const key = "personal:" + name.slice("fefe_daily:".length), daily = await this.storage.get(key);
+      const value = parseObject(next.data[name]);
+      if (daily && validDailyContent("academic", daily.content && daily.content.academic)) value.academic = daily.content.academic;
+      else if (validDailyContent("academic", value.academic)) await this.storage.put(key, { content: { academic: value.academic }, status: { academic: { state: "ready" } } });
+      next.data[name] = JSON.stringify(value);
+    }
+    await this.storage.put("account", next);
+    await this.env.SYNC.put("account:" + email, JSON.stringify(next)).catch(() => {});
+    return sharedJson({ ok: true, stored: true, updatedAt: incoming, data: next.data });
+  }
+  async personal({ email, date, key, apiKey, course, avoid }) {
+    if (!validDate(date) || key !== "academic") return sharedJson({ error: "Invalid daily request" }, 400);
+    const storageKey = "personal:" + date;
+    let record = await this.storage.get(storageKey) || { content: {}, status: {} };
+    if (!validDailyContent(key, record.content[key])) {
+      const snapshot = await this.storage.get("account") || await this.env.SYNC.get("account:" + email, "json");
+      const cached = parseObject(snapshot && snapshot.data && snapshot.data["fefe_daily:" + date]);
+      if (validDailyContent(key, cached[key])) record.content[key] = cached[key];
+    }
+    if (validDailyContent(key, record.content[key])) { await this.storage.put(storageKey, record); return sharedJson({ date, content: record.content, status: { [key]: { state: "ready" } }, frozen: true }); }
+    if (!canGenerateDate(date)) record.status[key] = { state: "error", message: "Only the current logical day can be loaded." };
+    else if (!textPresent(apiKey)) record.status[key] = { state: "missing_key", message: "Add your Anthropic API key in Settings to load Academic." };
+    else if (!course || !textPresent(course.id) || !textPresent(course.name) || !textPresent(course.content)) record.status[key] = { state: "missing_course", message: "Add course notes before loading Academic." };
+    else {
+      record.status[key] = { state: "processing", startedAt: Date.now() };
+      await this.storage.put(storageKey, record);
+      try {
+        const value = extractJSON(await callClaude({ ANTHROPIC_API_KEY: apiKey }, "You output ONLY valid minified JSON, no markdown.",
+          `Build one day's exam-prep study capsule from the student's own notes. Teach one concept in 3–4 sentences and connect it to the broader chapter in 1–2 sentences. Use only the supplied notes. Avoid: ${(Array.isArray(avoid) ? avoid : []).slice(-12).join(" | ") || "none"}. Course: ${String(course.name).slice(0,160)}. Notes: ${String(course.content).slice(0,6000)}. Shape:{"concept":"","explain":"","bigPicture":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Test understanding; make distractors plausible.`, 900));
+        if (!validDailyContent(key, value)) throw dailyFailure("invalid_content");
+        record.content[key] = { ...value, courseId: course.id, courseName: course.name };
+        record.status[key] = { state: "ready" };
+      } catch (error) { record.status[key] = generationError(error); }
+    }
+    await this.storage.put(storageKey, record);
+    // The supplied key and course notes are request-scoped and never persisted.
+    return sharedJson({ date, content: record.content, status: record.status, frozen: true });
+  }
 }
 
 /* ================= worker ================= */
@@ -231,32 +438,34 @@ var index_default = {
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
     const url = new URL(request.url);
 
+    if (request.method === "GET" && (DASHBOARD_ASSETS.has(url.pathname) || url.pathname.startsWith("/assets/") || url.pathname.endsWith(".webmanifest"))) {
+      const mime = DASHBOARD_ASSETS.get(url.pathname);
+      const missing = () => new Response("Asset not found", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store", ...cors } });
+      if (!mime) return missing();
+      const asset = await env.SYNC.get("asset:" + url.pathname, "arrayBuffer");
+      if (asset === null || asset === undefined) return missing();
+      return new Response(asset, { headers: { "Content-Type": mime, "X-Content-Type-Options": "nosniff", "Cache-Control": "public, max-age=300", ...cors } });
+    }
+
     // ---- shared community content (new) ----
     if (url.pathname === "/shared" && request.method === "GET") {
       const date = url.searchParams.get("date") || sharedDayKey();
-      let raw = await env.SYNC.get("shared:" + date);
-      if (!raw && date === sharedDayKey()) {
-        const locked = await env.SYNC.get("shared_lock:" + date);
-        if (!locked) {
-          await env.SYNC.put("shared_lock:" + date, "1", { expirationTtl: 120 });
-          try { const content = await generateSharedDay(env, date); raw = JSON.stringify(content); }
-          finally { await env.SYNC.delete("shared_lock:" + date); }
-        }
-      }
-      return sharedJson({ date, content: raw ? JSON.parse(raw) : null });
+      if (!validDate(date)) return sharedJson({ error: "Invalid date" }, 400);
+      return sharedRequest(env, date, null);
     }
-    if (url.pathname === "/shared/regenerate" && request.method === "POST") {
-      if (env.ADMIN_TOKEN && url.searchParams.get("token") !== env.ADMIN_TOKEN) return sharedJson({ error: "unauthorized" }, 401);
-      const date = sharedDayKey();
-      const content = await generateSharedDay(env, date);
-      return sharedJson({ date, content });
+    if (["/shared/retry", "/shared/regenerate"].includes(url.pathname) && request.method === "POST") {
+      if (url.pathname === "/shared/regenerate" && env.ADMIN_TOKEN && url.searchParams.get("token") !== env.ADMIN_TOKEN) return sharedJson({ error: "unauthorized" }, 401);
+      const body = await request.json().catch(() => ({}));
+      const date = url.searchParams.get("date") || body.date || sharedDayKey();
+      if (!validDate(date)) return sharedJson({ error: "Invalid date" }, 400);
+      return sharedRequest(env, date, Array.isArray(body.keys) ? body.keys.filter(k => SHARED_KEYS.includes(k)) : null);
     }
     // Which shared tiles to generate daily — driven by the dashboard's
     // Settings → "Daily AI content" checklist so tokens aren't spent on
     // tiles nobody reads.
     if (url.pathname === "/shared/config" && request.method === "GET") {
       const c = await env.SYNC.get("shared_config");
-      return sharedJson({ tiles: c ? (JSON.parse(c).tiles || null) : null, all: SHARED_KEYS });
+      return sharedJson({ tiles: c ? (parseObject(c).tiles || null) : null, active: await activeSharedKeys(env), all: SHARED_KEYS, safeRetry: !!env.DAILY_COORDINATOR });
     }
     if (url.pathname === "/shared/config" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
@@ -299,23 +508,37 @@ var index_default = {
     }
     if (url.pathname === "/auth/delete" && request.method === "POST") {
       const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const stub = coordinator(env, "account:" + account.email);
+      if (stub) await stub.fetch("https://daily.internal/delete", { method: "POST", body: "{}" });
       await env.SYNC.delete(`auth:user:${account.email}`); await env.SYNC.delete(`account:${account.email}`);
       const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim(); if (token) await env.SYNC.delete(`auth:session:${token}`);
       return sharedJson({ ok: true });
     }
+    if (url.pathname === "/daily/personal" && request.method === "POST") {
+      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const body = await request.json().catch(() => ({}));
+      const stub = coordinator(env, "account:" + account.email);
+      if (!stub) return sharedJson({ date: body.date, content: {}, status: { academic: { state: "server_unconfigured", message: "Academic needs the daily-content server update. Your loaded tiles are safe." } } }, 503);
+      return stub.fetch("https://daily.internal/personal", { method: "POST", body: JSON.stringify({ date: body.date, key: body.key, apiKey: body.apiKey, course: body.course, avoid: body.avoid, email: account.email }) });
+    }
     if (url.pathname === "/account/data") {
       const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const key = `account:${account.email}`;
-      if (request.method === "GET") return sharedJson(await env.SYNC.get(key, "json") || { updatedAt: 0, data: {} });
+      const stub = coordinator(env, "account:" + account.email);
+      if (request.method === "GET") {
+        if (stub) return stub.fetch("https://daily.internal/account", { method: "POST", body: JSON.stringify({ email: account.email }) });
+        return sharedJson(mergeDailySnapshot(null, await env.SYNC.get(key, "json") || { updatedAt: 0, data: {} }));
+      }
       if (request.method === "POST") {
         const body = await request.json().catch(() => null);
-        if (!body || typeof body !== "object") return sharedJson({ error: "Invalid data" }, 400);
+        if (!body || typeof body !== "object" || !body.data || typeof body.data !== "object" || Array.isArray(body.data) || !Number.isFinite(Number(body.updatedAt))) return sharedJson({ error: "Invalid data" }, 400);
+        if (stub) return stub.fetch("https://daily.internal/account", { method: "POST", body: JSON.stringify({ email: account.email, snapshot: body }) });
         // Refuse stale writes: an older push must never overwrite a newer stored version.
         const current = await env.SYNC.get(key, "json");
         const stored = current && Number(current.updatedAt || 0);
         const incoming = Number(body.updatedAt || 0);
         if (stored && incoming < stored) return sharedJson({ ok: true, stored: false, updatedAt: stored });
-        await env.SYNC.put(key, JSON.stringify(body));
+        await env.SYNC.put(key, JSON.stringify(mergeDailySnapshot(current, body)));
         return sharedJson({ ok: true, stored: true, updatedAt: incoming });
       }
       return sharedJson({ error: "Method not allowed" }, 405);
@@ -371,7 +594,7 @@ var index_default = {
     // ---- __html__ fallback (unchanged) ----
     if (request.method === "GET") {
       const html = await env.SYNC.get("__html__");
-      if (html) return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      if (html) return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
       return new Response("Dashboard not uploaded yet — run the kv put command.", { status: 404 });
     }
     return new Response("Not found", { status: 404, headers: cors });
@@ -379,9 +602,10 @@ var index_default = {
 
   // daily pre-generation of the communal tiles
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(generateSharedDay(env, sharedDayKey()));
+    ctx.waitUntil(sharedRequest(env, sharedDayKey(), null));
   }
 };
 export {
-  index_default as default
+  index_default as default,
+  DailyCoordinator
 };

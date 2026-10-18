@@ -1,0 +1,20 @@
+name = "fefe-sync"
+main = "fefe-sync.js"
+account_id = "8476aaed05673c2d19715e52c8399de2"
+compatibility_date = "2026-10-17"
+workers_dev = true
+keep_vars = true
+
+[[kv_namespaces]]
+binding = "SYNC"
+id = "06644ecfe21b4710b70587f1e2e04db0"
+
+[durable_objects]
+bindings = [{ name = "DAILY_COORDINATOR", class_name = "DailyCoordinator" }]
+
+[[migrations]]
+tag = "daily-freeze-v1"
+new_sqlite_classes = ["DailyCoordinator"]
+
+[triggers]
+crons = ["0 4 * * *"]

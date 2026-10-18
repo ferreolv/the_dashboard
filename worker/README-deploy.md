@@ -1,37 +1,49 @@
-# Shared community content — deploy guide
+# Daily content — safe retry and deployment
 
-The communal daily tiles (**word, knowledge, spanish, music, news, brainflex,
-philosophy prompt, and the GMAT daily lesson**) are generated **once per day
-server-side** and reused by every dashboard. No visitor needs their own API key for
-them, and the whole community costs ~8 Haiku calls/day instead of N-per-user. The GMAT
-generator writes 6 fresh questions (2 Quant / 2 Verbal / 2 Data Insights) that feed the
-existing adaptive session, recap, FSRS recall and analytics; the curated question bank
-stays in the app as an offline fallback, and a "Report a wrong question" control lets you
-hide any item whose AI-written answer key looks off.
+The shared Word, Knowledge, Spanish, Music, World, Brainflex, Philosophy prompt,
+and GMAT daily lesson reuse one successful result per date and tile. Retrying fills
+only missing or failed content. It never replaces a valid result, including when
+several browsers request it together or the cron overlaps a manual retry.
 
 This is merged into your **existing `fefe-sync` Worker** — the file to deploy is
 [`fefe-sync.js`](fefe-sync.js). It keeps `/data` (sync) and `/rss` (news proxy)
-**unchanged** and adds `/shared` + a daily cron. It reuses the `SYNC` KV binding and the
-`ANTHROPIC_API_KEY` secret already on that Worker; the new cache lives under `shared:*`
-keys so it never touches your `dashboard:<code>` sync blobs.
+and adds daily-content routes plus a cron. It reuses `SYNC` KV and the
+`ANTHROPIC_API_KEY` secret, and now requires a SQLite-backed `DAILY_COORDINATOR`
+Durable Object binding for generation. Existing `shared:*` and account snapshots
+are imported on first use; the KV namespace must be preserved.
 
 The dashboard already points `SHARED_URL` at `https://fefe-sync.fefedashboard.workers.dev`.
 
-Not shared (stay per-user): weather (free + location-specific), academic (your own
-notes), philosophy **chat** (each conversation is unique → still uses a personal key).
+Academic is private to the signed-in account. Its daily endpoint uses a supplied
+personal API key only for that request, stores the successful study capsule, and
+returns that capsule on later requests even if the key or course changes. Raw
+course notes and the key are never persisted by this endpoint. Weather stays
+location-specific; Philosophy conversations still use the personal key separately.
 
 ---
 
-## Deploy (Cloudflare dashboard, ~3 min)
+## Deploy the Worker and binding together
 
-1. **Paste the code**
-   - Workers & Pages → **`fefe-sync`** → **Edit code**.
-   - Select all, delete, paste the entire contents of `worker/fefe-sync.js`, **Save & Deploy**.
+1. This repository’s `wrangler.toml` is already configured for the existing live
+   `fefe-sync` Worker and `SYNC` namespace. Use it for this deployment. For another
+   environment, copy `wrangler.toml.example` to `wrangler.toml` and replace
+   the namespace placeholder with the **existing** `SYNC` KV namespace ID. Keep
+   any existing account ID, routes, environment variables, and other bindings.
+   The example adds the `DailyCoordinator` export, a `DAILY_COORDINATOR` binding,
+   and a SQLite namespace migration. Do not replace `SYNC` with a fresh namespace.
 
-2. **Confirm the pieces are in place** (they already are, from your setup):
-   - **Settings → Bindings**: KV namespace **`SYNC`** bound. ✅
-   - **Settings → Variables**: encrypted **`ANTHROPIC_API_KEY`**. ✅
-   - *(optional)* add encrypted **`ADMIN_TOKEN`** to protect `/shared/regenerate`.
+2. From `worker/`, use an authenticated Wrangler session to deploy:
+
+   ```sh
+   npx wrangler deploy
+   ```
+
+   Keep the existing encrypted `ANTHROPIC_API_KEY`. No personal key belongs in
+   Wrangler configuration. `ADMIN_TOKEN` still protects the old
+   `/shared/regenerate` alias when configured; that alias now only retries gaps.
+   A code-only paste without the binding serves existing cached content but
+   returns `server_unconfigured` for missing tiles and does not call the provider.
+   This avoids claiming that KV's eventually consistent lock is safe.
 
 2b. **Which tiles get generated** — by default this build is **token-frugal**:
    with nothing configured it generates only **`word` + `gmat`**, so a fresh
@@ -44,36 +56,102 @@ notes), philosophy **chat** (each conversation is unique → still uses a person
    - **Manual fallback:** a plain-text **`SHARED_TILES`** variable
      (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`, or
      all eight to generate everything.
-   Either takes effect on save, but today's already-cached day only reflects it
-   after the next cron run or a `POST /shared/regenerate` (the checklist's
-   "apply now" does this for you).
+   An empty checklist means no shared generation. Enabling a missing tile allows
+   the next request or retry to fill it; disabling one never erases content that
+   already loaded that day.
 
-3. **Add the daily cron** (this is the only new setting)
-   - **Settings → Triggers → Cron Triggers → Add** → `0 4 * * *`
-     (04:00 UTC ≈ 05:00–06:00 Paris). Pre-generates the day each morning.
+3. The example retains the daily cron, `0 4 * * *`. Cron and browser requests
+   use the same coordinator and cannot replace each other's completed tiles.
 
 4. **Warm & verify**
    - Visit `https://fefe-sync.fefedashboard.workers.dev/shared` — the first hit
      generates today's content (a few seconds), then returns
      `{"date":"…","content":{"word":{…},"worth":{…},…}}`.
-   - Reload the dashboard: the communal tiles fill in with **no API key set**.
+   - Repeat that request and `POST /shared/retry` for the same date. Ready content
+     must stay identical, while incomplete content remains absent with a status.
+   - Run `node --test worker/fefe-sync.test.mjs` before publishing changes.
 
 ---
 
-## Notes
+## Publish the dashboard HTML and public assets
 
-- **Cost:** cron generates only the active keys once/day on Haiku (cents/month),
-  regardless of how many people use the dashboard. The default active set is
-  `word` + `gmat`; widen it from the in-app checklist or `SHARED_TILES`.
-- **The key never reaches the browser** — it stays a Worker secret. Visitors read
-  finished content only.
-- **Abuse guard:** `/shared` only *reads* cache; the lazy first-hit generation is locked
-  to one run/day. Only the cron and the token-protected `/shared/regenerate` spend API calls.
-- **Timezone:** the shared "day" flips at midnight `Europe/Paris` (the `TZ` const).
-- **Sync is untouched:** `/data` and `/rss` are byte-for-byte the same; existing
-  sync codes and synced data keep working.
-- **Rollback:** if anything looks off, redeploy the previous version from the Worker's
-  **Deployments/Versions** tab — the shared logic is additive and self-contained.
+The live Worker serves `index.html` from the existing `SYNC` key `__html__`.
+A GitHub push or Worker-code deployment alone does not update that copy. Publish
+both the Worker and its public files when a dashboard change affects either.
+
+From the repository root, after validating the final dashboard:
+
+```sh
+node --test src/dashboard/daily-content.test.cjs src/dashboard/daily-ux.test.cjs worker/fefe-sync.test.mjs
+node worker/prepare-dashboard-assets.mjs
+npx wrangler deploy --config worker/wrangler.toml
+npx wrangler kv bulk put backups/dashboard-public-kv.json --binding SYNC --remote --config worker/wrangler.toml
+```
+
+The preparation command has no network access. It reads only the explicit allowlist:
+`index.html`, `dashboard.webmanifest`, and the five icons in `assets/icons/`.
+It writes seven KV entries into ignored `backups/dashboard-public-kv.json` and
+prints their byte counts and SHA-256 hashes. Regenerate this bundle after any
+further HTML or asset edit; do not upload a bundle prepared from an older version.
+
+HTML uses `__html__`; the other six entries use `asset:/<public path>`.
+The JSON uses Wrangler's supported `{key,value,base64:true}` bulk format so icon
+bytes and the exact HTML bytes survive publication. The helper never reads
+account snapshots, local browser data, personal backups, or credentials, and
+publishing these seven keys does not alter saved daily content or streaks.
+
+The Worker supplies the manifest/icon content types. Verify that the live root
+contains the new UI, `/dashboard.webmanifest` returns a manifest, and all five
+icon URLs return PNGs. A missing or unrecognised asset must return 404 rather
+than the dashboard HTML. KV publication can take time to reach every location;
+verify the live HTML and assets again after propagation. Keep the existing KV
+namespace and encrypted secrets throughout deployment.
+
+## HTTP contract
+
+- `GET /shared?date=YYYY-MM-DD` returns `{date,content,status,frozen:true}` and
+  loads missing enabled tiles. `POST /shared/retry?date=YYYY-MM-DD` accepts
+  `{keys:["word",...]}`. Neither route overwrites ready content.
+- `status[key].state` distinguishes readiness, missing content, disabled content,
+  missing or rejected keys, missing course notes, provider/rate-limit/feed errors,
+  incomplete responses, and server configuration or storage failures. Each failure
+  includes explanatory text where action is needed. Invalid/incomplete model responses are never
+  returned as successful tiles or added to history.
+- `POST /daily/personal` requires `Authorization: Bearer <account session>` and
+  `{date,key:"academic",apiKey,course:{id,name,content},avoid:[]}`. It returns the
+  same date/content/status envelope. Existing success is checked before prerequisites;
+  missing prerequisites use `missing_key` or `missing_course`.
+- `/shared/config` exposes `active`, `all`, and `safeRetry` in addition to the
+  existing `tiles` setting. Default generation stays `word` + `gmat`.
+- With the binding configured, account snapshot reads/writes use the same
+  account coordinator. A later sync cannot erase or replace valid
+  `fefe_daily:YYYY-MM-DD` fields, and older timestamps still cannot replace newer
+  snapshots. API keys and session tokens are stripped server-side too.
+- Explicit dates follow the profile's logical day; only dates within 36 hours of
+  the present may initiate generation. Historical records are read-only. Requests
+  without a date and the cron default to the current Paris calendar date.
+
+## Interrupted loads
+
+A durable reservation is written before every provider call. Simultaneous
+requests queue behind it. Independent tiles load in parallel with bounded provider,
+feed and catalog requests. Durable commits remain ordered, so one slow tile does
+not delay a finished neighbour’s save. Completed content is committed tile by tile, so one
+failure does not discard its neighbours. A known API failure can be retried.
+
+If the object restarts during a provider call, a retry checks durable content
+first. A committed result is reused; an uncommitted attempt can run again. The
+guarantee is one successful visible result per day, not one network attempt:
+provider calls cannot participate in Cloudflare's storage transaction. Retrying
+an interrupted attempt never requires deleting a finished tile or resetting its
+completion state.
+
+The old KV `shared_lock:*` records are no longer used. KV mirrors remain for
+compatibility and recovery, while the Durable Object is authoritative after its
+first import. Do not roll back to the old force-regeneration code: it would ignore
+that authority. The design follows Cloudflare's guidance on
+[Durable Object storage](https://developers.cloudflare.com/durable-objects/api/sqlite-storage-api/)
+and [SQLite namespace migrations](https://developers.cloudflare.com/durable-objects/reference/durable-objects-migrations/).
 
 ---
 

@@ -19,3 +19,6 @@ desktop.ini
 .agents/
 .claude/
 skills-lock.json
+
+# Cloudflare local deployment state (credentials remain outside the repository)
+.wrangler/
