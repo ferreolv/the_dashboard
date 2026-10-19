@@ -82,7 +82,7 @@ both the Worker and its public files when a dashboard change affects either.
 From the repository root, after validating the final dashboard:
 
 ```sh
-node --test src/dashboard/daily-content.test.cjs src/dashboard/daily-ux.test.cjs worker/fefe-sync.test.mjs
+node --test src/dashboard/daily-content.test.cjs src/dashboard/daily-ux.test.cjs src/dashboard/password-recovery.test.cjs worker/fefe-sync.test.mjs worker/password-recovery.test.mjs
 node worker/prepare-dashboard-assets.mjs
 npx wrangler deploy --config worker/wrangler.toml
 npx wrangler kv bulk put backups/dashboard-public-kv.json --binding SYNC --remote --config worker/wrangler.toml
@@ -106,6 +106,50 @@ icon URLs return PNGs. A missing or unrecognised asset must return 404 rather
 than the dashboard HTML. KV publication can take time to reach every location;
 verify the live HTML and assets again after propagation. Keep the existing KV
 namespace and encrypted secrets throughout deployment.
+
+## Password recovery email
+
+Sign-in offers **Forgot password?** and sends a 20-minute single-use link. The
+reset page works before account sync and while already signed in. Resetting keeps
+all saved dashboard data, invalidates prior sessions and reset links, and requires
+a normal sign-in with the new password. Legacy credentials import into the existing
+SQLite coordinator on first use; retain the DAILY_COORDINATOR binding.
+Authentication fails closed without that binding, so a configuration outage cannot
+reactivate sessions revoked by a password reset. Do not roll back to the KV-only
+authentication code after credentials migrate.
+
+Configure one real sender before offering email recovery in production:
+
+- **Cloudflare Email Service:** onboard a sending domain, set AUTH_EMAIL_FROM
+  to an allowed sender, and add a send_email binding named AUTH_EMAIL. Cloudflare
+  currently requires Workers Paid for Email Sending; review the account’s plan.
+- **Resend:** verify the sending domain, set AUTH_EMAIL_FROM to its sender address,
+  and store RESEND_API_KEY as an encrypted Worker secret. Never put this key in Git.
+  Without a domain, onboarding@resend.dev can test recovery only to the email on
+  the Resend account. The current config prepares that limited sender; the UI
+  explicitly describes its recipient restriction. Verify a domain before enabling
+  delivery for other dashboard users.
+- Set AUTH_APP_URL to the trusted HTTPS dashboard address. The default is the
+  existing workers.dev site. Request Host/Origin and client redirect fields never
+  determine reset links. The token stays in the URL fragment and is removed by the
+  page before third-party scripts load.
+
+If no sender is configured, the endpoint returns a clear recovery_unavailable
+error. It never pretends an email was sent. Configured requests return an identical
+neutral acknowledgement for known and unknown addresses; delivery runs in the
+background. Provider failures invalidate that link and log a fixed, non-personal
+error message. Monitor delivery at the provider and use a new request if no email
+arrives. Tokens and passwords are never logged or stored in browser storage.
+
+POST /auth/forgot-password accepts {email}; POST /auth/reset-password accepts
+{token,password}. Requests are rate limited. Only token hashes are persisted;
+reset consumption and the new password are committed together. Reset passwords
+use salted PBKDF2; existing password hashes remain readable during migration.
+
+Validate with node --test worker/password-recovery.test.mjs. The security model
+follows [OWASP’s forgot-password guidance](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html).
+Email integration references: [Cloudflare Workers email binding](https://developers.cloudflare.com/email-service/api/send-emails/workers-api/)
+and [Resend Send Email](https://resend.com/docs/api-reference/emails/send-email).
 
 ## HTTP contract
 

@@ -2,6 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+/* Read the recovery secret before external resources load. Keep it in memory,
+   and remove it from the address and its current history entry immediately. */
+function captureDashboardRecoveryLink(){
+  if(!/^#\/?reset-password(?:\?|$)/.test(location.hash))return null;
+  const query=location.hash.split("?")[1]||"";
+  const candidate=new URLSearchParams(query).get("token")||"";
+  history.replaceState(history.state,"",location.pathname+location.search+"#/reset-password");
+  return {token:/^[A-Za-z0-9_-]{32,512}$/.test(candidate)?candidate:""};
+}
+let dashboardRecoveryLink=captureDashboardRecoveryLink();
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#E4E4E9" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -2086,6 +2099,10 @@
   .authCard .authError{margin:12px 0;color:#a1323b;font-size:13px;line-height:1.5}
   .authCard .savebtn{min-height:44px;margin-top:18px;background:#3e4842}
   .authCard .link{min-height:40px;justify-content:center;color:#475f52}
+  .authCard .authStatus{margin:10px 0;color:#355742;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+  .authCard .authHelp{font-size:12px;line-height:1.6;margin:8px 0 0;color:#566159}
+  .authCard .authStatus{margin:10px 0;color:#355742;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+  .authCard .authHelp{font-size:12px;line-height:1.6;margin:8px 0 0;color:#566159}
   .skipLink{position:fixed;z-index:2000;left:16px;top:-90px;padding:12px 18px;border-radius:9px;background:#303e35;color:#fff;text-decoration:none}
   .skipLink:focus{top:12px}
   .pageContent:focus{outline:none}
@@ -3252,7 +3269,62 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   );
 }
 
-function App(){
+/* A recovery request omits account credentials: mailbox access is the proof,
+   and an old session must never override a reset link. */
+const passwordRecoveryRequest=async(path,body)=>{
+  const response=await fetch(SYNC_URL+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),credentials:"omit",cache:"no-store",referrerPolicy:"no-referrer",signal:AbortSignal.timeout(20000)});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||data.ok!==true)throw Object.assign(new Error("Recovery request failed."),{code:data.code,status:response.status,retryAfter:Math.min(3600,Math.max(1,Number(data.retryAfter)||Number(response.headers.get("Retry-After"))||60))});
+  return data;
+};
+const passwordRecoveryMessage=(error,reset=false)=>{
+  if(error.code==="invalid_reset_token")return "This reset link has expired or has already been used. Request a new link below.";
+  if(error.code==="recovery_unavailable")return "Password recovery email isn’t configured yet. Contact the app owner, then try again.";
+  if(error.status===429)return "Too many attempts. Wait a little, then try again.";
+  if(error.name==="TimeoutError"||error.name==="AbortError")return "The request took too long. Check your connection and try again.";
+  if(navigator.onLine===false)return "You’re offline. Connect to the internet and try again.";
+  return reset?"Couldn’t update your password. Please try again.":"Couldn’t request a recovery email. Please try again.";
+};
+function PasswordReset({token,onSignIn,onRequestNew}){
+  const [password,setPassword]=useState(""),[confirmPassword,setConfirmPassword]=useState("");
+  const [busy,setBusy]=useState(false),[error,setError]=useState(""),[unusable,setUnusable]=useState(!token),[complete,setComplete]=useState(false);
+  const confirmRef=useRef(null),busyRef=useRef(false);
+  const submit=async()=>{
+    if(busyRef.current||unusable||complete)return;
+    if(password.length<8){setError("Use at least 8 characters.");return;}
+    if(password!==confirmPassword){setError("The passwords don’t match. Enter the same password in both fields.");confirmRef.current?.focus();return;}
+    busyRef.current=true;setBusy(true);setError("");
+    try{await passwordRecoveryRequest("/auth/reset-password",{token,password});setPassword("");setConfirmPassword("");setComplete(true);}
+    catch(failure){setError(passwordRecoveryMessage(failure,true));if(failure.code==="invalid_reset_token"){setUnusable(true);setPassword("");setConfirmPassword("");}}
+    finally{busyRef.current=false;setBusy(false);}
+  };
+  return <DashboardModal label={complete?"Password updated":"Reset password"} onClose={()=>{}} overlayClassName="authGate" className="authCard" as="form" onSubmit={event=>{event.preventDefault();submit();}}>
+    <h2>{complete?"Password updated":unusable?"Request a new link":"Choose a new password"}</h2>
+    {complete?<><p className="authStatus" role="status">Your password has been changed. Sign in with your new password to continue.</p><p className="authHelp">Your saved dashboard and progress are kept.</p><button type="button" className="savebtn" onClick={onSignIn}>Go to sign in</button></>:unusable?<><p className="authError" role="alert">{error||"This reset link is missing, expired or already used. Open the original email again, or request a new link."}</p><button type="button" className="savebtn" onClick={onRequestNew}>Request a new reset link</button><button type="button" className="link" onClick={onSignIn}>Back to sign in</button></>:<>
+      <p className="hint">Use at least 8 characters. Your saved dashboard and progress stay in place.</p>
+      <label className="authLabel" htmlFor="reset-password">New password</label><input id="reset-password" className="sinput" type="password" autoComplete="new-password" required minLength={8} maxLength={256} disabled={busy} aria-describedby="reset-password-help" value={password} onChange={event=>setPassword(event.target.value)}/>
+      <p id="reset-password-help" className="authHelp">At least 8 characters.</p>
+      <label className="authLabel" htmlFor="reset-password-confirm">Confirm new password</label><input ref={confirmRef} id="reset-password-confirm" className="sinput" type="password" autoComplete="new-password" required minLength={8} maxLength={256} disabled={busy} aria-describedby={error?"reset-error":undefined} value={confirmPassword} onChange={event=>setConfirmPassword(event.target.value)}/>
+      {error&&<p id="reset-error" className="authError" role="alert">{error}</p>}
+      <button type="submit" className="savebtn" disabled={busy}>{busy?"Updating password…":"Update password"}</button>
+      <button type="button" className="link" disabled={busy} onClick={onRequestNew}>Request a new link</button>
+      <button type="button" className="link" disabled={busy} onClick={onSignIn}>Back to sign in</button>
+    </>}
+  </DashboardModal>;
+}
+function DashboardEntry(){
+  const [recovery,setRecovery]=useState(()=>{const captured=dashboardRecoveryLink;dashboardRecoveryLink=null;return captured;});
+  const [authStart,setAuthStart]=useState(null);
+  useEffect(()=>{
+    const capture=()=>{if(/^#\/?reset-password(?:\?|$)/.test(location.hash)&&!new URLSearchParams(location.hash.split("?")[1]||"").has("token")){setRecovery(current=>current||{token:""});setAuthStart(null);return;}const link=captureDashboardRecoveryLink();if(link){setRecovery(link);setAuthStart(null);}else setRecovery(null);};
+    window.addEventListener("hashchange",capture);window.addEventListener("popstate",capture);
+    return()=>{window.removeEventListener("hashchange",capture);window.removeEventListener("popstate",capture);};
+  },[]);
+  const leaveReset=mode=>{history.replaceState(history.state,"",location.pathname+location.search+"#/dashboard");setRecovery(null);setAuthStart(mode);};
+  // Delay dashboard mount so account sync cannot reload away a scrubbed token.
+  return recovery?<PasswordReset key={recovery.token} token={recovery.token} onSignIn={()=>leaveReset("login")} onRequestNew={()=>leaveReset("forgot")}/>:<App forceSignIn={authStart!==null} initialAuthMode={authStart||"login"}/>;
+}
+function App({forceSignIn=false,initialAuthMode="login"}){
   const [edit,setEdit]=useState(false);
   const [libraryQuery,setLibraryQuery]=useState("");
   const [libraryCategory,setLibraryCategory]=useState("all");
@@ -3306,13 +3378,18 @@ function App(){
   const [healthToken,setHealthTokenState]=useState(()=>getHealthToken());
   const [healthTokenField,setHealthTokenField]=useState("");
   const [healthBusy,setHealthBusy]=useState(false);
-  const [accountSignedIn,setAccountSignedIn]=useState(()=>!!getAccountToken());
-  const [authMode,setAuthMode]=useState("login");
+  const [accountSignedIn,setAccountSignedIn]=useState(()=>!forceSignIn&&!!getAccountToken());
+  const [authMode,setAuthMode]=useState(initialAuthMode);
   const [authEmailField,setAuthEmailField]=useState("");
   const [authPassword,setAuthPassword]=useState("");
   const [authBusy,setAuthBusy]=useState(false);
   const [newPassword,setNewPassword]=useState("");
   const [authError,setAuthError]=useState("");
+  const [authRecoveryRequested,setAuthRecoveryRequested]=useState("");
+  const [authRecoveryOwnerOnly,setAuthRecoveryOwnerOnly]=useState(false);
+  const [authRecoveryCooldown,setAuthRecoveryCooldown]=useState(0);
+  const authRequestBusy=useRef(false);
+  useEffect(()=>{if(authRecoveryCooldown<=0)return;const timer=setTimeout(()=>setAuthRecoveryCooldown(seconds=>Math.max(0,seconds-1)),1000);return()=>clearTimeout(timer);},[authRecoveryCooldown]);
   const [locationFeedback,setLocationFeedback]=useState("");
   const [notice,setNotice]=useState(null);
   const [loadProblems,setLoadProblems]=useState(null);
@@ -3380,7 +3457,16 @@ function App(){
   const [dailyHydrated,setDailyHydrated]=useState(()=>!getAccountToken()&&!getSyncId());
   const [syncChecked,setSyncChecked]=useState(false);
   // Adopt the account's saved day before any request can create missing content.
-  useEffect(()=>{let alive=true;(async()=>{const changed=await pullSync();if(!alive)return;if(changed){location.reload();return;}setDailyHydrated(_syncReadOK);setSyncChecked(true);if(!_syncReadOK)showLoadProblems([dailyIssueInfo("account",_syncIssue?.state||"sync_pending")]);})();return()=>{alive=false;};},[]);
+  useEffect(()=>{if(forceSignIn)return;let alive=true;(async()=>{const changed=await pullSync();if(!alive)return;if(changed){location.reload();return;}setDailyHydrated(_syncReadOK);setSyncChecked(true);if(!_syncReadOK)showLoadProblems([dailyIssueInfo("account",_syncIssue?.state||"sync_pending")]);})();return()=>{alive=false;};},[]);
+  const requestPasswordRecovery=async()=>{
+    if(authRequestBusy.current||authRecoveryCooldown>0)return;
+    authRequestBusy.current=true;setAuthBusy(true);setAuthError("");
+    const email=authEmailField.trim().toLowerCase();
+    try{const result=await passwordRecoveryRequest("/auth/forgot-password",{email});setAuthRecoveryOwnerOnly(!!result.ownerOnly);setAuthRecoveryRequested(email);setAuthRecoveryCooldown(60);}
+    catch(failure){setAuthError(passwordRecoveryMessage(failure));if(failure.status===429)setAuthRecoveryCooldown(failure.retryAfter||60);}
+    finally{authRequestBusy.current=false;setAuthBusy(false);}
+  };
+  const changeAuthMode=mode=>{if(authBusy)return;setAuthMode(mode);setAuthError("");setAuthPassword("");};
   const submitAccount=async()=>{ if(authBusy)return; setAuthError(""); setAuthBusy(true); try{
     const fresh=authMode==="signup";
     const data=await accountRequest(fresh?"/auth/signup":"/auth/login",{email:authEmailField,password:authPassword});
@@ -3565,7 +3651,7 @@ function App(){
   },[]);
   const [appDays,setAppDays]=useState(()=>load("appDays",[]));
   // Check the day's server snapshot and free weather once. Successful tiles make no requests.
-  useEffect(()=>{if(dailyHydrated)runGen(activeTiles.filter(key=>ALL_GEN_KEYS.includes(key)),{silent:true});},[dailyHydrated]);
+  useEffect(()=>{if(dailyHydrated&&accountSignedIn)runGen(activeTiles.filter(key=>ALL_GEN_KEYS.includes(key)),{silent:true});},[dailyHydrated,accountSignedIn]);
 
   /* academic tile */
   const [courses,setCourses]=useState(()=>load("courses",[]));
@@ -3742,7 +3828,7 @@ function App(){
     window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
   };
   useEffect(()=>{
-    const syncRoute=()=>{const next=dashboardPageFromHash();setPage(next);setEdit(false);if(location.hash!=="#/"+next)history.replaceState(null,"","#/"+next);window.scrollTo({top:0,behavior:"auto"});};
+    const syncRoute=()=>{if(/^#\/?reset-password(?:\?|$)/.test(location.hash))return;const next=dashboardPageFromHash();setPage(next);setEdit(false);if(location.hash!=="#/"+next)history.replaceState(null,"","#/"+next);window.scrollTo({top:0,behavior:"auto"});};
     if(location.hash!=="#/"+dashboardPageFromHash())history.replaceState(null,"","#/"+dashboardPageFromHash());
     window.addEventListener("hashchange",syncRoute);window.addEventListener("popstate",syncRoute);
     return()=>{window.removeEventListener("hashchange",syncRoute);window.removeEventListener("popstate",syncRoute);};
@@ -4338,15 +4424,19 @@ function App(){
   return (
     <div className="wrap">
       <a className="skipLink" href="#main-content" onClick={e=>{e.preventDefault();document.getElementById("main-content")?.focus();}}>Skip to content</a>
-      {!accountSignedIn&&<DashboardModal label={authMode==="login"?"Sign in":"Create account"} onClose={()=>{}} overlayClassName="authGate" className="authCard" as="form" onSubmit={e=>{e.preventDefault();submitAccount();}}>
-        <h2>{authMode==="login"?"Welcome back":"Create your account"}</h2>
-        <p className="hint">{authMode==="login"?"Sign in to your dashboard.":"Keep your dashboard with you across devices."}</p>
-        <label className="authLabel" htmlFor="auth-email">Email</label><input id="auth-email" className="sinput" type="email" autoComplete="email" required value={authEmailField} onChange={e=>setAuthEmailField(e.target.value)}/>
-        <label className="authLabel" htmlFor="auth-password">Password</label><input id="auth-password" className="sinput" type="password" required minLength={authMode==="signup"?8:undefined} autoComplete={authMode==="login"?"current-password":"new-password"} aria-describedby={authMode==="signup"?"auth-password-help":undefined} value={authPassword} onChange={e=>setAuthPassword(e.target.value)}/>
-        {authMode==="signup"&&<p id="auth-password-help" className="hint">At least 8 characters.</p>}
+      {!accountSignedIn&&<DashboardModal key={authMode} label={authMode==="forgot"?"Recover password":authMode==="login"?"Sign in":"Create account"} onClose={()=>{}} overlayClassName="authGate" className="authCard" as="form" onSubmit={event=>{event.preventDefault();authMode==="forgot"?requestPasswordRecovery():submitAccount();}}>
+        <h2>{authMode==="forgot"?(authRecoveryRequested?"Recovery requested":"Forgot your password?"):authMode==="login"?"Welcome back":"Create your account"}</h2>
+        <p className="hint">{authMode==="forgot"?"Enter the email you use for your dashboard.":authMode==="login"?"Sign in to your dashboard.":"Keep your dashboard with you across devices."}</p>
+        <label className="authLabel" htmlFor="auth-email">Email</label><input id="auth-email" className="sinput" type="email" autoComplete="email" required disabled={authBusy} value={authEmailField} onChange={event=>{setAuthEmailField(event.target.value);setAuthRecoveryRequested("");}}/>
+        {authMode!=="forgot"&&<>
+          <label className="authLabel" htmlFor="auth-password">Password</label><input id="auth-password" className="sinput" type="password" required disabled={authBusy} minLength={authMode==="signup"?8:undefined} autoComplete={authMode==="login"?"current-password":"new-password"} aria-describedby={authMode==="signup"?"auth-password-help":undefined} value={authPassword} onChange={event=>setAuthPassword(event.target.value)}/>
+          {authMode==="signup"&&<p id="auth-password-help" className="hint">At least 8 characters.</p>}
+        </>}
+        {authMode==="forgot"&&authRecoveryRequested&&<div className="authStatus" role="status"><p>If an account uses <strong>{authRecoveryRequested}</strong>, look for a password reset link in that inbox.</p><p>Check spam too. Links expire; use the most recent email.</p>{authRecoveryOwnerOnly&&<p>Email delivery currently supports the app owner’s Resend address only. Other addresses need a verified sender domain.</p>}</div>}
         {authError&&<p className="authError" role="alert">{authError}</p>}
-        <button type="submit" className="savebtn" disabled={authBusy}>{authBusy?(authMode==="login"?"Signing in…":"Creating account…"):authMode==="login"?"Sign in":"Create account"}</button>
-        <button type="button" className="link" onClick={()=>{setAuthMode(authMode==="login"?"signup":"login");setAuthError("");}}>{authMode==="login"?"Create an account":"Already have an account? Sign in"}</button>
+        <button type="submit" className="savebtn" disabled={authBusy||(authMode==="forgot"&&authRecoveryCooldown>0)}>{authBusy?(authMode==="forgot"?"Requesting email…":authMode==="login"?"Signing in…":"Creating account…"):authMode==="forgot"?(authRecoveryCooldown>0?"Request again in "+authRecoveryCooldown+"s":authRecoveryRequested?"Request another link":"Send reset link"):authMode==="login"?"Sign in":"Create account"}</button>
+        {authMode==="login"&&<button type="button" className="link" disabled={authBusy} onClick={()=>changeAuthMode("forgot")}>Forgot password?</button>}
+        <button type="button" className="link" disabled={authBusy} onClick={()=>changeAuthMode(authMode==="login"?"signup":"login")}>{authMode==="forgot"?"Back to sign in":authMode==="login"?"Create an account":"Already have an account? Sign in"}</button>
       </DashboardModal>}
       <nav className="topbar" aria-label="Primary navigation">
         <div className="topnav">
@@ -5427,7 +5517,7 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(<DashboardEntry/>);
 </script>
 </body>
 </html>

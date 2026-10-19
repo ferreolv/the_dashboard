@@ -18,3 +18,8 @@ new_sqlite_classes = ["DailyCoordinator"]
 
 [triggers]
 crons = ["0 4 * * *"]
+
+[vars]
+AUTH_APP_URL = "https://fefe-sync.fefedashboard.workers.dev/"
+# Resend’s test sender reaches only the Resend account email until a domain is verified.
+AUTH_EMAIL_FROM = "Password recovery <onboarding@resend.dev>"

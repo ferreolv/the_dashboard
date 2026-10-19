@@ -26,3 +26,11 @@ The live implementation remains in the root `index.html` during the compatibilit
 - Missing generated content has an honest setup/retry state and cannot count as completed. Loading never changes ritual logs or streak history. Quiz selections persist by exact day and question; partial completion and undo use those saved answers.
 - `dailyIssueInfo` supplies tile and popup reasons/recovery. `dailyRefreshPlan` supplies the main action label. User-initiated retries must not suppress errors.
 - Backend changes require the SQLite `DAILY_COORDINATOR` binding; use `worker/wrangler.toml` for this deployment. Also publish the live public HTML/assets, since a GitHub push alone does not update `SYNC.__html__`.
+
+## Account recovery contract
+
+- The head bootstrap captures and scrubs reset fragments before external resources load. DashboardEntry renders PasswordReset before mounting App, so sync cannot reload away the token. Duplicate history events retain a captured token in memory.
+- Forgot-password requests use a neutral acknowledgement and a resend cooldown; missing email configuration remains an explicit error. Passwords and reset tokens never enter browser storage.
+- The reset form validates confirmation, keeps the token through network retries and requires normal sign-in after success. Resetting never clears the existing dashboard.
+- AuthRecovery in the existing DAILY_COORDINATOR binding imports legacy credentials/sessions, commits reset consumption with the password, and revokes older sessions. Account tombstones reject late writes after deletion. Keep the coordinator when deploying; authentication fails closed without it.
+- Email sender configuration and production delivery are required before considering recovery live. See worker/README-deploy.md.

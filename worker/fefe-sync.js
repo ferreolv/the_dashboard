@@ -39,7 +39,12 @@ function sharedJson(obj, status = 200) {
   return new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...sharedCors() } });
 }
 function authEmail(value) { return String(value || "").trim().toLowerCase(); }
-async function authHash(email, password, salt) {
+async function authHash(email, password, salt, version) {
+  if (version === "pbkdf2-sha256-v1") {
+    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: new TextEncoder().encode(salt + ":" + email), iterations: 100000 }, key, 256);
+    return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, "0")).join("");
+  }
   const bytes = new TextEncoder().encode(`${salt}:${email}:${password}`);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
@@ -48,9 +53,173 @@ function authToken() { return crypto.randomUUID().replaceAll("-", ""); }
 async function authAccount(env, request) {
   const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
   if (!token) return null;
-  const email = await env.SYNC.get(`auth:session:${token}`);
-  return email ? { email } : null;
+  try {
+    const response = await authService(env, "session", { token });
+    if (response.ok) return await response.json();
+    return response.status === 401 ? null : { unavailable: true, response };
+  } catch { return { unavailable: true, response: sharedJson({ error: "The account service is temporarily unavailable. Please try again.", code: "auth_service_unavailable" }, 503) }; }
 }
+
+/* Password recovery and credentials share one serialized, durable authority.
+   Legacy credentials/sessions import on first use; dashboard snapshots stay separate. */
+const AUTH_RESET_TTL = 20 * 60 * 1000;
+const AUTH_SESSION_TTL = 30 * 24 * 60 * 60 * 1000;
+const AUTH_RECOVERY_MESSAGE = "Recovery requested. If an account uses that email, look for a reset link in your inbox and spam folder.";
+const AUTH_APP_DEFAULT = "https://fefe-sync.fefedashboard.workers.dev/";
+const authValidEmail = email => email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const authValidPassword = password => typeof password === "string" && password.length >= 8 && password.length <= 256;
+async function authDigest(value) {
+  return [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)))].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function authResetToken() { return [...crypto.getRandomValues(new Uint8Array(32))].map(b => b.toString(16).padStart(2, "0")).join(""); }
+async function authPasswordRecord(email, password, before = {}) {
+  const salt = authResetToken();
+  return { ...before, email, salt, hash: await authHash(email, password, salt, "pbkdf2-sha256-v1"), hashVersion: "pbkdf2-sha256-v1" };
+}
+function recoveryAvailable(env) { return !!(env.AUTH_EMAIL_FROM && (env.AUTH_EMAIL?.send || env.RESEND_API_KEY)); }
+function recoveryAppURL(env) {
+  const url = new URL(env.AUTH_APP_URL || AUTH_APP_DEFAULT);
+  if (url.protocol !== "https:" || url.username || url.password) throw new Error("Invalid recovery origin");
+  url.hash = ""; url.search = ""; return url.href;
+}
+async function sendAuthEmail(env, to, subject, text) {
+  const from = String(env.AUTH_EMAIL_FROM || "");
+  if (!from || /[\r\n]/.test(from)) throw new Error("Email sender unavailable");
+  if (env.AUTH_EMAIL?.send) {
+    let timeout;
+    try { return await Promise.race([env.AUTH_EMAIL.send({ from, to, subject, text }), new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error("Email timeout")), 15000); })]); }
+    finally { clearTimeout(timeout); }
+  }
+  if (!env.RESEND_API_KEY) throw new Error("Email sender unavailable");
+  const response = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: "Bearer " + env.RESEND_API_KEY, "Content-Type": "application/json" }, body: JSON.stringify({ from, to: [to], subject, text }), signal: AbortSignal.timeout(15000) });
+  if (!response.ok) throw new Error("Email provider rejected request");
+}
+async function authBody(request) {
+  const text = await request.text();
+  if (text.length > 4096) return null;
+  try { const body = JSON.parse(text); return body && typeof body === "object" && !Array.isArray(body) ? body : null; } catch { return null; }
+}
+async function authService(env, op, body) {
+  const stub = coordinator(env, "auth-recovery-v1");
+  if (!stub) return sharedJson({ error: "Account recovery is temporarily unavailable. Please try again later.", code: "recovery_unavailable" }, 503);
+  return stub.fetch("https://daily.internal/auth/" + op, { method: "POST", body: JSON.stringify(body) });
+}
+class AuthRecovery {
+  constructor(storage, env, waitUntil) { this.storage = storage; this.env = env; this.waitUntil = waitUntil; }
+  async user(email) {
+    const cached = await this.storage.get("auth-user:" + email);
+    if (cached !== undefined && cached !== null) return cached.record;
+    const record = await this.env.SYNC.get("auth:user:" + email, "json");
+    if (record) await this.storage.put("auth-user:" + email, { record });
+    return record;
+  }
+  async saveUser(record) {
+    await this.storage.put("auth-user:" + record.email, { record });
+    await this.env.SYNC.put("auth:user:" + record.email, JSON.stringify(record)).catch(() => {});
+  }
+  async session(token) {
+    if (!/^[A-Za-z0-9_-]{8,128}$/.test(token || "")) return null;
+    let session = await this.storage.get("auth-session:" + await authDigest(token));
+    if (!session) {
+      const legacy = await this.env.SYNC.get("auth:session:" + token);
+      if (!legacy) return null;
+      session = { email: legacy, version: "legacy", expiresAt: Date.now() + AUTH_SESSION_TTL };
+    }
+    const record = await this.user(session.email);
+    if (!record || session.expiresAt <= Date.now() || session.version !== (record.sessionVersion || "legacy")) return null;
+    return { email: session.email };
+  }
+  async newSession(record) {
+    const token = authResetToken();
+    await this.storage.put("auth-session:" + await authDigest(token), { email: record.email, version: record.sessionVersion || "legacy", expiresAt: Date.now() + AUTH_SESSION_TTL });
+    return { token, email: record.email };
+  }
+  async limit(name, count, duration) {
+    const now = Date.now(), key = "auth-rate:" + name;
+    let bucket = await this.storage.get(key);
+    if (!bucket || bucket.until <= now) bucket = { count: 0, until: now + duration };
+    if (bucket.count >= count) return Math.max(1, Math.ceil((bucket.until - now) / 1000));
+    await this.storage.put(key, { ...bucket, count: bucket.count + 1 }); return 0;
+  }
+  async handle(op, body) {
+    const email = authEmail(body.email), password = body.password;
+    if (op === "session") { const account = await this.session(body.token); return sharedJson(account || { error: "Not signed in" }, account ? 200 : 401); }
+    if (op === "signup") {
+      const retryAfter = await this.limit("signup-global", 50, 3600000) || await this.limit("signup-ip:" + await authDigest(body.ip || "unknown"), 5, 3600000);
+      if (retryAfter) return sharedJson({ error: "Too many account requests. Please try later.", code: "rate_limited", retryAfter }, 429);
+      if (!authValidEmail(email) || !authValidPassword(password)) return sharedJson({ error: "Use a valid email and a password of 8–256 characters." }, 400);
+      if (await this.user(email)) return sharedJson({ error: "An account with that email already exists." }, 409);
+      const target = coordinator(this.env, "account:" + email);
+      const activated = await target.fetch("https://daily.internal/activate", { method: "POST", body: "{}" });
+      if (!activated.ok) return sharedJson({ error: "Account creation could not finish. Please retry." }, 503);
+      const record = await authPasswordRecord(email, password, { createdAt: Date.now(), sessionVersion: authResetToken() });
+      await this.saveUser(record); return sharedJson(await this.newSession(record));
+    }
+    if (op === "login") {
+      const retryAfter = await this.limit("login-global", 200, 900000) || await this.limit("login-ip:" + await authDigest(body.ip || "unknown"), 20, 900000) || await this.limit("login-email:" + await authDigest(email), 20, 900000);
+      if (retryAfter) return sharedJson({ error: "Too many sign-in attempts. Please try later.", code: "rate_limited", retryAfter }, 429);
+      const record = authValidEmail(email) ? await this.user(email) : null;
+      if (!authValidPassword(password) || !record || await authHash(email, password, record.salt, record.hashVersion) !== record.hash) return sharedJson({ error: "Email or password is incorrect." }, 401);
+      return sharedJson(await this.newSession(record));
+    }
+    if (op === "password") {
+      const account = await this.session(body.token);
+      if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const record = await this.user(account.email);
+      if (!record) return sharedJson({ error: "Not signed in" }, 401);
+      if (!authValidPassword(password)) return sharedJson({ error: "Password must be 8–256 characters." }, 400);
+      await this.saveUser(await authPasswordRecord(account.email, password, record));
+      return sharedJson({ ok: true });
+    }
+    if (op === "delete") {
+      const account = await this.session(body.token);
+      if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const target = coordinator(this.env, "account:" + account.email);
+      const removed = await target.fetch("https://daily.internal/delete", { method: "POST", body: "{}" });
+      if (!removed.ok) return sharedJson({ error: "Account deletion could not finish. Please retry." }, 503);
+      await this.storage.put("auth-user:" + account.email, { record: null });
+      await this.env.SYNC.delete("auth:user:" + account.email);
+      await this.env.SYNC.delete("account:" + account.email);
+      await this.env.SYNC.delete("auth:session:" + body.token);
+      return sharedJson({ ok: true });
+    }
+    if (op === "forgot-password") {
+      if (!recoveryAvailable(this.env)) return sharedJson({ error: "Recovery email is not configured yet. The app owner needs to connect an email sender.", code: "recovery_unavailable" }, 503);
+      let appURL; try { appURL = recoveryAppURL(this.env); } catch { return sharedJson({ error: "Recovery email needs its app address configured.", code: "recovery_unavailable" }, 503); }
+      if (!authValidEmail(email)) return sharedJson({ error: "Enter a valid email address." }, 400);
+      const retryAfter = await this.limit("forgot-global", 200, 3600000) || await this.limit("forgot-ip:" + await authDigest(body.ip || "unknown"), 10, 3600000) || await this.limit("forgot-email:" + await authDigest(email), 3, 3600000);
+      if (retryAfter) return sharedJson({ error: "Too many recovery requests. Please wait before trying again.", code: "rate_limited", retryAfter }, 429);
+      const record = await this.user(email), token = authResetToken(), digest = await authDigest(token);
+      if (record) {
+        const key = "auth-reset:" + digest, previous = await this.storage.get("auth-reset-latest:" + email);
+        await this.storage.put({ [key]: { email, salt: record.salt, expiresAt: Date.now() + AUTH_RESET_TTL }, ["auth-reset-latest:" + email]: digest });
+        if (previous) await this.storage.put("auth-reset:" + previous, null);
+        const text = "You requested a password reset for your dashboard.\n\nOpen this link to choose a new password:\n" + appURL + "#/reset-password?token=" + token + "\n\nThis link expires in 20 minutes and can be used once. If you did not request it, you can ignore this email. Your password has not changed.";
+        this.waitUntil(sendAuthEmail(this.env, email, "Reset your dashboard password", text).catch(async () => { await this.storage.put(key, null); console.error("Dashboard recovery email delivery failed"); }));
+      }
+      const ownerOnly = !!this.env.RESEND_API_KEY && !this.env.AUTH_EMAIL?.send && /@resend\.dev(?:>|$)/i.test(String(this.env.AUTH_EMAIL_FROM || ""));
+      return sharedJson({ ok: true, message: AUTH_RECOVERY_MESSAGE, retryAfter: 60, ownerOnly });
+    }
+    if (op === "reset-password") {
+      if (!authValidPassword(password)) return sharedJson({ error: "Password must be 8–256 characters." }, 400);
+      const retryAfter = await this.limit("reset-global", 200, 900000) || await this.limit("reset-ip:" + await authDigest(body.ip || "unknown"), 20, 900000);
+      if (retryAfter) return sharedJson({ error: "Too many attempts. Please wait before trying again.", code: "rate_limited", retryAfter }, 429);
+      const invalid = () => sharedJson({ error: "This reset link has expired or has already been used. Request a new link.", code: "invalid_reset_token" }, 400);
+      if (!/^[a-f0-9]{64}$/.test(body.token || "")) return invalid();
+      const key = "auth-reset:" + await authDigest(body.token), reset = await this.storage.get(key);
+      if (!reset || reset.expiresAt <= Date.now()) return invalid();
+      const record = await this.user(reset.email);
+      if (!record || record.salt !== reset.salt) return invalid();
+      const next = await authPasswordRecord(reset.email, password, { ...record, sessionVersion: authResetToken() });
+      await this.storage.put({ ["auth-user:" + reset.email]: { record: next }, [key]: null, ["auth-reset-latest:" + reset.email]: null });
+      await this.env.SYNC.put("auth:user:" + reset.email, JSON.stringify(next)).catch(() => {});
+      if (recoveryAvailable(this.env)) this.waitUntil(sendAuthEmail(this.env, reset.email, "Your dashboard password was changed", "Your dashboard password has been reset. Previous sessions have been signed out. If this was not you, request another reset from " + recoveryAppURL(this.env)).catch(() => { console.error("Dashboard password-change notice delivery failed"); }));
+      return sharedJson({ ok: true });
+    }
+    return sharedJson({ error: "Not found" }, 404);
+  }
+}
+
 function sharedDayKey() {
   return new Date().toLocaleDateString("en-CA", { timeZone: TZ }); // YYYY-MM-DD
 }
@@ -302,7 +471,7 @@ function mergeDailySnapshot(current, incoming) {
 // and snapshot. The promise queue covers external I/O, where DO input gates alone
 // do not prevent a second request from entering. Durable records survive restarts.
 class DailyCoordinator {
-  constructor(state, env) { this.storage = protectedDailyStorage(state.storage); this.env = env; this.queue = Promise.resolve(); }
+  constructor(state, env) { this.storage = protectedDailyStorage(state.storage); this.env = env; this.queue = Promise.resolve(); this.waitUntil = state.waitUntil ? state.waitUntil.bind(state) : promise => promise.catch(() => {}); }
   fetch(request) {
     const work = this.queue.then(() => this.handle(request));
     this.queue = work.catch(() => {});
@@ -312,12 +481,15 @@ class DailyCoordinator {
     const path = new URL(request.url).pathname;
     const body = parseObject(await request.json().catch(() => ({})));
     try {
+      if (path.startsWith("/auth/")) return await new AuthRecovery(this.storage, this.env, this.waitUntil).handle(path.slice(6), body);
       if (path === "/shared") return await this.shared(body);
       if (path === "/personal") return await this.personal(body);
       if (path === "/account") return await this.account(body);
-      if (path === "/delete") { await this.storage.deleteAll(); return sharedJson({ ok: true }); }
+      if (path === "/delete") { await this.storage.deleteAll(); await this.storage.put("deleted", true); return sharedJson({ ok: true }); }
+      if (path === "/activate") { await this.storage.deleteAll(); return sharedJson({ ok: true }); }
       return sharedJson({ error: "Not found" }, 404);
     } catch (error) {
+      if (path.startsWith("/auth/")) return sharedJson({ error: "The account service is temporarily unavailable. Please try again.", code: "auth_service_unavailable" }, 503);
       if (!error || error.code !== "server_storage_error") throw error;
       const problem = { state: "server_storage_error", message: "The daily server could not access its saved data. Try again later; loaded tiles and progress stay safe." };
       if (path === "/shared" || path === "/personal") {
@@ -375,6 +547,7 @@ class DailyCoordinator {
     return sharedJson(sharedResult(date, record, active));
   }
   async account({ email, snapshot }) {
+    if (await this.storage.get("deleted")) return sharedJson({ error: "This account was deleted." }, 403);
     let current = await this.storage.get("account");
     if (!current) current = await this.env.SYNC.get("account:" + email, "json") || { updatedAt: 0, data: {} };
     if (!snapshot) return sharedJson(mergeDailySnapshot(null, current));
@@ -395,6 +568,7 @@ class DailyCoordinator {
     return sharedJson({ ok: true, stored: true, updatedAt: incoming, data: next.data });
   }
   async personal({ email, date, key, apiKey, course, avoid }) {
+    if (await this.storage.get("deleted")) return sharedJson({ error: "This account was deleted." }, 403);
     if (!validDate(date) || key !== "academic") return sharedJson({ error: "Invalid daily request" }, 400);
     const storageKey = "personal:" + date;
     let record = await this.storage.get(storageKey) || { content: {}, status: {} };
@@ -477,52 +651,29 @@ var index_default = {
     }
 
     // ---- account authentication and account-scoped data ----
-    if (url.pathname === "/auth/signup" && request.method === "POST") {
-      const body = await request.json().catch(() => ({}));
-      const email = authEmail(body.email), password = String(body.password || "");
-      if (!/^\S+@\S+\.\S+$/.test(email) || password.length < 8) return sharedJson({ error: "Use a valid email and a password of at least 8 characters." }, 400);
-      const key = `auth:user:${email}`;
-      if (await env.SYNC.get(key)) return sharedJson({ error: "An account with that email already exists." }, 409);
-      const salt = authToken(), hash = await authHash(email, password, salt), token = authToken();
-      await env.SYNC.put(key, JSON.stringify({ email, salt, hash, createdAt: Date.now() }));
-      await env.SYNC.put(`auth:session:${token}`, email, { expirationTtl: 60 * 60 * 24 * 30 });
-      return sharedJson({ token, email });
-    }
-    if (url.pathname === "/auth/login" && request.method === "POST") {
-      const body = await request.json().catch(() => ({}));
-      const email = authEmail(body.email), password = String(body.password || ""), record = await env.SYNC.get(`auth:user:${email}`, "json");
-      if (!record || !(await authHash(email, password, record.salt) === record.hash)) return sharedJson({ error: "Email or password is incorrect." }, 401);
-      const token = authToken(); await env.SYNC.put(`auth:session:${token}`, email, { expirationTtl: 60 * 60 * 24 * 30 });
-      return sharedJson({ token, email });
+    if (["/auth/signup", "/auth/login", "/auth/forgot-password", "/auth/reset-password"].includes(url.pathname) && request.method === "POST") {
+      const body = await authBody(request);
+      if (!body) return sharedJson({ error: "Invalid request." }, 400);
+      return authService(env, url.pathname.slice(6), { ...body, ip: request.headers.get("CF-Connecting-IP") || "unknown" });
     }
     if (url.pathname === "/auth/me" && request.method === "GET") {
-      const account = await authAccount(env, request); return account ? sharedJson(account) : sharedJson({ error: "Not signed in" }, 401);
+      const account = await authAccount(env, request); if (account?.unavailable) return account.response; return account ? sharedJson(account) : sharedJson({ error: "Not signed in" }, 401);
     }
-    if (url.pathname === "/auth/password" && request.method === "POST") {
-      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
-      const body = await request.json().catch(() => ({})), nextPassword = String(body.password || "");
-      if (nextPassword.length < 8) return sharedJson({ error: "Password must be at least 8 characters." }, 400);
-      const key = `auth:user:${account.email}`, record = await env.SYNC.get(key, "json"); if (!record) return sharedJson({ error: "Account not found." }, 404);
-      const salt = authToken(); record.salt = salt; record.hash = await authHash(account.email, nextPassword, salt); await env.SYNC.put(key, JSON.stringify(record));
-      return sharedJson({ ok: true });
-    }
-    if (url.pathname === "/auth/delete" && request.method === "POST") {
-      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
-      const stub = coordinator(env, "account:" + account.email);
-      if (stub) await stub.fetch("https://daily.internal/delete", { method: "POST", body: "{}" });
-      await env.SYNC.delete(`auth:user:${account.email}`); await env.SYNC.delete(`account:${account.email}`);
-      const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim(); if (token) await env.SYNC.delete(`auth:session:${token}`);
-      return sharedJson({ ok: true });
+    if (["/auth/password", "/auth/delete"].includes(url.pathname) && request.method === "POST") {
+      const body = url.pathname === "/auth/delete" ? {} : await authBody(request);
+      if (!body) return sharedJson({ error: "Invalid request." }, 400);
+      const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
+      return authService(env, url.pathname.slice(6), { password: body.password, token });
     }
     if (url.pathname === "/daily/personal" && request.method === "POST") {
-      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const account = await authAccount(env, request); if (account?.unavailable) return account.response; if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const body = await request.json().catch(() => ({}));
       const stub = coordinator(env, "account:" + account.email);
       if (!stub) return sharedJson({ date: body.date, content: {}, status: { academic: { state: "server_unconfigured", message: "Academic needs the daily-content server update. Your loaded tiles are safe." } } }, 503);
       return stub.fetch("https://daily.internal/personal", { method: "POST", body: JSON.stringify({ date: body.date, key: body.key, apiKey: body.apiKey, course: body.course, avoid: body.avoid, email: account.email }) });
     }
     if (url.pathname === "/account/data") {
-      const account = await authAccount(env, request); if (!account) return sharedJson({ error: "Not signed in" }, 401);
+      const account = await authAccount(env, request); if (account?.unavailable) return account.response; if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const key = `account:${account.email}`;
       const stub = coordinator(env, "account:" + account.email);
       if (request.method === "GET") {

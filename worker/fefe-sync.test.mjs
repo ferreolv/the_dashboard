@@ -32,6 +32,7 @@ function environment(tiles = ["word", "philo"]) {
   const env = { SYNC: new KV(), ANTHROPIC_API_KEY: "server-key" };
   env.SYNC.values.set("shared_config", JSON.stringify({ tiles }));
   env.SYNC.values.set("auth:session:test-token", "reader@example.test");
+  env.SYNC.values.set("auth:user:reader@example.test", JSON.stringify({ email: "reader@example.test", salt: "legacy", hash: "unused-in-these-tests" }));
   const storage = new Map(), instances = new Map();
   env.DAILY_COORDINATOR = {
     idFromName: name => name,
@@ -348,13 +349,14 @@ test("personal prerequisites are explicit and unauthenticated callers cannot gen
   assert.equal(calls.length, 0);
 });
 
-test("missing personal coordinator returns the requested date and actionable status", async () => {
-  const { env } = environment();
+test("missing auth coordinator fails closed before private daily generation", async () => {
+  const { env } = environment(), calls = provider();
   delete env.DAILY_COORDINATOR;
   const result = await request(env, "/daily/personal", { date, key: "academic" }, true);
   assert.equal(result.code, 503);
-  assert.equal(result.data.date, date);
-  assert.equal(result.data.status.academic.state, "server_unconfigured");
+  assert.equal(result.data.code, "recovery_unavailable");
+  assert.equal(result.headers.get("Access-Control-Allow-Origin"), "*");
+  assert.equal(calls.length, 0);
 });
 
 test("account sync merges daily successes, strips credentials and rejects stale snapshots", async () => {
