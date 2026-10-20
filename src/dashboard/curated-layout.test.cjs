@@ -40,6 +40,13 @@ test('Events remains a large square while Philosophy stays wide',()=>{
   assert.deepEqual(plain(api.curatedTileSize('philo',2)),{c:2,r:1,family:'wide'});
 });
 
+test('Reminders uses a broad desktop composition and keeps full phone width',()=>{
+  const desktop=api.curatedTileSize('agenda',12);
+  assert.equal(desktop.c,6,'the calendar and reminder list have room side by side');
+  assert.ok(desktop.c>desktop.r);
+  for(const columns of [1,2,4])assert.equal(api.curatedTileSize('agenda',columns).c,columns,'the calendar uses available narrow-screen width');
+});
+
 test('browser zoom reflows into fewer columns instead of scaling text down',()=>{
   const columns=[1,1.5,2,4].map(zoom=>api.columnsForWidth(1280/zoom));
   assert.deepEqual(plain(columns),[12,4,4,1]);

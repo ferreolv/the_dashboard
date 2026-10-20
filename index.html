@@ -597,8 +597,8 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   /* ===== Daylight v2 design system ===== */
   :root { --canvas:#eef0f2; --text:#17182c; --muted:#727589; --line:rgba(23,24,44,.08); --panel:rgba(255,255,255,.82); --shadow:0 1px 2px rgba(18,22,46,.03),0 16px 48px rgba(38,45,82,.07); --radius:22px; --ease:cubic-bezier(.22,1,.36,1); }
   html { background:var(--canvas); overflow-x:hidden; }
-  body { max-width:100%; overflow-x:hidden; color:var(--text); background:#dfe3e7 !important; }
-  body.theme-neutral { background:#dfe3e7 !important; }
+  body { max-width:100%; overflow-x:hidden; color:var(--text); background:#e6eae7 !important; }
+  body.theme-neutral { background:#e6eae7 !important; }
   body.theme-atmospheric { background:radial-gradient(circle at 8% 0%,rgba(255,187,135,.27),transparent 28%),radial-gradient(circle at 94% 16%,rgba(150,137,255,.24),transparent 30%),linear-gradient(145deg,#fff1e6,#f4f0ff 54%,#e9f7ff) !important; }
   body.theme-aurora { background:radial-gradient(circle at 12% 8%,rgba(255,140,200,.50),transparent 34%),radial-gradient(circle at 88% 16%,rgba(120,150,255,.48),transparent 36%),radial-gradient(circle at 62% 94%,rgba(110,232,220,.44),transparent 42%),linear-gradient(140deg,#fdeefb,#eef0ff 50%,#e6fbff) !important; background-attachment:fixed !important; }
   body.theme-sunset { background:radial-gradient(circle at 14% 6%,rgba(255,178,116,.52),transparent 36%),radial-gradient(circle at 86% 20%,rgba(255,126,150,.44),transparent 40%),radial-gradient(circle at 70% 96%,rgba(255,205,140,.40),transparent 42%),linear-gradient(150deg,#fff3e8,#ffe9ef 55%,#fff7ec) !important; background-attachment:fixed !important; }
@@ -1527,34 +1527,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid="pushups"] .pushBtns{max-width:100%;flex-wrap:wrap;overflow:hidden}
   .tile[data-tileid="pushups"] .pushBtns .puBtn{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   @media (min-width:640px){
-  .tile[data-tileid="agenda"][data-rows="1"] .miniCalendar,
-  .tile[data-tileid="agenda"][data-rows="1"] .taskAddLink{display:none}
-  .tile[data-tileid="agenda"][data-rows="1"] .taskAgenda{height:100%;justify-content:center}
-  .tile[data-tileid="agenda"][data-rows="1"] .taskRow{padding:5px 7px!important}
-  .tile[data-tileid="agenda"][data-rows="1"] .agSub{display:none}
-  .tile[data-tileid="agenda"][data-rows="2"] .miniCalendar{display:none}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalHead{padding:5px 8px;font-size:10.5px}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalNavGroup{grid-template-columns:22px minmax(0,1fr) 22px;gap:2px}
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalNav,
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalTitle,
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalToday{height:22px!important;min-height:22px!important}
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalTitle{font-size:10px!important}
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalToday{font-size:7.5px!important}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalWeek span{padding:2px 1px;font-size:7px}
-  .tile[data-tileid="agenda"][data-rows="3"] button.miniCalDay{min-height:17px!important;padding:1px!important}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalNum{width:14px;height:14px;font-size:8px}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalChip{display:none}
-  .tile[data-tileid="agenda"][data-rows="3"] .miniCalDay:has(.miniCalChip)::after{
-    content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;
-    border-radius:50%;background:var(--accent);transform:translateX(-50%)
-  }
-  .tile[data-tileid="agenda"][data-rows="3"] .taskAgenda{gap:4px}
-  .tile[data-tileid="agenda"][data-rows="3"] .taskRow{padding:4px 7px!important}
-  .tile[data-tileid="agenda"][data-rows="3"] .agName{font-size:11.5px}
-  .tile[data-tileid="agenda"][data-rows="3"] .agSub{display:none}
-  .tile[data-tileid="agenda"][data-rows="3"] .taskAddLink{
-    min-height:23px!important;padding:2px 9px!important;font-size:9px
-  }
   .tile[data-tileid="events"][data-rows="1"] .eventHero:not(:first-child){display:none}
   .tile[data-tileid="events"][data-rows="1"] .eventHero{
     min-height:0;padding:6px 8px;border-radius:12px
@@ -2131,8 +2103,9 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 
   /* Coloured liquid glass. Refraction stays behind the content, never on text. */
   body{isolation:isolate}
-  body::before{content:'';position:fixed;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 65% at 0% 80%,rgba(148,175,196,.2),transparent 75%),linear-gradient(124deg,transparent 22%,rgba(255,255,255,.36) 22.2%,rgba(255,255,255,.12) 37%,transparent 37.2%)}
-  body::after{content:'';position:fixed;z-index:-1;pointer-events:none;width:110vw;height:64vw;left:16vw;top:10vh;border:2px solid rgba(255,255,255,.32);border-radius:50%;transform:rotate(-28deg)}
+  /* A quiet mineral canvas lets the coloured glass carry the visual identity. */
+  body::before{content:'';position:fixed;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 70% at 4% 5%,rgba(255,255,255,.68),transparent 75%),radial-gradient(ellipse 65% 80% at 100% 85%,rgba(133,157,151,.12),transparent 80%)}
+  body::after{content:none}
   .tile[data-tileid]{
     --glass-radius:34px;
     border:1px solid rgba(255,255,255,.46)!important;border-radius:var(--glass-radius)!important;
@@ -2327,11 +2300,86 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .curatedTile[data-tileid="health"] .healthHint{display:none}.curatedTile[data-tileid="timer"] .timerSteppers{display:none!important}.curatedTile[data-tileid="timer"] .timerSub{display:none!important}.curatedTile[data-tileid="timer"] .timerControls{justify-content:center!important}
 
 
-.tileFootMinimal{min-height:0!important;margin:0!important}.curatedTile[data-family="small"] .tileFoot{position:absolute;top:3px;right:6px;min-height:44px;margin:0;z-index:5}.curatedTile[data-family="small"] .tileFootMinimal{display:none}.curatedTile[data-family="small"] .tileFoot .tileExpand>span,.curatedTile[data-family="small"] .tileSaveState{display:none}.curatedTile[data-family="small"] .tileExpand{width:44px;padding:0}.curatedTile .timerDial[role="button"]{cursor:pointer}.curatedTile .timerDial[role="button"]:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:18px}
+.tileFootMinimal{min-height:0!important;margin:0!important}
+.curatedTile .timerDial[role="button"]{cursor:pointer}.curatedTile .timerDial[role="button"]:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:18px}
+
+/* Quiet widget chrome and familiar, touch-friendly actions. */
+.curatedTile .tileFoot{position:absolute;z-index:6;top:8px;right:9px;min-height:44px;margin:0!important;gap:1px;justify-content:flex-end}
+.curatedTile .tileFoot>span:empty{display:none}.curatedTile .tileFootMinimal:not(:has(.tileSaveState)){display:none!important}
+.curatedTile:not(.editing):not(.cornerOutside)[data-expandable] .tileMount{padding-top:30px}
+.curatedTile:not(.editing):not(.cornerOutside)[data-family="small"] .tileMount{padding-top:18px}
+.curatedTile.cornerOutside .tilehead,.curatedTile.editing .tilehead{padding-right:64px}
+.tile[data-tileid] :is(.tileExpand,.tileArrangeHandle){display:inline-flex!important;align-items:center;justify-content:center;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;opacity:.58;transform:none!important;transition:opacity .18s,background .18s}
+.tile[data-tileid] :is(.tileExpand,.tileArrangeHandle):hover{opacity:1;background:rgba(255,255,255,.3)!important;border:0!important;transform:none!important}
+.tile[data-tileid] .tileExpand svg{width:18px;height:18px}.tile[data-tileid] .tileSaveState{display:flex;align-items:center;opacity:.42}.tileSaveState svg{width:15px;height:15px}
+.tile[data-tileid] :is(button,a).widgetIconButton{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 44px!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:44px!important;margin:0;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.22)!important;box-shadow:none!important;color:var(--ink)!important;cursor:pointer;text-decoration:none!important;transform:none!important;transition:background .18s,opacity .18s,scale .18s}
+.tile[data-tileid] :is(button,a).widgetIconButton svg{width:21px;height:21px;flex:none}
+.tile[data-tileid] :is(button,a).widgetIconButton:hover{background:rgba(255,255,255,.45)!important;transform:none!important}
+.tile[data-tileid] :is(button,a).widgetIconButton:active{scale:.95}
+.tile[data-tileid] :is(button,a).widgetIconButton:is(.primary,.musicPlay,.on){color:#fff!important;background:rgba(var(--glass-depth),.88)!important}
+.tile[data-tileid] :is(button,a).widgetIconButton:is(.primary,.musicPlay,.on):hover{background:rgba(var(--glass-depth),1)!important}
+.tile[data-tileid] .widgetIconButton[hidden]{display:none!important}
+.tile[data-tileid] .widgetIconButton:disabled{opacity:.45;cursor:default}
+.tile[data-tileid] .musicActions{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:10px!important;margin-top:18px!important}
+.tile[data-tileid] .musicActions .musicPlay{width:52px!important;height:52px!important;min-width:52px!important;max-width:52px!important;flex-basis:52px!important}.tile[data-tileid] .musicComplete:not(.on){color:var(--ink)!important;opacity:.55}
+.tile[data-tileid] .musicTitle{font-weight:800!important;letter-spacing:-.035em;line-height:1.14}.tile[data-tileid] .musicArtist{font-weight:600!important;line-height:1.45}
+.tile[data-tileid] .timerActions,.tile[data-tileid] .breathActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap}
+.tile[data-tileid] .noteActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}.tile[data-tileid] .noteSaved{flex:none!important;opacity:.45}.noteSaved svg{width:16px;height:16px}
+.tile[data-tileid] .eventAddToggle,.tile[data-tileid] .philoPreviewAction{align-self:flex-end;margin-top:12px!important}
+.tile[data-tileid] .shoppingPreviewActions{margin-top:10px;justify-content:flex-end}.tile[data-tileid] .shopSectionLabel{font-size:11px;letter-spacing:.02em;font-weight:700;opacity:.6}
+.tile[data-tileid] :is(.pill,.mark,.ghostbtn,.pillBtn){box-shadow:none!important;font-weight:700!important;letter-spacing:0!important}
+
+/* The month is a date map; reminder names stay in the readable list. */
+.grid>.tile[data-cols="6"]{grid-column:span 6!important}
+.tile[data-tileid="agenda"] .taskAgenda{display:grid!important;grid-template-columns:minmax(0,1fr);gap:16px!important;align-items:start}
+.tile[data-tileid="agenda"] .miniCalendar{display:block!important;border:0!important;border-radius:0!important;overflow:visible!important}
+.tile[data-tileid="agenda"] .miniCalHead{padding:0 0 8px!important;gap:4px;font-weight:800;font-size:15px!important}
+.tile[data-tileid="agenda"] .miniCalNavGroup{grid-template-columns:32px minmax(0,1fr) 32px!important;gap:0!important}
+.tile[data-tileid="agenda"] .miniCalTitle{font-size:14px!important;text-align:center;letter-spacing:-.02em;white-space:nowrap}
+.tile[data-tileid="agenda"] button.miniCalNav{display:grid;place-items:center;width:32px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important}
+.miniCalNav svg{width:17px;height:17px}.tile[data-tileid="agenda"] button.miniCalToday{flex:none!important;width:36px!important;min-width:36px!important;max-width:36px!important;background:transparent!important;opacity:.6}
+.tile[data-tileid="agenda"] .miniCalWeek span{font-size:10px!important;font-weight:700;padding:2px 0 8px!important;border:0!important;opacity:.5}
+.tile[data-tileid="agenda"] .miniCalGrid{gap:3px 0}
+.tile[data-tileid="agenda"] button.miniCalDay{display:flex!important;flex-direction:column;align-items:center;justify-content:center;min-height:36px!important;height:36px!important;padding:0!important;border:0!important;border-radius:10px!important;background:transparent!important;overflow:visible;box-shadow:none!important}
+.tile[data-tileid="agenda"] button.miniCalDay:hover{background:rgba(255,255,255,.32)!important}
+.tile[data-tileid="agenda"] .miniCalNum{width:27px!important;height:27px!important;margin:0!important;font-size:12px!important;font-weight:700;line-height:1}
+.tile[data-tileid="agenda"] .miniCalDay.today .miniCalNum{background:rgba(var(--glass-depth),.88)!important;color:#fff!important}
+.tile[data-tileid="agenda"] .miniCalDay.selected{background:rgba(255,255,255,.4)!important;box-shadow:inset 0 0 0 1px var(--ink)!important}
+.tile[data-tileid="agenda"] .miniCalEvents{display:flex;flex-direction:row;justify-content:center;gap:2px;min-height:4px;margin:0}
+.miniCalDot{display:block;width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.45}.miniCalDot.due{opacity:1}.miniCalDot.done{opacity:.2}
+.tile[data-tileid="agenda"] .agendaItems{display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile[data-tileid="agenda"] .taskRow{padding:8px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;gap:8px}
+.tile[data-tileid="agenda"] .taskRow.calendarSelected{box-shadow:inset 2px 0 currentColor!important;padding-left:10px!important}
+.tile[data-tileid="agenda"] .taskRow.later{opacity:.65}.tile[data-tileid="agenda"] .taskMain{min-height:44px!important;min-width:0;flex:1;padding:0!important}
+.tile[data-tileid="agenda"] .agName{font-size:14px!important;font-weight:700}.tile[data-tileid="agenda"] .agSub{font-size:11px!important;opacity:.6;margin-top:2px}.tile[data-tileid="agenda"] .agWhen{font-size:10px!important;font-weight:650;padding:0!important;border:0!important;background:transparent!important;white-space:normal;max-width:58px;text-align:right}
+.tile[data-tileid="agenda"] .taskAddLink{align-self:flex-end}
+@container (min-width:520px){.tile[data-tileid="agenda"] .taskAgenda{grid-template-columns:minmax(240px,1fr) minmax(0,1fr);gap:24px!important}.tile[data-tileid="agenda"] .agendaItems{padding-top:8px}}
+@media(prefers-reduced-motion:reduce){.tile[data-tileid] :is(button,a).widgetIconButton{transition:none}}
 
 .grid>.tile[data-tileid]{grid-row:span var(--tile-span-rows)!important}
 
 .philoWorkspace[hidden]{display:none!important}.philoPreviewAction{align-self:flex-start;margin-top:4px}.tileFootMinimal{min-height:0!important;margin-top:6px!important}.tileFootMinimal:has(>span:empty):not(:has(.tileSaveState)){display:none!important}
+
+/* Compact utilities keep their authored proportions without losing touch targets. */
+.grid>.tile[data-tileid="breathing"][data-rows] .breathCard{align-items:center!important}
+.grid>.tile[data-family="small"] .tileMount{display:flex;flex-direction:column;justify-content:center}
+@media(max-width:639px){
+ .grid>.curatedTile:not(.editing):not(.cornerOutside)[data-expandable] .tileMount{padding-top:18px}
+ .grid>.curatedTile:not(.editing):not(.cornerOutside)[data-family="small"] .tileMount{padding-top:4px}
+ .grid>.curatedTile[data-tileid="timer"] .tileMount{padding-top:6px!important}
+ .grid>.curatedTile[data-tileid="music"] .tileMount{padding-top:10px!important}
+ .grid>.tile[data-tileid="timer"] .content{padding:0!important}
+ .grid>.tile[data-tileid="breathing"][data-rows] .breathStage,.grid>.tile[data-tileid="breathing"][data-rows] .breathProgress{width:52px!important;height:52px!important;min-height:0!important}
+ .grid>.tile[data-tileid="breathing"] .breathCount{font-size:20px!important}
+ .grid>.tile[data-tileid="breathing"] .breathPhase{font-size:14px!important}
+}
+
+.tile[data-tileid="shopping"] .shoppingPicked{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px}
+.tile[data-tileid] .shopChip{display:flex;align-items:center;width:100%!important;height:auto!important;min-height:44px!important;flex:0 0 auto!important;box-sizing:border-box;padding:0 6px!important;border:0!important;background:rgba(255,255,255,.12)!important;box-shadow:none!important}
+.tile[data-tileid] .shopChip>.del{position:static!important;inset:auto!important;width:44px!important;min-width:44px!important;max-width:44px!important;height:44px!important;min-height:44px!important;flex:0 0 44px!important;margin:0!important;transform:none!important}
+.tile[data-tileid] button.shopItemToggle{display:flex;align-items:center;gap:10px;min-height:44px!important;flex:1;min-width:0;max-width:100%;padding:4px 6px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;text-align:left;font:inherit;cursor:pointer;transform:none!important}
+.tile[data-tileid] .shopItemToggle>span:last-child{display:block!important;flex:1;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:16px!important}.tile[data-tileid] .shopChip.done .shopItemToggle{opacity:.5}
+.tile[data-tileid] .healthMetric{border:0!important;border-radius:0!important;background:transparent!important;padding:6px 0!important;box-shadow:none!important}.tile[data-tileid] .healthGrid{gap:16px!important}.tile[data-tileid] .healthMetric span{font-weight:600!important}
 </style>
 </head>
 <body>
@@ -3236,7 +3284,7 @@ const CURATED_TILE_LAYOUT={
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
   shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
-  agenda:{desktop:[2,4],phone:[2,2],family:"tall"},
+  agenda:{desktop:[6,3],phone:[2,2],family:"large"},
   events:{desktop:[4,4],phone:[2,2],family:"large-square"},
   note:{desktop:[4,2],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
@@ -3389,6 +3437,10 @@ const moveVisibleTile=(order,id,delta,active)=>{
 /* TILE_INTERACTION_CONTRACT_END */
 const TilePresentationContext=React.createContext({expanded:false,open:()=>{}});
 const useTilePresentation=()=>React.useContext(TilePresentationContext);
+function WidgetGlyph({name}){
+  const paths={expand:<><path d="M14 4h6v6M20 4l-8 8M10 20H4v-6M4 20l8-8"/></>,play:<path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/>,stop:<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/>,send:<path d="M12 20V4m-6 6 6-6 6 6"/>,folder:<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"/>,pause:<><path d="M8 5v14M16 5v14" strokeWidth="3"/></>,reset:<><path d="M4 10a8 8 0 1 1 2 8M4 4v6h6"/></>,plus:<path d="M12 5v14M5 12h14"/>,history:<><path d="M4 10a8 8 0 1 1 2 8M4 4v6h6M12 8v5l3 2"/></>,chat:<path d="M20 11a8 8 0 0 1-8 8H4l1.5-4A8 8 0 1 1 20 11Z"/>,saved:<><path d="m8 12 3 3 5-6"/><circle cx="12" cy="12" r="9"/></>,eye:<><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></>};
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{paths[name]||paths.expand}</svg>;
+}
 function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onMoveBy,children}){
   const t=themeVars(id,done),tileCols=Math.min(size.c,cols);
   const [expanded,setExpanded]=useState(false),[closing,setClosing]=useState(false);
@@ -3417,8 +3469,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
       if(!Number.isFinite(unit)||unit<=0)return;
       const style=getComputedStyle(tile),footer=tile.querySelector('.tileFoot'),head=tile.querySelector('.tilehead');
       const headHeight=showLabel&&head?head.getBoundingClientRect().height+(parseFloat(getComputedStyle(head).marginBottom)||0):0;
-      const footerHeight=footer?footer.getBoundingClientRect().height+(parseFloat(getComputedStyle(footer).marginTop)||0):0;
-      const needed=contentHost.getBoundingClientRect().height+headHeight+footerHeight+(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0)+2;
+      const footerHeight=footer&&getComputedStyle(footer).position!=="absolute"?footer.getBoundingClientRect().height+(parseFloat(getComputedStyle(footer).marginTop)||0):0;
+      const mountPadding=previewRef.current?parseFloat(getComputedStyle(previewRef.current).paddingTop)||0:0;
+      const needed=contentHost.getBoundingClientRect().height+mountPadding+headHeight+footerHeight+(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0)+2;
       const rows=tileRowSpan(needed,unit,gap,size.r);setMeasuredRows(current=>current===rows?current:rows);
     });};
     measure();const observer=new ResizeObserver(measure);observer.observe(contentHost);observer.observe(grid);
@@ -3428,7 +3481,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   const renderedRows=expanded?measuredRows:Math.max(size.r,measuredRows);
   const span={"--tile-span-rows":renderedRows,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
   return <TilePresentationContext.Provider value={{expanded,open}}>
-    <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
+    <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expandable={canExpand||undefined} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
       {topright&&!edit&&(cornerOutside?topright:<div className="topright">{topright}</div>)}
       <div className="tbody" onClick={!edit&&!expanded&&onTap?event=>{if(event.target.closest("button,a,input,textarea,select,label,[role=button]"))return;onTap(event);}:undefined}>
         <div className={"tilehead"+(showLabel?"":" quietTileLabel")}><span className="lbl">{label}</span></div>
@@ -3436,8 +3489,8 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
         {ReactDOM.createPortal(children,contentHost,id)}
       </div>
       <div className={"tileFoot"+(!canExpand&&!edit?" tileFootMinimal":"")}>
-        {status?<span className="tileSaveState" title={statusHelp||"Saved for today. Reload only retries missing content."}>{status}</span>:<span/>}
-        {!edit&&canExpand&&<button type="button" className="tileExpand" ref={openButtonRef} aria-label={"Open "+label} aria-haspopup="dialog" onClick={event=>{event.stopPropagation();open();}}><span>Open</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button>}
+        {status==="Saved today"?<span className="tileSaveState" role="img" aria-label={status} title={statusHelp||"Saved for today. Reload only retries missing content."}><WidgetGlyph name="saved"/></span>:<span/>}
+        {!edit&&canExpand&&<button type="button" className="tileExpand" ref={openButtonRef} title={"Open "+label} aria-label={"Open "+label} aria-haspopup="dialog" onClick={event=>{event.stopPropagation();open();}}><WidgetGlyph name="expand"/></button>}
         {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Use arrow keys to reorder."} title="Drag to move · arrow keys to reorder" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const delta=event.key==="ArrowUp"||event.key==="ArrowLeft"?-1:event.key==="ArrowDown"||event.key==="ArrowRight"?1:0;if(delta){event.preventDefault();onMoveBy?.(delta);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
       </div>
       {expanded&&<DashboardModal label={label} onClose={close} overlayClassName={"tileFocusOverlay"+(closing?" isClosing":"")} className={"tileFocus"+(done?" completed":"")}>
@@ -4822,8 +4875,8 @@ function NoteCard({saved,onSave,onView}){
     <div className="noteCard">
       <textarea className="notearea" aria-label="Today’s note" placeholder="Something to remember…" value={saved} onChange={e=>onSave(e.target.value)} />
       <div className="noteActions" style={{marginTop:8}}>
-        <span className="noteSaved">Saved</span>
-        <button className="link" onClick={onView}>View all notes →</button>
+        <span className="noteSaved" role="status" aria-label="Note saved" title="Saved"><WidgetGlyph name="saved"/></span>
+        <button type="button" className="widgetIconButton" aria-label="View all notes" title="All notes" onClick={onView}><WidgetGlyph name="history"/></button>
       </div>
     </div>
   );
@@ -4886,7 +4939,7 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
       {item.meta && <p className="muted" style={{fontSize:11.5,margin:"-4px 0 8px"}}>{item.meta}</p>}
       <div className="recallFlash">
         <p className="recallQuestion">{prompt}</p>
-        {!isRevealed&&!scheduled&&<button type="button" className="pill primary" onClick={()=>setRevealed(r=>({...r,[item.id]:true}))}>Reveal answer</button>}
+        {!isRevealed&&!scheduled&&<button type="button" className="widgetIconButton" aria-label={"Reveal answer for "+item.title} title="Reveal answer" onClick={()=>setRevealed(r=>({...r,[item.id]:true}))}><WidgetGlyph name="eye"/></button>}
         {(isRevealed||scheduled)&&<div className="recallAnswer"><b>{answer.short}</b>{answer.detail}</div>}
       </div>
       {isRevealed&&!scheduled&&<>
@@ -5031,8 +5084,8 @@ function BreathingCard({done,onComplete,onIncomplete}){
           {Array.from({length:SEGMENTS},(_,i)=><span key={i} className={"breathRound"+(i<segIndex?" done":running&&i===segIndex?" current":"")} />)}
         </div>
         <div className="breathActions">
-          {!running&&<button type="button" className="pill primary" onClick={begin}>{finished||done?"Again":"Start"}</button>}
-          {running&&<button type="button" className="link" onClick={stop}>Stop</button>}
+          {!running&&<button type="button" className="widgetIconButton primary" aria-label={finished||done?"Restart breathing exercise":"Start breathing exercise"} title={finished||done?"Again":"Start"} onClick={begin}><WidgetGlyph name={finished||done?"reset":"play"}/></button>}
+          {running&&<button type="button" className="widgetIconButton" aria-label="Stop breathing exercise" title="Stop" onClick={stop}><WidgetGlyph name="stop"/></button>}
           {!running&&(finished||done)&&<span className="breathDone">3 minutes</span>}
         </div>
       </div>
@@ -5078,8 +5131,8 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
           </div>
         )}
         <div className="timerActions">
-          <button className="pill primary" onClick={running?onPause:onStart}>{running?"Stop":paused?"Resume":"Start"}</button>
-          {(running||paused||fired) && <button className="link" onClick={onReset}>Reset</button>}
+          <button type="button" className="widgetIconButton primary" aria-label={running?"Pause timer":paused?"Resume timer":"Start timer"} title={running?"Pause":paused?"Resume":"Start"} onClick={running?onPause:onStart}><WidgetGlyph name={running?"pause":"play"}/></button>
+          {(running||paused||fired) && <button type="button" className="widgetIconButton" aria-label="Reset timer" title="Reset" onClick={onReset}><WidgetGlyph name="reset"/></button>}
         </div>
       </div>
     </div>
@@ -5113,8 +5166,12 @@ function MusicCard({music,done,onToggle}){
       {match&&match.catalogArtist&&musicNorm(match.catalogArtist)!==musicNorm(music.artist)&&<p className="muted musicCatalogCredits" style={{fontSize:13,lineHeight:1.5}}>Recording credits: {match.catalogArtist}{match.catalogComposer&&musicNorm(match.catalogComposer)!==musicNorm(music.composer)?' · '+match.catalogComposer:''}</p>}
     </div>
     <div className="musicActions">
-      <a className="pill" target="_blank" rel="noreferrer" href={href}>{matching?"Matching Apple Music…":match?"Apple Music ↗":"Find on Apple Music ↗"}</a>
-      <button className={"mark"+(done?" on":"")} onClick={onToggle}><span className={"tick sm"+(done?" on":"")}>{done?"✓":""}</span>{done?"Heard":"Listened"}</button>
+      <a className="widgetIconButton musicPlay" target="_blank" rel="noreferrer" href={href} aria-label={(match?"Open ":"Find ")+music.title+" by "+music.artist+" on Apple Music"} title={match?"Open in Apple Music":"Find on Apple Music"} aria-busy={matching}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5.8a1 1 0 0 1 1.54-.84l8.72 5.7a1.6 1.6 0 0 1 0 2.68l-8.72 5.7A1 1 0 0 1 9 18.2Z" fill="currentColor"/></svg>
+      </a>
+      <button type="button" className={"widgetIconButton musicComplete"+(done?" on":"")} onClick={onToggle} aria-pressed={done} aria-label={(done?"Undo listened: ":"Mark as listened: ")+music.title} title={done?"Undo listened":"Mark as listened"}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 12 4 4 8-8"/></svg>
+      </button>
     </div>
   </div>;
 }
@@ -5152,20 +5209,19 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
     <div className="miniCalendar" aria-label="Reminder calendar">
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
-          <button className="miniCalNav" aria-label="Previous month" onClick={()=>moveMonth(-1)}>‹</button>
-          <button className="miniCalTitle" aria-label="Return to the current month" onClick={returnToday}>{monthLabel}</button>
-          <button className="miniCalNav" aria-label="Next month" onClick={()=>moveMonth(1)}>›</button>
+          <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
+          <span className="miniCalTitle" aria-live="polite">{monthLabel}</span>
+          <button type="button" className="miniCalNav" aria-label="Next month" title="Next month" onClick={()=>moveMonth(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5" /></svg></button>
         </div>
-        <button className="miniCalToday" onClick={returnToday}>Today</button>
+        <button type="button" className="miniCalToday widgetIconButton" aria-label="Return to the current month" title="Current month" onClick={returnToday}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="2.5" /><path d="M6.5 3v3M13.5 3v3M3.5 8.5h13" /><circle cx="10" cy="12.5" r="1.3" fill="currentColor" stroke="none" /></svg></button>
       </div>
       <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
         {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||""))); return (
-          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")} aria-label={`${formatDateKey(key)}${items.length?` · ${items.map(item=>item.label).join(", ")}`:""}`} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
+          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")} aria-label={`${formatDateKey(key)}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}`} title={`${formatDateKey(key)}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}`} aria-current={key===todayKey?"date":undefined} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
             <div className="miniCalNum">{day}</div>
-            <div className="miniCalEvents">
-              {items.slice(0,2).map((item,i)=><span key={i} className={"miniCalChip"+(item.due?" due":"")} title={(item.time?item.time+" · ":"")+item.label}>{item.time?item.time+" ":""}{item.label}</span>)}
-              {items.length>2&&<span className="miniCalMore">+{items.length-2}</span>}
+            <div className="miniCalEvents" aria-hidden="true">
+              {items.slice(0,3).map((item,i)=><span key={i} className={"miniCalDot"+(item.due?" due":"")+(item.done?" done":"")} />)}
             </div>
           </button>
         ); })}
@@ -5193,6 +5249,7 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
   return (
     <div className="taskAgenda">
       <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <div className="agendaItems">
       {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
         <div key={r.id} className={"agRow taskRow"+state+(selectedDate&&r.calendarDate===selectedDate?" calendarSelected":"")}>
@@ -5205,10 +5262,11 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
       );})}
       {noDueToday && shown.length===0 && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
       {!showAdd ? (
-        <button className="link taskAddLink" onClick={()=>setShowAdd(true)}>+ Add task →</button>
+        <button type="button" className="widgetIconButton taskAddLink" aria-label="Add task" title="Add task" onClick={()=>setShowAdd(true)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg></button>
       ) : (
         <AgendaAddForm onAddRecurring={onAddRecurring} onAddEvent={onAddEvent} onClose={()=>setShowAdd(false)} />
       )}
+      </div>
     </div>
   );
 }
@@ -5279,7 +5337,7 @@ function PositiveEventsCard({events,onAdd,onRemove}){
       </div>)}</div>}
       {!expanded&&upcoming.length>shown.length&&<button type="button" className="link" onClick={open}>{upcoming.length-shown.length} more events</button>}
       {!showAdd
-        ? <button className="eventAddToggle" onClick={()=>{setShowAdd(true);open();}}>+ Add event</button>
+        ? <button type="button" className="widgetIconButton eventAddToggle" aria-label="Add event" title="Add event" onClick={()=>{setShowAdd(true);open();}}><WidgetGlyph name="plus"/></button>
         : <PositiveEventForm onAdd={(label,date,type)=>{onAdd(label,date,type);setShowAdd(false);}} onClose={()=>setShowAdd(false)} />}
     </div>
   );
@@ -5370,14 +5428,14 @@ function ShoppingCard({items,onChange}){
       <div className="shoppingSection basket">
         <div className="shopSectionLabel">Your list</div>
         <div className="shoppingPicked">
-          {list.length===0 ? <PlainEmpty>Tap icons below to build the list.</PlainEmpty> : visibleList.map(item=>{ const p=shoppingProduct(item.key); return (
-            <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
-              <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
-            </span>
+          {list.length===0 ? <PlainEmpty>Your list is empty.</PlainEmpty> : visibleList.map(item=>{ const p=shoppingProduct(item.key); return (
+            <div key={item.id} className={"shopChip"+(item.checked?" done":"")}><button type="button" className="shopItemToggle" aria-pressed={!!item.checked} aria-label={(item.checked?"Mark needed: ":"Mark bought: ")+(item.label||p.label)} onClick={()=>toggleCheck(item.id)}>
+              <span aria-hidden="true">{p.icon}</span><span>{item.label||p.label}</span></button><button type="button" className="del" aria-label={"Remove "+(item.label||p.label)} onClick={()=>remove(item.id)}>×</button>
+            </div>
           ); })}
         </div>
       </div>
-      {!expanded&&<div className="shoppingPreviewActions"><button type="button" className="pill" onClick={open}>+ Add items</button>{list.length>4&&<button type="button" className="link" onClick={open}>{list.length-4} more items</button>}</div>}
+      {!expanded&&<div className="shoppingPreviewActions"><button type="button" className="widgetIconButton" aria-label="Add shopping items" title="Add items" onClick={open}><WidgetGlyph name="plus"/></button>{list.length>4&&<button type="button" className="link" onClick={open}>{list.length-4} more items</button>}</div>}
       <div className="shoppingSection picker" hidden={!expanded}>
         <div className="shopSectionLabel">Choose products</div>
         <div className="shopShelf">
@@ -5423,10 +5481,10 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){
       {!haveKey&&<p className="dailyDependency">Memory filing needs your Claude API key. Your draft stays here if filing fails. <button className="link" onClick={onSetup}>Add key</button></p>}
       <textarea className="notearea" style={{minHeight:64}} placeholder="Something you just learned…" value={v} onChange={e=>{setV(e.target.value);save("brainDraft",e.target.value);}} />
       <div style={{display:"flex",gap:8,marginTop:8,alignItems:"center"}}>
-        <button className="pill primary" disabled={!v.trim()||busy} onClick={submit}>{busy?"Filing…":"Add to bank"}</button>
-        <button className="link" onClick={onOpenBrowser}>Browse bank →</button>
+        <button type="button" className="widgetIconButton primary" disabled={!v.trim()||busy} aria-label={busy?"Filing memory":"Save to memory"} title={busy?"Filing…":"Save to memory"} onClick={submit}>{busy?<span className="genSpin" aria-hidden="true"/>:<WidgetGlyph name="send"/>}</button>
+        <button type="button" className="widgetIconButton" aria-label="Browse saved memories" title="Browse memories" onClick={onOpenBrowser}><WidgetGlyph name="folder"/></button>
       </div>
-      <p className="muted" style={{fontSize:11.5,marginTop:9}}>{total} thing{total===1?"":"s"} filed across {topics.length} topic{topics.length===1?"":"s"} — each one comes back later in Recall too.</p>
+      <p className="muted" style={{fontSize:11.5,marginTop:9}}>{total} memor{total===1?"y":"ies"} · {topics.length} topic{topics.length===1?"":"s"}</p>
     </div>
   );
 }
@@ -5640,7 +5698,7 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
     <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
       <span className="brainFormat">{brain.format}</span>
       <p className="brainPrompt">{brain.prompt}</p>
-      {!revealed ? <button className="pill primary" style={{marginTop:9}} onClick={onReveal}>Reveal answer</button> : (
+      {!revealed ? <button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button> : (
         <button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>
       )}
     </div>
@@ -5666,7 +5724,7 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
       <p className="philoQ" style={started&&expanded?{fontSize:14,lineHeight:1.4,marginBottom:9,opacity:.8}:null}>{philo.question}</p>
       {!haveKey&&<p className="dailyDependency">Replies need your Claude API key. Your own reflection still saves. <button className="link" onClick={onSetup}>Add key</button></p>}
       {error&&<div className="dailyDependency" role="alert">{error}{haveKey&&<button className="link" onClick={onRetry} disabled={sending}>Retry reply</button>}</div>}
-      <button type="button" className="pill primary philoPreviewAction" hidden={expanded} onClick={open}>{started?"Continue conversation":"Reflect"} →</button>
+      <button type="button" className="widgetIconButton primary philoPreviewAction" hidden={expanded} aria-label={started?"Continue philosophy conversation":"Reflect on this question"} title={started?"Continue conversation":"Reflect"} onClick={open}><WidgetGlyph name="chat"/></button>
       <div className="philoWorkspace" hidden={!expanded}>
       <div className="philoModeBar">
         <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>

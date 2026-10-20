@@ -43,3 +43,5 @@ The live implementation remains in the root `index.html` during the compatibilit
 - Device display preference fefe_deviceDisplay is excluded from sync snapshots via SYNC_EXCLUDE. Reordering uses visible Today neighbors; free resize is disabled without deleting old saved dimensions.
 - Reading quizzes remain mounted in hidden expanded sections. Shopping shows needed items first; full lists and product selection remain available in expansion.
 - Verify node --test src/dashboard/curated-layout.test.cjs src/dashboard/tile-interaction.test.cjs plus the existing dashboard regression suites.
+
+- Quiet widget chrome and action rules own icon-only controls (with accessible labels/tooltips), the corner expansion action, and the broad Reminders calendar/list composition. Avoid reviving legacy authored-row compaction that shrinks calendar targets or hides reminder subtitles.
