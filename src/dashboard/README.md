@@ -7,7 +7,7 @@ The live implementation remains in the root `index.html` during the compatibilit
 
 ## Interface conventions
 
-- The “Dashboard finish” CSS block in `index.html` controls the shell; the final “Coloured liquid glass” block owns tile materials. Tile-specific container rules retain their individual layouts. Desktop uses six columns from 1000 px so four/two and three/three spans pair without changing stored sizes.
+- The “Dashboard finish” CSS block in `index.html` controls the shell; the final “Coloured liquid glass” block owns tile materials. Tile-specific container rules retain their individual layouts. The final Curated responsive compositions block owns grid geometry: 12/8/4/2/1 units by available width. CURATED_TILE_LAYOUT supplies authored compositions; legacy saved sizes remain intact.
 - Hash routes track browser Back/Forward. Navigation exposes the current page and the main region has a skip link.
 - `DashboardModal` owns dialog focus, Escape, return focus, background isolation, and scroll locking. New overlays should reuse it.
 - Settings labels belong to their controls. Profile, appearance, keys and city use Save changes; daily content preferences and health connections retain their separate actions. Layout reset offers Undo.
@@ -34,3 +34,12 @@ The live implementation remains in the root `index.html` during the compatibilit
 - The reset form validates confirmation, keeps the token through network retries and requires normal sign-in after success. Resetting never clears the existing dashboard.
 - AuthRecovery in the existing DAILY_COORDINATOR binding imports legacy credentials/sessions, commits reset consumption with the password, and revokes older sessions. Account tombstones reject late writes after deletion. Keep the coordinator when deploying; authentication fails closed without it.
 - Email sender configuration and production delivery are required before considering recovery live. See worker/README-deploy.md.
+
+## Curated compositions and focused views
+
+- Today hides redundant visible tile labels while retaining accessible names. Library and expanded views remain labelled. Events is a large square; Philosophy is wide.
+- Tile uses one persistent portal content host moved between preview and DashboardModal. Never duplicate or remount a card merely to expand it: drafts, answers, active timers and completion must survive.
+- Authored data-rows remains stable for content styling; ResizeObserver measures content and reserves extra grid rows through inline placement only. One tall card must not enlarge every grid track.
+- Device display preference fefe_deviceDisplay is excluded from sync snapshots via SYNC_EXCLUDE. Reordering uses visible Today neighbors; free resize is disabled without deleting old saved dimensions.
+- Reading quizzes remain mounted in hidden expanded sections. Shopping shows needed items first; full lists and product selection remain available in expansion.
+- Verify node --test src/dashboard/curated-layout.test.cjs src/dashboard/tile-interaction.test.cjs plus the existing dashboard regression suites.

@@ -2239,6 +2239,99 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 @media(max-width:639px){.dailySafety{align-items:flex-start;padding:11px 13px}.dailySafety strong,.dailySafety span:not(.dailySafetyIcon){display:block}.dailySafetyIcon{margin-top:1px}.dailyLoadState{gap:10px}.dailyLoadCopy strong{font-size:13px}.dailySaved{font-size:8px}}
 .dailyProblemCard{position:relative;width:min(540px,calc(100vw - 28px));max-height:85vh;overflow-y:auto;padding:26px;color:#26333d}.dailyProblemCard h2{font-size:22px;line-height:1.25;margin:0 28px 7px 0}.dailyProblemIntro{font-size:12px;line-height:1.5;opacity:.72;margin:0 0 18px}.dailyProblemClose{position:absolute;right:14px;top:12px;display:grid;place-items:center;width:30px;height:30px;background:none;border:0;font-family:inherit;font-size:26px;line-height:1;color:inherit;cursor:pointer}.dailyProblemList{list-style:none;padding:0;margin:0;display:grid;gap:14px}.dailyProblemList li{padding:15px;border:1px solid rgba(31,48,60,.12);border-radius:18px;background:rgba(255,255,255,.26)}.dailyProblemTile{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;opacity:.63;margin-bottom:5px}.dailyProblemList h3{font-size:15px;margin:0 0 6px}.dailyProblemList p{font-size:12px;line-height:1.5;margin:0 0 12px}.dailyProblemList .ghostbtn{font-size:12px;min-height:36px}.dailyProblemFooter{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.dailyLoadActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.settingsHelp a{font-weight:800;color:inherit}#daily-content:focus{outline:2px solid rgba(50,72,90,.35);outline-offset:5px}
 @media(max-width:639px){.dailyProblemCard{padding:22px 18px}.dailyProblemCard h2{font-size:20px}.dailyProblemList li{padding:13px}}
+
+/* Focused tile views: one persistent content host preserves drafts and progress. */
+.quietTileLabel{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+.tileMount{min-width:0;min-height:0;flex:1}.tileMount>.content{height:auto!important;min-height:0!important;max-height:none!important}
+.curatedTile .tbody{display:flex;flex-direction:column;min-width:0;min-height:0;flex:1;overflow:visible!important}
+.tileFoot{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;margin-top:10px;flex:none;color:var(--ink)}
+.tileSaveState{font-size:11px;line-height:1.3;opacity:.64}.tileExpand,.tileArrangeHandle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:44px;min-height:44px;padding:6px 2px 6px 10px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:700;cursor:pointer;border-radius:12px}
+.tileExpand svg,.tileArrangeHandle svg{width:19px;height:19px}.tileExpand:hover{background:rgba(255,255,255,.17)}.tileExpand:focus-visible,.tileArrangeHandle:focus-visible,.tileFocusClose:focus-visible{outline:2px solid currentColor;outline-offset:3px}.tileArrangeHandle{cursor:grab;touch-action:none}
+.tileFocusOverlay{padding:30px!important;align-items:center!important;background:rgba(22,31,42,.27)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;animation:focusBackdropIn .2s ease both}
+.tileFocus{width:min(860px,100%);max-height:calc(100dvh - 60px);overflow:auto;overscroll-behavior:contain;border-radius:30px;border:1px solid rgba(255,255,255,.6);background:rgba(245,248,250,.75);box-shadow:0 26px 90px rgba(12,23,37,.2);backdrop-filter:blur(26px) saturate(1.3);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both;scrollbar-width:none}
+.tileFocusHeader{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px 10px;color:var(--ink)}.tileFocusHeader h2{margin:0;font-size:16px;font-weight:750}.tileFocusClose{display:grid;place-items:center;width:44px;height:44px;flex:none;border:0;border-radius:50%;background:rgba(255,255,255,.32);color:inherit;font-size:29px;line-height:1;cursor:pointer}
+.tileFocusSurface{padding:8px 28px 30px;color:var(--ink);background:linear-gradient(160deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.04));container-type:inline-size}
+.tileFocus.completed .tileFocusSurface{background:linear-gradient(160deg,rgba(var(--glass-rgb),.29),rgba(var(--glass-rgb),.14))}
+.tileFocusBody,.tileFocusBody>.content{height:auto!important;max-height:none!important;overflow:visible!important;min-width:0}.tileFocusBody .content{font-size:16px;line-height:1.6}.tileFocusBody p{line-height:1.6}.tileFocusBody input,.tileFocusBody textarea,.tileFocusBody select{font-size:16px}.tileFocusBody .story{max-height:none!important;overflow:visible!important}.tileFocusBody .chatLog{max-height:none!important;overflow:visible!important}
+.tileFocusOverlay.isClosing{animation:focusBackdropOut .18s ease both}.tileFocusOverlay.isClosing .tileFocus{animation:tileFocusOut .18s ease both}
+@keyframes tileFocusIn{from{opacity:0;transform:translateY(18px) scale(.975)}to{opacity:1;transform:none}}@keyframes tileFocusOut{to{opacity:0;transform:translateY(12px) scale(.985)}}@keyframes focusBackdropIn{from{background:rgba(22,31,42,0);backdrop-filter:blur(0)}to{background:rgba(22,31,42,.27);backdrop-filter:blur(12px)}}@keyframes focusBackdropOut{to{opacity:0}}
+[hidden]{display:none!important}
+.shoppingPreviewActions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}.curatedTile .shoppingPicked{display:flex;flex-direction:column;align-items:stretch;gap:8px}.curatedTile .shopChip{width:100%;box-sizing:border-box;min-height:36px;white-space:normal}
+.eventComposition{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.eventComposition .eventHero{min-width:0;width:auto!important;padding:14px!important}.eventComposition .eventCountdown strong{font-size:36px!important}.eventComposition .eventTitle{font-size:15px!important;overflow-wrap:anywhere}.tileFocusSurface .eventComposition{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.curatedTile .goalDay:nth-child(n+3),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:639px){
+ .tileFocusOverlay{padding:16px 0 0!important;align-items:flex-end!important}.tileFocus{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top)));border-radius:28px 28px 0 0;padding-bottom:env(safe-area-inset-bottom);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both}.tileFocusHeader{padding:12px 18px 6px}.tileFocusSurface{padding:8px 20px 28px}.tileFocusBody .content{font-size:16px}
+ .wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}.topbar:not(.learnNav){position:static!important;min-height:44px!important;background:transparent!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;padding:0!important;margin-bottom:20px!important}.topnav{position:fixed!important;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;display:flex!important;width:calc(100% - 32px);max-width:420px;box-sizing:border-box;padding:5px!important;border:1px solid rgba(255,255,255,.75)!important;border-radius:24px!important;background:rgba(239,243,246,.84)!important;backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 6px 28px rgba(24,34,48,.12)}.topnav .navbtn{flex:1;min-height:44px;padding:10px 8px!important;font-size:14px!important;border-radius:19px!important}.topActions{width:100%;justify-content:flex-end!important;gap:8px!important}.topActions .actionBtn:last-child{display:inline-flex!important}.topActions .actionBtn{min-height:44px;height:auto!important;font-size:12px!important;padding:10px 12px!important;white-space:normal}.tileSaveState{font-size:11px}.tileFoot{margin-top:8px}
+}
+@media(prefers-reduced-motion:reduce){.tileFocusOverlay,.tileFocus,.tileFocusOverlay.isClosing,.tileFocusOverlay.isClosing .tileFocus{animation:none!important;transition:none!important}}
+
+
+  /* Curated responsive compositions */
+  .wrap{
+    --dashboard-columns:12;--dashboard-max:100rem;
+    --dashboard-gutter:clamp(1rem,2.2vw,2.5rem);
+    --dashboard-gap:clamp(.875rem,1.05vw,1.25rem);
+    --dashboard-pad:clamp(1rem,1.4vw,1.5rem);
+    --dashboard-text:clamp(1rem,.9rem + .15vw,1.125rem);
+    --dashboard-support:clamp(.875rem,.8rem + .1vw,1rem);
+    --dashboard-canvas:min(calc(100vw - 2 * var(--dashboard-gutter)),var(--dashboard-max));
+    --dashboard-unit:calc((var(--dashboard-canvas) - (var(--dashboard-columns) - 1) * var(--dashboard-gap)) / var(--dashboard-columns));
+    width:100%;max-width:none!important;box-sizing:border-box;
+    padding:1rem var(--dashboard-gutter) calc(4rem + env(safe-area-inset-bottom))!important;
+  }
+  body[data-display="compact"] .wrap{--dashboard-max:88rem;--dashboard-pad:1rem;--dashboard-gap:.875rem;--dashboard-text:1rem;--dashboard-support:.875rem}
+  body[data-display="roomy"] .wrap{--dashboard-max:110rem;--dashboard-pad:clamp(1.25rem,1.7vw,1.875rem);--dashboard-gap:1.25rem;--dashboard-text:1.125rem;--dashboard-support:1rem}
+  .wrap :is(.topbar,.dashboardHero,.grid,.edithint,.questStrip,.libraryIntro,.libraryShelves,.settings,.foot){max-width:var(--dashboard-max)!important;margin-inline:auto;box-sizing:border-box}
+  .wrap .grid{width:100%;min-width:0;gap:var(--dashboard-gap)!important;grid-auto-rows:var(--dashboard-unit)!important;grid-auto-flow:row!important;align-items:stretch}
+  .grid>.tile[data-tileid]{height:auto!important;min-height:0!important;min-width:0;box-sizing:border-box;padding:var(--dashboard-pad)!important;border-radius:clamp(1.5rem,2.1vw,2rem)!important;align-self:stretch;scroll-margin-block:6rem}
+  .grid>.tile[data-cols="1"]{grid-column:span 1!important}
+  .grid>.tile[data-cols="2"]{grid-column:span 2!important}
+  .grid>.tile[data-cols="4"]{grid-column:span 4!important}
+  /* Preferred proportions are minimums. Larger text and long content may grow;
+     the page remains the only scroll surface at every display size and zoom. */
+  .grid>.tile[data-tileid]>.tbody{flex:1!important;height:auto!important;min-height:min-content!important;max-height:none!important;overflow:visible!important;mask-image:none!important;-webkit-mask-image:none!important}
+  .grid>.tile[data-tileid] .content{height:auto!important;min-width:0;max-width:100%;font-size:var(--dashboard-text)!important;line-height:1.45;overflow-wrap:anywhere}
+  .grid>.tile[data-tileid] :where(.goalText,.agName,.story,.ptext,.qprompt,.chatMsg,.healthWorkout){font-size:var(--dashboard-text)!important;line-height:1.45}
+  .grid>.tile[data-tileid] :where(.agSub,.agWhen,.healthHint,.healthDate,.healthMetric span,.weatherMeta,.weatherTomorrowLabel,.eventDate){font-size:var(--dashboard-support)!important;line-height:1.4}
+  .grid>.tile[data-tileid] :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:var(--dashboard-text)!important;line-height:1.45;padding:.625rem .75rem!important;max-width:100%;box-sizing:border-box}
+  .grid>.tile[data-tileid] :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button,.addbtn){min-height:2.75rem!important;max-width:100%;font-size:var(--dashboard-support)!important;line-height:1.3;white-space:normal}
+  .grid>.tile[data-tileid] :where(.addrow,.timerControls,.pushBtns,.weatherSplit,.healthGrid,.philoModeBar){min-width:0;max-width:100%}
+  .grid>.tile[data-tileid] :where(.resizeH,.sizebadge){display:none!important}
+  @media(max-width:1199px){.wrap{--dashboard-columns:8}}
+  @media(max-width:959px){.wrap{--dashboard-columns:4}}
+  @media(max-width:639px){
+    .wrap,body[data-display="compact"] .wrap,body[data-display="roomy"] .wrap{--dashboard-columns:2;--dashboard-gutter:.75rem;--dashboard-gap:.75rem;--dashboard-pad:1rem;--dashboard-text:1rem;--dashboard-support:.875rem}
+    .grid>.tile[data-tileid]{border-radius:1.625rem!important}
+    .grid>.tile[data-tileid] :where(input,textarea,select){font-size:1rem!important}
+    .grid>.tile[data-family="small"]{padding:.875rem!important}
+    .grid>.tile[data-tileid] :where(.chatLog,.goalDays,.taskAgenda,.shoppingPicked){max-height:none!important;overflow:visible!important}
+  }
+  @media(max-width:359px){.wrap,body[data-display="compact"] .wrap,body[data-display="roomy"] .wrap{--dashboard-columns:1}}
+  @media(prefers-reduced-motion:reduce){.grid>.tile[data-tileid]{animation:none!important;transition:none!important}}
+
+
+/* Expanded cards retain their tile-specific internals without grid geometry. */
+.tile.tileFocusSurface{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:block!important;container-type:inline-size!important;transform:none!important;animation:none!important;box-shadow:none!important;padding:8px 28px 30px!important;border:0!important;border-radius:0 0 30px 30px!important}
+.tileFocusSurface>.tileFocusBody{position:relative;z-index:2}.tile.tileFocusSurface::before,.tile.tileFocusSurface::after{border-radius:inherit!important}
+.curatedTile[data-tileid="philo"] .philoThinkArea{min-height:44px!important;height:44px!important;resize:none}.curatedTile[data-tileid="philo"] .philoCard{gap:8px!important}
+@media(max-width:639px){.tile.tileFocusSurface{padding:8px 20px 28px!important}}
+
+
+/* Intrinsic spans reserve room for one card without stretching its neighbours. */
+.grid>.tile[data-tileid] .tileMount>.content{flex:none!important}
+.curatedTile[data-tileid="shopping"] .shopChip{display:flex!important;align-items:center;gap:8px;min-height:44px!important;width:100%!important;border-radius:12px!important;font-size:16px!important}
+.curatedTile[data-tileid="shopping"] .shopChip>span:nth-child(2){display:block!important;flex:1;min-width:0;white-space:normal!important;overflow-wrap:anywhere}.curatedTile[data-tileid="shopping"] .shopChip>.del{display:none!important}
+.eventComposition .eventCountdown{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:2px!important}.eventComposition .eventCountdown strong{white-space:nowrap!important;font-size:clamp(24px,3vw,34px)!important;letter-spacing:-.04em!important;line-height:1.1!important}.eventComposition .eventCountdown>span{white-space:normal;font-size:10px!important;line-height:1.3!important}
+.curatedTile[data-tileid="breathing"] .breathCard{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-height:0!important;height:auto!important}
+.curatedTile[data-tileid="breathing"] .breathStage{width:64px!important;height:64px!important;min-height:0!important;flex:none!important}.curatedTile[data-tileid="breathing"] .breathProgress{width:64px!important;height:64px!important}.curatedTile[data-tileid="breathing"] .breathCount{font-size:23px!important}.curatedTile[data-tileid="breathing"] .breathCopy{display:flex!important;flex-direction:column!important;align-items:center!important;gap:5px!important}.curatedTile[data-tileid="breathing"] :is(.breathCue,.breathRecipe,.breathRounds,.breathDone){display:none!important}.curatedTile[data-tileid="breathing"] .breathActions{margin:0!important}.curatedTile[data-tileid="breathing"] .breathPhase{font-size:15px!important}
+.curatedTile[data-tileid="health"] .healthHint{display:none}.curatedTile[data-tileid="timer"] .timerSteppers{display:none!important}.curatedTile[data-tileid="timer"] .timerSub{display:none!important}.curatedTile[data-tileid="timer"] .timerControls{justify-content:center!important}
+
+
+.tileFootMinimal{min-height:0!important;margin:0!important}.curatedTile[data-family="small"] .tileFoot{position:absolute;top:3px;right:6px;min-height:44px;margin:0;z-index:5}.curatedTile[data-family="small"] .tileFootMinimal{display:none}.curatedTile[data-family="small"] .tileFoot .tileExpand>span,.curatedTile[data-family="small"] .tileSaveState{display:none}.curatedTile[data-family="small"] .tileExpand{width:44px;padding:0}.curatedTile .timerDial[role="button"]{cursor:pointer}.curatedTile .timerDial[role="button"]:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:18px}
+
+.grid>.tile[data-tileid]{grid-row:span var(--tile-span-rows)!important}
+
+.philoWorkspace[hidden]{display:none!important}.philoPreviewAction{align-self:flex-start;margin-top:4px}.tileFootMinimal{min-height:0!important;margin-top:6px!important}.tileFootMinimal:has(>span:empty):not(:has(.tileSaveState)){display:none!important}
 </style>
 </head>
 <body>
@@ -2331,7 +2424,7 @@ const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex",
    whole-state snapshot. See worker/health-ingest.js. Set to "" to disable. */
 const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
 const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
-const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken","fefe_accountToken","fefe_accountEmail"]);
+const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken","fefe_accountToken","fefe_accountEmail","fefe_deviceDisplay"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
 const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
@@ -3068,6 +3161,7 @@ function Quiz({prompt,options,answer,explain,onDone,onUndo}){
 
 /* cards */
 function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
+  const {expanded}=useTilePresentation();
   if(!word) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
     <div className="wordcard">
@@ -3075,29 +3169,30 @@ function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
         <span className="wcTerm">{word.term_en}</span>
         {word.pos && <span className="lbl">{word.pos}</span>}
       </div>
-      {word.ipa && <span className="muted wcIpa">{word.ipa}</span>}
+      {word.ipa && <span hidden={!expanded} className="muted wcIpa cardExpandedDetails">{word.ipa}</span>}
       <p className="wcDef">{word.def_en}</p>
       <div className="wcFr">
         <span className="wcTermFr">{word.term_fr}</span>
-        <span className="muted wcDefFr"> — {word.def_fr}</span>
+        {expanded&&word.def_fr&&<span className="muted wcDefFr"> — {word.def_fr}</span>}
       </div>
-      {word.quiz && <Quiz prompt="Quiz · closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`Closest synonym for “${word.term_en}”.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}
+      <div hidden={!expanded} className="cardExpandedDetails">{word.quiz && <Quiz prompt="Quiz · closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`Closest synonym for “${word.term_en}”.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}</div>
     </div>
   );
 }
 function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
-
+  const {expanded}=useTilePresentation();
   if(!lesson) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=lesson.quiz||[];
+  const paragraphs=(lesson.story||"").split("\n\n");
   const mark=()=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(lesson);};
   const undo=()=>onUnlearned&&onUnlearned(lesson);
   return (
-    <div>
+    <div className="lessonCard readingCard">
       <div style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginBottom:2}}>{lesson.title}</div>
       {lesson.category && <span className="lbl">{lesson.category}</span>}
-      <div className="story" style={{marginTop:8}}>{(lesson.story||"").split("\n\n").map((p,i)=><p key={i}>{p}</p>)}</div>
+      <div className="story cardReadingCopy" style={{marginTop:8}}>{paragraphs.map((p,i)=><p key={i} hidden={!expanded&&i>0}>{p}</p>)}</div>
       {lesson.insight && <div className="insight">💡 {lesson.insight}</div>}
-      {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}
+      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}</div>
     </div>
   );
 }
@@ -3133,15 +3228,44 @@ function WeatherCard({data,busy,onGenerate}){
   );
 }
 
-/* sizing */
-const ROW=112, GAP=13;
-/* Cap at 5 columns so a large desktop monitor lays out the same as a laptop/Mac
-   of the same window width; bigger screens just scale the tiles wider (grid is
-   centred with a max-width) rather than adding a 6th column and rearranging. */
-const columnsForWidth=width=>width>=1000?6:width>=640?4:2;
-const DEFSIZE={ goals:{c:4,r:3}, habits:{c:2,r:2}, breathing:{c:2,r:2}, health:{c:3,r:2}, shopping:{c:3,r:2}, agenda:{c:3,r:4}, events:{c:3,r:3}, note:{c:2,r:1}, weather:{c:3,r:1}, timer:{c:3,r:2}, worth:{c:4,r:3}, word:{c:2,r:2}, music:{c:2,r:2}, spanish:{c:2,r:2}, world:{c:4,r:2}, recall:{c:2,r:2}, pushups:{c:2,r:1}, weekly:{c:4,r:4}, birthdays:{c:2,r:1}, brain:{c:3,r:2}, brainflex:{c:3,r:2}, academic:{c:3,r:3}, gmat:{c:3,r:2}, philo:{c:3,r:3}, people:{c:3,r:2} };
-const MIN_SIZE={goals:{c:2,r:2},habits:{c:2,r:2},breathing:{c:2,r:1},shopping:{c:1,r:2},agenda:{c:2,r:2},events:{c:1,r:1},timer:{c:1,r:1},worth:{c:2,r:2},word:{c:1,r:2},music:{c:1,r:2},spanish:{c:1,r:2},world:{c:2,r:1},recall:{c:1,r:2},pushups:{c:1,r:1},philo:{c:2,r:2},academic:{c:2,r:2},gmat:{c:2,r:1}};
-const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.entries(sizes).map(([id,v])=>{ const min=MIN_SIZE[id]||{c:1,r:1}; return [id,{c:Math.max(Math.min(Number(v&&v.c)||1,availableCols),Math.min(min.c,availableCols)),r:Math.max(Number(v&&v.r)||1,min.r)}]; }));
+/* sizing: authored compositions, with browser-zoom reflow */
+const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360?2:1;
+const CURATED_TILE_LAYOUT={
+  goals:{desktop:[4,3],phone:[2,2],family:"large"},
+  habits:{desktop:[2,2],phone:[2,2],family:"large"},
+  breathing:{desktop:[2,2],phone:[1,1],family:"small"},
+  health:{desktop:[4,2],phone:[2,2],family:"large"},
+  shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
+  agenda:{desktop:[2,4],phone:[2,2],family:"tall"},
+  events:{desktop:[4,4],phone:[2,2],family:"large-square"},
+  note:{desktop:[4,2],phone:[2,1],family:"wide"},
+  weather:{desktop:[4,2],phone:[2,1],family:"wide"},
+  timer:{desktop:[4,2],phone:[2,1],family:"wide"},
+  worth:{desktop:[4,3],phone:[2,2],family:"large"},
+  word:{desktop:[2,2],phone:[2,1],family:"wide"},
+  music:{desktop:[2,2],phone:[2,1],family:"wide"},
+  spanish:{desktop:[4,3],phone:[2,2],family:"large"},
+  world:{desktop:[4,3],phone:[2,2],family:"large"},
+  recall:{desktop:[4,3],phone:[2,2],family:"large"},
+  pushups:{desktop:[2,2],phone:[1,1],family:"small"},
+  weekly:{desktop:[4,3],phone:[2,2],family:"large"},
+  birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
+  brain:{desktop:[4,2],phone:[2,2],family:"large"},
+  brainflex:{desktop:[4,3],phone:[2,2],family:"large"},
+  academic:{desktop:[4,3],phone:[2,2],family:"large"},
+  gmat:{desktop:[4,2],phone:[2,1],family:"wide"},
+  philo:{desktop:[4,2],phone:[2,1],family:"wide"},
+  people:{desktop:[4,2],phone:[2,1],family:"wide"}
+};
+const curatedTileSize=(id,availableCols)=>{
+  const layout=CURATED_TILE_LAYOUT[id]||{desktop:[2,2],phone:[2,1],family:"wide"};
+  const cols=Math.max(1,Math.floor(Number(availableCols)||1));
+  const [c,r]=cols<=2?layout.phone:layout.desktop;
+  return {c:Math.min(c,cols),r:cols===1?Math.max(1,Math.ceil(r/2)):r,family:layout.family};
+};
+const DEFSIZE=Object.fromEntries(Object.keys(CURATED_TILE_LAYOUT).map(id=>[id,curatedTileSize(id,6)]));
+// Compatibility helper never mutates old arbitrary dimensions from backups.
+const clampTileSizes=(sizes,availableCols)=>Object.fromEntries(Object.keys(sizes||{}).map(id=>[id,curatedTileSize(id,availableCols)]));
 const ALL=Object.keys(DEFSIZE);
 const LIBRARY_CATEGORIES=[{id:"all",label:"All widgets"},{id:"plan",label:"Plan"},{id:"discover",label:"Discover"},{id:"wellbeing",label:"Wellbeing"},{id:"life",label:"Life"}];
 // Search widget descriptions only; personal notes and account data stay out of the index.
@@ -3253,20 +3377,75 @@ function DashboardModal({label,onClose,overlayClassName="",className="ovlcard",a
 const DASHBOARD_ROUTES=["dashboard","library","settings"];
 const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");return DASHBOARD_ROUTES.includes(route)?route:"dashboard";};
 
-function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onResizeStart,children}){
-  const t=themeVars(id,done);
-  const tileCols=Math.min(size.c,cols);
-  const span={ gridColumn:`span ${tileCols}`, gridRow:`span ${size.r}` };
-  return (
-    <section data-tileid={id} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} className={"tile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}} onPointerDown={edit?(e)=>onMoveStart(e,id):undefined}>
-      {topright && !edit && (cornerOutside?topright:<div className="topright">{topright}</div>)}
-      <div className={"tbody"} onClick={!edit&&onTap?(e)=>{ if(e.target.closest&&e.target.closest("button,a,input,textarea,select,label")) return; onTap(e); }:undefined} style={!edit&&onTap?{cursor:"pointer"}:null}><div className="tilehead"><span style={{display:"flex",alignItems:"center",gap:7}}><span className="ldot"/><span className="lbl">{label}</span></span>{status&&<span className="dailySaved" title={statusHelp||"This content is saved for this day. Refresh only retries missing tiles."}>{status}</span>}</div><div className={"content"+(edit?" locked":"")}>{children}</div></div>
-      {edit && <>
-        <div className="sizebadge">{Math.min(size.c,cols)}×{size.r}</div>
-        <div className="resizeH" title="Drag to resize" onPointerDown={(e)=>onResizeStart(e,id)} />
-      </>}
+/* TILE_INTERACTION_CONTRACT_START */
+const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
+const shoppingDisplayItems=items=>[...items.filter(item=>!item.checked),...items.filter(item=>item.checked)];
+const moveVisibleTile=(order,id,delta,active)=>{
+  const visible=order.filter(item=>active.has(item)),at=visible.indexOf(id),neighbor=visible[at+Math.sign(delta)];
+  if(at<0||!delta||!neighbor)return order;
+  const next=order.filter(item=>item!==id),target=next.indexOf(neighbor);
+  next.splice(target+(delta>0?1:0),0,id);return next;
+};
+/* TILE_INTERACTION_CONTRACT_END */
+const TilePresentationContext=React.createContext({expanded:false,open:()=>{}});
+const useTilePresentation=()=>React.useContext(TilePresentationContext);
+function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onMoveBy,children}){
+  const t=themeVars(id,done),tileCols=Math.min(size.c,cols);
+  const [expanded,setExpanded]=useState(false),[closing,setClosing]=useState(false);
+  const [contentHost]=useState(()=>{const node=document.createElement("div");node.className="content";return node;});
+  const previewRef=useRef(null),focusRef=useRef(null),tileRef=useRef(null),closeTimer=useRef(null),openButtonRef=useRef(null),focusedContentRef=useRef(null),wasExpandedRef=useRef(false),returnFocusRef=useRef(null);
+  const [previewHeight,setPreviewHeight]=useState(null),[measuredRows,setMeasuredRows]=useState(size.r);
+  const open=()=>{if(edit||expanded)return;returnFocusRef.current=document.activeElement;focusedContentRef.current=contentHost.contains(document.activeElement)?document.activeElement:null;setPreviewHeight(tileRef.current?.getBoundingClientRect().height||null);setClosing(false);setExpanded(true);};
+  const close=()=>{if(closing)return;setClosing(true);closeTimer.current=setTimeout(()=>{setExpanded(false);setClosing(false);setPreviewHeight(null);},window.matchMedia("(prefers-reduced-motion: reduce)").matches?0:180);};
+  useLayoutEffect(()=>{
+    const destination=expanded?focusRef.current:previewRef.current;
+    if(destination&&contentHost.parentNode!==destination)destination.appendChild(contentHost);
+    if(expanded&&focusedContentRef.current?.isConnected){focusedContentRef.current.focus({preventScroll:true});focusedContentRef.current=null;}
+    if(!expanded&&wasExpandedRef.current){const target=returnFocusRef.current?.isConnected?returnFocusRef.current:openButtonRef.current;target?.focus({preventScroll:true});}
+    wasExpandedRef.current=expanded;
+    contentHost.className="content"+(expanded?" expandedContent":"")+(edit?" locked":"");
+  });
+  useEffect(()=>()=>clearTimeout(closeTimer.current),[]);
+  const showLabel=edit||cornerOutside||(contentState&&contentState!=="ready");
+  const canExpand=!["birthdays","gmat","philo"].includes(id);
+  useLayoutEffect(()=>{
+    if(expanded)return;
+    const tile=tileRef.current,grid=tile?.parentElement;if(!tile||!grid)return;
+    let frame;
+    const measure=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
+      const gridStyle=getComputedStyle(grid),unit=parseFloat(gridStyle.gridAutoRows),gap=parseFloat(gridStyle.rowGap)||0;
+      if(!Number.isFinite(unit)||unit<=0)return;
+      const style=getComputedStyle(tile),footer=tile.querySelector('.tileFoot'),head=tile.querySelector('.tilehead');
+      const headHeight=showLabel&&head?head.getBoundingClientRect().height+(parseFloat(getComputedStyle(head).marginBottom)||0):0;
+      const footerHeight=footer?footer.getBoundingClientRect().height+(parseFloat(getComputedStyle(footer).marginTop)||0):0;
+      const needed=contentHost.getBoundingClientRect().height+headHeight+footerHeight+(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0)+2;
+      const rows=tileRowSpan(needed,unit,gap,size.r);setMeasuredRows(current=>current===rows?current:rows);
+    });};
+    measure();const observer=new ResizeObserver(measure);observer.observe(contentHost);observer.observe(grid);
+    return()=>{cancelAnimationFrame(frame);observer.disconnect();};
+  },[expanded,size.r,size.c,cols,showLabel]);
+
+  const renderedRows=expanded?measuredRows:Math.max(size.r,measuredRows);
+  const span={"--tile-span-rows":renderedRows,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
+  return <TilePresentationContext.Provider value={{expanded,open}}>
+    <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
+      {topright&&!edit&&(cornerOutside?topright:<div className="topright">{topright}</div>)}
+      <div className="tbody" onClick={!edit&&!expanded&&onTap?event=>{if(event.target.closest("button,a,input,textarea,select,label,[role=button]"))return;onTap(event);}:undefined}>
+        <div className={"tilehead"+(showLabel?"":" quietTileLabel")}><span className="lbl">{label}</span></div>
+        <div ref={previewRef} className="tileMount"/>
+        {ReactDOM.createPortal(children,contentHost,id)}
+      </div>
+      <div className={"tileFoot"+(!canExpand&&!edit?" tileFootMinimal":"")}>
+        {status?<span className="tileSaveState" title={statusHelp||"Saved for today. Reload only retries missing content."}>{status}</span>:<span/>}
+        {!edit&&canExpand&&<button type="button" className="tileExpand" ref={openButtonRef} aria-label={"Open "+label} aria-haspopup="dialog" onClick={event=>{event.stopPropagation();open();}}><span>Open</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button>}
+        {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Use arrow keys to reorder."} title="Drag to move · arrow keys to reorder" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const delta=event.key==="ArrowUp"||event.key==="ArrowLeft"?-1:event.key==="ArrowDown"||event.key==="ArrowRight"?1:0;if(delta){event.preventDefault();onMoveBy?.(delta);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
+      </div>
+      {expanded&&<DashboardModal label={label} onClose={close} overlayClassName={"tileFocusOverlay"+(closing?" isClosing":"")} className={"tileFocus"+(done?" completed":"")}>
+        <div className="tileFocusHeader" style={t}><h2>{label}</h2><button type="button" className="tileFocusClose" aria-label={"Close "+label} onClick={close}>×</button></div>
+        <div className={"tile tileFocusSurface"+(done?" completed":"")} data-tileid={id} style={t}><div ref={focusRef} className="tileFocusBody"/></div>
+      </DashboardModal>}
     </section>
-  );
+  </TilePresentationContext.Provider>;
 }
 
 /* A recovery request omits account credentials: mailbox access is the proof,
@@ -3332,12 +3511,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
   const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
-  const [sizes,setSizes]=useState(()=>{ if(NEED_V2_LAYOUT){ save("sizes",DEFSIZE); save("designVersion",5); return DEFSIZE; }
-    let s={...DEFSIZE,...load("sizes",{})};
-    if(load("designVersion",2)<3){ const OLD={goals:{c:4,r:2},agenda:{c:3,r:2},timer:{c:3,r:1},weekly:{c:4,r:3}}; Object.keys(OLD).forEach(id=>{ const o=OLD[id],c=s[id]; if(c&&c.c===o.c&&c.r===o.r) s[id]={...DEFSIZE[id]}; }); save("sizes",s); save("designVersion",3); }
-    if(load("designVersion",3)<4){ const c=s.note; if(c&&c.c===3&&c.r===2)s.note={...DEFSIZE.note}; save("sizes",s); save("designVersion",4); }
-    if(load("designVersion",4)<5){ const c=s.agenda; if(c&&c.c===3&&c.r===3)s.agenda={...DEFSIZE.agenda}; save("sizes",s); save("designVersion",5); }
-    return clampTileSizes(s,columnsForWidth(window.innerWidth)); });
+  // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
+  const [sizes,setSizes]=useState(()=>load("sizes",{}));
   const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
@@ -3400,6 +3575,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(null),6500);return()=>clearTimeout(timer);},[notice]);
   useEffect(()=>{document.title=page==="dashboard"?"Today":page==="library"?"Library":"Settings";},[page]);
   const [backgroundTheme,setBackgroundTheme]=useState(()=>load("backgroundTheme","neutral"));
+  const [deviceDisplay,setDeviceDisplay]=useState(()=>{try{const value=localStorage.getItem("fefe_deviceDisplay");return ["compact","comfortable","roomy"].includes(value)?value:"comfortable";}catch{return "comfortable";}});
+  useEffect(()=>{document.body.dataset.display=deviceDisplay;try{localStorage.setItem("fefe_deviceDisplay",deviceDisplay);}catch{}},[deviceDisplay]);
 
   /* Daily AI content: which shared server-generated tiles to actually produce
      each day. null = all (default). Untick a tile → the worker stops spending
@@ -4052,8 +4229,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     prevRects.current=nextRects;
   },[order,sizes,cols]);
 
-  const cellW=()=>{ const g=gridRef.current; if(!g) return 120; return (g.clientWidth-GAP*(cols-1))/cols; };
-
   const onMoveStart=(e,id)=>{
     e.preventDefault();
     try{ e.currentTarget.setPointerCapture&&e.currentTarget.setPointerCapture(e.pointerId); }catch(x){}
@@ -4063,15 +4238,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     window.addEventListener("pointerup",onPointerUp,{once:true});
     window.addEventListener("pointercancel",onPointerUp,{once:true});
   };
-  const onResizeStart=(e,id)=>{
-    e.preventDefault(); e.stopPropagation();
-    const s=sizesRef.current[id]||{c:2,r:1};
-    drag.current={ type:"resize", id, x:e.clientX, y:e.clientY, c0:Math.min(s.c,cols), r0:s.r };
-    document.body.classList.add("dragging");
-    window.addEventListener("pointermove",onPointerMove,{passive:false});
-    window.addEventListener("pointerup",onPointerUp,{once:true});
-    window.addEventListener("pointercancel",onPointerUp,{once:true});
-  };
+  const onResizeStart=e=>{e.preventDefault();e.stopPropagation();};
   const onPointerMove=(e)=>{
     if(!drag.current) return; e.preventDefault();
     const d=drag.current;
@@ -4092,20 +4259,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         const cur=[...orderRef.current]; const from=cur.indexOf(d.id); const to=cur.indexOf(over);
         if(from>-1&&to>-1){ cur.splice(from,1); cur.splice(to,0,d.id); orderRef.current=cur; setOrder(cur); d.lastOver=over; d.lastSwap=Date.now(); }
       });
-    } else {
-      if(rafPending.current) return; rafPending.current=true;
-      const cx=e.clientX, cy=e.clientY;
-      requestAnimationFrame(()=>{
-        rafPending.current=false;
-        const cw=cellW();
-        const dc=Math.round((cx-d.x)/(cw+GAP));
-        const dr=Math.round((cy-d.y)/(ROW+GAP));
-        const min=MIN_SIZE[d.id]||{c:1,r:1};
-        const nc=Math.max(Math.min(min.c,cols),Math.min(cols, d.c0+dc));
-        const nr=Math.max(min.r,Math.min(6, d.r0+dr));
-        const cur=sizesRef.current[d.id]||{c:2,r:1};
-        if(cur.c!==nc||cur.r!==nr){ const next={...sizesRef.current,[d.id]:{c:nc,r:nr}}; sizesRef.current=next; setSizes(next); }
-      });
     }
   };
   const onPointerUp=()=>{
@@ -4114,7 +4267,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     if(drag.current){
       const node=gridRef.current&&gridRef.current.querySelector(`[data-tileid="${drag.current.id}"]`);
       if(node){ node.style.transition="transform .22s ease"; node.style.transform=""; }
-      if(drag.current.type==="move") save("widgetOrder",orderRef.current); else save("sizes",sizesRef.current);
+      if(drag.current.type==="move") save("widgetOrder",orderRef.current);
     }
     setLifted(null);
     drag.current=null;
@@ -4268,7 +4421,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   let goalsHit7=0; for(let i=0;i<7;i++){ (goalsLog[addDays(todayKey,-i)]||[]).forEach(g=>{ if(g.done) goalsHit7++; }); }
   const learned7=recallList.filter(f=>f.addedOn>=addDays(todayKey,-6)).length;
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
-  const sz=id=>sizes[id]||DEFSIZE[id]||{c:2,r:1};
+  const sz=id=>curatedTileSize(id,cols);
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
     const libraryCorner=page==="library"?(onDaily
@@ -4277,7 +4430,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const generated=DAILY_CONTENT_KEYS.includes(id)&&id!=="gmat", ready=!generated||validDailyTile(id,view[id]);
     const state=generated&&!ready?dailyStateFor(id):null;
     const visualDone=ready&&(!!done||!!manualTileDone[id]);
-    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onResizeStart={onResizeStart}>{state?<DailyLoadState {...state}/>:children}</Tile>;
+    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onMoveBy={delta=>{const next=moveVisibleTile(orderRef.current,id,delta,activeNow);if(next===orderRef.current)return;orderRef.current=next;setOrder(next);save("widgetOrder",next);}}>{state?<DailyLoadState {...state}/>:children}</Tile>;
   };
   const RetryNote=()=>null;
 
@@ -4342,7 +4495,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           {(view.world||[]).map((n,i)=>(<div key={i}>
             <div style={{fontSize:14.5,fontWeight:700,lineHeight:1.25}}>{clean(n.headline)}</div>
-            <div className="muted" style={{fontSize:13.2,lineHeight:1.55,marginTop:3}}>{clean(n.summary)}</div>
+            <div className="muted worldSummary" style={{fontSize:13.2,lineHeight:1.55,marginTop:3}}>{clean(n.summary)}</div>
           </div>))}
         </div>
         {(view.world&&view.world.length>0) && <div style={{marginTop:11}}><button className={"mark"+(rToday.world?" on":"")} onClick={()=>toggleRitual("world")}><span className={"tick sm"+(rToday.world?" on":"")}>{rToday.world?"✓":""}</span>{rToday.world?"Read":"Mark read"}</button></div>}
@@ -4486,6 +4639,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
             </section>
             <section className="settingsCard">
               <h2>Appearance</h2>
+              <label className="lab" htmlFor="device-display">Display size · this device</label>
+              <select id="device-display" className="sinput" value={deviceDisplay} onChange={event=>setDeviceDisplay(event.target.value)}><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="roomy">Large</option></select>
+              <p className="hint">Applies immediately on this device. Browser zoom still works.</p>
               <label className="lab" htmlFor="background-theme">Background</label>
               <select id="background-theme" className="sinput" value={backgroundTheme} onChange={e=>setBackgroundTheme(e.target.value)}>
                 <option value="neutral">Neutral grey</option><option value="paper">Warm paper</option><option value="graphite">Soft graphite</option><option value="atmospheric">Soft colour wash</option><option value="aurora">Aurora</option><option value="sunset">Sunset</option><option value="ocean">Ocean</option>
@@ -4539,7 +4695,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         </div>
       )}
 
-      {page==="dashboard" && edit && <div className="edithint">Drag tiles to move them. Use the bottom-right corner to resize. Choose Done to finish.</div>}
+      {page==="dashboard" && edit && <div className="edithint">Drag the handle to move a tile, or use its arrow keys. Sizes are fitted to the content.</div>}
 
       {page==="settings" ? null : page==="library" ? (
         <div className="libraryShelves">
@@ -4673,24 +4829,26 @@ function NoteCard({saved,onSave,onView}){
   );
 }
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
+  const {expanded}=useTilePresentation();
   if(!sp)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
   const qs=sp.quiz||[];
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(sp);};
   const undo=index=>onUnlearned&&onUnlearned(sp);
   return (
-    <div>
-      <div style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{sp.tema}</div>
+    <div className="spanishCard readingCard">
+      <div className="cardContentTitle" style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{sp.tema}</div>
       {sp.punto && <div className="insight" style={{marginTop:8}}>{sp.punto}</div>}
-      {(sp.vocab||[]).length>0 && <div style={{margin:"2px 0 4px"}}>
-        {(sp.vocab||[]).map((v,i)=>(<div key={i} className="trow" style={{padding:"5px 0"}}>
+      {(sp.vocab||[]).length>0 && <div className="spanishVocabulary" style={{margin:"2px 0 4px"}}>
+        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="trow" style={{padding:"5px 0"}}>
           <span style={{fontWeight:700,fontSize:14}}>{v.es}</span>
           <span className="muted" style={{fontSize:13,marginLeft:"auto"}}>{v.en}</span>
         </div>))}
       </div>}
-      {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
+      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
 }
+
 const recallAnswerFor=item=>{
   const q=item&&item.quiz?item.quiz:{};
   const option=Array.isArray(q.options)?q.options[Number(q.answer)||0]:"";
@@ -4883,6 +5041,7 @@ function BreathingCard({done,onComplete,onIncomplete}){
 }
 
 function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPause,onReset}){
+  const {expanded,open}=useTilePresentation();
   const diffMs=Math.max(0,(end||0)-now.getTime());
   const running=end>now.getTime()&&!fired;
   const paused=remaining>0&&!running&&!fired;
@@ -4897,7 +5056,7 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   return (
     <div className={"timerWrap "+(running?"isRunning":paused?"isPaused":fired?"isFired":"isIdle")}>
       <div className={"timerRow"+(fired?" timerHit":"")}>
-        <div className="timerDial">
+        <div className="timerDial" role={expanded?undefined:"button"} tabIndex={expanded?undefined:0} aria-label={expanded?undefined:"Change timer duration"} onClick={expanded?undefined:open} onKeyDown={event=>{if(!expanded&&(event.key==="Enter"||event.key===" ")){event.preventDefault();open();}}}>
           <svg className="timerRingSvg" viewBox="0 0 100 100" aria-hidden="true">
             <circle className="timerRingBg" cx="50" cy="50" r="44"/>
             <circle className="timerRingFg" cx="50" cy="50" r="44"
@@ -4928,6 +5087,7 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
 }
 
 function MusicCard({music,done,onToggle}){
+  const {expanded}=useTilePresentation();
   const catalogMatch=()=>{
     if(!music||!music.catalogMatched||!music.url) return null;
     return {url:music.url,catalogTitle:music.catalogTitle||music.title,catalogArtist:music.catalogArtist||music.artist,catalogComposer:music.catalogComposer||music.composer,catalogMatched:true};
@@ -4943,12 +5103,15 @@ function MusicCard({music,done,onToggle}){
     return ()=>{ live=false; };
   },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
   const href=match&&match.url?match.url:appleMusicSearchUrl(music);
-  return <div>
+  return <div className="musicCard">
     <div className="musicTitle">{music.title}</div>
-    <div className="musicArtist">{music.artist}{music.year?` · ${music.year}`:""}</div>
-    {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="samplehint" style={{marginTop:3,fontStyle:"normal"}}>Composed by {music.composer}</div>}
-    {music.genre&&<div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(music.genre)} {music.genre}</span></div>}
-    <p className="muted" style={{fontSize:12.5,margin:"7px 0 9px",lineHeight:1.4}}>{music.why}</p>
+    <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
+    {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="samplehint musicComposer" style={{marginTop:3,fontStyle:"normal"}}>Composed by {music.composer}</div>}
+    <div hidden={!expanded} className="cardExpandedDetails musicDetails">
+      {music.genre&&<div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(music.genre)} {music.genre}</span></div>}
+      {music.why&&<p className="muted" style={{fontSize:14,margin:"9px 0",lineHeight:1.5}}>{music.why}</p>}
+      {match&&match.catalogArtist&&musicNorm(match.catalogArtist)!==musicNorm(music.artist)&&<p className="muted musicCatalogCredits" style={{fontSize:13,lineHeight:1.5}}>Recording credits: {match.catalogArtist}{match.catalogComposer&&musicNorm(match.catalogComposer)!==musicNorm(music.composer)?' · '+match.catalogComposer:''}</p>}
+    </div>
     <div className="musicActions">
       <a className="pill" target="_blank" rel="noreferrer" href={href}>{matching?"Matching Apple Music…":match?"Apple Music ↗":"Find on Apple Music ↗"}</a>
       <button className={"mark"+(done?" on":"")} onClick={onToggle}><span className={"tick sm"+(done?" on":"")}>{done?"✓":""}</span>{done?"Heard":"Listened"}</button>
@@ -5100,21 +5263,23 @@ function positiveEventDate(key){
   return formatDateKey(key);
 }
 function PositiveEventsCard({events,onAdd,onRemove}){
+  const {expanded,open}=useTilePresentation();
   const [showAdd,setShowAdd]=useState(false);
   const upcoming=(events||[]).filter(event=>event&&typeof event.date==="string").map(event=>({...event,days:daysBetween(todayKey,event.date)})).filter(event=>Number.isFinite(event.days)&&event.days>=0).sort((a,b)=>a.days-b.days||String(a.label||"").localeCompare(String(b.label||"")));
-  const shown=upcoming.slice(0,8);
+  const shown=expanded?upcoming:upcoming.slice(0,4);
   const typeFor=event=>POSITIVE_EVENT_TYPES[event.type]||POSITIVE_EVENT_TYPES.other;
   return (
     <div className="positiveEvents">
       {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b><span>Add a plan to count down to.</span></div>}
-      {shown.length>0 && <div className="eventList">{shown.map(event=><div className="eventHero" key={event.id}>
+      {shown.length>0 && <div className="eventList eventComposition">{shown.map(event=><div className="eventHero" key={event.id}>
         <div className="eventHeroTop"><span className="eventType">{typeFor(event).icon} {typeFor(event).label}</span><button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button></div>
         <div className="eventCountdown"><strong>{event.days===0?"TODAY":event.days}</strong><span>{event.days===0?"It’s here":event.days===1?"day to go":"days to go"}</span></div>
         <div className="eventTitle">{event.label}</div>
         <div className="eventDate">{positiveEventDate(event.date)}</div>
       </div>)}</div>}
+      {!expanded&&upcoming.length>shown.length&&<button type="button" className="link" onClick={open}>{upcoming.length-shown.length} more events</button>}
       {!showAdd
-        ? <button className="eventAddToggle" onClick={()=>setShowAdd(true)}>+ Add event</button>
+        ? <button className="eventAddToggle" onClick={()=>{setShowAdd(true);open();}}>+ Add event</button>
         : <PositiveEventForm onAdd={(label,date,type)=>{onAdd(label,date,type);setShowAdd(false);}} onClose={()=>setShowAdd(false)} />}
     </div>
   );
@@ -5186,8 +5351,11 @@ function HealthCard({data,latest,connected,busy,onSetup,onSync}){
   );
 }
 function ShoppingCard({items,onChange}){
+  const {expanded,open}=useTilePresentation();
   const [custom,setCustom]=useState("");
   const list=Array.isArray(items)?items:[];
+  const orderedList=shoppingDisplayItems(list);
+  const visibleList=expanded?orderedList:orderedList.slice(0,4);
   const hasKey=key=>list.some(item=>item.key===key&&!item.custom);
   const toggleProduct=product=>{
     if(product.key==="other"){ const label=custom.trim(); if(!label) return; onChange([...list,{id:uid(),key:"other",label,checked:false,custom:true}]); setCustom(""); return; }
@@ -5202,14 +5370,15 @@ function ShoppingCard({items,onChange}){
       <div className="shoppingSection basket">
         <div className="shopSectionLabel">Your list</div>
         <div className="shoppingPicked">
-          {list.length===0 ? <PlainEmpty>Tap icons below to build the list.</PlainEmpty> : list.map(item=>{ const p=shoppingProduct(item.key); return (
+          {list.length===0 ? <PlainEmpty>Tap icons below to build the list.</PlainEmpty> : visibleList.map(item=>{ const p=shoppingProduct(item.key); return (
             <span key={item.id} className={"shopChip"+(item.checked?" done":"")} onClick={()=>toggleCheck(item.id)} title={item.checked?"Mark needed":"Mark bought"}>
               <span>{p.icon}</span><span>{item.label||p.label}</span><button className="del" aria-label={"Remove "+(item.label||p.label)} onClick={e=>{e.stopPropagation();remove(item.id);}}>×</button>
             </span>
           ); })}
         </div>
       </div>
-      <div className="shoppingSection picker">
+      {!expanded&&<div className="shoppingPreviewActions"><button type="button" className="pill" onClick={open}>+ Add items</button>{list.length>4&&<button type="button" className="link" onClick={open}>{list.length-4} more items</button>}</div>}
+      <div className="shoppingSection picker" hidden={!expanded}>
         <div className="shopSectionLabel">Choose products</div>
         <div className="shopShelf">
           {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
@@ -5263,7 +5432,7 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){
 }
 
 function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEditor,onGenerate}){
-
+  const {expanded}=useTilePresentation();
   if(!hasCourses&&!academic) return (
     <div className="academicSetup">
       <span className="academicSetupGlyph" aria-hidden="true">📚</span>
@@ -5273,16 +5442,19 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEdit
   );
   if(!academic) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const qs=academic.quiz||[];
+  const explanation=String(academic.explain||"").split(/\n\s*\n/);
   const mark=()=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(academic);};
   const undo=()=>onUnlearned&&onUnlearned(academic);
   return (
-    <div>
+    <div className="academicCard readingCard">
       {academic.courseName && <span className="lbl">{academic.courseName}</span>}
-      <div style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginTop:4}}>{academic.concept}</div>
-      <p style={{fontSize:13.2,lineHeight:1.55,margin:"8px 0 0"}}>{academic.explain}</p>
+      <div className="cardContentTitle" style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginTop:4}}>{academic.concept}</div>
+      <div className="cardReadingCopy">{explanation.map((paragraph,i)=><p key={i} hidden={!expanded&&i>0} style={{fontSize:14,lineHeight:1.55,margin:"8px 0 0"}}>{paragraph}</p>)}</div>
       {academic.bigPicture && <div className="examLink">🎯 {academic.bigPicture}</div>}
-      {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}
-      <button className="pill" style={{marginTop:10}} onClick={onOpenEditor}>📄 Manage files</button>
+      <div hidden={!expanded} className="cardExpandedDetails">
+        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}
+        <button className="pill" style={{marginTop:10}} onClick={onOpenEditor}>📄 Manage files</button>
+      </div>
     </div>
   );
 }
@@ -5462,9 +5634,10 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
 }
 
 function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
+  const {expanded}=useTilePresentation();
   if(!brain) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   return (
-    <div>
+    <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
       <span className="brainFormat">{brain.format}</span>
       <p className="brainPrompt">{brain.prompt}</p>
       {!revealed ? <button className="pill primary" style={{marginTop:9}} onClick={onReveal}>Reveal answer</button> : (
@@ -5475,20 +5648,26 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
 }
 
 function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
+  const {expanded,open}=useTilePresentation();
   const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
   const logRef=useRef(null);
-  useEffect(()=>{ if(logRef.current) logRef.current.scrollTop=logRef.current.scrollHeight; });
+  useEffect(()=>{ if(expanded&&logRef.current) logRef.current.scrollTop=logRef.current.scrollHeight; });
   if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
   const mode=chat.mode||"standard";
   const modeDef=PHILO_MODES.find(m=>m.id===mode)||PHILO_MODES[0];
-  const send=()=>{ const t=msg.trim(); if(!t||sending) return; onSend(t); setMsg(""); };
+  const messages=chat.messages||[];
+  const latest=messages.length?messages[messages.length-1]:{role:"user",text:chat.initial};
+  const send=()=>{ const t=msg.trim(); if(!t||sending) return; open(); onSend(t); setMsg(""); };
+  const reflect=()=>{ const t=draft.trim(); if(!t) return; open(); onSubmitInitial(t); };
   return (
     <div className="philoCard">
-      <p className="philoQ" style={started?{fontSize:12.5,lineHeight:1.35,marginBottom:7,opacity:.72}:null}>{philo.question}</p>
+      <p className="philoQ" style={started&&expanded?{fontSize:14,lineHeight:1.4,marginBottom:9,opacity:.8}:null}>{philo.question}</p>
       {!haveKey&&<p className="dailyDependency">Replies need your Claude API key. Your own reflection still saves. <button className="link" onClick={onSetup}>Add key</button></p>}
       {error&&<div className="dailyDependency" role="alert">{error}{haveKey&&<button className="link" onClick={onRetry} disabled={sending}>Retry reply</button>}</div>}
+      <button type="button" className="pill primary philoPreviewAction" hidden={expanded} onClick={open}>{started?"Continue conversation":"Reflect"} →</button>
+      <div className="philoWorkspace" hidden={!expanded}>
       <div className="philoModeBar">
         <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
         <label className="philoModeRow">
@@ -5500,19 +5679,27 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
         {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
       </div>
       {!started ? (<>
-        <textarea className="philoThinkArea" placeholder="Think it through first — write your own take here…" value={draft} onChange={e=>setDraft(e.target.value)} />
-        <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={()=>onSubmitInitial(draft.trim())}>I've thought about this →</button>
+        <textarea className="philoThinkArea" aria-label="Your reflection" placeholder="What do you think?" value={draft} onFocus={()=>{if(!expanded)open();}} onChange={e=>setDraft(e.target.value)} />
+        <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={reflect}>Continue reflection →</button>
       </>) : (<>
-        <div className="chatLog" ref={logRef}>
-          <div className="chatMsg me">{chat.initial}</div>
-          {chat.messages.map((m,i)=>(<div key={i} className={"chatMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>))}
-          {sending && <div className="chatThinking">…thinking</div>}
-        </div>
-        <div className="chatInputRow">
-          <input className="chatInput" placeholder="Push back, or ask why…" value={msg} onChange={e=>setMsg(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") send(); }} />
-          <button className="chatSend" disabled={!msg.trim()||sending} onClick={send}>↑</button>
+        {!expanded&&<div className="philoConversationPreview">
+          <div className={"chatMsg "+(latest.role==="user"?"me":"them")}>{latest.text}</div>
+          {sending&&<div className="chatThinking">…thinking</div>}
+          <button className="pill" onClick={open}>Continue conversation →</button>
+        </div>}
+        <div hidden={!expanded} className="cardExpandedDetails philoConversation">
+          <div className="chatLog" ref={logRef}>
+            <div className="chatMsg me">{chat.initial}</div>
+            {messages.map((m,i)=>(<div key={i} className={"chatMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>))}
+            {sending && <div className="chatThinking">…thinking</div>}
+          </div>
+          <div className="chatInputRow">
+            <input className="chatInput" aria-label="Reply to the conversation" placeholder="Push back, or ask why…" value={msg} onChange={e=>setMsg(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") send(); }} />
+            <button className="chatSend" aria-label="Send reply" disabled={!msg.trim()||sending} onClick={send}>↑</button>
+          </div>
         </div>
       </>)}
+    </div>
     </div>
   );
 }

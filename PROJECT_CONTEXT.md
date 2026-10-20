@@ -43,15 +43,15 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep a stronger, vivid transparent hue and readable dark ink; the background must remain visible through both states. Typeface remains Nunito.
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
-- A tile title is ordinary content at the top of the tile's scroll area: it never pins, overlays, or remains visible after the rest of that tile has scrolled away.
-- Arrange and resize affordances stay on the right edge of every tile. Habit controls remain true circles at every responsive size.
+- Today omits redundant tile headings; accessible names remain. Library and expanded views retain a clear title. Titles follow the normal reading flow.
+- Tiles have authored desktop and phone compositions; users rearrange with a handle or arrow keys instead of freely resizing. Legacy saved sizes remain preserved. Events is a large square and Philosophy is wide. Habit controls remain true circles.
 - Reminders are practical recurring or one-off tasks: later items stay subdued, due items become prominent, and completed items are crossed through without checkbox UI. Events are a separate, non-scoring space for positive plans, presented as countdowns rather than tasks.
 - Default Reminders are: suggest an app improvement/recommendation to the creator daily, call your mum weekly, and an example doctor appointment. One-off reminders can include an optional time, future reminders should stay subdued but readable, and the tile combines a navigable month calendar with its complete upcoming list; selecting a calendar date highlights the matching reminder without filtering or hiding the rest. Birthday gift planning does not appear in Reminders.
 - In the Library, both Add-to-Today “+” and Remove-from-Today “×” are direct, absolutely positioned tile children centred half-inside/half-outside the top-right corner; neither action appears in the tile body or title wrapper. Compact Birthdays shows only today’s cake/name or the next birthday; its complete list and import controls live in a separate overlay.
 - Timer Stop pauses and preserves the remaining time for Resume; Reset alone starts it over. Every positive Event uses the same full countdown-card hierarchy rather than a primary/secondary split.
 - Birthday import lives in Settings with a short tutorial; the Birthdays tile stays focused on the compact summary and hidden full list.
 - Compact utility tiles retain their title and adapt to tile shape: wide Timer and Push-ups layouts move controls to the right, Weather gives Tomorrow equal visual weight, completed due Reminders receive the tile’s full-colour completion state, and Event cards stay comparatively compact.
-- Flat Timer tiles reserve a separate title row, keep the time on the left, keep adjustment/Stop/Resume/Reset controls on the right, and show no state-caption text. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
+- Timer previews keep the time and Start/Stop/Resume controls prominent; duration adjustments live in the expanded view. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
 - Library widgets should match their Today widget bodies. AI-capable widgets can be generated individually from the Library without being added to Today.
 - Visible stored dates render as `dd/mm/yyyy`.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
@@ -74,9 +74,11 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Preserve colour identity, tactile completion reward, and individual character without inconsistency.
 - Every dashboard tile follows one reversible visual-state contract: informative tiles can be tapped to toggle full colour, task tiles return to lighter tinted glass when their answer, button, or checkbox is undone, and no tile type is excluded from the full-colour treatment.
 - Resized widgets use deliberate compact summaries and edge-to-edge internal layouts. At every supported tile shape, controls either reflow or secondary detail progressively hides; borders must never slice through buttons, text, or cards.
-- Compact tiles never use horizontal scrolling: content reflows into the tile width and only the tile body scrolls vertically when more detail is present.
+- Content reflows without horizontal scrolling. Dashboard uses page scrolling; long content opens in a focused view with Escape, backdrop close, focus return and preserved drafts/answers.
 - Delete and close glyphs inside widgets are bare, centred, minimalist crosses rather than pill or rounded-rectangle buttons.
 - Full-colour tiles use a vivid hue-aware transparent fill with high-contrast dark content and translucent internal surfaces, including for yellow, mint and cyan.
+
+- Responsive sizing follows available window width and browser zoom. Individual tile spans grow for content without stretching neighbours. Compact/Comfortable/Large display size is stored per device and excluded from account sync.
 
 ## Learn direction
 
