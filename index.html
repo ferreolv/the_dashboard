@@ -2479,14 +2479,91 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
 .movieNowTitle,.tile .movieNowTitle{font-weight:900;font-size:clamp(15px,7cqi,19px);line-height:1.15;color:#fff!important;letter-spacing:.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .movieUpNext,.tile .movieUpNext{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.58)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.tile .movieStrip .movieAddInput{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.25)!important;color:#fff!important;text-align:center}
-.tile .movieStrip .movieAddInput::placeholder{color:rgba(255,255,255,.55)}
+.tile .movieStrip .movieAddInput{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.25)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-align:center}
+.tile .movieStrip .movieAddInput::placeholder{color:rgba(255,255,255,.6)!important;-webkit-text-fill-color:rgba(255,255,255,.6)!important}
 .movieQueueN{font:800 11px/1 'Nunito',sans-serif;color:var(--accent,#D62839);width:16px;flex:none;text-align:right}
 .movieList{display:flex;flex-direction:column;gap:2px}
 .movieManager .movieAddInput{margin-bottom:8px}
 .tile.completed .movieStrip{background:rgba(20,8,10,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+
+/* ================= tile identity pass, round 2 ================= */
 .tile[data-tileid="movie"] .content{display:flex;flex-direction:column}
 .tile[data-tileid="recall"] .content{display:flex;flex-direction:column}
+
+/* --- Events as admission tickets: stub with the big day count, perforation,
+       then the plan itself. Alternating tilt keeps the pile playful. --- */
+.eventHero.eventTicket{display:flex;align-items:stretch;gap:0;padding:0;border-radius:13px;overflow:visible;
+  -webkit-mask:radial-gradient(circle 7px at 74px 0,transparent 96%,#000 100%),radial-gradient(circle 7px at 74px 100%,transparent 96%,#000 100%);
+  -webkit-mask-composite:source-in;mask:radial-gradient(circle 7px at 74px 0,transparent 96%,#000 100%),radial-gradient(circle 7px at 74px 100%,transparent 96%,#000 100%);mask-composite:intersect}
+.eventTicket.tiltA{transform:rotate(-.7deg)}
+.eventTicket.tiltB{transform:rotate(.7deg)}
+/* Tickets read horizontally, so they stack — overriding the 2-up event grid. */
+.eventList.eventComposition:has(.eventTicket){display:flex!important;flex-direction:column;grid-template-columns:none!important;gap:10px!important}
+.tileFocusSurface .eventComposition:has(.eventTicket){grid-template-columns:none!important}
+.eventComposition .eventHero.eventTicket{padding:0!important}
+.eventTicket::after{display:none}
+.ticketStub{flex:none;width:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 6px;background:color-mix(in srgb,var(--accent) 16%,rgba(255,255,255,.3));border-right:2px dashed color-mix(in srgb,var(--accent) 45%,#fff)}
+.ticketStub strong{font-size:clamp(22px,9cqi,32px);line-height:.95;letter-spacing:-.04em;color:var(--accentDark);font-weight:900}
+.ticketStub span{font-size:8.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ticketBody{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:9px 30px 9px 11px}
+.eventTicket .eventTitle{font-size:14px;font-weight:800;line-height:1.2}
+.eventTicket .eventDate{margin-top:0}
+.eventTicket .eventType{padding:3px 7px;font-size:8px}
+.ticketDel{position:absolute;top:6px;right:6px}
+.tile.completed .ticketStub{background:rgba(255,255,255,.16);border-right-color:rgba(255,255,255,.6)}
+.tile.completed .ticketStub strong{color:#fff}
+.tile.completed .ticketStub span{color:rgba(255,255,255,.75)}
+
+/* --- Note as ruled paper: faint lines, a red margin, writing straight on it. --- */
+.tile[data-tileid="note"] .notearea{
+  background:
+    linear-gradient(90deg,transparent 27px,rgba(224,82,110,.5) 27px,rgba(224,82,110,.5) 28.5px,transparent 28.5px),
+    repeating-linear-gradient(to bottom,transparent 0 20.5px,color-mix(in srgb,var(--accent) 30%,transparent) 20.5px 21.5px,transparent 21.5px 22px),
+    rgba(255,255,255,.88)!important;
+  background-position:0 0,0 5px,0 0!important;
+  line-height:22px!important;padding:5px 12px 10px 38px!important;
+  border-radius:4px 14px 14px 4px!important;font-size:14px}
+.tile.completed[data-tileid="note"] .notearea{background:
+    linear-gradient(90deg,transparent 27px,rgba(224,82,110,.5) 27px,rgba(224,82,110,.5) 28.5px,transparent 28.5px),
+    repeating-linear-gradient(to bottom,transparent 0 20.5px,color-mix(in srgb,var(--accent) 38%,transparent) 20.5px 21.5px,transparent 21.5px 22px),
+    rgba(255,255,255,.9)!important;background-position:0 0,0 5px,0 0!important}
+
+/* --- Philosophy: the day's question set like a quotation. --- */
+.philoQ{position:relative;font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-style:italic;font-size:16.5px;line-height:1.45;font-weight:600;color:var(--accentDark);padding:12px 2px 0 27px;margin-bottom:12px}
+.philoQ::before{content:"\201C";position:absolute;left:-3px;top:-8px;font-family:Georgia,serif;font-style:normal;font-weight:700;font-size:56px;line-height:1;color:color-mix(in srgb,var(--accent) 50%,transparent);pointer-events:none}
+.tile.completed .philoQ{color:#fff}
+.tile.completed .philoQ::before{color:rgba(255,255,255,.45)}
+
+/* --- Push-ups: the add buttons are weight plates, sized by what they add. --- */
+.pushBtns{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.tile[data-tileid="pushups"] .pushBtns:has(.puPlate){display:flex!important;grid-template-columns:none!important;flex-wrap:wrap;align-items:center;justify-content:center;align-self:center!important;width:auto!important;gap:9px}
+.tile[data-tileid="pushups"] .pushBtns button.puBtn.puPlate,.tile.completed[data-tileid="pushups"] .pushBtns button.puBtn.puPlate{flex:none!important;display:grid;place-items:center;padding:0!important;border-radius:50%!important;border:2.5px solid color-mix(in srgb,var(--accent) 55%,#fff)!important;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 7%,#fff) 0 33%,color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.6)) 34% 100%)!important;box-shadow:inset 0 0 0 5px rgba(255,255,255,.55),0 4px 10px color-mix(in srgb,var(--accent) 20%,transparent)!important;color:var(--accentDark)!important;font-weight:900}
+.tile[data-tileid="pushups"] .pushBtns button.puPlate.p10{width:58px!important;min-width:58px!important;max-width:58px!important;height:58px!important;min-height:58px!important;font-size:14.5px!important}
+.tile[data-tileid="pushups"] .pushBtns button.puPlate.p5{width:47px!important;min-width:47px!important;max-width:47px!important;height:47px!important;min-height:47px!important;font-size:12.5px!important}
+.tile[data-tileid="pushups"] .pushBtns button.puPlate.p1{width:38px!important;min-width:38px!important;max-width:38px!important;height:38px!important;min-height:38px!important;font-size:11px!important}
+.tile[data-tileid="pushups"] .pushBtns button.puPlate:hover{background:radial-gradient(circle,color-mix(in srgb,var(--accent) 12%,#fff) 0 33%,color-mix(in srgb,var(--accent) 30%,rgba(255,255,255,.6)) 34% 100%)!important;border-color:var(--accent)!important;transform:translateY(-2px) rotate(-8deg)}
+.tile.completed[data-tileid="pushups"] .pushBtns button.puPlate{border-color:rgba(255,255,255,.8)!important;background:radial-gradient(circle,rgba(255,255,255,.3) 0 33%,rgba(255,255,255,.14) 34% 100%)!important;box-shadow:inset 0 0 0 5px rgba(255,255,255,.28),0 4px 10px rgba(0,0,0,.14)!important;color:#fff!important}
+.tile[data-tileid="pushups"] .pushBtns button.puReset,.tile.completed[data-tileid="pushups"] .pushBtns button.puReset{flex:none!important;width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border:none!important;border-radius:9px!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:15px!important}
+.tile[data-tileid="pushups"] .pushBtns button.puReset:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)!important;border:none!important;transform:none}
+.tile.completed[data-tileid="pushups"] .pushBtns button.puReset{color:rgba(255,255,255,.72)!important}
+
+/* --- People as "HELLO" name badges, grouped by place. --- */
+.pplBadges{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
+.pplBadge{position:relative;min-width:96px;max-width:100%;display:flex;flex-direction:column;border-radius:11px;overflow:hidden;background:rgba(255,255,255,.85);border:1px solid color-mix(in srgb,var(--accent) 26%,#fff);box-shadow:0 4px 10px color-mix(in srgb,var(--accent) 12%,transparent)}
+.pplBadgeBand{display:block;padding:3px 9px 2px;background:var(--accent);color:#fff;font-size:8px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}
+.pplBadgeName{padding:5px 22px 1px 9px;font-size:13.5px;font-weight:850;color:#2a2e40;line-height:1.15}
+.pplBadgeNote{padding:0 22px 6px 9px;font-size:11px;color:#777e90;line-height:1.3}
+.pplBadge .pplBadgeName:last-child{padding-bottom:6px}
+.pplBadgeDel{position:absolute;top:1px;right:2px;color:rgba(255,255,255,.85)}
+.tile.completed .pplBadge{background:rgba(255,255,255,.92);border-color:rgba(255,255,255,.7)}
+.tile.completed .pplBadgeBand{background:var(--accent)}
+
+/* --- Birthdays: the next one as a tear-off calendar leaf. --- */
+.birthdayNextWrap{display:flex;align-items:center;gap:11px;text-align:left}
+.bdayLeaf{flex:none;width:46px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;background:#fff;border:1px solid color-mix(in srgb,var(--accent) 30%,#fff);box-shadow:0 4px 10px color-mix(in srgb,var(--accent) 16%,transparent)}
+.bdayLeafMonth{display:block;padding:2.5px 0 2px;background:var(--accent);color:#fff;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+.bdayLeafDay{display:block;padding:3px 0 4px;font-size:19px;font-weight:900;color:#2a2e40;text-align:center;line-height:1}
+.tile.completed .bdayLeafMonth{background:var(--accent)}
 </style>
 </head>
 <body>
@@ -4685,10 +4762,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <div className="pushWrap">
         <div className="pushCount">{pToday}</div>
         <div className="pushBtns">
-          <button className="puBtn" onClick={()=>addPush(10)}>+10</button>
-          <button className="puBtn" onClick={()=>addPush(5)}>+5</button>
-          <button className="puBtn" onClick={()=>addPush(1)}>+1</button>
-          <button className="puBtn puReset" onClick={()=>setPushExact(0)}>↺</button>
+          <button className="puBtn puPlate p10" aria-label="Add 10 push-ups" onClick={()=>addPush(10)}>+10</button>
+          <button className="puBtn puPlate p5" aria-label="Add 5 push-ups" onClick={()=>addPush(5)}>+5</button>
+          <button className="puBtn puPlate p1" aria-label="Add 1 push-up" onClick={()=>addPush(1)}>+1</button>
+          <button className="puBtn puReset" aria-label="Reset today’s push-ups" title="Reset" onClick={()=>setPushExact(0)}>↺</button>
         </div>
       </div>),
     habits: T("habits","Habits",habitsLit,null,<>
@@ -5200,6 +5277,7 @@ function nextBirthday(list){
   list.forEach(b=>{ const days=birthdayDaysUntil(b); if(days<bd){ bd=days; best={...b,days}; } });
   return best;
 }
+const MONTH_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 function BirthdaysCard({birthdays,today,onAdd,onRemove}){
   const [open,setOpen]=useState(false);
   const has=today.length>0; const next=nextBirthday(birthdays);
@@ -5209,9 +5287,11 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
         {has ? <div className="birthdayTodaySummary">
           <div className="birthdayTodayEmoji">🎂</div>
           <div><div className="birthdayTodayName">{today.map(b=>b.name).join(", ")}</div><div className="muted birthdayTodayMessage">Birthday today</div></div>
-        </div> : <div>
-          <div className="birthdayStatus">No birthday today</div>
-          {next && <div className="muted birthdayNext">Next: {next.name} on {pad(next.day)}/{pad(next.month)}</div>}
+        </div> : <div className="birthdayNextWrap">
+          {next ? <>
+            <span className="bdayLeaf" aria-hidden="true"><span className="bdayLeafMonth">{MONTH_ABBR[Number(next.month)-1]||""}</span><span className="bdayLeafDay">{Number(next.day)}</span></span>
+            <div><div className="birthdayStatus">{next.name}</div><div className="muted birthdayNext">in {next.days} day{next.days===1?"":"s"}</div></div>
+          </> : <div className="birthdayStatus">No birthdays yet</div>}
         </div>}
       </button>
       {open&&<DashboardModal label="Birthdays" onClose={()=>setOpen(false)} className="ovlcard birthdayManager">
@@ -5575,11 +5655,14 @@ function PositiveEventsCard({events,onAdd,onRemove}){
   return (
     <div className="positiveEvents">
       {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b><span>Add a plan to count down to.</span></div>}
-      {shown.length>0 && <div className="eventList eventComposition">{shown.map(event=><div className="eventHero" key={event.id}>
-        <div className="eventHeroTop"><span className="eventType">{typeFor(event).icon} {typeFor(event).label}</span><button className="del" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button></div>
-        <div className="eventCountdown"><strong>{event.days===0?"TODAY":event.days}</strong><span>{event.days===0?"It’s here":event.days===1?"day to go":"days to go"}</span></div>
-        <div className="eventTitle">{event.label}</div>
-        <div className="eventDate">{positiveEventDate(event.date)}</div>
+      {shown.length>0 && <div className="eventList eventComposition">{shown.map((event,i)=><div className={"eventHero eventTicket"+(i%2?" tiltB":" tiltA")} key={event.id}>
+        <div className="ticketStub" aria-hidden="true"><strong>{event.days===0?"NOW":event.days}</strong><span>{event.days===0?"it’s here":event.days===1?"day":"days"}</span></div>
+        <div className="ticketBody">
+          <div className="eventTitle">{event.label}</div>
+          <div className="eventDate">{positiveEventDate(event.date)}</div>
+          <span className="eventType">{typeFor(event).icon} {typeFor(event).label}</span>
+        </div>
+        <button className="del ticketDel" aria-label={"Delete "+event.label} onClick={()=>onRemove(event.id)}>×</button>
       </div>)}</div>}
       {!expanded&&upcoming.length>shown.length&&<button type="button" className="link" onClick={open}>{upcoming.length-shown.length} more events</button>}
       {!showAdd
@@ -5714,7 +5797,7 @@ function PeopleMetCard({people,onAdd,onRemove}){
   const [place,setPlace]=useState(""); const [name,setName]=useState(""); const [desc,setDesc]=useState("");
   const submit=()=>{ if(!place.trim()||!name.trim())return; onAdd({place:place.trim(),name:name.trim(),desc:desc.trim()}); setName(""); setDesc(""); };
   const places=[...new Set(people.map(p=>p.place))];
-  return <div><div className="addrow peopleAddRow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div>{people.filter(p=>p.place===pl).map(p=><div className="bankEntry" key={p.id}><span><b>{p.name}</b>{p.desc?` · ${p.desc}`:""}</span><button className="del" onClick={()=>onRemove(p.id)}>×</button></div>)}</div>)}</div></div>;
+  return <div><div className="addrow peopleAddRow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div><div className="pplBadges">{people.filter(p=>p.place===pl).map(p=><div className="pplBadge" key={p.id}><span className="pplBadgeBand" aria-hidden="true">HELLO</span><b className="pplBadgeName">{p.name}</b>{p.desc&&<span className="pplBadgeNote">{p.desc}</span>}<button className="del pplBadgeDel" aria-label={"Remove "+p.name} onClick={()=>onRemove(p.id)}>×</button></div>)}</div></div>)}</div></div>;
 }
 
 function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){
