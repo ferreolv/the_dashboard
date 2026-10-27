@@ -11,7 +11,7 @@ const api=vm.runInNewContext(html.slice(start,end)+';({columnsForWidth,curatedTi
 const plain=value=>JSON.parse(JSON.stringify(value));
 
 test('every existing dashboard tile has one authored composition',()=>{
-  const ids=['goals','habits','breathing','health','shopping','agenda','events','note','weather','timer','worth','word','music','spanish','world','recall','pushups','weekly','birthdays','brain','brainflex','academic','gmat','philo','people'];
+  const ids=['goals','habits','breathing','health','shopping','agenda','events','note','weather','timer','worth','word','music','spanish','german','movie','world','recall','pushups','weekly','birthdays','brain','brainflex','academic','gmat','philo','people'];
   assert.deepEqual(Object.keys(api.CURATED_TILE_LAYOUT),ids);
   for(const id of ids){
     for(const width of [320,375,390,639,640,768,999,1000,1440,2560]){

@@ -10,7 +10,7 @@
 // namespaced `shared:*` so they never collide with the `dashboard:<code>` sync blobs.
 
 /* ---------------- shared-content config ---------------- */
-var SHARED_KEYS = ["word", "worth", "spanish", "music", "world", "brainflex", "philo", "gmat"];
+var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo", "gmat"];
 var MODEL = "claude-haiku-4-5-20251001";
 var TZ = "Europe/Paris"; // the shared "day" flips at local midnight here
 var RSS_FEEDS = [
@@ -255,6 +255,9 @@ var sharedGen = {
   spanish: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
     `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid || []).join(" | ") || "none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, 650).then(extractJSON),
 
+  german: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
+    `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif DÉBUTANT-FAUX-DÉBUTANT (A1–A2). Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid || []).join(" | ") || "none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A1–A2 (ordre des mots, genres, cas de base, verbes fréquents…) expliqué en 2–3 phrases simples en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" très fréquents et utiles à l'oral — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions FACILES dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, 700).then(extractJSON),
+
   music: async (env, avoid) => {
     const base = await callClaude(env, "You output ONLY valid minified JSON, no markdown.",
       `Recommend ONE specific, real recording that is critically or technically excellent yet UNDERRATED — most people don't know it, but a musicologist or serious critic would admire its craft, innovation, influence or musicianship. ROTATE THE GENRE FAMILY EVERY DAY across the whole world of music — e.g. soul, West African highlife, chamber pop, modal jazz, flamenco, qawwali, bossa nova, baroque, gospel, Afrobeat, country, funk, folk, chanson, R&B, string quartet, singer-songwriter, dub, post-punk. IMPORTANT: do NOT default to ambient, minimalist, drone, or experimental/electronic music — those are massively overused in these picks; unless it is genuinely the single best choice, prefer music with melody, voice, or acoustic instrumentation. Pick a genre from a clearly DIFFERENT family than EACH recent pick listed below (each shows its genre in brackets). It MUST be findable as a track in Apple Music. Give the exact released track title. "artist" is the complete recording credit (all named performers, ensemble and/or conductor as appropriate), not automatically the composer and not artificially reduced to one person. For classical music, include the work's composer separately in "composer"; otherwise "composer" may be empty. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ") || "none"}. Shape:{"title":"","artist":"","composer":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, 420).then(extractJSON);
@@ -273,8 +276,9 @@ var sharedGen = {
     return Array.isArray(arr) ? arr : null;
   },
 
-  brainflex: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
-    `Create ONE hard, self-contained thinking game for a smart 24-year-old. It must be playable mentally or by choosing or manipulating a few options, never an essay or writing exercise. Vary sharply from recent formats: ${(avoid || []).join(" | ") || "none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, counterfactual choices, ranking constraints, code-breaking, mental maths or lateral riddles. Vary domain and reasoning skill. Shape:{"format":"2-4 word game name","prompt":"concise challenge with all needed information and no hint","solution":"worked answer or decisive insight"}.`, 500).then(extractJSON),
+  brainflex: (env, avoid) => callClaude(env,
+    "You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter: SOLVE the puzzle completely yourself before writing it down, verify the solution is the unique correct answer, and if you cannot fully verify it, replace the puzzle with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty must come from the reasoning alone, not from length or noise.",
+    `Create ONE self-contained thinking game for a smart 24-year-old, solvable mentally in 2-5 minutes. Vary sharply from recent formats: ${(avoid || []).join(" | ") || "none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, ranking constraints, code-breaking, mental maths or lateral riddles. Rules: the prompt is at most 55 words and contains EVERY fact needed and NOTHING that isn't needed; exactly one answer must be defensible. Shape:{"format":"2-4 word game name","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 sentences"}.`, 500).then(extractJSON),
 
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
     `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, 220).then(extractJSON),
@@ -289,6 +293,7 @@ var sharedHistLabel = {
   word: (v) => v && v.term_en,
   worth: (v) => v && v.title,
   spanish: (v) => v && v.tema,
+  german: (v) => v && v.thema,
   music: (v) => v && `${v.title} — ${v.artist} [${v.genre || "?"}]`,
   world: (v) => Array.isArray(v) ? v.map((x) => x.headline) : null,
   brainflex: (v) => v && v.format,
@@ -333,7 +338,7 @@ async function resolveMusic(m) {
   const cand = /* @__PURE__ */ new Map();
   for (const q of queries) {
     try {
-      const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=au&media=music&entity=song&limit=25`, { signal: AbortSignal.timeout(4000) });
+      const r = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=fr&media=music&entity=song&limit=25`, { signal: AbortSignal.timeout(4000) });
       if (!r.ok) continue;
       const d = await r.json();
       (d.results || []).forEach((t) => { if (t.trackViewUrl) cand.set(String(t.trackId || t.trackViewUrl), t); });
@@ -350,7 +355,10 @@ async function resolveMusic(m) {
   }).sort((a, b) => b.score - a.score);
   const best = scored[0];
   if (!best || best.titleScore < 70 || best.creditScore < 10) return null;
-  return { url: best.t.trackViewUrl, trackId: best.t.trackId || "", catalogTitle: best.t.trackName || title, catalogArtist: best.t.artistName || artist, catalogComposer: best.t.composerName || composer, catalogMatched: true };
+  /* geo.music.apple.com redirects to the listener's own storefront, so the link opens
+     the exact song in-app for any country instead of dead-ending on a foreign page. */
+  const geoUrl = String(best.t.trackViewUrl).replace(/^https:\/\/music\.apple\.com\//, "https://geo.music.apple.com/");
+  return { url: geoUrl, trackId: best.t.trackId || "", catalogTitle: best.t.trackName || title, catalogArtist: best.t.artistName || artist, catalogComposer: best.t.composerName || composer, catalogMatched: true };
 }
 
 /* Which shared tiles to actually generate, so API tokens aren't spent on tiles
@@ -361,7 +369,7 @@ async function resolveMusic(m) {
      3. DEFAULT_SHARED (word + gmat) when neither is set — a minimal, token-frugal
         default so a fresh deploy never generates tiles nobody asked for. To
         generate everything, set the in-app checklist or SHARED_TILES explicitly. */
-const DEFAULT_SHARED = ["word", "gmat"];
+const DEFAULT_SHARED = ["word", "gmat", "german"];
 async function activeSharedKeys(env) {
   let wanted = null;
   try {
@@ -382,6 +390,7 @@ function validDailyContent(key, value) {
     case "word": return textPresent(value.term_en) && textPresent(value.def_en) && textPresent(value.term_fr) && !!value.quiz && Array.isArray(value.quiz.options) && value.quiz.options.length >= 2 && value.quiz.options.every(textPresent) && Number.isInteger(value.quiz.answer) && value.quiz.answer >= 0 && value.quiz.answer < value.quiz.options.length;
     case "worth": return textPresent(value.title) && textPresent(value.story) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
     case "spanish": return textPresent(value.tema) && textPresent(value.punto) && Array.isArray(value.vocab) && value.vocab.length > 0 && value.vocab.every(v => v && textPresent(v.es) && textPresent(v.en)) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
+    case "german": return textPresent(value.thema) && textPresent(value.punkt) && Array.isArray(value.vocab) && value.vocab.length > 0 && value.vocab.every(v => v && textPresent(v.de) && textPresent(v.fr)) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
     case "music": return textPresent(value.title) && textPresent(value.artist) && textPresent(value.why);
     case "world": return Array.isArray(value) && value.length > 0 && value.every(v => v && textPresent(v.headline) && textPresent(v.summary));
     case "brainflex": return textPresent(value.format) && textPresent(value.prompt) && textPresent(value.solution);

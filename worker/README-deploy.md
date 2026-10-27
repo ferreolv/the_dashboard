@@ -46,16 +46,16 @@ location-specific; Philosophy conversations still use the personal key separatel
    This avoids claiming that KV's eventually consistent lock is safe.
 
 2b. **Which tiles get generated** — by default this build is **token-frugal**:
-   with nothing configured it generates only **`word` + `gmat`**, so a fresh
-   deploy never spends API calls on tiles nobody asked for. To change the set,
-   two ways, in precedence order:
+   with nothing configured it generates only **`word` + `gmat` + `german`**, so a
+   fresh deploy never spends API calls on tiles nobody asked for. To change the
+   set, two ways, in precedence order:
    - **In-app (recommended):** the dashboard's **Settings → "Daily AI content"**
      checklist. Ticking/unticking a tile writes a `shared_config` KV key the cron
      reads, so you control it per-tile with no Cloudflare edits. The card's
      **"Check server"** button confirms the worker is honoring your selection.
    - **Manual fallback:** a plain-text **`SHARED_TILES`** variable
-     (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat`, or
-     all eight to generate everything.
+     (**Settings → Variables**) with a comma-separated list, e.g. `word,gmat,german`,
+     or all nine to generate everything.
    An empty checklist means no shared generation. Enabling a missing tile allows
    the next request or retry to fill it; disabling one never erases content that
    already loaded that day.
@@ -166,7 +166,7 @@ and [Resend Send Email](https://resend.com/docs/api-reference/emails/send-email)
   same date/content/status envelope. Existing success is checked before prerequisites;
   missing prerequisites use `missing_key` or `missing_course`.
 - `/shared/config` exposes `active`, `all`, and `safeRetry` in addition to the
-  existing `tiles` setting. Default generation stays `word` + `gmat`.
+  existing `tiles` setting. Default generation stays `word` + `gmat` + `german`.
 - With the binding configured, account snapshot reads/writes use the same
   account coordinator. A later sync cannot erase or replace valid
   `fefe_daily:YYYY-MM-DD` fields, and older timestamps still cannot replace newer
