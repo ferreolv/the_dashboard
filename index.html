@@ -2380,6 +2380,113 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid] button.shopItemToggle{display:flex;align-items:center;gap:10px;min-height:44px!important;flex:1;min-width:0;max-width:100%;padding:4px 6px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;text-align:left;font:inherit;cursor:pointer;transform:none!important}
 .tile[data-tileid] .shopItemToggle>span:last-child{display:block!important;flex:1;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:16px!important}.tile[data-tileid] .shopChip.done .shopItemToggle{opacity:.5}
 .tile[data-tileid] .healthMetric{border:0!important;border-radius:0!important;background:transparent!important;padding:6px 0!important;box-shadow:none!important}.tile[data-tileid] .healthGrid{gap:16px!important}.tile[data-tileid] .healthMetric span{font-weight:600!important}
+/* ================= tile identity pass =================
+   Each tile's own design carries its identity; controls are intrinsic, not pills. */
+
+/* --- Word as a dictionary entry --- */
+.dictEntry{display:flex;flex-direction:column;min-height:0}
+.dictHeadline{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.dictWord{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:clamp(21px,9cqi,27px);font-weight:700;letter-spacing:-.01em;color:var(--accentDark);line-height:1.05}
+.dictIpa{font-size:12.5px;color:var(--dim);font-weight:600}
+.dictPos{font-family:Georgia,serif;font-style:italic;font-size:12.5px;color:var(--accent);margin-top:2px;padding-bottom:7px;border-bottom:1px solid var(--hair)}
+.dictSense{display:flex;gap:8px;margin:8px 0 0;font-size:13.8px;line-height:1.5}
+.dictNum{font-family:Georgia,serif;font-weight:700;color:var(--accent);font-size:13px;flex:none}
+.dictXlat{margin:7px 0 2px;font-size:13px;line-height:1.45}
+.dictLangTag{display:inline-block;font:800 8.5px/1 'Nunito',sans-serif;letter-spacing:.08em;color:var(--accentDark);background:color-mix(in srgb,var(--accent) 14%,transparent);border-radius:5px;padding:3px 5px;margin-right:7px;vertical-align:1px}
+.dictXlatDef{color:var(--dim)}
+.tile.completed .dictWord,.tile.completed .dictPos,.tile.completed .dictNum,.tile.completed .dictLangTag{color:#fff!important}
+.tile.completed .dictLangTag{background:rgba(255,255,255,.2)}
+.tile.completed .dictIpa,.tile.completed .dictXlatDef{color:rgba(255,255,255,.76)!important}
+
+/* --- Music: the big bold note IS the link --- */
+.musicCard{display:flex;gap:14px;align-items:flex-start;min-height:0}
+a.musicNote,.tile a.musicNote{flex:none;display:grid;place-items:center;width:clamp(54px,26cqi,84px);height:clamp(54px,26cqi,84px);min-height:0;border-radius:26px;font:900 clamp(32px,17cqi,52px)/1 Georgia,serif;color:#fff;background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 86%,#fff),var(--accent) 55%,var(--accentDark));box-shadow:0 10px 24px -10px color-mix(in srgb,var(--accent) 65%,transparent),inset 0 1px 0 rgba(255,255,255,.35);text-decoration:none;transform:rotate(-6deg);transition:transform .25s ease,box-shadow .25s ease;padding:0;border:0}
+a.musicNote:hover{transform:rotate(-6deg) scale(1.06)}
+a.musicNote:active{transform:rotate(-6deg) scale(.94)}
+a.musicNote.matching{animation:musicPulse 1.1s ease-in-out infinite}
+@keyframes musicPulse{50%{transform:rotate(-6deg) scale(.96);opacity:.82}}
+.musicMeta{min-width:0;flex:1}
+.musicComposer{font-size:12px;color:var(--dim);margin-top:2px}
+.tile.completed a.musicNote{background:rgba(255,255,255,.95)!important;color:var(--accentDark)!important;box-shadow:0 10px 22px -12px rgba(0,0,0,.35)}
+.tile.completed .musicComposer,.tile.completed .musicWhy{color:rgba(255,255,255,.78)!important}
+.tile[data-cols="1"] .musicCard{flex-direction:column;align-items:center;text-align:center}
+
+/* --- Recall: a real flashcard deck --- */
+.recallDeck{display:flex;flex-direction:column;gap:9px;flex:1;min-height:0}
+.recallCard3d{position:relative;flex:1;min-height:118px;perspective:900px;-webkit-tap-highlight-color:transparent}
+.tile button.recallCard3d,.tile.completed button.recallCard3d,button.recallCard3d{min-height:118px;height:auto;border:none!important;border-radius:17px!important;background:transparent!important;box-shadow:none!important;padding:0;font:inherit;color:inherit;cursor:pointer}
+.tile button.recallCard3d:hover{background:transparent!important;border:none!important;transform:none;filter:none}
+.recallFace{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:12px 14px;border-radius:17px;background:linear-gradient(160deg,rgba(255,255,255,.72),color-mix(in srgb,var(--accent) 10%,rgba(255,255,255,.4)));border:1px solid color-mix(in srgb,var(--accent) 26%,#fff);box-shadow:0 3px 0 -1px color-mix(in srgb,var(--accent) 24%,#fff),0 7px 0 -3px color-mix(in srgb,var(--accent) 15%,#fff),0 14px 22px -12px color-mix(in srgb,var(--accent) 38%,transparent);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .45s cubic-bezier(.2,.75,.3,1.08);overflow:hidden}
+.recallFace.recallFront{transform:rotateY(0)}
+.recallFace.recallBackface{transform:rotateY(180deg)}
+.recallCard3d.flipped .recallFront{transform:rotateY(-180deg)}
+.recallCard3d.flipped .recallBackface{transform:rotateY(0)}
+.recallTag{font:800 9px/1 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);padding:3px 7px;border-radius:99px}
+.recallPrompt{font-size:14.5px;font-weight:750;line-height:1.35;color:var(--ink,#1d2030);display:block;overflow:hidden}
+.recallAnswerBig{font-size:15.5px;font-weight:850;color:var(--accentDark);line-height:1.3}
+.recallDetail{font-size:12px;line-height:1.4;color:var(--dim,#667);display:block;overflow:hidden;max-height:4.3em}
+.recallMetaRow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none}
+.recallCount{font:800 11px/1 'Nunito',sans-serif;color:var(--dim,#667);letter-spacing:.04em}
+.tile button.recallBack,button.recallBack{min-height:0;width:28px;height:28px;border:none!important;border-radius:9px!important;background:color-mix(in srgb,var(--accent) 10%,transparent)!important;box-shadow:none!important;color:var(--accentDark)!important;padding:0;font-size:13px;cursor:pointer;display:grid;place-items:center;flex:none}
+.tile button.recallBack:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)!important;border:none!important;transform:none}
+.tile.completed button.recallBack{background:rgba(255,255,255,.16)!important;color:#fff!important}
+.recallBackSpacer{width:28px;height:28px;flex:none}
+.recallSegs{display:flex;gap:4px;flex:none}
+.recallSeg{flex:1;height:4px;border-radius:99px;background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.recallSeg.on{background:var(--accent)}
+.recallSeg.cur{background:color-mix(in srgb,var(--accent) 45%,transparent)}
+.recallDeck .recallRatings{margin-top:0}
+.recallDone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--accentDark);font-weight:750;min-height:84px}
+.recallDoneGlyph{font-size:24px}
+.tile.completed .recallFace{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);box-shadow:0 3px 0 -1px rgba(255,255,255,.22),0 7px 0 -3px rgba(255,255,255,.12)}
+.tile.completed .recallPrompt,.tile.completed .recallAnswerBig,.tile.completed .recallDone{color:#fff}
+.tile.completed .recallTag{color:#fff;background:rgba(255,255,255,.18)}
+.tile.completed .recallDetail{color:rgba(255,255,255,.75)}
+.tile.completed .recallSeg{background:rgba(255,255,255,.25)}
+.tile.completed .recallSeg.on{background:#fff}
+.tile.completed .recallCount{color:rgba(255,255,255,.8)}
+.recallDeck.big{gap:12px}
+.recallDeck.big .recallCard3d,.tile button.recallCard3d:where(.recallDeck.big *){min-height:230px}
+.recallDeck.big .recallPrompt{font-size:17.5px}
+.recallDeck.big .recallAnswerBig{font-size:19px}
+.recallDeck.big .recallDetail{font-size:13.5px;max-height:9em}
+.recallDeck.big .recallRating{flex-direction:column;gap:3px}
+.recallWhen{font:700 10px/1.1 'Nunito',sans-serif;color:var(--dim,#667)}
+.recallSource{font-size:12px;color:var(--dim,#778);margin:2px 2px 0;text-align:center}
+
+/* --- Breathing: the circle is the button --- */
+.tile button.breathOrb,.tile.completed button.breathOrb{min-height:0;padding:0;border:none!important;border-radius:50%!important;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 46%,white),var(--accent) 58%,var(--accentDark))!important;color:#fff!important;box-shadow:0 14px 32px color-mix(in srgb,var(--accent) 30%,transparent),inset 0 1px 0 rgba(255,255,255,.66)!important;cursor:pointer;font:inherit}
+.tile button.breathOrb:hover{background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 46%,white),var(--accent) 58%,var(--accentDark))!important;border:none!important;transform:scale(calc(var(--breath-scale,.78) * 1.04));filter:none}
+.tile button.breathOrb.inhale,.tile button.breathOrb.exhale{box-shadow:0 18px 38px color-mix(in srgb,var(--accent) calc(18% + var(--breath-amount,0) * 22%),transparent),inset 0 1px 0 rgba(255,255,255,.72)!important}
+.tile button.breathOrb.idle{box-shadow:0 12px 24px color-mix(in srgb,var(--accent) 18%,transparent),inset 0 1px 0 rgba(255,255,255,.66)!important}
+button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offset:4px}
+
+/* --- Deutsch vocab rows: article + word, gloss, French-respelled pronunciation --- */
+.deRow{display:flex;flex-direction:column;gap:1px;padding:6px 0;border-bottom:1px solid var(--hair)}
+.deRow:last-child{border-bottom:none}
+.deWords{display:flex;align-items:baseline;gap:10px;justify-content:space-between}
+.deTerm{font-weight:800;font-size:14px;color:var(--accentDark)}
+.deFr{font-size:12.8px;color:var(--dim);text-align:right}
+.dePron{font-size:11px;font-style:italic;color:color-mix(in srgb,var(--accent) 70%,var(--dim))}
+.tile.completed .deTerm{color:#fff}
+.tile.completed .deFr{color:rgba(255,255,255,.78)}
+.tile.completed .dePron{color:rgba(255,255,255,.62)}
+
+/* --- Movies: a strip of film in the dark --- */
+.movieCard{display:flex;flex-direction:column;flex:1;min-height:0;gap:10px}
+.movieStrip{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:84px;border-radius:14px;background:linear-gradient(165deg,color-mix(in srgb,var(--accentDark) 82%,#000),color-mix(in srgb,var(--accentDark) 55%,#000));padding:8px 10px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 22px -14px color-mix(in srgb,var(--accentDark) 80%,#000)}
+.movieSprockets{display:block;height:7px;flex:none;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.75) 6px 14px,transparent 14px 20px);border-radius:2px}
+.movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
+.movieNowTitle,.tile .movieNowTitle{font-weight:900;font-size:clamp(15px,7cqi,19px);line-height:1.15;color:#fff!important;letter-spacing:.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.movieUpNext,.tile .movieUpNext{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.58)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tile .movieStrip .movieAddInput{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.25)!important;color:#fff!important;text-align:center}
+.tile .movieStrip .movieAddInput::placeholder{color:rgba(255,255,255,.55)}
+.movieQueueN{font:800 11px/1 'Nunito',sans-serif;color:var(--accent,#D62839);width:16px;flex:none;text-align:right}
+.movieList{display:flex;flex-direction:column;gap:2px}
+.movieManager .movieAddInput{margin-bottom:8px}
+.tile.completed .movieStrip{background:rgba(20,8,10,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.tile[data-tileid="movie"] .content{display:flex;flex-direction:column}
+.tile[data-tileid="recall"] .content{display:flex;flex-direction:column}
 </style>
 </head>
 <body>
@@ -2400,6 +2507,8 @@ const COL = {
   word:     {p:"#E5F7FF", v:"#00A6D6", d:"#006A8A"},
   worth:    {p:"#DDF7F0", v:"#00C2A3", d:"#067563"},
   spanish:  {p:"#FFE4EB", v:"#FF3D77", d:"#B01E4E"},
+  german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
+  movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -2465,7 +2574,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
 const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
-const SHARED_KEYS=new Set(["word","worth","spanish","music","world","brainflex","philo","gmat"]);
+const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","brainflex","philo","gmat"]);
 /* Garmin (and any scripted health source) push daily summaries to this token-keyed
    store; the dashboard pulls them in on load and merges into the local health log.
    Its own little Worker — separate from sync so a script write can never clobber the
@@ -2572,6 +2681,7 @@ function validDailyTile(key,value){
     case "word": return dailyText(value.term_en)&&dailyText(value.def_en)&&dailyText(value.term_fr)&&!!value.quiz&&Array.isArray(value.quiz.options)&&value.quiz.options.length>=2&&value.quiz.options.every(dailyText)&&Number.isInteger(value.quiz.answer)&&value.quiz.answer>=0&&value.quiz.answer<value.quiz.options.length;
     case "worth": return dailyText(value.title)&&dailyText(value.story)&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
     case "spanish": return dailyText(value.tema)&&dailyText(value.punto)&&Array.isArray(value.vocab)&&value.vocab.length>0&&value.vocab.every(v=>v&&dailyText(v.es)&&dailyText(v.en))&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
+    case "german": return dailyText(value.thema)&&dailyText(value.punkt)&&Array.isArray(value.vocab)&&value.vocab.length>0&&value.vocab.every(v=>v&&dailyText(v.de)&&dailyText(v.fr))&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
     case "music": return dailyText(value.title)&&dailyText(value.artist)&&dailyText(value.why);
     case "world": return Array.isArray(value)&&value.length>0&&value.every(v=>v&&dailyText(v.headline)&&dailyText(v.summary));
     case "weather": return !!value.tomorrow&&[value.temp,value.code,value.hi,value.lo,value.tomorrow.hi,value.tomorrow.lo,value.tomorrow.code].every(v=>typeof v==="number"&&Number.isFinite(v))&&dailyText(value.place);
@@ -2588,10 +2698,10 @@ function mergeDailyContent(existing,incoming){
   return next;
 }
 const dailyRequestKeys=(keys,content)=>[...new Set(keys)].filter(key=>!validDailyTile(key,(content||{})[key]));
-const DAILY_CONTENT_KEYS=["word","worth","spanish","music","world","weather","brainflex","philo","academic","gmat"];
+const DAILY_CONTENT_KEYS=["word","worth","spanish","german","music","world","weather","brainflex","philo","academic","gmat"];
 /* DAILY_CONTENT_CONTRACT_END */
 /* DAILY_UX_CONTRACT_START */
-const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",gmat:"GMAT lesson",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
+const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",german:"Deutsch",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",gmat:"GMAT lesson",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
 const DAILY_SETUP_STATES=new Set(["disabled","personal_key","missing_key","invalid_key","missing_course","server_unconfigured","service_update","browser_lock_unavailable","signin_required"]);
 function dailyIssueInfo(key,state,message="",personalOverride=false){
   const personal=key==="academic"||personalOverride;
@@ -2692,10 +2802,16 @@ const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no mar
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:650}).then(extractJSON);
 
+/* German mirrors the Spanish principle at a much lower level (A1–A2): a French native
+   can't guess German the way they guess Spanish, so everything is taught explicitly —
+   articles included, pronunciation respelled the French way, explanations in French. */
+const genGerman=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
+  `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif DÉBUTANT-FAUX-DÉBUTANT (A1–A2). Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A1–A2 (ordre des mots, genres, cas de base, verbes fréquents…) expliqué en 2–3 phrases simples en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" très fréquents et utiles à l'oral — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions FACILES dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:700}).then(extractJSON);
+
 /* Use-your-brain: a self-contained daily exercise in a rotating format, meant to be worked
    out rather than explained — the antidote tile. */
-const genBrainFlex=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Create ONE hard, self-contained thinking game for a smart 24-year-old. It must be playable mentally or by choosing or manipulating a few options, never an essay or writing exercise. Vary sharply from recent formats: ${(avoid||[]).join(" | ")||"none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, counterfactual choices, ranking constraints, code-breaking, mental maths or lateral riddles. Vary domain and reasoning skill. Shape:{"format":"2-4 word game name","prompt":"concise challenge with all needed information and no hint","solution":"worked answer or decisive insight"}.`, {max:500}).then(extractJSON);
+const genBrainFlex=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter: SOLVE the puzzle completely yourself before writing it down, verify the solution is the unique correct answer, and if you cannot fully verify it, replace the puzzle with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty must come from the reasoning alone, not from length or noise.",
+  `Create ONE self-contained thinking game for a smart 24-year-old, solvable mentally in 2-5 minutes. Vary sharply from recent formats: ${(avoid||[]).join(" | ")||"none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, ranking constraints, code-breaking, mental maths or lateral riddles. Rules: the prompt is at most 55 words and contains EVERY fact needed and NOTHING that isn't needed; exactly one answer must be defensible. Shape:{"format":"2-4 word game name","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 sentences"}.`, {max:500}).then(extractJSON);
 
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
@@ -2753,13 +2869,23 @@ async function philoReply(question,history,mode="standard"){
   const system=philosopher
     ? `You are reconstructing ${philosopher}'s philosophical response to a live conversation. Do not roleplay theatrically or invent views. Use only claims, arguments, distinctions, and likely extensions that are well grounded in ${philosopher}'s primary texts or widely accepted scholarship. If ${philosopher} has no clear basis for answering the user's exact claim, say that the textual basis is unclear, then offer only a careful nearby distinction if one is genuinely grounded. Defend ${philosopher}'s opposition as ${philosopher} plausibly would, but never fabricate a counterargument. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." You may imitate the philosopher's argumentative style at a high level, but do not invent quotations. End every answer with a short parenthetical source note naming the relevant work(s), e.g. "(Sources: ...)." Today's question under discussion: "${question}"`
     : `You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking and keep digging below the surface: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
-  const body={ model:"claude-sonnet-4-20250514", max_tokens:420, system, messages:history.map(h=>({role:h.role,content:h.text})) };
-  const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
-    headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
-    body:JSON.stringify(body) });
-  if(!res.ok) throw new Error("API "+res.status);
-  const data=await res.json();
-  return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+/* The philosophy chat survives model retirements: try the preferred stronger model,
+   then fall back on a 4xx (retired/unknown id) instead of failing the whole chat. */
+const PHILO_CHAT_MODELS=["claude-sonnet-4-5-20250929","claude-haiku-4-5-20251001"];
+  let lastErr=null;
+  for(const model of PHILO_CHAT_MODELS){
+    const body={ model, max_tokens:420, system, messages:history.map(h=>({role:h.role,content:h.text})) };
+    const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
+      headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
+      body:JSON.stringify(body) });
+    if(res.ok){
+      const data=await res.json();
+      return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+    }
+    lastErr=new Error("API "+res.status);
+    if(res.status!==400&&res.status!==404) throw lastErr;
+  }
+  throw lastErr||new Error("API");
 }
 
 /* Every daily-generated tile, keyed the same way it's stored on `daily`. Each task reads its
@@ -2770,6 +2896,7 @@ const GEN_TASKS={
   word:    ()=>genWord(load("wordHistory",[]).slice(-12)),
   worth:   ()=>genLesson(load("lessonHistory",[]).slice(-15)),
   spanish: ()=>genSpanish(load("spanishHistory",[]).slice(-15)),
+  german:  ()=>genGerman(load("germanHistory",[]).slice(-15)),
   music:   ()=>genMusic(load("musicHistory",[]).slice(-30)),
   world:   ()=>genWorld(load("worldHistory",[]).slice(-25)),
   weather: ()=>fetchWeather(),
@@ -2799,7 +2926,10 @@ const musicOverlap=(a,b)=>{
   let hit=0; aa.forEach(w=>{ if(bb.has(w)) hit++; });
   return hit/Math.max(aa.size,bb.size);
 };
-const appleMusicSearchUrl=m=>`https://music.apple.com/au/search?term=${encodeURIComponent([m.title,m.artist,m.composer].filter(Boolean).join(" "))}`;
+const appleMusicSearchUrl=m=>`https://music.apple.com/fr/search?term=${encodeURIComponent([m.title,m.artist,m.composer].filter(Boolean).join(" "))}`;
+/* geo.music.apple.com redirects to the listener's own storefront, so a matched track
+   opens the exact song in-app instead of dead-ending on a foreign-country page. */
+const appleGeoUrl=url=>String(url||"").replace(/^https:\/\/music\.apple\.com\//,"https://geo.music.apple.com/");
 async function resolveMusicTrack(m){
   const title=String(m&&m.title||"").trim(), artist=String(m&&m.artist||"").trim(), composer=String(m&&m.composer||"").trim();
   if(!title) return null;
@@ -2810,7 +2940,7 @@ async function resolveMusicTrack(m){
   const candidates=new Map();
   for(const q of queries){
     try{
-      const api=`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=au&media=music&entity=song&limit=25`;
+      const api=`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=fr&media=music&entity=song&limit=25`;
       const response=await fetch(api); if(!response.ok) continue;
       const data=await response.json();
       (data.results||[]).forEach(track=>{ if(track.trackViewUrl) candidates.set(String(track.trackId||track.trackViewUrl),track); });
@@ -2830,7 +2960,7 @@ async function resolveMusicTrack(m){
   const best=scored[0];
   if(!best||best.titleScore<70||best.creditScore<10) return null;
   const match={
-    url:best.track.trackViewUrl,
+    url:appleGeoUrl(best.track.trackViewUrl),
     trackId:best.track.trackId||"",
     catalogTitle:best.track.trackName||title,
     catalogArtist:best.track.artistName||artist,
@@ -3208,22 +3338,23 @@ function Quiz({prompt,options,answer,explain,onDone,onUndo}){
 }
 
 /* cards */
+/* The Word tile reads like a page out of a dictionary: serif headword, IPA,
+   italic part of speech, a numbered sense, then the French gloss as a sub-entry.
+   The synonym quiz lives in the expanded view, like the other reading tiles. */
 function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!word) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
+  const ipa=String(word.ipa||"").replace(/^\/+|\/+$/g,"");
   return (
-    <div className="wordcard">
-      <div style={{display:"flex",alignItems:"baseline",gap:8,flexWrap:"wrap"}}>
-        <span className="wcTerm">{word.term_en}</span>
-        {word.pos && <span className="lbl">{word.pos}</span>}
+    <div className="dictEntry">
+      <div className="dictHeadline">
+        <span className="dictWord">{word.term_en}</span>
+        {ipa && <span className="dictIpa">/{ipa}/</span>}
       </div>
-      {word.ipa && <span hidden={!expanded} className="muted wcIpa cardExpandedDetails">{word.ipa}</span>}
-      <p className="wcDef">{word.def_en}</p>
-      <div className="wcFr">
-        <span className="wcTermFr">{word.term_fr}</span>
-        {expanded&&word.def_fr&&<span className="muted wcDefFr"> — {word.def_fr}</span>}
-      </div>
-      <div hidden={!expanded} className="cardExpandedDetails">{word.quiz && <Quiz prompt="Quiz · closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`Closest synonym for “${word.term_en}”.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}</div>
+      {word.pos && <div className="dictPos">{word.pos}</div>}
+      <p className="dictSense"><span className="dictNum">1</span><span>{word.def_en}</span></p>
+      <p className="dictXlat"><span className="dictLangTag">FR</span><b>{word.term_fr}</b>{expanded&&word.def_fr&&<span className="dictXlatDef"> — {word.def_fr}</span>}</p>
+      <div hidden={!expanded} className="cardExpandedDetails">{word.quiz && <Quiz prompt="closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`“${word.term_en}” — ${word.def_en}.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}</div>
     </div>
   );
 }
@@ -3243,18 +3374,6 @@ function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}</div>
     </div>
   );
-}
-function musicGenreIcon(genre){
-  const g=String(genre||"").toLowerCase();
-  if(/baroque|classical|orchestra|symph|opera/.test(g)) return "🎻";
-  if(/jazz|sax|swing|blues/.test(g)) return "🎷";
-  if(/piano|keyboard|harpsichord/.test(g)) return "🎹";
-  if(/guitar|rock|folk|indie|metal|punk|country/.test(g)) return "🎸";
-  if(/hip hop|rap|trap|grime/.test(g)) return "🎤";
-  if(/electronic|house|techno|ambient|synth|dance/.test(g)) return "🎛️";
-  if(/drum|percussion/.test(g)) return "🥁";
-  if(/reggae|dub/.test(g)) return "🔊";
-  return "🎵";
 }
 function WeatherCard({data,busy,onGenerate}){
   if(busy && !data) return <Note>Checking local skies…</Note>;
@@ -3293,6 +3412,8 @@ const CURATED_TILE_LAYOUT={
   word:{desktop:[2,2],phone:[2,1],family:"wide"},
   music:{desktop:[2,2],phone:[2,1],family:"wide"},
   spanish:{desktop:[4,3],phone:[2,2],family:"large"},
+  german:{desktop:[4,3],phone:[2,2],family:"large"},
+  movie:{desktop:[2,2],phone:[2,1],family:"wide"},
   world:{desktop:[4,3],phone:[2,2],family:"large"},
   recall:{desktop:[4,3],phone:[2,2],family:"large"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -3328,6 +3449,7 @@ const LIBRARY_META={
   worth:["discover","knowledge lessons facts learn"],
   word:["discover","word vocabulary english french"],
   spanish:["discover","español spanish language vocabulary"],
+  german:["discover","deutsch german allemand language vocabulary beginner"],
   world:["discover","world news headlines current affairs"],
   recall:["discover","recall flashcards memory review revision"],
   brain:["discover","memory second brain knowledge notes mind map"],
@@ -3342,6 +3464,7 @@ const LIBRARY_META={
   music:["life","song music classical recording listening"],
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
+  movie:["life","movies films watch-list cinema next movie"],
   weekly:["life","stats statistics weekly history progress review"],
 };
 const normaliseLibrarySearch=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
@@ -3352,18 +3475,22 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","note","weather","timer","worth","word","music","spanish","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
+const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
 const GMAT_TILE_INTRODUCED=load("gmatTileIntroduced",false);
 const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
 const HEALTH_TILE_INTRODUCED=load("healthTileIntroduced",false);
+const GERMAN_TILE_INTRODUCED=load("germanTileIntroduced",false);
+const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=next.indexOf("academic"); next.splice(at<0?next.length:at+1,0,"gmat"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
 const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"health"); return next; };
+const placeGermanAfterSpanish=list=>{ const next=list.filter(id=>id!=="german"), at=next.indexOf("spanish"); next.splice(at<0?next.length:at+1,0,"german"); return next; };
+const placeMovieAfterEvents=list=>{ const next=list.filter(id=>id!=="movie"), at=next.indexOf("events"); next.splice(at<0?next.length:at+1,0,"movie"); return next; };
 
 // Dialogs share a stack so only the frontmost overlay handles focus and Escape.
 const dashboardDialogStack=[];
@@ -3489,7 +3616,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
         {ReactDOM.createPortal(children,contentHost,id)}
       </div>
       <div className={"tileFoot"+(!canExpand&&!edit?" tileFootMinimal":"")}>
-        {status==="Saved today"?<span className="tileSaveState" role="img" aria-label={status} title={statusHelp||"Saved for today. Reload only retries missing content."}><WidgetGlyph name="saved"/></span>:<span/>}
+        <span/>
         {!edit&&canExpand&&<button type="button" className="tileExpand" ref={openButtonRef} title={"Open "+label} aria-label={"Open "+label} aria-haspopup="dialog" onClick={event=>{event.stopPropagation();open();}}><WidgetGlyph name="expand"/></button>}
         {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Use arrow keys to reorder."} title="Drag to move · arrow keys to reorder" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const delta=event.key==="ArrowUp"||event.key==="ArrowLeft"?-1:event.key==="ArrowDown"||event.key==="ArrowRight"?1:0;if(delta){event.preventDefault();onMoveBy?.(delta);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
       </div>
@@ -3563,10 +3690,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); return next; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -3579,6 +3706,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
+  const [movies,setMovies]=useState(()=>load("movies",[]));
   const [healthLog,setHealthLog]=useState(()=>load("healthLog",{}));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
@@ -3634,7 +3762,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   /* Daily AI content: which shared server-generated tiles to actually produce
      each day. null = all (default). Untick a tile → the worker stops spending
      tokens on it. Persisted to the worker (shared_config) so its cron obeys. */
-  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"],["gmat","GMAT lesson"]];
+  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"],["gmat","GMAT lesson"]];
   const [genPrefs,setGenPrefs]=useState(()=>load("genPrefs",null));
   const [genCfgStatus,setGenCfgStatus]=useState("");
   const [genCfgBusy,setGenCfgBusy]=useState(false);
@@ -4088,7 +4216,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const remember=(key,value)=>{
       const before=load("daily:"+todayKey,{}), next=acceptDaily({[key]:value});
       if(!validDailyTile(key,before[key])&&validDailyTile(key,next[key])){
-        const history={word:["wordHistory",value.term_en],worth:["lessonHistory",value.title],spanish:["spanishHistory",value.tema],music:["musicHistory",value.title+" — "+value.artist],brainflex:["brainHistory",value.format],philo:["philoHistory",value.theme]};
+        const history={word:["wordHistory",value.term_en],worth:["lessonHistory",value.title],spanish:["spanishHistory",value.tema],german:["germanHistory",value.thema],music:["musicHistory",value.title+" — "+value.artist],brainflex:["brainHistory",value.format],philo:["philoHistory",value.theme]};
         if(history[key]){const [name,item]=history[key];save(name,[...new Set([...load(name,[]),item])].slice(-80));}
         if(key==="world")save("worldHistory",[...new Set([...load("worldHistory",[]),...value.map(item=>item.headline)])].slice(-40));
       }
@@ -4171,6 +4299,23 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     });
     if(additions.length) appendDailyRecall("spanish",additions);
   };
+  /* German feeds recall the same way as Spanish — quiz questions plus every vocab word,
+     each keeping its pronunciation in the answer so the respelling is rehearsed too. */
+  const learnGerman=de=>{
+    setRitual("german");
+    if(!de || recallList.some(x=>x.type==="german"&&x.addedOn===todayKey)) return;
+    const additions=[];
+    (de.quiz||[]).forEach(q=>{ if(!q) return; additions.push(newRecallItem({ id:uid(), type:"german", addedOn:todayKey, title:"Deutsch · "+de.thema, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } })); });
+    const vocab=de.vocab||[];
+    vocab.forEach((v,i)=>{
+      const decoys=vocab.filter((_,j)=>j!==i).map(x=>x.fr);
+      const base=[v.fr,...decoys].slice(0,3); while(base.length<3) base.push("—");
+      const order=[0,1,2].sort(()=>Math.random()-0.5);
+      const options=order.map(idx=>base[idx]); const answer=order.indexOf(0);
+      additions.push(newRecallItem({ id:uid(), type:"german", addedOn:todayKey, title:"Vokabel · "+de.thema, quiz:{ prompts:[`Que veut dire « ${v.de} » ?`], options, answer, explain:`« ${v.de} » = ${v.fr}${v.pron?` (prononcé ${v.pron})`:""}.` } }));
+    });
+    if(additions.length) appendDailyRecall("german",additions);
+  };
   const learnAcademic=a=>{ setRitual("academic"); if(a&&a.quiz&&a.quiz.length && !recallList.some(x=>x.type==="academic"&&x.addedOn===todayKey)){
     const additions=a.quiz.filter(Boolean).map(q=>newRecallItem({ id:uid(), type:"academic", addedOn:todayKey, title:(a.courseName?a.courseName+" · ":"")+a.concept, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } }));
     if(additions.length) appendDailyRecall("academic",additions);
@@ -4179,6 +4324,19 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall(previous=>[...previous,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
   const gradeRecall=(item,rating)=>{ const scheduled=scheduleRecall(item,rating); persistRecall(list=>list.map(x=>x.id===item.id?scheduled:x)); return scheduled; };
   const restoreRecall=item=>{ persistRecall(list=>list.map(x=>x.id===item.id?item:x)); };
+
+  /* ---- movies: a plain personal watch-list, no AI. Tapping the tile watches the
+     next movie (tap again to undo); the list itself is managed in the expanded view. ---- */
+  const persistMovies=v=>{ setMovies(v); save("movies",v); };
+  const addMovie=title=>{ const t=String(title||"").trim(); if(!t) return; persistMovies([...movies,{id:uid(),title:t,addedOn:todayKey}]); };
+  const removeMovie=id=>persistMovies(movies.filter(m=>m.id!==id));
+  const bumpMovie=id=>{ const target=movies.find(m=>m.id===id); if(!target) return; persistMovies([target,...movies.filter(m=>m.id!==id)]); };
+  const toggleMovieWatched=()=>{
+    const watchedToday=movies.find(m=>m.watchedOn===todayKey);
+    if(watchedToday){ persistMovies(movies.map(m=>m.id===watchedToday.id?{...m,watchedOn:null}:m)); return; }
+    const next=movies.find(m=>!m.watchedOn);
+    if(next) persistMovies(movies.map(m=>m.id===next.id?{...m,watchedOn:todayKey}:m));
+  };
 
   /* ---- reminders: recurring chores + one-off dated tasks ---- */
   const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>{
@@ -4377,7 +4535,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","music","world","breathing","gmat","note","recall","brainflex","philo"];
+  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","gmat","note","recall","brainflex","philo"];
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. GMAT done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
@@ -4506,6 +4664,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     spanish: T("spanish","Español",!!rToday.spanish, null,<>
       <SpanishCard sp={view.spanish} busy={genBusy} done={!!rToday.spanish} onLearned={learnSpanish} onUnlearned={()=>unsetRitual("spanish")} onGenerate={()=>regenerateOne("spanish")} />
       <RetryNote tileKey="spanish"/></>),
+    german: T("german","Deutsch",!!rToday.german, null,<>
+      <GermanCard de={view.german} busy={genBusy} done={!!rToday.german} onLearned={learnGerman} onUnlearned={()=>unsetRitual("german")} onGenerate={()=>regenerateOne("german")} />
+      <RetryNote tileKey="german"/></>),
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
       <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
     word: T("word","Word",!!rToday.word, null,<>
@@ -4515,8 +4676,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <LessonCard lesson={view.worth} busy={genBusy} onLearned={learnLesson} onUnlearned={unlearnLesson} onGenerate={()=>regenerateOne("worth")} />
       <RetryNote tileKey="worth"/></>),
     music: T("music","Song",!!rToday.music, null,<>
-      {view.music ? <MusicCard music={view.music} done={!!rToday.music} onToggle={()=>toggleRitual("music")} /> : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
-      <RetryNote tileKey="music"/></>),
+      {view.music ? <MusicCard music={view.music} done={!!rToday.music} /> : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
+      <RetryNote tileKey="music"/></>, ()=>toggleRitual("music")),
     weather: T("weather","Weather",!!rToday.weather, null,<>
       <WeatherCard data={weather} busy={genBusy} onGenerate={()=>regenerateOne("weather")} />
       <RetryNote tileKey="weather"/></>, ()=>toggleRitual("weather")),
@@ -4551,11 +4712,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
             <div className="muted worldSummary" style={{fontSize:13.2,lineHeight:1.55,marginTop:3}}>{clean(n.summary)}</div>
           </div>))}
         </div>
-        {(view.world&&view.world.length>0) && <div style={{marginTop:11}}><button className={"mark"+(rToday.world?" on":"")} onClick={()=>toggleRitual("world")}><span className={"tick sm"+(rToday.world?" on":"")}>{rToday.world?"✓":""}</span>{rToday.world?"Read":"Mark read"}</button></div>}
       </>
-      <RetryNote tileKey="world"/></>),
-    recall: T("recall","Recall",dueFacts.length>0&&!!rToday.recall,null,
-      <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />),
+      <RetryNote tileKey="world"/></>, ()=>toggleRitual("world")),
+    recall: T("recall","Recall",!!rToday.recall,null,
+      <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />, ()=>{}),
     weekly: T("weekly","Stats",!!rToday.weekly,null,
       <div className="wrev">
         <div className="wrevSection chartSec">
@@ -4603,6 +4763,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} />),
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
+    movie: T("movie","Movies",movies.some(m=>m.watchedOn===todayKey),null,
+      <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} />, ()=>toggleMovieWatched()),
     brain: T("brain","Memory",false,null,
       <BrainBankCard bank={brainBank} busy={bankBusy} haveKey={haveKey} onSetup={()=>openDailySettings("claude-key")} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
@@ -4901,6 +5063,28 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
+/* German mirrors the Spanish tile one level down (A1–A2): article + word, French gloss,
+   and a French-respelled pronunciation under each entry, since German can't be guessed. */
+function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
+  const {expanded}=useTilePresentation();
+  if(!de)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
+  const qs=de.quiz||[];
+  const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
+  const undo=index=>onUnlearned&&onUnlearned(de);
+  return (
+    <div className="germanCard readingCard">
+      <div className="cardContentTitle" style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{de.thema}</div>
+      {de.punkt && <div className="insight" style={{marginTop:8}}>{de.punkt}</div>}
+      {(de.vocab||[]).length>0 && <div className="germanVocabulary" style={{margin:"2px 0 4px"}}>
+        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="deRow">
+          <div className="deWords"><span className="deTerm">{v.de}</span><span className="deFr">{v.fr}</span></div>
+          {v.pron && <span className="dePron">{v.pron}</span>}
+        </div>))}
+      </div>}
+      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
+    </div>
+  );
+}
 
 const recallAnswerFor=item=>{
   const q=item&&item.quiz?item.quiz:{};
@@ -4911,51 +5095,76 @@ const recallAnswerFor=item=>{
   if(explain) return {short:"Answer", detail:explain};
   return {short:item.term||item.title||"Answer", detail:item.meta||""};
 };
+const RECALL_TYPE_TAG={word:"Word",lesson:"Lesson",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
+/* One real flashcard at a time: the front shows only the prompt (never the title or
+   meta, which can give the answer away), tapping flips it, an emoji grade slides the
+   next card in. The tile's own expand opens the same session big, with the grade
+   intervals spelled out — the deck keeps its state because the content is reparented. */
 function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
+  const {expanded}=useTilePresentation();
   const [snap]=useState(()=>due);
-  const [answered,setAnswered]=useState({});
-  const [revealed,setRevealed]=useState({});
+  const [log,setLog]=useState([]);
+  const [flipped,setFlipped]=useState(false);
   useEffect(()=>{ if(snap.length===0) onComplete(); /* eslint-disable-next-line */ },[]);
-  const rate=(item,rating)=>{
-    const scheduled=onGrade(item,rating);
-    setAnswered(a=>{ const n={...a,[item.id]:scheduled}; if(Object.keys(n).length>=snap.length) onComplete(); return n; });
+  const total=snap.length, done=log.length, finished=total>0&&done>=total;
+  const current=finished?null:snap[done];
+  const rate=rating=>{
+    if(!current) return;
+    const scheduled=onGrade(current,rating);
+    setLog(l=>[...l,{item:current,scheduled,rating}]);
+    setFlipped(false);
+    if(done+1>=total) onComplete();
   };
-  const undo=item=>{
-    if(answered[item.id]){ onRestore(item); onIncomplete(); }
-    setAnswered(a=>{ const n={...a}; delete n[item.id]; return n; });
-    setRevealed(results=>{ const n={...results}; delete n[item.id]; return n; });
+  const back=()=>{
+    if(!log.length){ setFlipped(false); return; }
+    const last=log[log.length-1];
+    onRestore(last.item); onIncomplete();
+    setLog(l=>l.slice(0,-1)); setFlipped(true);
   };
-  if(snap.length===0) return <PlainEmpty>Nothing due. Saved cards return here for review.</PlainEmpty>;
-  return <div>{snap.map(item=>{
-    const quiz=item.quiz||{};
-    const prompts=(quiz.prompts&&quiz.prompts.length)?quiz.prompts:[quiz.prompt||item.title||"What do you remember?"];
-    const seen=item.seen||1;
-    const prompt=prompts[(seen)%prompts.length]||prompts[0];
-    const isRevealed=!!revealed[item.id];
-    const scheduled=answered[item.id];
-    const answer=recallAnswerFor(item);
-    return (<div key={item.id} className="reviewItem" onClick={e=>e.stopPropagation()}>
-      <p className="rtitle">{item.title}</p>
-      {item.meta && <p className="muted" style={{fontSize:11.5,margin:"-4px 0 8px"}}>{item.meta}</p>}
-      <div className="recallFlash">
-        <p className="recallQuestion">{prompt}</p>
-        {!isRevealed&&!scheduled&&<button type="button" className="widgetIconButton" aria-label={"Reveal answer for "+item.title} title="Reveal answer" onClick={()=>setRevealed(r=>({...r,[item.id]:true}))}><WidgetGlyph name="eye"/></button>}
-        {(isRevealed||scheduled)&&<div className="recallAnswer"><b>{answer.short}</b>{answer.detail}</div>}
-      </div>
-      {isRevealed&&!scheduled&&<>
-        <p className="recallHint">How did it feel?</p>
+  if(total===0) return <div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">Nothing due</span></div>;
+  if(finished) return (
+    <div className="recallDone">
+      <span className="recallDoneGlyph" aria-hidden="true">✦</span>
+      <span className="recallDoneText">{total} reviewed</span>
+      <button type="button" className="recallBack" onClick={back} aria-label="Undo last review" title="Undo">↶</button>
+    </div>
+  );
+  const answer=recallAnswerFor(current);
+  const prompts=(current.quiz&&current.quiz.prompts&&current.quiz.prompts.length)?current.quiz.prompts:[(current.quiz&&current.quiz.prompt)||current.title||"What do you remember?"];
+  const prompt=prompts[(current.seen||1)%prompts.length]||prompts[0];
+  const tag=RECALL_TYPE_TAG[current.type]||"Recall";
+  return (
+    <div className={"recallDeck"+(expanded?" big":"")}>
+      <button type="button" className={"recallCard3d"+(flipped?" flipped":"")} onClick={()=>setFlipped(f=>!f)} aria-label={flipped?"Hide answer":"Reveal answer"}>
+        <span className="recallFace recallFront">
+          <span className="recallTag">{tag}</span>
+          <span className="recallPrompt">{prompt}</span>
+        </span>
+        <span className="recallFace recallBackface">
+          <span className="recallTag">{tag}</span>
+          <span className="recallAnswerBig">{answer.short}</span>
+          {answer.detail?<span className="recallDetail">{answer.detail}</span>:null}
+        </span>
+      </button>
+      {flipped ? (
         <div className="recallRatings" role="group" aria-label="Rate this memory">
-          {FSRS_RATINGS.map(choice=>{
-            const preview=scheduleRecall(item,choice.value);
-            return <button type="button" key={choice.value} className="recallRating" title={`${choice.name} · ${humanInterval(preview.fsrs.scheduledDays)}`} aria-label={`${choice.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(item,choice.value)}>
-              <span className="face" aria-hidden="true">{choice.face}</span>
-            </button>;
-          })}
+          {FSRS_RATINGS.map(c=>{ const preview=scheduleRecall(current,c.value); return (
+            <button type="button" key={c.value} className="recallRating" title={`${c.name} · ${humanInterval(preview.fsrs.scheduledDays)}`} aria-label={`${c.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(c.value)}>
+              <span className="face" aria-hidden="true">{c.face}</span>
+              {expanded&&<span className="recallWhen">{humanInterval(preview.fsrs.scheduledDays)}</span>}
+            </button>); })}
         </div>
-      </>}
-      {scheduled&&<button type="button" className="recallScheduled" aria-label={`Undo review for ${item.title}`} onClick={()=>undo(item)}><span className="face" aria-hidden="true">{FSRS_RATINGS[scheduled.reviewLog[scheduled.reviewLog.length-1].rating-1].face}</span><span>Back {humanInterval(scheduled.fsrs.scheduledDays)}</span></button>}
-    </div>);
-  })}</div>;
+      ) : (
+        <div className="recallMetaRow">
+          {log.length>0 ? <button type="button" className="recallBack" onClick={back} aria-label="Undo last review" title="Undo">↶</button> : <span className="recallBackSpacer" aria-hidden="true"/>}
+          <span className="recallCount">{done+1} / {total}</span>
+          <span className="recallBackSpacer" aria-hidden="true"/>
+        </div>
+      )}
+      {expanded&&flipped&&(current.title||current.meta)&&<p className="recallSource">{current.title}{current.meta?` · ${current.meta}`:""}</p>}
+      <div className="recallSegs" aria-hidden="true">{snap.map((it,i)=><span key={it.id} className={"recallSeg"+(i<done?" on":i===done?" cur":"")} />)}</div>
+    </div>
+  );
 }
 function PushBars({values}){
   const n=values.length, max=Math.max(...values,1), last=n-1;
@@ -5017,6 +5226,51 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
   );
 }
 
+function MovieAdd({onAdd,autoFocus}){
+  const [v,setV]=useState("");
+  const commit=()=>{ const t=v.trim(); if(!t) return; onAdd(t); setV(""); };
+  return <input className="sinput movieAddInput" placeholder="Add a film…" autoFocus={autoFocus} value={v} onClick={e=>e.stopPropagation()} onChange={e=>setV(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") commit(); }} />;
+}
+/* Next movie to watch: a film-strip marquee showing only the next title. Tapping the
+   tile marks it watched (tap again to undo); the expanded view manages the queue. */
+function MovieCard({movies,onAdd,onRemove,onBump}){
+  const {expanded}=useTilePresentation();
+  const queue=movies.filter(m=>!m.watchedOn);
+  const seen=movies.filter(m=>m.watchedOn).sort((a,b)=>String(b.watchedOn).localeCompare(String(a.watchedOn)));
+  const watchedToday=movies.find(m=>m.watchedOn===todayKey);
+  const feature=watchedToday||queue[0];
+  const upNext=watchedToday?queue[0]:queue[1];
+  return (<div className="movieCard">
+    <div className="movieStrip">
+      <span className="movieSprockets" aria-hidden="true"/>
+      <div className="movieFrame">
+        {feature ? (<>
+          <span className="movieNowTitle">{feature.title}</span>
+          {upNext && <span className="movieUpNext">then · {upNext.title}</span>}
+        </>) : <MovieAdd onAdd={onAdd}/>}
+      </div>
+      <span className="movieSprockets" aria-hidden="true"/>
+    </div>
+    <div hidden={!expanded} className="cardExpandedDetails movieManager">
+      <MovieAdd onAdd={onAdd}/>
+      <div className="movieList">
+        {queue.map((m,i)=>(<div key={m.id} className="trow">
+          <span className="movieQueueN">{i+1}</span>
+          <span style={{flex:1,fontSize:13.5,fontWeight:i===0?750:600}}>{m.title}</span>
+          {i>0&&<button className="iconbtn" title="Watch next" aria-label={`Move ${m.title} to the top`} onClick={e=>{e.stopPropagation();onBump(m.id);}}>↑</button>}
+          <button className="del" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
+        </div>))}
+        {seen.length>0&&<div className="lbl" style={{margin:"10px 0 2px"}}>Seen</div>}
+        {seen.map(m=>(<div key={m.id} className="trow" style={{opacity:.62}}>
+          <span style={{flex:1,fontSize:13}}>{m.title}</span>
+          <span className="muted" style={{fontSize:11}}>{String(m.watchedOn).split("-").reverse().join("/")}</span>
+          <button className="del" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
+        </div>))}
+      </div>
+    </div>
+  </div>);
+}
+
 function BreathingCard({done,onComplete,onIncomplete}){
   const TOTAL_MS=180000, INHALE_MS=4000, HOLD_MS=1000, EXHALE_MS=4000, REST_MS=1000, CYCLE_MS=INHALE_MS+HOLD_MS+EXHALE_MS+REST_MS, SEGMENTS=6, SEG_MS=TOTAL_MS/SEGMENTS;
   const [startedAt,setStartedAt]=useState(null);
@@ -5065,28 +5319,23 @@ function BreathingCard({done,onComplete,onIncomplete}){
   const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
   const PHASE_LABEL={inhale:"Inhale",hold:"Lift",exhale:"Exhale",rest:"Release"};
   const PHASE_CUE={inhale:"Belly rises to the ceiling",hold:"Gently lift and hold",exhale:"Breathe out — stay lifted",rest:"Drop, release, open"};
-  const phase=running?PHASE_LABEL[phaseKey]:finished||done?"Complete":"Ready";
-  const cue=running?PHASE_CUE[phaseKey]:finished||done?"Nicely done":"Inhale, lift, breathe out, release";
+  const phase=running?PHASE_LABEL[phaseKey]:finished||done?"Complete":"Breathe";
+  const cue=running?PHASE_CUE[phaseKey]:finished||done?"":"4s in · 4s out · 3 min";
+  /* The circle is the control: tap it to begin, tap again to stop. No separate buttons. */
   return (
     <div className="breathCard">
       <div className="breathStage">
         <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
-          <div className={"breathOrb "+(running?(expanded?"inhale":"exhale"):"idle")} style={{"--breath-scale":breathScale,"--breath-amount":breathAmount}}>
+          <button type="button" className={"breathOrb "+(running?(expanded?"inhale":"exhale"):"idle")} style={{"--breath-scale":breathScale,"--breath-amount":breathAmount}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?"Stop the breathing exercise":finished||done?"Breathe again":"Start the breathing exercise"}>
             <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"3′"}</span>
-          </div>
+          </button>
         </div>
       </div>
       <div className="breathCopy">
         <div className="breathPhase" aria-live="polite">{phase}</div>
-        <div className="breathCue">{cue}</div>
-        {!running&&<div className="breathRecipe" aria-label="Inhale four seconds and lift, exhale four seconds and release, for three minutes"><span>Belly · 4s</span><span>Hold · 4s</span><span>3 min</span></div>}
+        {cue&&<div className="breathCue">{cue}</div>}
         <div className="breathRounds" aria-label={`${running?segIndex:finished||done?SEGMENTS:0} of ${SEGMENTS} segments complete`}>
           {Array.from({length:SEGMENTS},(_,i)=><span key={i} className={"breathRound"+(i<segIndex?" done":running&&i===segIndex?" current":"")} />)}
-        </div>
-        <div className="breathActions">
-          {!running&&<button type="button" className="widgetIconButton primary" aria-label={finished||done?"Restart breathing exercise":"Start breathing exercise"} title={finished||done?"Again":"Start"} onClick={begin}><WidgetGlyph name={finished||done?"reset":"play"}/></button>}
-          {running&&<button type="button" className="widgetIconButton" aria-label="Stop breathing exercise" title="Stop" onClick={stop}><WidgetGlyph name="stop"/></button>}
-          {!running&&(finished||done)&&<span className="breathDone">3 minutes</span>}
         </div>
       </div>
     </div>
@@ -5139,7 +5388,7 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
-function MusicCard({music,done,onToggle}){
+function MusicCard({music,done}){
   const {expanded}=useTilePresentation();
   const catalogMatch=()=>{
     if(!music||!music.catalogMatched||!music.url) return null;
@@ -5155,23 +5404,20 @@ function MusicCard({music,done,onToggle}){
     resolveMusicTrack(music).then(found=>{ if(live){ setMatch(found); setMatching(false); } }).catch(()=>{ if(live){ setMatch(null); setMatching(false); } });
     return ()=>{ live=false; };
   },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
-  const href=match&&match.url?match.url:appleMusicSearchUrl(music);
+  const href=match&&match.url?appleGeoUrl(match.url):appleMusicSearchUrl(music);
+  /* The note IS the tile's identity and its only control: tapping it opens the exact
+     song in Apple Music. Tapping anywhere else on the tile marks the song heard. */
   return <div className="musicCard">
-    <div className="musicTitle">{music.title}</div>
-    <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
-    {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="samplehint musicComposer" style={{marginTop:3,fontStyle:"normal"}}>Composed by {music.composer}</div>}
-    <div hidden={!expanded} className="cardExpandedDetails musicDetails">
-      {music.genre&&<div style={{marginTop:5}}><span className="lbl">{musicGenreIcon(music.genre)} {music.genre}</span></div>}
-      {music.why&&<p className="muted" style={{fontSize:14,margin:"9px 0",lineHeight:1.5}}>{music.why}</p>}
-      {match&&match.catalogArtist&&musicNorm(match.catalogArtist)!==musicNorm(music.artist)&&<p className="muted musicCatalogCredits" style={{fontSize:13,lineHeight:1.5}}>Recording credits: {match.catalogArtist}{match.catalogComposer&&musicNorm(match.catalogComposer)!==musicNorm(music.composer)?' · '+match.catalogComposer:''}</p>}
-    </div>
-    <div className="musicActions">
-      <a className="widgetIconButton musicPlay" target="_blank" rel="noreferrer" href={href} aria-label={(match?"Open ":"Find ")+music.title+" by "+music.artist+" on Apple Music"} title={match?"Open in Apple Music":"Find on Apple Music"} aria-busy={matching}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5.8a1 1 0 0 1 1.54-.84l8.72 5.7a1.6 1.6 0 0 1 0 2.68l-8.72 5.7A1 1 0 0 1 9 18.2Z" fill="currentColor"/></svg>
-      </a>
-      <button type="button" className={"widgetIconButton musicComplete"+(done?" on":"")} onClick={onToggle} aria-pressed={done} aria-label={(done?"Undo listened: ":"Mark as listened: ")+music.title} title={done?"Undo listened":"Mark as listened"}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 12 4 4 8-8"/></svg>
-      </button>
+    <a className={"musicNote"+(matching?" matching":"")} href={href} target="_blank" rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}>♪</a>
+    <div className="musicMeta">
+      <div className="musicTitle">{music.title}</div>
+      <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
+      {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="musicComposer">{music.composer}</div>}
+      <div hidden={!expanded} className="cardExpandedDetails musicDetails">
+        {music.genre&&<div style={{marginTop:5}}><span className="lbl">{music.genre}</span></div>}
+        {music.why&&<p className="muted musicWhy" style={{fontSize:14,margin:"9px 0",lineHeight:1.5}}>{music.why}</p>}
+        {match&&match.catalogArtist&&musicNorm(match.catalogArtist)!==musicNorm(music.artist)&&<p className="muted musicCatalogCredits" style={{fontSize:13,lineHeight:1.5}}>Recording credits: {match.catalogArtist}{match.catalogComposer&&musicNorm(match.catalogComposer)!==musicNorm(music.composer)?' · '+match.catalogComposer:''}</p>}
+      </div>
     </div>
   </div>;
 }
