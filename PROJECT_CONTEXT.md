@@ -55,7 +55,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Compact utility tiles retain their title and adapt to tile shape: wide Timer and Push-ups layouts move controls to the right, Weather gives Tomorrow equal visual weight, completed due Reminders receive the tile’s full-colour completion state, and Event cards stay comparatively compact.
 - Timer previews keep the time and Start/Stop/Resume controls prominent; duration adjustments live in the expanded view. When nothing is due, an unlabeled empty area in Reminders toggles the full-colour completion state; completed reminder text never receives an opaque white pressed field.
 - Library widgets should match their Today widget bodies. AI-capable widgets can be generated individually from the Library without being added to Today.
-- Visible stored dates render as `dd/mm/yyyy`.
+- Visible dates use en-US formatting: `MM/DD/YYYY` for numeric dates and "Wednesday, October 28" style for long dates.
 - Note defaults to a compact one-row writing card with a visually hidden textarea scrollbar and stacked actions. Flat Timer controls use a four-adjustment row plus a separate balanced action row; compact Push-ups stretches its count and controls through the tile’s available height.
 - The user’s editable display name is stored as `fefe_profileName`, appears in the dashboard greeting, and participates in the same sync, backup, and restore flow as other dashboard memory.
 - Settings saves the display name and API key in place without reloading the dashboard or deleting today’s generated content.
@@ -70,9 +70,18 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Word renders as a dictionary entry: serif headword, IPA, italic part of speech, numbered sense, FR gloss as sub-entry; the synonym quiz lives in the expanded view.
 - Song's identity is one big tilted bold note; tapping the note opens the exact track in Apple Music (conservative catalog match on the FR storefront, geo.music.apple.com links so the song opens in the listener's own storefront; uncertain matches fall back to a precise search).
 - Recall is a single-flashcard deck: the front shows only the prompt (never title/meta, which can leak the answer), tapping flips it, an emoji grade advances; the tile's built-in expand shows the same session big with undo, counter, per-grade intervals and segmented progress. FSRS-6 scheduling, the 8-card cap and undo/restore semantics are unchanged.
-- Breathing's circle is the control: tap the orb to start or stop; no separate buttons or recipe chips.
+- Breathing is only its dial: the ring and orb fill the whole square tile, tapping the orb starts or stops it, and there is no visible text (the phase is announced to screen readers).
 - Deutsch is a daily tile mirroring Español one level down (A1–A2 for a French native): explanations and questions in French, vocabulary with article + French-respelled pronunciation, recall fed like Spanish. German is never assumed guessable from French.
 - Movies is a manual watch-list with a film-strip marquee showing only the next title; tapping the tile marks it watched today (tap again undoes), the expanded view manages the queue and seen history. Deliberately no AI.
+- Liquid glass is clear in the centre: tile surfaces carry only a light tint with no blur, and refraction plus specular highlights are confined to an ~11px rim, so textured backgrounds stay crisp through the tiles.
+- The expand control (⤢) appears only when a tile's preview, at the current size and zoom, actually hides content (expanded-only blocks, clamped text, collapsed rows); Recall keeps it for its focused session. Purely decorative captions opt out with `data-preview-optional`. Prefer putting short content on the main tile over adding an expand.
+- Habits show emoji-only circles at Goals' size and shape; names, deleting and adding live in the expanded editor. Text-only habits keep their name.
+- Goals use round checkboxes, a minimal underline "add a goal" field and no done/total counters.
+- Push-ups is a loose pile of weight plates sized by value (+10 > +5 > +1) with the day's count in the corner; Timer is a small square dial (tap to start/pause/resume, adaptive −/＋ while idle).
+- World news is set as a small newspaper page (masthead, dateline, lead story, ruled columns).
+- Reminders recur every n days, weeks, months or years (calendar maths with month-end clamping); legacy day counts still work. The tile stays a compact calendar beside a single-line list.
+- Brainflex rotates daily through owner-chosen challenge kinds (Fermi estimate, case interview, logic, probability, pattern, mental math, lateral riddle) picked with a ⚙ on the tile and stored in the worker's `shared_config` alongside the tile checklist.
+- Daily-content progress is a compact pill with one dot per daily tile, not an explanatory banner.
 - Further tile identities: Events render as admission tickets (day-count stub, perforation, then the plan, stacked vertically); Note is ruled notebook paper with a red margin; Philosophy sets the day's question as a serif quotation with an oversized opening quote mark; Push-up add-buttons are round weight plates sized by their value with a bare reset glyph; People are "HELLO" name badges grouped under their place; the next Birthday is a tear-off calendar leaf (month band + day) with the name and days-to-go beside it.
 - Brainflex puzzles must be solved and verified by the generator before being emitted, with a ≤55-word prompt containing every needed fact and nothing decorative.
 - Philosophy chat requests try the current Sonnet model and fall back to Haiku on a 4xx (retired model id), so the tile keeps working across model retirements.

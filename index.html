@@ -2111,7 +2111,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid]{
     --glass-radius:34px;
     border:1px solid rgba(255,255,255,.46)!important;border-radius:var(--glass-radius)!important;
-    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,0) 46%,rgba(255,255,255,.015)),linear-gradient(125deg,rgba(var(--glass-rgb),.15),rgba(var(--glass-rgb),.08));
+    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,0) 40%,rgba(255,255,255,.04)),linear-gradient(125deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.05));
     background:transparent!important;
     -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
     box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.1),0 10px 26px -14px rgba(var(--glass-depth),.16),0 2px 6px rgba(30,40,50,.025)!important;
@@ -2120,22 +2120,29 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid]::before{
     content:''!important;display:block!important;position:absolute;z-index:-1;inset:0!important;width:auto!important;height:auto!important;margin:0!important;border-radius:inherit;pointer-events:none;opacity:1!important;transform:none!important;
     background:var(--glass-surface)!important;box-shadow:inset 0 0 12px 2px rgba(255,255,255,.035);
-    -webkit-backdrop-filter:blur(3px) saturate(125%);backdrop-filter:blur(3px) saturate(125%);
-    -webkit-backdrop-filter:blur(3px) saturate(125%) url('#dashboard-glass-refraction');backdrop-filter:blur(3px) saturate(125%) url('#dashboard-glass-refraction');
+    /* Liquid glass is clear in the middle: the background shows through untouched.
+       Only the rim (::after below) bends light, so busy wallpapers stay crisp. */
+    -webkit-backdrop-filter:saturate(135%);backdrop-filter:saturate(135%);
   }
   .tile[data-tileid]::after{
     content:'';display:block!important;position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;opacity:1!important;
-    background:linear-gradient(155deg,rgba(255,255,255,.1),transparent 13%,transparent 87%,rgba(255,255,255,.035))!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 1px 0 0 rgba(255,255,255,.2);
+    /* the lensing rim: a ~11px band that refracts and brightens what is behind the edge */
+    padding:11px;box-sizing:border-box;
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+    -webkit-backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06);backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06);
+    -webkit-backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06) url('#dashboard-glass-refraction');backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06) url('#dashboard-glass-refraction');
+    background:linear-gradient(155deg,rgba(255,255,255,.42),rgba(255,255,255,.06) 30%,rgba(255,255,255,0) 60%,rgba(255,255,255,.16))!important;
+    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 1px 0 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.25),inset -1px 0 0 rgba(255,255,255,.18);
   }
   .tile[data-tileid]:not(.editing):hover{transform:none!important;border-color:rgba(255,255,255,.7)!important;box-shadow:inset 1px 1px 1px rgba(255,255,255,.65),inset -1px -1px 1px rgba(var(--glass-depth),.12),0 12px 28px -14px rgba(var(--glass-depth),.2)!important}
   .tile.completed[data-tileid]{
-    --glass-surface:linear-gradient(145deg,rgba(var(--glass-depth),.02),rgba(var(--glass-depth),.01)),linear-gradient(125deg,rgba(var(--glass-rgb),.5),rgba(var(--glass-rgb),.35));
+    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,0) 40%),linear-gradient(125deg,rgba(var(--glass-rgb),.46),rgba(var(--glass-rgb),.30));
     background:transparent!important;
     border-color:rgba(255,255,255,.38)!important;
     box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.15),0 12px 28px -14px rgba(var(--glass-depth),.23)!important;
   }
-  .tile.completed[data-tileid]::after{background:linear-gradient(155deg,rgba(255,255,255,.08),transparent 12%,transparent 88%,rgba(255,255,255,.04))!important}
+  .tile.completed[data-tileid]::after{background:linear-gradient(155deg,rgba(255,255,255,.34),rgba(255,255,255,.05) 30%,rgba(255,255,255,0) 60%,rgba(255,255,255,.12))!important}
   .tile[data-tileid] .tilehead .ldot{background:currentColor!important;opacity:.65}
   .tile[data-tileid] .tilehead .lbl{color:var(--ink)!important;font-size:13px!important;font-weight:800!important}
   .tile[data-tileid] .content{color:var(--ink)!important;text-shadow:none!important}
@@ -2409,6 +2416,8 @@ a.musicNote.matching{animation:musicPulse 1.1s ease-in-out infinite}
 @keyframes musicPulse{50%{transform:rotate(-6deg) scale(.96);opacity:.82}}
 .musicMeta{min-width:0;flex:1}
 .musicComposer{font-size:12px;color:var(--dim);margin-top:2px}
+.musicWhy{font-size:12.5px;line-height:1.45;color:var(--dim);margin:6px 0 6px}
+.musicGenre{display:inline-block;font-size:10px!important}
 .tile.completed a.musicNote{background:rgba(255,255,255,.95)!important;color:var(--accentDark)!important;box-shadow:0 10px 22px -12px rgba(0,0,0,.35)}
 .tile.completed .musicComposer,.tile.completed .musicWhy{color:rgba(255,255,255,.78)!important}
 .tile[data-cols="1"] .musicCard{flex-direction:column;align-items:center;text-align:center}
@@ -2566,6 +2575,163 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .bdayLeafMonth{display:block;padding:2.5px 0 2px;background:var(--accent);color:#fff;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;text-align:center}
 .bdayLeafDay{display:block;padding:3px 0 4px;font-size:19px;font-weight:900;color:#2a2e40;text-align:center;line-height:1}
 .tile.completed .bdayLeafMonth{background:var(--accent)}
+/* --- Breathe: the dial fills the whole square, no words --- */
+.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.tile[data-tileid="breathing"] .tileMount{padding-top:0!important}
+.tile[data-tileid="breathing"] .content{display:flex;align-items:center;justify-content:center;padding:0!important;min-height:0!important}
+.breathFull{width:100%;display:grid;place-items:center}
+.breathDial{position:relative;width:100%;max-width:calc(var(--tile-base-rows,2) * var(--dashboard-unit,140px) + (var(--tile-base-rows,2) - 1) * var(--dashboard-gap,14px) - 2 * var(--dashboard-pad,18px) - 12px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
+/* session ring: a 5px band that fills clockwise over the three minutes */
+.breathDial::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:conic-gradient(var(--accent) var(--breath-progress,0deg),color-mix(in srgb,var(--accent) 30%,rgba(255,255,255,.5)) 0);
+  -webkit-mask:radial-gradient(circle closest-side,transparent calc(100% - 7px),#000 calc(100% - 6.5px));mask:radial-gradient(circle closest-side,transparent calc(100% - 7px),#000 calc(100% - 6.5px))}
+.breathDial::before{content:"";position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 10%,rgba(255,255,255,.22)),transparent 70%)}
+.tile button.breathCore,.tile.completed button.breathCore{position:relative;z-index:1;width:82%;height:auto;aspect-ratio:1;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 40%,white),var(--accent) 58%,var(--accentDark))!important;
+  box-shadow:0 18px 40px -12px color-mix(in srgb,var(--accent) 60%,transparent),inset 0 2px 0 rgba(255,255,255,.55)!important;
+  transform:scale(var(--breath-scale,.8));transition:transform .1s linear}
+.tile button.breathCore:hover{transform:scale(calc(var(--breath-scale,.8) * 1.03))!important;border:none!important;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 40%,white),var(--accent) 58%,var(--accentDark))!important}
+.breathDial.isIdle .breathCore{animation:breathIdle 4.5s ease-in-out infinite}
+@keyframes breathIdle{0%,100%{transform:scale(.74)}50%{transform:scale(.84)}}
+.tile.completed button.breathCore{background:radial-gradient(circle at 34% 28%,#fff,rgba(255,255,255,.82) 60%,rgba(255,255,255,.6))!important}
+.tile.completed .breathDial::after{background:conic-gradient(#fff var(--breath-progress,0deg),rgba(255,255,255,.28) 0)}
+button.breathCore:focus-visible{outline:2px solid var(--accentDark);outline-offset:6px}
+@media(prefers-reduced-motion:reduce){.breathDial.isIdle .breathCore{animation:none}}
+/* --- Habits: big emoji circles; editing lives in the expanded view --- */
+.grid>.tile[data-tileid="habits"]>.tbody,.grid>.tile[data-tileid="breathing"]>.tbody{display:flex!important;flex-direction:column}
+/* centre via the mount; .content keeps its natural height because the tile measures it */
+.grid>.tile[data-tileid="habits"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
+.grid>.tile[data-tileid="habits"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:flex!important;justify-content:center!important;padding:0!important}
+.tile[data-tileid] .habitBoard.hgrid{display:flex!important;flex-wrap:wrap;align-items:flex-start!important;justify-content:center!important;align-content:center!important;gap:clamp(10px,1.4vw,18px)!important;width:100%;grid-template-columns:none!important}
+.tile[data-tileid] .habitBoard .habitControl{position:relative;flex:none!important;display:flex;flex-direction:column;align-items:center;gap:6px;width:auto!important}
+.tile[data-tileid="habits"] .habitBoard .hsq,.tileFocusSurface .habitBoard .hsq{width:clamp(58px,calc(var(--dashboard-unit,90px) * .95),112px)!important;height:auto!important;aspect-ratio:1!important;min-height:0!important;border-radius:50%!important;padding:0!important}
+.tile[data-tileid="habits"] .habitBoard .hsq.emojiOnly .hicon,.tileFocusSurface .habitBoard .hsq.emojiOnly .hicon{font-size:clamp(26px,calc(var(--dashboard-unit,90px) * .38),48px)!important;line-height:1}
+.habitBoard .hdel{position:static!important;opacity:1!important}
+.habitEditRow{display:flex;align-items:center;gap:4px;max-width:120px}
+.habitEditRow[hidden]{display:none!important}
+.habitEditName{font-size:12px;font-weight:750;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.habitAddSlot[hidden]{display:none!important}
+.habitAddSlot .hsq.plus{width:clamp(58px,calc(var(--dashboard-unit,90px) * .95),112px)!important;height:auto!important;aspect-ratio:1;border-radius:50%!important;border-style:dashed!important}
+/* --- Push-ups: a leaning pile of weight plates sized by value --- */
+.grid>.tile[data-tileid="pushups"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="pushups"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
+.grid>.tile[data-tileid="pushups"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:block!important;padding:0!important;container-type:inline-size}
+/* square rack capped to the tile's own base height so the tile never grows */
+.tile .pushRack{position:relative;width:100%;aspect-ratio:1;max-width:calc(var(--tile-base-rows,2) * var(--dashboard-unit,140px) + (var(--tile-base-rows,2) - 1) * var(--dashboard-gap,14px) - 2 * var(--dashboard-pad,18px) - 12px)!important;margin:0 auto}
+.pushTally{position:absolute;left:2%;top:0;font-weight:900;font-size:clamp(28px,30cqi,54px);line-height:.9;letter-spacing:-.05em;color:var(--accentDark);font-variant-numeric:tabular-nums}
+.tile.completed .pushTally{color:#fff}
+.tile button.plate,.tile.completed button.plate{position:absolute;display:grid;place-items:center;padding:0!important;min-height:0!important;border-radius:50%!important;
+  border:none!important;font-weight:900;letter-spacing:-.03em;color:#fff!important;text-shadow:none!important;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  /* face, a darker groove, then the outer rim — read as a cast plate */
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 88%,#fff) 0 56%,color-mix(in srgb,var(--accentDark) 85%,#000) 57% 61%,var(--accent) 62% 100%)!important;
+  box-shadow:0 8px 16px -7px color-mix(in srgb,var(--accentDark) 75%,transparent),inset 0 2px 0 rgba(255,255,255,.3),inset 0 -2px 0 rgba(0,0,0,.14)!important;
+  transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.tile button.plate.p10{width:56cqi;height:56cqi;right:0;bottom:0;transform:rotate(-9deg);font-size:clamp(15px,13cqi,26px);z-index:1}
+.tile button.plate.p5{width:40cqi;height:40cqi;left:5%;bottom:3%;transform:rotate(7deg);font-size:clamp(13px,10cqi,20px);z-index:2}
+.tile button.plate.p1{width:27cqi;height:27cqi;left:34%;bottom:44%;transform:rotate(-4deg);font-size:clamp(11px,8cqi,16px);z-index:3}
+.tile button.plate:hover{filter:brightness(1.06);border:none!important}
+.tile button.plate.p10:hover{transform:rotate(-14deg) translateY(-2px)}
+.tile button.plate.p5:hover{transform:rotate(12deg) translateY(-2px)}
+.tile button.plate.p1:hover{transform:rotate(-9deg) translateY(-2px)}
+.tile button.plate:active{filter:brightness(.94)}
+.tile.completed button.plate{background:radial-gradient(circle,#fff 0 56%,color-mix(in srgb,var(--accent) 45%,#fff) 57% 61%,rgba(255,255,255,.9) 62% 100%)!important;color:var(--accentDark)!important;box-shadow:0 8px 16px -7px rgba(0,0,0,.3),inset 0 -2px 0 rgba(0,0,0,.06)!important}
+.tile button.pushReset,.tile.completed button.pushReset{position:absolute;right:0;top:0;width:26px;height:26px;min-height:0!important;padding:0!important;border:none!important;border-radius:8px!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:14px;opacity:.7;z-index:4}
+.tile button.pushReset:hover{opacity:1;background:color-mix(in srgb,var(--accent) 12%,transparent)!important;border:none!important;transform:none}
+.tile.completed button.pushReset{color:rgba(255,255,255,.8)!important}
+button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3px}
+/* --- World: a small newspaper page --- */
+.newsPage{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;color:var(--ink)}
+.newsMast{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0 6px;margin-bottom:9px;border-top:3px double currentColor;border-bottom:1px solid currentColor;border-bottom-color:color-mix(in srgb,currentColor 55%,transparent);border-top-color:color-mix(in srgb,currentColor 75%,transparent)}
+.newsMastTitle{font-family:'Old English Text MT','UnifrakturMaguntia',Georgia,serif;font-size:clamp(20px,6cqi,30px);font-weight:700;letter-spacing:.02em;line-height:1}
+.newsDateline{font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+.newsHeadline{margin:0 0 4px;font-weight:700;font-size:clamp(16px,4.4cqi,21px);line-height:1.15;letter-spacing:-.01em}
+.newsHeadline.small{font-size:14px;line-height:1.2}
+.newsBody{margin:0;font-size:12.8px;line-height:1.5;font-weight:400;color:var(--ink);opacity:.85;text-align:left;hyphens:auto}
+.newsLead .newsBody{text-align:justify}
+.newsHeadline{font-weight:700!important}
+.newsLead{padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid color-mix(in srgb,currentColor 30%,transparent)}
+.newsColumns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0}
+.newsItem{padding:0 11px 6px;border-left:1px solid color-mix(in srgb,currentColor 25%,transparent)}
+.newsColumns .newsItem:first-child{padding-left:0;border-left:none}
+.tileFocusSurface .newsColumns{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.tile[data-tileid="world"] .content{container-type:inline-size}
+/* --- Goals: minimal add field, round checks, no counters --- */
+.goalInputMinimal{position:relative;display:flex;align-items:center;margin-top:4px}
+.tile input.goalInputField,.tile.completed input.goalInputField{flex:1;min-width:0;height:30px;padding:2px 26px 2px 30px!important;border:none!important;border-bottom:1px dashed color-mix(in srgb,var(--accent) 40%,transparent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:13.5px!important;transform:none!important}
+.tile input.goalInputField:focus{border-bottom-style:solid!important;border-bottom-color:var(--accent)!important}
+.goalInputMinimal::before{content:"";position:absolute;left:5px;width:17px;height:17px;border-radius:50%;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,transparent);pointer-events:none}
+.tile button.goalInputAdd{position:absolute;right:0;width:24px;height:24px;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:var(--accent)!important;color:#fff!important;font-size:13px;box-shadow:none!important}
+.tile .goalTick,.tile button.goalTick{border-radius:50%!important}
+/* --- Timer: a small square that is the dial --- */
+.grid>.tile[data-tileid="timer"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="timer"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
+.grid>.tile[data-tileid="timer"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:block!important;padding:0!important;container-type:inline-size}
+.tile .timerSquare{position:relative;width:100%;aspect-ratio:1;max-width:calc(var(--tile-base-rows,2) * var(--dashboard-unit,140px) + (var(--tile-base-rows,2) - 1) * var(--dashboard-gap,14px) - 2 * var(--dashboard-pad,18px) - 12px)!important;margin:0 auto;display:grid;place-items:center}
+.tile button.timerFace,.tile.completed button.timerFace{position:relative;width:84%;height:auto;aspect-ratio:1;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;display:grid;place-items:center;cursor:pointer;color:var(--accentDark)!important}
+.tile button.timerFace:hover{background:color-mix(in srgb,var(--accent) 7%,transparent)!important;border:none!important;transform:none}
+.timerFace .timerRingSvg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.timerFace .timerRingBg{fill:none;stroke:color-mix(in srgb,var(--accent) 18%,transparent);stroke-width:6}
+.timerFace .timerRingFg{fill:none;stroke:var(--accent);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.timerFaceTime{position:relative;font-weight:900;font-size:clamp(16px,17cqi,30px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.timerFaceState{position:absolute;bottom:24%;font-size:9px;letter-spacing:-1px;opacity:.6}
+.timerSquare.isIdle .timerFace .timerRingFg{opacity:.35}
+.timerSquare.isFired .timerFaceTime{animation:timerPulse 1s ease-in-out infinite}
+@keyframes timerPulse{50%{opacity:.45}}
+.timerNudge{position:absolute;left:0;right:0;bottom:-2px;display:flex;justify-content:space-between;pointer-events:none}
+.tile .timerNudge button,.tile.completed .timerNudge button{pointer-events:auto;width:26px;height:26px;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.5))!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:15px;font-weight:800;line-height:1}
+.tile .timerNudge button:hover{background:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.5))!important;border:none!important;transform:none}
+.tile button.timerResetGlyph,.tile.completed button.timerResetGlyph{position:absolute;right:0;top:0;width:26px;height:26px;min-height:0!important;padding:0!important;border:none!important;border-radius:8px!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:14px}
+.tile.completed button.timerFace{color:#fff!important}
+.tile.completed .timerFace .timerRingFg{stroke:#fff}
+.tile.completed .timerFace .timerRingBg{stroke:rgba(255,255,255,.3)}
+.tile.completed .timerNudge button{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.tile.completed button.timerResetGlyph{color:rgba(255,255,255,.85)!important}
+/* --- Reminders: compact rows, visible due state, uniform form controls --- */
+.grid>.tile[data-tileid="agenda"] .tileMount{padding-top:0!important}
+.grid>.tile[data-tileid="agenda"] .tileMount>.content{padding-bottom:0!important}
+.grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:2px!important;padding-top:34px}
+.grid>.tile[data-tileid="agenda"] .agRow{padding:3px 2px!important;min-height:0!important;gap:8px!important}
+.grid>.tile[data-tileid="agenda"] button.taskMain{min-height:36px!important}
+/* the add control sits level with the calendar header instead of taking its own line */
+.grid>.tile[data-tileid="agenda"] .agendaItems>button.taskAddLink{position:absolute;top:0;right:0;width:30px!important;height:30px!important;min-height:0!important;margin:0!important}
+.grid>.tile[data-tileid="agenda"] .agendaItems:has(.agendaForm){padding-top:0}
+.tile[data-tileid="agenda"] .agName{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13.5px!important;line-height:1.25!important}
+.tile[data-tileid="agenda"] .agSub{font-size:11px!important;line-height:1.2!important;margin-top:1px}
+.tile[data-tileid="agenda"] .taskMain{min-width:0;flex:1}
+.tile[data-tileid="agenda"] .agWhen{flex:none;font-size:10.5px!important;font-weight:800;white-space:nowrap}
+.tile[data-tileid="agenda"] .taskRow.dueNow .agWhen{padding:2px 8px;border-radius:99px;background:var(--accent)!important;color:#fff!important}
+.tile.completed[data-tileid="agenda"] .taskRow.dueNow .agWhen{background:#fff!important;color:var(--accentDark)!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay{min-height:26px!important;height:26px!important;padding:0!important;font-size:11.5px!important}
+.tile[data-tileid="agenda"] .miniCalendar .miniCalWeekday,.tile[data-tileid="agenda"] .miniCalendar [class*="Weekday"]{font-size:9.5px!important}
+.agendaForm{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.agendaSeg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,rgba(255,255,255,.4))}
+.tile .agendaSeg button,.tile.completed .agendaSeg button{height:32px;min-height:32px!important;padding:0!important;border:none!important;border-radius:9px!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:12.5px;font-weight:800}
+.tile .agendaSeg button.on{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
+.agendaFormRow{display:flex;align-items:center;gap:8px}
+.tile .agendaForm .agendaField,.tile .agendaForm input.agendaField{height:38px!important;min-height:38px!important;max-height:38px!important;box-sizing:border-box;flex:1;min-width:0;padding:0 11px!important;border-radius:11px!important;font-size:13px!important}
+.tile .agendaField.agendaN{flex:0 0 64px;text-align:center}
+.agendaEvery{font-size:12.5px;font-weight:750;color:var(--dim);flex:none}
+.tile button.agendaBtn,.tile.completed button.agendaBtn{flex:1;height:38px;min-height:38px!important;padding:0!important;border-radius:11px!important;border:none!important;background:var(--accent)!important;color:#fff!important;font-weight:800;font-size:13px;box-shadow:none!important}
+.tile button.agendaBtn.ghost{background:transparent!important;color:var(--accentDark)!important;border:1.5px solid color-mix(in srgb,var(--accent) 35%,transparent)!important}
+/* --- Brainflex: a quiet gear to choose the kinds of challenge --- */
+.brainFlexCard{position:relative}
+.tile button.brainGear,.tile.completed button.brainGear{position:absolute;top:-2px;right:-2px;width:28px;height:28px;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:16px;opacity:.55;transition:transform .35s ease,opacity .2s;z-index:2}
+.tile button.brainGear:hover,.tile button.brainGear[aria-expanded="true"]{opacity:1;transform:rotate(60deg);border:none!important;background:color-mix(in srgb,var(--accent) 12%,transparent)!important}
+.tile.completed button.brainGear{color:#fff!important}
+.brainTuner{margin:8px 0 10px;padding:10px;border-radius:14px;background:color-mix(in srgb,var(--accent) 9%,rgba(255,255,255,.55));border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.brainTunerChips{display:flex;flex-wrap:wrap;gap:6px}
+.tile button.brainChip,.tile.completed button.brainChip{display:inline-flex;align-items:center;gap:5px;height:30px;min-height:30px!important;padding:0 11px!important;border-radius:99px!important;border:1.5px solid color-mix(in srgb,var(--accent) 30%,transparent)!important;background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:12px;font-weight:750}
+.tile button.brainChip.on{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.brainTunerNote{margin:8px 2px 0;font-size:11px;color:var(--dim)}
+.tile.completed .brainTuner{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3)}
+/* --- Daily content meter: one dot per daily tile, filled once its content is in --- */
+.dailyMeter{display:inline-flex;align-items:center;gap:10px;margin:-10px 0 20px;padding:6px 12px 6px 10px;border-radius:99px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 14px -8px rgba(30,40,60,.25);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);cursor:default}
+.dailyMeterDots{display:inline-flex;gap:5px}
+.dailyMeterDot{width:8px;height:8px;border-radius:50%;background:transparent;border:1.5px solid rgba(40,52,64,.35);transition:background .3s,border-color .3s}
+.dailyMeterDot.on{background:#2c3a45;border-color:#2c3a45}
+.dailyMeterText{font-size:12px;font-weight:800;letter-spacing:.01em;color:#33424d}
+.dailyMeter.isComplete .dailyMeterDot.on{background:#1f9d6a;border-color:#1f9d6a}
+.dailyMeter.isComplete .dailyMeterText{color:#1f7a55}
 </style>
 </head>
 <body>
@@ -2690,7 +2856,7 @@ function zonedParts(date,timeZone){
   return { weekday:pick("weekday"), year:Number(pick("year")), month:Number(pick("month")), day:Number(pick("day")), hour:Number(pick("hour")), minute:Number(pick("minute")) };
 }
 function formatLongDateInZone(date,timeZone){
-  return new Intl.DateTimeFormat("en-GB",{timeZone,weekday:"long",day:"numeric",month:"long"}).format(date);
+  return new Intl.DateTimeFormat("en-US",{timeZone,weekday:"long",day:"numeric",month:"long"}).format(date);
 }
 function formatClockInZone(date,timeZone){
   const p=zonedParts(date,timeZone);
@@ -2736,7 +2902,8 @@ async function pullHealth(token){ const t=(token||getHealthToken()).trim(); if(!
    doesn't quietly become tomorrow while you're still awake. */
 const pad=n=>String(n).padStart(2,"0");
 const dateKey=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const formatDateKey=key=>{ const [y,m,d]=String(key||"").split("-").map(Number); return y&&m&&d?`${pad(d)}/${pad(m)}/${y}`:""; };
+/* Visible dates are en-US (MM/DD/YYYY). */
+const formatDateKey=key=>{ const [y,m,d]=String(key||"").split("-").map(Number); return y&&m&&d?`${pad(m)}/${pad(d)}/${y}`:""; };
 const WEEKDAY_NAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const parseDateKey=value=>{
   const s=String(value||"").trim();
@@ -2745,6 +2912,22 @@ const parseDateKey=value=>{
   return "";
 };
 function addDays(key,n){ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+n); return dateKey(dt); }
+/* Recurring reminders repeat every n days, weeks, months or years. Older reminders only
+   carry everyDays and read as day-based. Months and years use calendar maths, clamping
+   to the month's last day (Jan 31 + 1 month → Feb 28/29). */
+const RECUR_UNITS=["day","week","month","year"];
+function recurEvery(r){ const e=r&&r.every; if(e&&RECUR_UNITS.includes(e.unit)&&Number(e.n)>=1) return {n:Math.round(Number(e.n)),unit:e.unit}; const days=Math.max(1,Math.round(Number(r&&r.everyDays)||1)); return days%7===0?{n:days/7,unit:"week"}:{n:days,unit:"day"}; }
+function addRecurStep(key,every,times=1){
+  const {n,unit}=every, k=n*times;
+  if(unit==="day") return addDays(key,k);
+  if(unit==="week") return addDays(key,7*k);
+  const [y,m,d]=key.split("-").map(Number), months=unit==="month"?k:12*k;
+  const target=new Date(y,m-1+months,1), last=new Date(target.getFullYear(),target.getMonth()+1,0).getDate();
+  return dateKey(new Date(target.getFullYear(),target.getMonth(),Math.min(d,last)));
+}
+const recurDue=r=>addRecurStep(r.lastDone,recurEvery(r));
+function recurLabel(r){ const {n,unit}=recurEvery(r); const one={day:"Daily",week:"Weekly",month:"Monthly",year:"Yearly"}[unit]; return n===1?one:`Every ${n} ${unit}s`; }
+const recurApproxDays=({n,unit})=>n*({day:1,week:7,month:30,year:365}[unit]);
 function daysBetween(fromKey,toKey){ const [ay,am,ad]=fromKey.split("-").map(Number); const [by,bm,bd]=toKey.split("-").map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000); }
 const logicalDateKey=(d=new Date())=>{ const dt=new Date(d); if(dt.getHours()<1) dt.setDate(dt.getDate()-1); return dateKey(dt); };
 const todayKey=logicalDateKeyInZone(new Date(),getLocationProfile().timezone);
@@ -2887,14 +3070,25 @@ const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no ma
 const genGerman=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif DÉBUTANT-FAUX-DÉBUTANT (A1–A2). Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A1–A2 (ordre des mots, genres, cas de base, verbes fréquents…) expliqué en 2–3 phrases simples en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" très fréquents et utiles à l'oral — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions FACILES dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:700}).then(extractJSON);
 
-/* Use-your-brain: a self-contained daily exercise in a rotating format, meant to be worked
-   out rather than explained — the antidote tile. */
-const genBrainFlex=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter: SOLVE the puzzle completely yourself before writing it down, verify the solution is the unique correct answer, and if you cannot fully verify it, replace the puzzle with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty must come from the reasoning alone, not from length or noise.",
-  `Create ONE self-contained thinking game for a smart 24-year-old, solvable mentally in 2-5 minutes. Vary sharply from recent formats: ${(avoid||[]).join(" | ")||"none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, ranking constraints, code-breaking, mental maths or lateral riddles. Rules: the prompt is at most 55 words and contains EVERY fact needed and NOTHING that isn't needed; exactly one answer must be defensible. Shape:{"format":"2-4 word game name","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 sentences"}.`, {max:500}).then(extractJSON);
+/* Use-your-brain: one quick daily challenge that trains thinking. The owner picks the
+   formats with the ⚙ on the tile; each day rotates through them (all when none chosen).
+   Mirrors the worker's BRAINFLEX_KINDS so shared and personal generation agree. */
+const BRAINFLEX_KINDS={
+  fermi:{label:"Fermi estimate",icon:"≈",brief:"a Fermi estimate: a rough order-of-magnitude calculation about the real world (e.g. how many cafés are in Sydney?). The solution gives a defensible ballpark first, then the 3-4 assumptions that drive it"},
+  case:{label:"Case interview",icon:"📈",brief:"a consulting case-interview question (market sizing, profitability, pricing or growth) answerable in a few minutes. The solution gives the answer first, then a crisp 2-3 step structure"},
+  logic:{label:"Logic puzzle",icon:"🧩",brief:"a logic puzzle (deduction, ordering constraints, knights and knaves) with exactly one valid answer"},
+  probability:{label:"Probability",icon:"🎲",brief:"a probability or expected-value question with a tempting wrong intuition and exactly one correct answer"},
+  pattern:{label:"Pattern",icon:"🔢",brief:"a sequence or pattern to complete, with exactly one rule that fits every term"},
+  mental:{label:"Mental math",icon:"➗",brief:"a mental-math challenge that rewards a clever shortcut, with one exact answer"},
+  lateral:{label:"Lateral riddle",icon:"💡",brief:"a lateral-thinking riddle with one satisfying answer that every clue supports"}
+};
+function brainflexKindFor(chosen){ const keys=(Array.isArray(chosen)?chosen:[]).filter(k=>BRAINFLEX_KINDS[k]); const pool=keys.length?keys:Object.keys(BRAINFLEX_KINDS); return pool[Math.floor(Date.now()/86400000)%pool.length]; }
+const genBrainFlex=(avoid)=>{ const kind=brainflexKindFor(load("brainflexKinds",null)); return callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
+  `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind].brief}. Vary the topic from these recent ones: ${(avoid||[]).join(" | ")||"none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, {max:500}).then(extractJSON); };
 
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, {max:220}).then(extractJSON);
+  `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 16 words, no preamble or setup — depth comes from the idea, not the length"}.`, {max:220}).then(extractJSON);
 
 const PHILO_MODES=[
   {id:"standard",label:"Standard · go deeper",icon:"🔎"},
@@ -3478,7 +3672,7 @@ function WeatherCard({data,busy,onGenerate}){
 const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360?2:1;
 const CURATED_TILE_LAYOUT={
   goals:{desktop:[4,3],phone:[2,2],family:"large"},
-  habits:{desktop:[2,2],phone:[2,2],family:"large"},
+  habits:{desktop:[4,3],phone:[2,2],family:"large"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
   shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
@@ -3486,7 +3680,7 @@ const CURATED_TILE_LAYOUT={
   events:{desktop:[4,4],phone:[2,2],family:"large-square"},
   note:{desktop:[4,2],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
-  timer:{desktop:[4,2],phone:[2,1],family:"wide"},
+  timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,3],phone:[2,2],family:"large"},
   word:{desktop:[2,2],phone:[2,1],family:"wide"},
   music:{desktop:[2,2],phone:[2,1],family:"wide"},
@@ -3633,6 +3827,22 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
+const TILE_ALWAYS_EXPAND=new Set(["recall"]);
+/* True when a tile preview hides real content: an element hidden in preview that
+   carries text or a control, or a text box clipped by a line clamp / overflow. */
+function previewHidesContent(root){
+  if(!root)return false;
+  // Decorative captions opt out with data-preview-optional; hiding them loses nothing.
+  const meaningful=el=>!el.closest("[data-preview-optional]")&&((el.textContent||"").trim().length>0||!!el.querySelector("input,textarea,select,button"));
+  for(const el of root.querySelectorAll("[hidden]"))if(meaningful(el))return true;
+  for(const el of root.querySelectorAll("*")){
+    const cs=getComputedStyle(el);
+    if(cs.display==="none"){if(meaningful(el))return true;continue;}
+    const clips=cs.overflowY==="hidden"||cs.overflow==="hidden"||(cs.webkitLineClamp&&cs.webkitLineClamp!=="none");
+    if(clips&&el.scrollHeight>el.clientHeight+2&&meaningful(el))return true;
+  }
+  return false;
+}
 const shoppingDisplayItems=items=>[...items.filter(item=>!item.checked),...items.filter(item=>item.checked)];
 const moveVisibleTile=(order,id,delta,active)=>{
   const visible=order.filter(item=>active.has(item)),at=visible.indexOf(id),neighbor=visible[at+Math.sign(delta)];
@@ -3665,7 +3875,13 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   });
   useEffect(()=>()=>clearTimeout(closeTimer.current),[]);
   const showLabel=edit||cornerOutside||(contentState&&contentState!=="ready");
-  const canExpand=!["birthdays","gmat","philo"].includes(id);
+  /* ⤢ only appears when it earns its place: Recall's focused session always, otherwise
+     only while this tile's preview — at the current size and zoom — is actually hiding
+     something (expanded-only blocks, clamped text, collapsed rows). Birthdays, GMAT and
+     Philosophy open through their own controls instead. */
+  const expandable=!["birthdays","gmat","philo"].includes(id);
+  const [hasMore,setHasMore]=useState(false);
+  const canExpand=expandable&&(TILE_ALWAYS_EXPAND.has(id)||hasMore);
   useLayoutEffect(()=>{
     if(expanded)return;
     const tile=tileRef.current,grid=tile?.parentElement;if(!tile||!grid)return;
@@ -3679,13 +3895,14 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
       const mountPadding=previewRef.current?parseFloat(getComputedStyle(previewRef.current).paddingTop)||0:0;
       const needed=contentHost.getBoundingClientRect().height+mountPadding+headHeight+footerHeight+(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0)+2;
       const rows=tileRowSpan(needed,unit,gap,size.r);setMeasuredRows(current=>current===rows?current:rows);
+      const more=expandable&&previewHidesContent(contentHost);setHasMore(current=>current===more?current:more);
     });};
     measure();const observer=new ResizeObserver(measure);observer.observe(contentHost);observer.observe(grid);
     return()=>{cancelAnimationFrame(frame);observer.disconnect();};
   },[expanded,size.r,size.c,cols,showLabel]);
 
   const renderedRows=expanded?measuredRows:Math.max(size.r,measuredRows);
-  const span={"--tile-span-rows":renderedRows,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
+  const span={"--tile-span-rows":renderedRows,"--tile-base-rows":size.r,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
   return <TilePresentationContext.Provider value={{expanded,open}}>
     <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expandable={canExpand||undefined} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
       {topright&&!edit&&(cornerOutside?topright:<div className="topright">{topright}</div>)}
@@ -4423,12 +4640,12 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const markRecurringDone=id=>{ persistRecurring(agendaRecurring.map(r=>{
     if(r.id!==id)return r;
     if(r.lastDone===todayKey){
-      const restored=r.previousLastDone||addDays(todayKey,-Math.max(1,Number(r.everyDays)||1));
+      const restored=r.previousLastDone||addRecurStep(todayKey,recurEvery(r),-1);
       const next={...r,lastDone:restored}; delete next.previousLastDone; return next;
     }
     return {...r,previousLastDone:r.lastDone,lastDone:todayKey};
   })); };
-  const addRecurring=(label,days)=>{ persistRecurring([...agendaRecurring,{id:uid(),label,everyDays:days,lastDone:todayKey}]); };
+  const addRecurring=(label,n,unit="day")=>{ const every={n,unit}; persistRecurring([...agendaRecurring,{id:uid(),label,every,everyDays:recurApproxDays(every),lastDone:todayKey}]); };
   const removeRecurring=id=>{ persistRecurring(agendaRecurring.filter(r=>r.id!==id)); };
   const addEvent=(label,date,time="")=>{ persistEvents([...agendaEvents,{id:uid(),label,date,time:time||""}]); };
   const removeEvent=id=>{ persistEvents(agendaEvents.filter(e=>e.id!==id)); };
@@ -4655,7 +4872,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const habitsLit=habits.length>0 && habits.every(h=>hToday[h.id]);
   const shoppingLit=shoppingList.length>0 && shoppingList.every(item=>item.checked);
   const agendaTodayStates=[];
-  agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,addDays(r.lastDone,r.everyDays))<=0; if(done||due)agendaTodayStates.push(done); });
+  agendaRecurring.forEach(r=>{ const done=r.lastDone===todayKey, due=daysBetween(todayKey,recurDue(r))<=0; if(done||due)agendaTodayStates.push(done); });
   agendaEvents.forEach(e=>{ const done=e.doneDate===todayKey, due=!e.doneDate&&e.date<=todayKey; if(done||due)agendaTodayStates.push(done); });
   const agendaLit=!!rToday.agenda||(agendaTodayStates.length>0&&agendaTodayStates.every(Boolean));
   const activeNow=new Set(activeTiles);
@@ -4732,7 +4949,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         <div key={k} className="goalDay" onDragOver={e=>e.preventDefault()} onDrop={e=>{e.preventDefault();try{const d=JSON.parse(e.dataTransfer.getData("text/plain"));moveGoal(d.day,k,d.id);}catch(_){}}}>
           <div className="goalDayHead">
             <span className="lbl">{planDl(k)}</span>
-            {list.length>0 && <span className="muted" style={{fontSize:11}}>{list.filter(g=>g.done).length}/{list.length}</span>}
           </div>
           {list.map(g=>(<div key={g.id} draggable className={"goalRow"+(g.done?" done":"")+(!g.carried&&!g.done?" fresh":"")} style={{cursor:"grab"}} onClick={e=>e.stopPropagation()} onDragStart={e=>e.dataTransfer.setData("text/plain",JSON.stringify({day:k,id:g.id}))}>
             <button className={"tick goalTick"+(g.done?" on":"")} aria-label={g.done?"Mark goal incomplete":"Mark goal complete"} onClick={()=>setGoalsDay(k,list.map(x=>x.id===g.id?{...x,done:!x.done}:x))}>{g.done?"✓":""}</button>
@@ -4763,37 +4979,19 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <WeatherCard data={weather} busy={genBusy} onGenerate={()=>regenerateOne("weather")} />
       <RetryNote tileKey="weather"/></>, ()=>toggleRitual("weather")),
     pushups: T("pushups","Push-ups",pToday>0,null,
-      <div className="pushWrap">
-        <div className="pushCount">{pToday}</div>
-        <div className="pushBtns">
-          <button className="puBtn puPlate p10" aria-label="Add 10 push-ups" onClick={()=>addPush(10)}>+10</button>
-          <button className="puBtn puPlate p5" aria-label="Add 5 push-ups" onClick={()=>addPush(5)}>+5</button>
-          <button className="puBtn puPlate p1" aria-label="Add 1 push-up" onClick={()=>addPush(1)}>+1</button>
-          <button className="puBtn puReset" aria-label="Reset today’s push-ups" title="Reset" onClick={()=>setPushExact(0)}>↺</button>
-        </div>
+      /* A loose pile of weight plates, each sized by what it adds; the day's count sits
+         large in the corner. Deliberately a little messy, never a button grid. */
+      <div className="pushRack">
+        <div className="pushTally" aria-live="polite">{pToday}</div>
+        <button type="button" className="pushReset" aria-label="Reset today’s push-ups" title="Reset" onClick={()=>setPushExact(0)}>↺</button>
+        <button type="button" className="plate p10" aria-label="Add 10 push-ups" onClick={()=>addPush(10)}>10</button>
+        <button type="button" className="plate p5" aria-label="Add 5 push-ups" onClick={()=>addPush(5)}>5</button>
+        <button type="button" className="plate p1" aria-label="Add 1 push-up" onClick={()=>addPush(1)}>1</button>
       </div>),
-    habits: T("habits","Habits",habitsLit,null,<>
-      <div className="hgrid">
-        {habits.map(h=>{ const on=!!hToday[h.id],parts=h.name.trim().split(/\s+/),hasIcon=/[\p{Extended_Pictographic}\p{Emoji_Presentation}]/u.test(parts[0]||""),icon=hasIcon?parts.shift():"",label=hasIcon?parts.join(" "):h.name; return (
-          <div className="habitControl" key={h.id}>
-            <button className={"hsq"+(on?" on":"")} aria-label={h.name} aria-pressed={on} onClick={()=>toggleHabit(h.id)}>
-              {icon&&<span className="hicon" aria-hidden="true">{icon}</span>}{label&&<span className="hname">{label}</span>}
-            </button>
-            <button type="button" className="hdel" aria-label={"Delete habit "+h.name} title={"Delete "+h.name} onClick={()=>persistHabits(habits.filter(x=>x.id!==h.id))}>×</button>
-          </div>
-        ); })}
-        <HabitAdd onAdd={name=>persistHabits([...habits,{id:uid(),name}])} />
-      </div></>),
+    habits: T("habits","Habits",habitsLit,null,
+      <HabitsCard habits={habits} doneToday={hToday} onToggle={toggleHabit} onChange={persistHabits} />),
     world: T("world","World",!!rToday.world, null,<>
-      <>
-        {(!view.world || view.world.length===0) && <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("world")} />}
-        <div style={{display:"flex",flexDirection:"column",gap:12}}>
-          {(view.world||[]).map((n,i)=>(<div key={i}>
-            <div style={{fontSize:14.5,fontWeight:700,lineHeight:1.25}}>{clean(n.headline)}</div>
-            <div className="muted worldSummary" style={{fontSize:13.2,lineHeight:1.55,marginTop:3}}>{clean(n.summary)}</div>
-          </div>))}
-        </div>
-      </>
+      {(!view.world || view.world.length===0) ? <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("world")} /> : <NewsPage items={view.world} dateLabel={displayDateLabel} />}
       <RetryNote tileKey="world"/></>, ()=>toggleRitual("world")),
     recall: T("recall","Recall",!!rToday.recall,null,
       <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />, ()=>{}),
@@ -4914,7 +5112,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           <div className="metric"><span className="heroClock">{displayClock}</span><span className="metricLabel">{locationProfile.name}</span></div>
         </div>
       </header>
-      {page==="dashboard"&&<div className="dailySafety"><span className="dailySafetyIcon" aria-hidden="true">✓</span><div><strong>{expectedGenKeys.length?readyGenCount+" of "+expectedGenKeys.length+" daily tiles saved":"Your day is saved as you go"}</strong><span>Saved tiles, answers and streaks stay put. The button only loads gaps or explains the setup needed. New content arrives after 1am.</span></div></div>}
+      {page==="dashboard"&&expectedGenKeys.length>0&&<div className={"dailyMeter"+(contentReady?" isComplete":"")} title="Saved content, answers and streaks stay put. Loading only fills gaps. New content arrives after 1am." aria-label={`Today’s content: ${readyGenCount} of ${expectedGenKeys.length} tiles in`}>
+        <span className="dailyMeterDots" aria-hidden="true">{expectedGenKeys.map(key=><span key={key} className={"dailyMeterDot"+(validDailyTile(key,view[key])?" on":"")} title={DAILY_TILE_LABELS[key]||key}/>)}</span>
+        <span className="dailyMeterText">{contentReady?"All in":`${readyGenCount} of ${expectedGenKeys.length} in`}</span>
+      </div>}
 
       {page==="settings"&&(
         <div className="settings">
@@ -5081,7 +5282,29 @@ function GoalInput({onAdd,placeholder,compact}){
   // Compact (future days): a quiet "+ add" that expands to an input only when
   // tapped, then folds back if left empty — keeps the plan rows from cluttering.
   if(compact && !open) return <button className="goalAddGhost" onClick={()=>setOpen(true)}>＋ add</button>;
-  return <div className="addrow goalInputRow"><input ref={ref} autoFocus={compact} className="addinput" style={compact?{padding:"6px 10px",fontSize:12.5}:null} placeholder={placeholder||"Add a goal…"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") s(); if(e.key==="Escape"){ setV(""); if(compact) setOpen(false); } }} onBlur={()=>{ if(compact&&!v.trim()) setOpen(false); }} /><button className="addbtn" style={compact?{width:30,fontSize:16}:null} onMouseDown={e=>e.preventDefault()} onClick={s}>+</button></div>; }
+  // A quiet underline field: Enter adds; the small ＋ only shows once there is text.
+  return <div className={"goalInputMinimal"+(compact?" compact":"")}><input ref={ref} autoFocus={compact} className="goalInputField" aria-label={placeholder||"Add a goal"} placeholder={compact?"Plan…":"add a goal"} value={v} onChange={e=>setV(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") s(); if(e.key==="Escape"){ setV(""); if(compact) setOpen(false); } }} onBlur={()=>{ if(compact&&!v.trim()) setOpen(false); }} />{v.trim()&&<button type="button" className="goalInputAdd" aria-label="Add goal" onMouseDown={e=>e.preventDefault()} onClick={s}>＋</button>}</div>; }
+/* Habits read as big emoji circles only; names, deleting and adding live in the
+   expanded editor, so the daily view stays a row of tap targets. A text-only habit
+   keeps its name, since that name is its only face. */
+const splitHabit=h=>{ const parts=String(h.name||"").trim().split(/\s+/), hasIcon=/[\p{Extended_Pictographic}\p{Emoji_Presentation}]/u.test(parts[0]||""), icon=hasIcon?parts.shift():""; return {icon,label:hasIcon?parts.join(" "):h.name}; };
+function HabitsCard({habits,doneToday,onToggle,onChange}){
+  const {expanded}=useTilePresentation();
+  return <div className={"hgrid habitBoard"+(expanded?" editing":"")}>
+    {habits.map(h=>{ const on=!!doneToday[h.id], {icon,label}=splitHabit(h); return (
+      <div className="habitControl" key={h.id}>
+        <button className={"hsq"+(icon?" emojiOnly":"")+(on?" on":"")} aria-label={h.name} title={label||h.name} aria-pressed={on} onClick={()=>onToggle(h.id)}>
+          {icon?<span className="hicon" aria-hidden="true">{icon}</span>:<span className="hname">{label}</span>}
+        </button>
+        <div hidden={!expanded} className="habitEditRow">
+          {icon&&label&&<span className="habitEditName">{label}</span>}
+          <button type="button" className="hdel" aria-label={"Delete habit "+h.name} title={"Delete "+h.name} onClick={()=>onChange(habits.filter(x=>x.id!==h.id))}>×</button>
+        </div>
+      </div>
+    ); })}
+    <div hidden={!expanded&&habits.length>0} className="habitAddSlot"><HabitAdd onAdd={name=>onChange([...habits,{id:uid(),name}])} /></div>
+  </div>;
+}
 function HabitAdd({onAdd}){
   const [open,setOpen]=useState(false), [emoji,setEmoji]=useState(""), [label,setLabel]=useState("");
   const close=()=>{ setOpen(false); setEmoji(""); setLabel(""); };
@@ -5106,8 +5329,8 @@ function BirthdayInput({onAdd}){
   const submit=event=>{event.preventDefault();if(!valid)return;onAdd({name:name.trim(),day:d,month:m});setName("");setDay("");setMonth("");nameRef.current?.focus();};
   return <form className="addrow birthdayAddRow" onSubmit={submit}>
     <input ref={nameRef} className="addinput" style={{flex:2}} aria-label="Birthday name" placeholder="Name" autoComplete="off" required value={name} onChange={e=>setName(e.target.value)} />
-    <input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} aria-label="Birthday day" inputMode="numeric" pattern="[0-9]*" maxLength={2} placeholder="DD" required value={day} aria-invalid={!!day&&!!month&&!validDate||undefined} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} />
     <input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} aria-label="Birthday month" inputMode="numeric" pattern="[0-9]*" maxLength={2} placeholder="MM" required value={month} aria-invalid={!!day&&!!month&&!validDate||undefined} onChange={e=>setMonth(e.target.value.replace(/\D/g,"").slice(0,2))} />
+    <input className="addinput" style={{width:42,flex:"none",textAlign:"center"}} aria-label="Birthday day" inputMode="numeric" pattern="[0-9]*" maxLength={2} placeholder="DD" required value={day} aria-invalid={!!day&&!!month&&!validDate||undefined} onChange={e=>setDay(e.target.value.replace(/\D/g,"").slice(0,2))} />
     <button type="submit" className="addbtn" aria-label="Add birthday" disabled={!valid}>+</button>
   </form>;
 }
@@ -5303,13 +5526,23 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
           <BirthdayInput onAdd={onAdd} />
           <div className="birthdayManagerList">
             {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Add someone by hand here, or import your contacts from Settings.</div></div>}
-            {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.day)}/{pad(b.month)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
+            {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.month)}/{pad(b.day)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
           </div>
       </DashboardModal>}
     </>
   );
 }
 
+/* World news set as a small newspaper page: masthead between double rules, a dateline,
+   the lead story across the top, the rest in ruled columns. */
+function NewsPage({items,dateLabel}){
+  const [lead,...rest]=items;
+  return <article className="newsPage">
+    <header className="newsMast"><span className="newsMastTitle">The World</span><span className="newsDateline">{dateLabel}</span></header>
+    <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className="newsBody worldSummary">{clean(lead.summary)}</p></section>
+    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
+  </article>;
+}
 function MovieAdd({onAdd,autoFocus}){
   const [v,setV]=useState("");
   const commit=()=>{ const t=v.trim(); if(!t) return; onAdd(t); setV(""); };
@@ -5347,7 +5580,7 @@ function MovieCard({movies,onAdd,onRemove,onBump}){
         {seen.length>0&&<div className="lbl" style={{margin:"10px 0 2px"}}>Seen</div>}
         {seen.map(m=>(<div key={m.id} className="trow" style={{opacity:.62}}>
           <span style={{flex:1,fontSize:13}}>{m.title}</span>
-          <span className="muted" style={{fontSize:11}}>{String(m.watchedOn).split("-").reverse().join("/")}</span>
+          <span className="muted" style={{fontSize:11}}>{formatDateKey(m.watchedOn)}</span>
           <button className="del" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
         </div>))}
       </div>
@@ -5356,7 +5589,7 @@ function MovieCard({movies,onAdd,onRemove,onBump}){
 }
 
 function BreathingCard({done,onComplete,onIncomplete}){
-  const TOTAL_MS=180000, INHALE_MS=4000, HOLD_MS=1000, EXHALE_MS=4000, REST_MS=1000, CYCLE_MS=INHALE_MS+HOLD_MS+EXHALE_MS+REST_MS, SEGMENTS=6, SEG_MS=TOTAL_MS/SEGMENTS;
+  const TOTAL_MS=180000, INHALE_MS=4000, HOLD_MS=1000, EXHALE_MS=4000, REST_MS=1000, CYCLE_MS=INHALE_MS+HOLD_MS+EXHALE_MS+REST_MS;
   const [startedAt,setStartedAt]=useState(null);
   const [clock,setClock]=useState(Date.now());
   const [finished,setFinished]=useState(done);
@@ -5386,7 +5619,6 @@ function BreathingCard({done,onComplete,onIncomplete}){
   },[startedAt]);
   const running=startedAt!==null;
   const elapsed=running?Math.min(TOTAL_MS,Math.max(0,clock-startedAt)):0;
-  const segIndex=running?Math.min(SEGMENTS-1,Math.floor(elapsed/SEG_MS)):finished?SEGMENTS:0;
   /* Four phases with a 1s hold at the top (squeeze) and a 1s release at the bottom,
      so it never snaps straight from breathing in to breathing out. */
   const withinCycle=elapsed%CYCLE_MS;
@@ -5402,32 +5634,23 @@ function BreathingCard({done,onComplete,onIncomplete}){
   const begin=()=>{ const time=Date.now(); if(done)onIncomplete&&onIncomplete(); completedRef.current=false; setFinished(false); setClock(time); setStartedAt(time); };
   const stop=()=>{ setStartedAt(null); setClock(Date.now()); completedRef.current=false; };
   const PHASE_LABEL={inhale:"Inhale",hold:"Lift",exhale:"Exhale",rest:"Release"};
-  const PHASE_CUE={inhale:"Belly rises to the ceiling",hold:"Gently lift and hold",exhale:"Breathe out — stay lifted",rest:"Drop, release, open"};
   const phase=running?PHASE_LABEL[phaseKey]:finished||done?"Complete":"Breathe";
-  const cue=running?PHASE_CUE[phaseKey]:finished||done?"":"4s in · 4s out · 3 min";
-  /* The circle is the control: tap it to begin, tap again to stop. No separate buttons. */
+  /* The breathing circle IS the tile: it fills the square edge to edge, tap it to begin or
+     stop. No words — the ring fills with the session and the orb swells and empties with
+     each breath. The phase is still announced to screen readers. */
   return (
-    <div className="breathCard">
-      <div className="breathStage">
-        <div className="breathProgress" role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
-          <button type="button" className={"breathOrb "+(running?(expanded?"inhale":"exhale"):"idle")} style={{"--breath-scale":breathScale,"--breath-amount":breathAmount}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?"Stop the breathing exercise":finished||done?"Breathe again":"Start the breathing exercise"}>
-            <span className="breathCount" aria-hidden="true">{running?phaseRemaining:finished||done?"✓":"3′"}</span>
-          </button>
-        </div>
+    <div className="breathFull">
+      <div className={"breathDial"+(running?" isRunning":finished||done?" isDone":" isIdle")} role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
+        <button type="button" className="breathCore" style={{"--breath-scale":breathScale}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?`${phase}. Tap to stop the breathing exercise`:finished||done?"Breathing done. Tap to breathe again":"Start the three-minute breathing exercise"}/>
       </div>
-      <div className="breathCopy">
-        <div className="breathPhase" aria-live="polite">{phase}</div>
-        {cue&&<div className="breathCue">{cue}</div>}
-        <div className="breathRounds" aria-label={`${running?segIndex:finished||done?SEGMENTS:0} of ${SEGMENTS} segments complete`}>
-          {Array.from({length:SEGMENTS},(_,i)=><span key={i} className={"breathRound"+(i<segIndex?" done":running&&i===segIndex?" current":"")} />)}
-        </div>
-      </div>
+      <span className="srOnly" aria-live="polite">{running?phase:""}</span>
     </div>
   );
 }
 
+/* A small square that is the timer: tap the dial to start, pause or resume; a quiet
+   −/＋ underneath while idle (steps grow with the duration); reset only once it runs. */
 function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPause,onReset}){
-  const {expanded,open}=useTilePresentation();
   const diffMs=Math.max(0,(end||0)-now.getTime());
   const running=end>now.getTime()&&!fired;
   const paused=remaining>0&&!running&&!fired;
@@ -5435,45 +5658,31 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   const totalSec=Math.ceil(shownMs/1000);
   const hh=Math.floor(totalSec/3600), mm=Math.floor((totalSec%3600)/60), ss=totalSec%60;
   const big=fired?"Done":hh>0?`${hh}:${pad(mm)}`:`${pad(mm)}:${pad(ss)}`;
-  const unit=fired?"time's up":hh>0?"h · m":"m · s";
   const frac=fired?0:(running||paused)?Math.max(0,Math.min(1,shownMs/(duration*60000||1))):1;
   const C=2*Math.PI*44; // ring circumference (r=44)
-  const adjust=d=>onSetDuration(Math.max(5,Math.min(24*60,duration+d)));
+  const step=up=>{ const d=up?duration:duration-1; return d<30?5:d<120?15:60; };
+  const adjust=up=>onSetDuration(Math.max(5,Math.min(24*60,duration+(up?step(true):-step(false)))));
+  const idle=!running&&!paused&&!fired;
+  const tap=()=>{ if(fired){ onReset(); return; } if(running) onPause(); else onStart(); };
   return (
-    <div className={"timerWrap "+(running?"isRunning":paused?"isPaused":fired?"isFired":"isIdle")}>
-      <div className={"timerRow"+(fired?" timerHit":"")}>
-        <div className="timerDial" role={expanded?undefined:"button"} tabIndex={expanded?undefined:0} aria-label={expanded?undefined:"Change timer duration"} onClick={expanded?undefined:open} onKeyDown={event=>{if(!expanded&&(event.key==="Enter"||event.key===" ")){event.preventDefault();open();}}}>
-          <svg className="timerRingSvg" viewBox="0 0 100 100" aria-hidden="true">
-            <circle className="timerRingBg" cx="50" cy="50" r="44"/>
-            <circle className="timerRingFg" cx="50" cy="50" r="44"
-              style={{strokeDasharray:C,strokeDashoffset:C*(1-frac)}}/>
-          </svg>
-          <div className="timerDialCenter">
-            <span className="timerDialTime">{big}</span>
-            <span className="timerSub">{running?"remaining":paused?"paused":fired?unit:unit}</span>
-          </div>
-        </div>
-      </div>
-      <div className="timerControls">
-        {!running && !paused && !fired && (
-          <div className="timerSteppers">
-            <button className="puBtn" onClick={()=>adjust(-60)}>−1h</button>
-            <button className="puBtn" onClick={()=>adjust(-15)}>−15m</button>
-            <button className="puBtn" onClick={()=>adjust(15)}>+15m</button>
-            <button className="puBtn" onClick={()=>adjust(60)}>+1h</button>
-          </div>
-        )}
-        <div className="timerActions">
-          <button type="button" className="widgetIconButton primary" aria-label={running?"Pause timer":paused?"Resume timer":"Start timer"} title={running?"Pause":paused?"Resume":"Start"} onClick={running?onPause:onStart}><WidgetGlyph name={running?"pause":"play"}/></button>
-          {(running||paused||fired) && <button type="button" className="widgetIconButton" aria-label="Reset timer" title="Reset" onClick={onReset}><WidgetGlyph name="reset"/></button>}
-        </div>
-      </div>
+    <div className={"timerSquare "+(running?"isRunning":paused?"isPaused":fired?"isFired":"isIdle")}>
+      <button type="button" className="timerFace" onClick={e=>{e.stopPropagation();tap();}} aria-label={fired?"Time’s up. Tap to reset":running?`${big} left. Tap to pause`:paused?`Paused at ${big}. Tap to resume`:`Start a ${big} timer`}>
+        <svg className="timerRingSvg" viewBox="0 0 100 100" aria-hidden="true">
+          <circle className="timerRingBg" cx="50" cy="50" r="44"/>
+          <circle className="timerRingFg" cx="50" cy="50" r="44" style={{strokeDasharray:C,strokeDashoffset:C*(1-frac)}}/>
+        </svg>
+        <span className="timerFaceTime">{big}</span>
+        {paused&&<span className="timerFaceState" aria-hidden="true">❚❚</span>}
+      </button>
+      {idle?<div className="timerNudge">
+        <button type="button" aria-label={`Shorter by ${step(false)} minutes`} onClick={e=>{e.stopPropagation();adjust(false);}}>−</button>
+        <button type="button" aria-label={`Longer by ${step(true)} minutes`} onClick={e=>{e.stopPropagation();adjust(true);}}>＋</button>
+      </div>:<button type="button" className="timerResetGlyph" aria-label="Reset timer" title="Reset" onClick={e=>{e.stopPropagation();onReset();}}>↺</button>}
     </div>
   );
 }
 
 function MusicCard({music,done}){
-  const {expanded}=useTilePresentation();
   const catalogMatch=()=>{
     if(!music||!music.catalogMatched||!music.url) return null;
     return {url:music.url,catalogTitle:music.catalogTitle||music.title,catalogArtist:music.catalogArtist||music.artist,catalogComposer:music.catalogComposer||music.composer,catalogMatched:true};
@@ -5497,11 +5706,8 @@ function MusicCard({music,done}){
       <div className="musicTitle">{music.title}</div>
       <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
       {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="musicComposer">{music.composer}</div>}
-      <div hidden={!expanded} className="cardExpandedDetails musicDetails">
-        {music.genre&&<div style={{marginTop:5}}><span className="lbl">{music.genre}</span></div>}
-        {music.why&&<p className="muted musicWhy" style={{fontSize:14,margin:"9px 0",lineHeight:1.5}}>{music.why}</p>}
-        {match&&match.catalogArtist&&musicNorm(match.catalogArtist)!==musicNorm(music.artist)&&<p className="muted musicCatalogCredits" style={{fontSize:13,lineHeight:1.5}}>Recording credits: {match.catalogArtist}{match.catalogComposer&&musicNorm(match.catalogComposer)!==musicNorm(music.composer)?' · '+match.catalogComposer:''}</p>}
-      </div>
+      {music.why&&<p className="musicWhy">{music.why}</p>}
+      {music.genre&&<span className="lbl musicGenre">{music.genre}</span>}
     </div>
   </div>;
 }
@@ -5511,7 +5717,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
   const [viewMonth,setViewMonth]=useState(()=>new Date(baseY,baseM-1,1));
   const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1;
   const first=new Date(y,m-1,1);
-  const monthLabel=new Intl.DateTimeFormat("en-GB",{month:"long",year:"numeric"}).format(first);
+  const monthLabel=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(first);
   const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
   const monthKey=`${y}-${pad(m)}`;
   const monthOf=key=>String(key||"").slice(0,7);
@@ -5523,7 +5729,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
     addItem(e.date,{label:e.label,time:e.time||"",due:d<=0&&!e.doneDate,done:e.doneDate===todayKey});
   });
   (recurring||[]).forEach(r=>{
-    let due=addDays(r.lastDone,r.everyDays);
+    let due=recurDue(r);
     if(due<todayKey) due=todayKey;
     const d=daysBetween(todayKey,due);
     addItem(due,{label:r.label,time:"",due:d<=0&&r.lastDone!==todayKey,done:r.lastDone===todayKey});
@@ -5564,8 +5770,8 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
   const [selectedDate,setSelectedDate]=useState("");
   const rows=[];
   recurring.forEach(r=>{
-    const done=r.lastDone===todayKey, due=addDays(r.lastDone,r.everyDays), d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, sub:done?"Completed today":`Every ${r.everyDays} days`, canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    const done=r.lastDone===todayKey, due=recurDue(r), d=daysBetween(todayKey,due);
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, sub:done?"Completed today":recurLabel(r), canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
@@ -5602,27 +5808,35 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
 }
 function AgendaAddForm({onAddRecurring,onAddEvent,onClose}){
   const [mode,setMode]=useState("oneoff");
-  const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [time,setTime]=useState(""); const [days,setDays]=useState("");
+  const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [time,setTime]=useState(""); const [n,setN]=useState("1"); const [unit,setUnit]=useState("week");
   const submit=()=>{ const t=label.trim(); if(!t) return;
-    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date,time); } else { const n=Number(days); if(!n||n<1) return; onAddRecurring(t,n); }
+    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date,time); } else { const k=Math.round(Number(n)); if(!k||k<1) return; onAddRecurring(t,k,unit); }
     onClose(); };
   return (
-    <div className="taskAddForm">
-      <div className="tabbar">
-        <button className={"tab"+(mode==="oneoff"?" on":"")} onClick={()=>setMode("oneoff")}>One-off task</button>
-        <button className={"tab"+(mode==="recurring"?" on":"")} onClick={()=>setMode("recurring")}>Recurring task</button>
+    <div className="taskAddForm agendaForm">
+      <div className="agendaSeg" role="tablist">
+        <button type="button" role="tab" aria-selected={mode==="oneoff"} className={mode==="oneoff"?"on":""} onClick={()=>setMode("oneoff")}>Once</button>
+        <button type="button" role="tab" aria-selected={mode==="recurring"} className={mode==="recurring"?"on":""} onClick={()=>setMode("recurring")}>Repeats</button>
       </div>
-      <div className="addrow"><input className="addinput" placeholder={mode==="oneoff"?"e.g. Renew passport":"e.g. Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} /></div>
-      <div className="addrow" style={{marginTop:7}}>
+      <input className="addinput agendaField" placeholder={mode==="oneoff"?"Renew passport":"Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} />
+      <div className="agendaFormRow">
         {mode==="oneoff"
           ? <>
-              <input className="addinput" type="date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
-              <input className="addinput" type="time" value={time} onChange={e=>setTime(e.target.value)} />
+              <input className="addinput agendaField" type="date" aria-label="Date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
+              <input className="addinput agendaField" type="time" aria-label="Time (optional)" value={time} onChange={e=>setTime(e.target.value)} />
             </>
-          : <input className="addinput" type="number" min="1" placeholder="Every N days" value={days} onChange={e=>setDays(e.target.value)} />}
-        <button className="addbtn" onClick={submit}>+</button>
+          : <>
+              <span className="agendaEvery">every</span>
+              <input className="addinput agendaField agendaN" type="number" min="1" aria-label="How many" value={n} onChange={e=>setN(e.target.value)} />
+              <select className="addinput agendaField" aria-label="Unit" value={unit} onChange={e=>setUnit(e.target.value)}>
+                {RECUR_UNITS.map(u=><option key={u} value={u}>{Number(n)===1?u:u+"s"}</option>)}
+              </select>
+            </>}
       </div>
-      <button className="link" style={{marginTop:7}} onClick={onClose}>Cancel</button>
+      <div className="agendaFormRow">
+        <button type="button" className="agendaBtn ghost" onClick={onClose}>Cancel</button>
+        <button type="button" className="agendaBtn" onClick={submit}>Add</button>
+      </div>
     </div>
   );
 }
@@ -5723,7 +5937,7 @@ function HealthCard({data,latest,connected,busy,onSetup,onSync}){
       <div className="healthTop">
         <div className="healthMain">
           <div className="healthDate">{has ? (d.date===todayKey?"Today":formatDateKey(d.date)) : "Garmin bridge"}</div>
-          <div className="healthSteps">{steps!=null?steps.toLocaleString("en-GB"):"—"} <span><Sym name="steps" className="healthUnitIcon" />steps</span></div>
+          <div className="healthSteps">{steps!=null?steps.toLocaleString("en-US"):"—"} <span><Sym name="steps" className="healthUnitIcon" />steps</span></div>
         </div>
         <span className="healthSync">{data?"Today’s summary":"Last available summary"}</span>
       </div>
@@ -6026,10 +6240,22 @@ function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
 
 function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
   const {expanded}=useTilePresentation();
-  if(!brain) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
+  const [kinds,setKinds]=useState(()=>load("brainflexKinds",null));
+  const [tuning,setTuning]=useState(false);
+  const chosen=Array.isArray(kinds)?kinds:[];
+  const toggleKind=k=>{ const next=chosen.includes(k)?chosen.filter(x=>x!==k):[...chosen,k]; const value=next.length?next:null; setKinds(value); save("brainflexKinds",value);
+    if(SHARED_URL) fetch(SHARED_URL+"/shared/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({brainflexKinds:value})}).catch(()=>{}); };
+  const gear=<button type="button" className="brainGear" aria-label="Choose puzzle types" aria-expanded={tuning} title="Puzzle types" onClick={e=>{e.stopPropagation();setTuning(t=>!t);}}>⚙</button>;
+  const tuner=tuning&&<div className="brainTuner" onClick={e=>e.stopPropagation()}>
+    <div className="brainTunerChips">{Object.entries(BRAINFLEX_KINDS).map(([k,v])=><button type="button" key={k} className={"brainChip"+(chosen.includes(k)?" on":"")} aria-pressed={chosen.includes(k)} onClick={()=>toggleKind(k)}><span aria-hidden="true">{v.icon}</span>{v.label}</button>)}</div>
+    <p className="brainTunerNote">{chosen.length?"Rotates through these from the next puzzle.":"Nothing picked: rotates through all of them."}</p>
+  </div>;
+  if(!brain) return <div className="brainFlexCard">{gear}{tuner}<GenerateEmpty busy={busy} onGenerate={onGenerate} /></div>;
   return (
     <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
+      {gear}
       <span className="brainFormat">{brain.format}</span>
+      {tuner}
       <p className="brainPrompt">{brain.prompt}</p>
       {!revealed ? <button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button> : (
         <button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>

@@ -244,6 +244,24 @@ async function callClaude(env, system, user, max = 600) {
   return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
 }
 
+/* Brainflex formats the owner can choose from (dashboard ⚙ on the tile). Each day rotates
+   through the chosen kinds; with none chosen, it rotates through all of them. */
+var BRAINFLEX_KINDS = {
+  fermi: "a Fermi estimate: a rough order-of-magnitude calculation about the real world (e.g. how many cafés are in Sydney?). The solution gives a defensible ballpark first, then the 3-4 assumptions that drive it",
+  case: "a consulting case-interview question (market sizing, profitability, pricing or growth) answerable in a few minutes. The solution gives the answer first, then a crisp 2-3 step structure",
+  logic: "a logic puzzle (deduction, ordering constraints, knights and knaves) with exactly one valid answer",
+  probability: "a probability or expected-value question with a tempting wrong intuition and exactly one correct answer",
+  pattern: "a sequence or pattern to complete, with exactly one rule that fits every term",
+  mental: "a mental-math challenge that rewards a clever shortcut, with one exact answer",
+  lateral: "a lateral-thinking riddle with one satisfying answer that every clue supports"
+};
+function brainflexKindFor(chosen) {
+  const keys = (Array.isArray(chosen) ? chosen : []).filter((k) => BRAINFLEX_KINDS[k]);
+  const pool = keys.length ? keys : Object.keys(BRAINFLEX_KINDS);
+  const day = Math.floor(Date.now() / 86400000);
+  return pool[day % pool.length];
+}
+
 /* ---------------- per-key generators (prompts mirror the client) ---------------- */
 var sharedGen = {
   word: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
@@ -276,12 +294,17 @@ var sharedGen = {
     return Array.isArray(arr) ? arr : null;
   },
 
-  brainflex: (env, avoid) => callClaude(env,
-    "You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter: SOLVE the puzzle completely yourself before writing it down, verify the solution is the unique correct answer, and if you cannot fully verify it, replace the puzzle with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty must come from the reasoning alone, not from length or noise.",
-    `Create ONE self-contained thinking game for a smart 24-year-old, solvable mentally in 2-5 minutes. Vary sharply from recent formats: ${(avoid || []).join(" | ") || "none"}. Choose among logic grids, sequences, spatial reasoning, probability traps, deduction, ranking constraints, code-breaking, mental maths or lateral riddles. Rules: the prompt is at most 55 words and contains EVERY fact needed and NOTHING that isn't needed; exactly one answer must be defensible. Shape:{"format":"2-4 word game name","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 sentences"}.`, 500).then(extractJSON),
+  brainflex: async (env, avoid) => {
+    let chosen = null;
+    try { chosen = parseObject(await env.SYNC.get("shared_config")).brainflexKinds; } catch {}
+    const kind = brainflexKindFor(chosen);
+    return callClaude(env,
+      "You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
+      `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind]}. Vary the topic from these recent ones: ${(avoid || []).join(" | ") || "none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, 500).then(extractJSON);
+  },
 
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
-    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"one or two concise sentences posed directly, retaining genuine depth"}.`, 220).then(extractJSON),
+    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 16 words, no preamble or setup — depth comes from the idea, not the length"}.`, 220).then(extractJSON),
 
   gmat: (env, avoid) => callClaude(env,
     "You are a meticulous GMAT item writer. You output ONLY a valid minified JSON array, no markdown. Accuracy of the answer key is paramount: solve every question yourself step by step BEFORE writing options, make sure EXACTLY ONE option is correct, and set \"answer\" to that option's 0-based index. If unsure a question is airtight, replace it with a simpler one you can fully verify.",
@@ -648,15 +671,24 @@ var index_default = {
     // tiles nobody reads.
     if (url.pathname === "/shared/config" && request.method === "GET") {
       const c = await env.SYNC.get("shared_config");
-      return sharedJson({ tiles: c ? (parseObject(c).tiles || null) : null, active: await activeSharedKeys(env), all: SHARED_KEYS, safeRetry: !!env.DAILY_COORDINATOR });
+      return sharedJson({ tiles: c ? (parseObject(c).tiles || null) : null, brainflexKinds: c ? (parseObject(c).brainflexKinds || null) : null, active: await activeSharedKeys(env), all: SHARED_KEYS, safeRetry: !!env.DAILY_COORDINATOR });
     }
     if (url.pathname === "/shared/config" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
-      const tiles = Array.isArray(body.tiles)
-        ? body.tiles.map((s) => String(s).trim().toLowerCase()).filter((k) => SHARED_KEYS.includes(k))
-        : null;
-      await env.SYNC.put("shared_config", JSON.stringify({ tiles }));
-      return sharedJson({ ok: true, tiles });
+      // Each field updates only when sent, so saving the tile checklist never wipes the
+      // Brainflex formats and vice versa.
+      const current = parseObject(await env.SYNC.get("shared_config"));
+      const next = { ...current };
+      if ("tiles" in body || !("brainflexKinds" in body)) {
+        next.tiles = Array.isArray(body.tiles)
+          ? body.tiles.map((s) => String(s).trim().toLowerCase()).filter((k) => SHARED_KEYS.includes(k))
+          : null;
+      }
+      if ("brainflexKinds" in body) {
+        next.brainflexKinds = Array.isArray(body.brainflexKinds) ? body.brainflexKinds.filter((k) => BRAINFLEX_KINDS[k]) : null;
+      }
+      await env.SYNC.put("shared_config", JSON.stringify(next));
+      return sharedJson({ ok: true, tiles: next.tiles ?? null, brainflexKinds: next.brainflexKinds ?? null });
     }
 
     // ---- account authentication and account-scoped data ----
