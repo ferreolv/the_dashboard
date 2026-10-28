@@ -39,6 +39,7 @@ They share a small storage contract and navigation, not a runtime or interface.
 
 ## Durable design preferences
 
+- The default dashboard background is "Woven white": an embossed white-on-white isometric cube weave (each cube face striped in its own direction), drawn as a generated inline SVG rather than a stock image. Users still on the old default grey move to it once; any deliberate background choice is kept.
 - The dashboard shell stays quiet: lighter headings, inline summary metrics, plain language, restrained shadows and modest control shapes; vivid tile identities and glass completion states remain the visual focus. Settings uses labelled fields, a visible save state, optional setup details, and reversible layout resets.
 - Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep a stronger, vivid transparent hue and readable dark ink; the background must remain visible through both states. Typeface remains Nunito.
 - Routine widget actions use accessible icon controls with 44px touch targets; Today expansion is a quiet corner icon. Keep actual content titles and actionable setup/error explanations. Reminders uses a broad desktop calendar/list composition and stacks on phones. The wallpaper stays a quiet mineral canvas without decorative stripes or rings.
