@@ -31,7 +31,7 @@ test('phone families retain compact squares, wide cards and large cards',()=>{
 });
 
 test('desktop compositions come from a small module set so rows pack without holes',()=>{
-  const modules=new Set(['2x2','4x1','4x2','4x3']);
+  const modules=new Set(['2x2','4x1','4x2','4x3','4x4']);
   for(const [id,layout] of Object.entries(api.CURATED_TILE_LAYOUT)){
     assert.ok(modules.has(layout.desktop.join('x')),id+' uses a standard module, got '+layout.desktop.join('x'));
   }
@@ -57,7 +57,7 @@ test('legacy arbitrary dimensions neither drive rendering nor mutate saved data'
   const legacy={events:{c:1,r:6},philo:{c:6,r:1}},before=JSON.stringify(legacy);
   const curated=api.clampTileSizes(legacy,6);
   assert.equal(JSON.stringify(legacy),before);
-  assert.deepEqual(plain(curated.events),{c:4,r:2,family:'wide'});
+  assert.deepEqual(plain(curated.events),{c:4,r:3,family:'large'});
   assert.deepEqual(plain(curated.philo),{c:4,r:2,family:'wide'});
   assert.match(html,/const sz=id=>curatedTileSize\(id,cols\)/);
   const initializer=html.slice(html.indexOf('const [sizes,setSizes]'),html.indexOf('const [activeTiles,setActiveTiles]'));
@@ -65,7 +65,7 @@ test('legacy arbitrary dimensions neither drive rendering nor mutate saved data'
   assert.doesNotMatch(initializer,/save\(/,'opening the dashboard must preserve old dimensions');
 });
 
-test('curated grid allows content growth and keeps modal content outside its sizing rules',()=>{
+test('curated grid keeps fixed module spans and keeps modal content outside its sizing rules',()=>{
   const css=html.slice(html.indexOf('/* Curated responsive compositions */'),html.indexOf('/* Expanded cards retain'));
   assert.match(css,/grid-auto-rows:var\(--dashboard-unit\)/);
   assert.match(html,/new ResizeObserver\(measure\)/,"individual cards reserve extra grid rows when content grows");
