@@ -11,7 +11,7 @@ const api=vm.runInNewContext(html.slice(start,end)+';({columnsForWidth,curatedTi
 const plain=value=>JSON.parse(JSON.stringify(value));
 
 test('every existing dashboard tile has one authored composition',()=>{
-  const ids=['goals','habits','breathing','health','shopping','agenda','events','note','weather','timer','worth','word','music','spanish','german','movie','world','recall','pushups','weekly','birthdays','brain','brainflex','academic','gmat','philo','people'];
+  const ids=['goals','habits','breathing','health','shopping','agenda','events','note','weather','timer','worth','word','music','spanish','german','movie','world','recall','pushups','weekly','birthdays','brain','brainflex','academic','philo','people'];
   assert.deepEqual(Object.keys(api.CURATED_TILE_LAYOUT),ids);
   for(const id of ids){
     for(const width of [320,375,390,639,640,768,999,1000,1440,2560]){
@@ -30,20 +30,16 @@ test('phone families retain compact squares, wide cards and large cards',()=>{
   assert.equal(api.curatedTileSize('habits',2).c,2,'daily habit actions retain full phone width');
 });
 
-test('Events remains a large square while Philosophy stays wide',()=>{
-  for(const cols of [1,2,4,6,8,12]){
-    const events=api.curatedTileSize('events',cols);
-    assert.equal(events.c,events.r,'countdown square at '+cols+' columns');
+test('desktop compositions come from a small module set so rows pack without holes',()=>{
+  const modules=new Set(['2x2','4x1','4x2','4x3']);
+  for(const [id,layout] of Object.entries(api.CURATED_TILE_LAYOUT)){
+    assert.ok(modules.has(layout.desktop.join('x')),id+' uses a standard module, got '+layout.desktop.join('x'));
   }
-  assert.deepEqual(plain(api.curatedTileSize('events',6)),{c:4,r:4,family:'large-square'});
   assert.deepEqual(plain(api.curatedTileSize('philo',6)),{c:4,r:2,family:'wide'});
   assert.deepEqual(plain(api.curatedTileSize('philo',2)),{c:2,r:1,family:'wide'});
 });
 
-test('Reminders uses a broad desktop composition and keeps full phone width',()=>{
-  const desktop=api.curatedTileSize('agenda',12);
-  assert.equal(desktop.c,6,'the calendar and reminder list have room side by side');
-  assert.ok(desktop.c>desktop.r);
+test('Reminders keeps full phone width',()=>{
   for(const columns of [1,2,4])assert.equal(api.curatedTileSize('agenda',columns).c,columns,'the calendar uses available narrow-screen width');
 });
 
@@ -61,7 +57,7 @@ test('legacy arbitrary dimensions neither drive rendering nor mutate saved data'
   const legacy={events:{c:1,r:6},philo:{c:6,r:1}},before=JSON.stringify(legacy);
   const curated=api.clampTileSizes(legacy,6);
   assert.equal(JSON.stringify(legacy),before);
-  assert.deepEqual(plain(curated.events),{c:4,r:4,family:'large-square'});
+  assert.deepEqual(plain(curated.events),{c:4,r:2,family:'wide'});
   assert.deepEqual(plain(curated.philo),{c:4,r:2,family:'wide'});
   assert.match(html,/const sz=id=>curatedTileSize\(id,cols\)/);
   const initializer=html.slice(html.indexOf('const [sizes,setSizes]'),html.indexOf('const [activeTiles,setActiveTiles]'));

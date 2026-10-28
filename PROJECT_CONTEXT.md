@@ -35,14 +35,14 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Memory stores a recursively rendered knowledge tree and can globally reorganise note placement.
 - The live dashboard exposes an installable web-app manifest and uses the user's black line-art “D” as its browser, desktop, Android, and iOS home-screen icon.
 - Breathing is a guided one-minute daily widget: six rounds of a 4-second nasal inhale and 6-second gentle exhale, shown through an expanding/contracting visual, phase countdown, and round progress.
-- GMAT is a dashboard tile plus focused overlay workspace. It provides original adaptive Quant, Verbal, and Data Insights sprints; records accuracy, pacing, confidence and error causes; schedules broad skills with FSRS; tracks exam date, weekly minutes and official mock scores; and never presents its local practice as official material or invents a predicted GMAT score.
+- GMAT has been deleted from the product entirely (tile, workspace, question bank, daily generation, stats). Stored `fefe_gmat*` data stays untouched in browsers but nothing reads it. Default worker generation is word + german.
 
 ## Durable design preferences
 
 - The default dashboard background is "Woven white": an embossed white-on-white isometric cube weave (each cube face striped in its own direction), drawn as a generated inline SVG rather than a stock image. Users still on the old default grey move to it once; any deliberate background choice is kept.
 - The dashboard shell stays quiet: lighter headings, inline summary metrics, plain language, restrained shadows and modest control shapes; vivid tile identities and glass completion states remain the visual focus. Settings uses labelled fields, a visible save state, optional setup details, and reversible layout resets.
 - Dashboard tiles are transparent, hue-tinted liquid glass: the tile surface carries its colour, while text sits sharply over it in deep, readable ink. Use a thin luminous glass rim, softly refracted backdrop, and generous round corners rather than coloured outlines and white panels. Inner surfaces remain transparent. Completed tiles keep a stronger, vivid transparent hue and readable dark ink; the background must remain visible through both states. Typeface remains Nunito.
-- Routine widget actions use accessible icon controls with 44px touch targets; Today expansion is a quiet corner icon. Keep actual content titles and actionable setup/error explanations. Reminders uses a broad desktop calendar/list composition and stacks on phones. The wallpaper stays a quiet mineral canvas without decorative stripes or rings.
+- Routine widget actions use accessible icon controls with 44px touch targets; Today expansion is a quiet corner icon. Keep actual content titles and actionable setup/error explanations. Reminders stacks its calendar and list in a standard large tile and keeps full phone width. The wallpaper stays a quiet mineral canvas without decorative stripes or rings.
 - Dense tile content follows a natural top/left reading flow. Centering is reserved for compact utilities, empty states, and content that is intentionally poster-like.
 - Tile internals respond to the tile's own width and height, not only to the browser window. Long controls reflow as readable rows, and mobile uses the page scroll instead of nested tile scrolling.
 - Today omits redundant tile headings; accessible names remain. Library and expanded views retain a clear title. Titles follow the normal reading flow.
@@ -104,6 +104,14 @@ They share a small storage contract and navigation, not a runtime or interface.
 - Full-colour tiles use a vivid hue-aware transparent fill with high-contrast dark content and translucent internal surfaces, including for yellow, mint and cyan.
 
 - Responsive sizing follows available window width and browser zoom. Individual tile spans grow for content without stretching neighbours. Compact/Comfortable/Large display size is stored per device and excluded from account sync.
+
+- Desktop tile sizes come from a fixed module set — square 2×2, wide 4×2, large 4×3 (plus the slim 4×1 note) — so any arrangement packs without holes; content adapts to the module, previews hide surplus behind ⤢ instead of growing arbitrary shapes.
+- The ⤢ expand control overlays the tile's top-right corner and must never shift tile content down; tiles keep that corner visually free. The expanded pop-up has no header bar: the expanded tile IS the dialog, with the close cross embedded in its top-right corner.
+- No tile shows a title or section caption (e.g. shopping's "Your list" is gone); identity comes from the design itself. Loading/error states may still name the tile.
+- Text inputs show no focus container anywhere: no focus rings, boxes, dashed circles or dotted underlines — just the caret (Goals' add field is the reference).
+- Tile identities, round 3: Music is a slowly spinning grooved vinyl disc (the disc is the Apple Music link; it spins faster while matching). Languages embed their flag as a vertical stripe bar beside the day's point (ES left/DE right, mirrored layouts) instead of a pole flag and tailed bubble. Knowledge's watering can is a cropped corner watermark pouring onto the title. Brainflex has no user choice of puzzle kinds: daily rotation across all kinds, the day's type shown as a label, and a decorative line-art gear half-buried in the lower-right corner. Breathe releases soft ripple rings on each exhale. The Note tile is a slim 4×1 whose ruled paper (lines in the tile's own colour) fills the whole tile. Reminders marks "due today" with a small accent dot + bold text, not a pill. World previews the lead plus exactly two column stories; the rest opens via ⤢.
+- Recall grade buttons show the FSRS-scheduled interval ("1 d", "2 w", …) with the grade name beneath in the expanded view — no emoji faces — and an item's translation/meta is part of the answer face itself.
+- Insights keeps all its content but at half scale: the page is capped at 56rem and every card, ring, table cell and number is compact.
 
 ## Learn direction
 

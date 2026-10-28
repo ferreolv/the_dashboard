@@ -400,7 +400,7 @@ test("backend and frontend accept exactly the same daily shapes, including malfo
     [{ headline: "Headline", summary: "Summary" }], { place: "Sydney", temp: 20, code: 0 },
     { place: "Sydney", temp: 20, code: 0, hi: 23, lo: 15, tomorrow: { hi: 24, lo: 16, code: 1 } },
     { title: "Music", artist: "Artist", why: "Listen" }, { format: "Logic", prompt: "Challenge", solution: "Answer" }];
-  for (const key of ["word", "worth", "spanish", "music", "world", "weather", "brainflex", "philo", "academic", "gmat"]) {
+  for (const key of ["word", "worth", "spanish", "music", "world", "weather", "brainflex", "philo", "academic"]) {
     for (const sample of samples) assert.equal(Boolean(serverValid(key, sample)), Boolean(clientValid(key, sample)), key + ": " + JSON.stringify(sample));
   }
 });

@@ -267,8 +267,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .rtitle { font-size:11px; color:var(--dim); margin:0 0 6px; font-weight:700; }
   .recallRatings { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:11px; }
   .recallRating { min-width:0; min-height:54px!important; padding:7px 5px!important; display:flex; align-items:center; justify-content:center; border-radius:18px!important; }
-  .recallRating .face { font-size:28px; line-height:1; filter:drop-shadow(0 3px 5px rgba(63,24,89,.12)); transition:transform .18s ease; }
-  .recallRating:hover .face { transform:scale(1.12) rotate(-3deg); }
+  .recallRating { flex-direction:column; gap:2px; }
   .recallFlash { display:flex; flex-direction:column; gap:8px; padding:10px 11px; border:1.5px solid var(--fieldbd); border-radius:20px; background:var(--field); }
   .recallQuestion { margin:0; color:var(--accentDark); font-size:14px; line-height:1.35; font-weight:850; }
   .recallAnswer { padding:9px 10px; border-radius:16px; border:1.5px solid color-mix(in srgb,var(--accent) 24%,#fff); color:var(--ink); font-size:12.5px; line-height:1.45; }
@@ -418,145 +417,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .bigtextarea:focus { border-color:#4F46E5; }
   .examLink { font-style:italic; background:var(--field); border-left:3px solid var(--lbl); border-radius:8px; padding:8px 11px; font-size:12.6px; line-height:1.5; margin-top:8px; color:var(--ink); }
 
-  /* ---- GMAT adaptive sprint ---- */
-  .gmatTile { height:100%; min-height:0; display:flex; flex-direction:column; gap:9px; }
-  .gmatFocus { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 13px; border:1.5px solid color-mix(in srgb,var(--accent) 34%,transparent); border-radius:17px; background:linear-gradient(135deg,rgba(255,255,255,.62),color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.28))); }
-  .gmatFocus::after { content:""; position:absolute; right:-26px; bottom:-38px; width:106px; height:106px; border-radius:50%; background:color-mix(in srgb,var(--accent) 12%,transparent); pointer-events:none; }
-  .gmatFocusCopy { position:relative; z-index:1; min-width:0; }
-  .gmatKicker { color:var(--dim); font-size:9px; line-height:1; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
-  .gmatFocusName { margin-top:4px; font-size:clamp(15px,5.5cqi,20px); line-height:1.08; font-weight:900; letter-spacing:-.02em; overflow-wrap:anywhere; }
-  .gmatExamCountdown { position:relative; z-index:1; flex:none; text-align:right; }
-  .gmatExamCountdown strong { display:block; font-size:clamp(22px,8cqi,32px); line-height:.9; font-weight:900; letter-spacing:-.05em; }
-  .gmatExamCountdown span { display:block; margin-top:4px; color:var(--dim); font-size:8.5px; line-height:1.1; font-weight:850; text-transform:uppercase; }
-  .gmatSections { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
-  .gmatSectionMini { min-width:0; padding:8px 9px; border:1px solid var(--fieldbd); border-radius:13px; background:var(--field); }
-  .gmatSectionTop { display:flex; align-items:center; justify-content:space-between; gap:4px; font-size:9px; line-height:1; font-weight:900; }
-  .gmatSectionTop b { font-size:11px; }
-  .gmatMeter { height:5px; margin-top:6px; overflow:hidden; border-radius:999px; background:color-mix(in srgb,var(--accent) 12%,transparent); }
-  .gmatMeter span { display:block; height:100%; border-radius:inherit; background:var(--accent); }
-  .gmatTileActions { display:flex; align-items:center; justify-content:space-between; gap:7px; margin-top:auto; }
-  .gmatTileActions .pill { flex:1 1 auto; justify-content:center; }
-  .gmatTileMeta { color:var(--dim); font-size:9.5px; line-height:1.2; font-weight:800; text-align:right; white-space:nowrap; }
-  .gmatOverlay { --gm:#654EF2; --gmDark:#3E2AA6; background:radial-gradient(circle at 15% 10%,rgba(101,78,242,.25),transparent 38%),rgba(22,18,52,.72); }
-  .gmatWorkspace { max-width:980px; min-height:min(720px,calc(100vh - 60px)); padding:0; overflow:hidden; border:1px solid rgba(101,78,242,.17); border-radius:26px; background:linear-gradient(145deg,#fbfaff,#f2f0ff 58%,#f7fbff); box-shadow:0 36px 100px rgba(23,14,68,.35); color:#27204f; }
-  .gmatWorkspace button,.gmatWorkspace input { font-family:'Nunito',sans-serif; }
-  .gmatTop { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:17px 20px; border-bottom:1px solid rgba(62,42,166,.1); background:rgba(255,255,255,.64); }
-  .gmatBrand { display:flex; align-items:center; gap:10px; min-width:0; }
-  .gmatBrandMark { width:39px; height:39px; display:grid; place-items:center; flex:none; border-radius:13px; background:linear-gradient(145deg,var(--gm),var(--gmDark)); color:#fff; font-size:12px; font-weight:950; letter-spacing:-.03em; box-shadow:0 9px 20px rgba(101,78,242,.25); }
-  .gmatBrand h2 { margin:0; font-size:17px; line-height:1.1; font-weight:950; letter-spacing:-.025em; }
-  .gmatBrand p { margin:3px 0 0; color:#70699a; font-size:10.5px; line-height:1.2; }
-  .gmatClose { width:37px; height:37px; padding:0; border:1px solid rgba(62,42,166,.15); border-radius:50%; background:#fff; color:var(--gmDark); cursor:pointer; font-size:20px; line-height:1; }
-  .gmatBody { min-height:0; padding:20px; }
-  .gmatNav { display:flex; gap:6px; margin-bottom:16px; overflow-x:auto; scrollbar-width:none; }
-  .gmatNav::-webkit-scrollbar { display:none; }
-  .gmatNavBtn { min-height:36px; padding:7px 13px; border:1px solid rgba(62,42,166,.13); border-radius:999px; background:rgba(255,255,255,.75); color:#615a88; cursor:pointer; font-size:10.5px; font-weight:850; white-space:nowrap; }
-  .gmatNavBtn.on { border-color:var(--gm); background:var(--gm); color:#fff; box-shadow:0 7px 16px rgba(101,78,242,.2); }
-  .gmatDashboard { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr); gap:14px; }
-  .gmatPanel { padding:16px; border:1px solid rgba(62,42,166,.1); border-radius:20px; background:rgba(255,255,255,.72); box-shadow:0 9px 24px rgba(46,35,108,.055); }
-  .gmatPanel h3 { margin:0; font-size:14px; line-height:1.2; font-weight:950; }
-  .gmatPanelSub { margin:4px 0 0; color:#756f98; font-size:10.5px; line-height:1.4; }
-  .gmatHeroPanel { position:relative; overflow:hidden; min-height:200px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(145deg,#6e57f4,#4b35c9); color:#fff; }
-  .gmatHeroPanel::after { content:""; position:absolute; right:-70px; bottom:-95px; width:260px; height:260px; border:1px solid rgba(255,255,255,.15); border-radius:50%; box-shadow:0 0 0 30px rgba(255,255,255,.045),0 0 0 62px rgba(255,255,255,.025); }
-  .gmatHeroPanel>* { position:relative; z-index:1; }
-  .gmatHeroPanel .gmatPanelSub { color:rgba(255,255,255,.74); }
-  .gmatHeroFocus { margin-top:15px; font-size:clamp(25px,4vw,38px); line-height:.98; font-weight:950; letter-spacing:-.045em; }
-  .gmatHeroActions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:18px; }
-  .gmatBtn { min-height:40px; display:inline-flex; align-items:center; justify-content:center; padding:8px 15px; border:1.5px solid var(--gm); border-radius:999px; background:var(--gm); color:#fff; cursor:pointer; font-size:11px; line-height:1.2; font-weight:900; text-decoration:none; }
-  .gmatBtn:hover { filter:brightness(1.06); transform:translateY(-1px); }
-  .gmatBtn.light { border-color:#fff; background:#fff; color:var(--gmDark); }
-  .gmatBtn.soft { border-color:rgba(101,78,242,.18); background:#f0edff; color:var(--gmDark); }
-  .gmatBtn.ghost { border-color:rgba(255,255,255,.38); background:rgba(255,255,255,.1); color:#fff; }
-  .gmatBtn:disabled { cursor:not-allowed; opacity:.45; transform:none; }
-  .gmatAnalytics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin-top:14px; }
-  .gmatStatCard { padding:12px; border:1px solid rgba(62,42,166,.1); border-radius:15px; background:rgba(255,255,255,.68); }
-  .gmatStatHead { display:flex; align-items:center; justify-content:space-between; gap:6px; color:#69628f; font-size:9.5px; font-weight:900; }
-  .gmatStatHead span:first-child { width:25px; height:25px; display:grid; place-items:center; border-radius:8px; background:#ebe8ff; color:var(--gmDark); }
-  .gmatStatValue { margin-top:10px; font-size:24px; line-height:.9; font-weight:950; letter-spacing:-.04em; }
-  .gmatStatSub { margin-top:5px; color:#7c769d; font-size:9px; font-weight:750; }
-  .gmatSideStack { display:flex; flex-direction:column; gap:14px; }
-  .gmatField { width:100%; min-height:40px; padding:9px 11px; border:1px solid rgba(62,42,166,.16); border-radius:11px; background:#fff; color:#29224f; outline:none; font-size:12px; }
-  .gmatField:focus { border-color:var(--gm); box-shadow:0 0 0 3px rgba(101,78,242,.1); }
-  .gmatSettingRow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; margin-top:10px; }
-  .gmatDueList { display:flex; flex-direction:column; gap:7px; margin-top:11px; }
-  .gmatDueRow { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:11px; background:#f4f2ff; color:#5d5685; font-size:10px; font-weight:800; }
-  .gmatDueRow b { color:var(--gmDark); }
-  .gmatPracticeHead { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .gmatQuestionShell { max-width:760px; margin:0 auto; }
-  .gmatQuestionMeta { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#70699a; font-size:10px; font-weight:850; }
-  .gmatQuestionMeta span:first-child { display:inline-flex; align-items:center; gap:6px; }
-  .gmatQuestionMeta b { color:var(--gmDark); }
-  .gmatSessionProgress { height:6px; margin:9px 0 17px; overflow:hidden; border-radius:999px; background:#e5e1fa; }
-  .gmatSessionProgress span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#8b75ff,var(--gm)); transition:width .25s ease; }
-  .gmatQuestion { margin:0; font-size:clamp(17px,2.6vw,23px); line-height:1.32; font-weight:900; letter-spacing:-.02em; color:#2b2454; }
-  .gmatOptions { display:grid; gap:8px; margin-top:17px; }
-  .gmatOption { width:100%; min-height:44px; display:flex; align-items:center; gap:10px; padding:9px 12px; border:1.5px solid rgba(62,42,166,.13); border-radius:13px; background:#fff; color:#37305f; cursor:pointer; text-align:left; font-size:12px; line-height:1.3; font-weight:750; }
-  .gmatOption:hover:not(:disabled) { border-color:#9b8af7; background:#f7f5ff; }
-  .gmatOption:disabled { cursor:default; }
-  .gmatOption.correct { border-color:#24a66a; background:#eaf9f1; color:#12653f; }
-  .gmatOption.wrong { border-color:#e15a75; background:#fff0f3; color:#9f2941; }
-  .gmatOption.dim { opacity:.5; }
-  .gmatLetter { width:25px; height:25px; display:grid; place-items:center; flex:none; border-radius:8px; background:#eeeafd; color:var(--gmDark); font-size:9px; font-weight:950; }
-  .gmatOption.correct .gmatLetter { background:#24a66a; color:#fff; }
-  .gmatOption.wrong .gmatLetter { background:#e15a75; color:#fff; }
-  .gmatFeedback { margin-top:14px; padding:13px 14px; border-left:4px solid var(--gm); border-radius:12px; background:#f0edff; color:#5d5684; font-size:11.5px; line-height:1.5; }
-  .gmatReport { display:inline-block; margin-top:9px; padding:0; border:0; background:none; color:#8a6d2f; font:800 10.5px/1.2 'Nunito',sans-serif; cursor:pointer; opacity:.72; }
-  .gmatReport:hover { opacity:1; text-decoration:underline; }
-  .gmatErrorWrap { margin-top:14px; }
-  .gmatPromptLabel { margin-bottom:7px; color:#746d99; font-size:9px; font-weight:950; letter-spacing:.07em; text-transform:uppercase; }
-  .gmatChips { display:flex; flex-wrap:wrap; gap:6px; }
-  .gmatChip { min-height:32px; padding:6px 10px; border:1px solid rgba(62,42,166,.14); border-radius:999px; background:#fff; color:#625b89; cursor:pointer; font-size:9.5px; font-weight:850; }
-  .gmatChip.on { border-color:var(--gm); background:var(--gm); color:#fff; }
-  .gmatFeelings { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:14px; }
-  .gmatFeeling { min-height:72px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:7px; border:1.5px solid rgba(62,42,166,.14); border-radius:15px; background:#fff; color:#514a7a; cursor:pointer; }
-  .gmatFeeling:hover:not(:disabled) { border-color:var(--gm); transform:translateY(-2px); box-shadow:0 8px 18px rgba(70,49,172,.1); }
-  .gmatFeeling:disabled { cursor:not-allowed; opacity:.38; }
-  .gmatFeeling .face { font-size:24px; line-height:1; }
-  .gmatFeeling b { font-size:9.5px; }
-  .gmatSessionDone { max-width:620px; margin:30px auto; padding:28px; border:1px solid rgba(62,42,166,.1); border-radius:24px; background:#fff; text-align:center; }
-  .gmatDoneMark { width:68px; height:68px; display:grid; place-items:center; margin:0 auto 14px; border-radius:22px; background:linear-gradient(145deg,var(--gm),var(--gmDark)); color:#fff; font-size:30px; box-shadow:0 16px 30px rgba(101,78,242,.24); }
-  .gmatSessionDone h3 { margin:0; font-size:24px; font-weight:950; letter-spacing:-.035em; }
-  .gmatSessionDone p { color:#746e98; font-size:12px; line-height:1.5; }
-  .gmatDoneStats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:18px 0; }
-  .gmatDoneStats div { padding:12px 8px; border-radius:14px; background:#f3f1ff; }
-  .gmatDoneStats b { display:block; font-size:21px; line-height:1; color:var(--gmDark); }
-  .gmatDoneStats span { display:block; margin-top:5px; color:#7a749a; font-size:8.5px; font-weight:850; text-transform:uppercase; }
-  .gmatMistakes { display:flex; flex-direction:column; gap:8px; }
-  .gmatMistake { padding:12px 13px; border:1px solid rgba(62,42,166,.1); border-radius:14px; background:#fff; }
-  .gmatMistakeTop { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#746d99; font-size:9px; font-weight:900; }
-  .gmatMistakeText { margin-top:6px; font-size:12px; line-height:1.35; font-weight:850; color:#393260; }
-  .gmatMistakeReason { display:inline-flex; margin-top:7px; padding:4px 7px; border-radius:999px; background:#fff0f3; color:#a52e49; font-size:8.5px; font-weight:900; }
-  .gmatMockForm { display:grid; grid-template-columns:repeat(4,minmax(70px,1fr)) auto; gap:7px; margin-top:12px; }
-  .gmatMocks { display:flex; flex-direction:column; gap:7px; margin-top:12px; }
-  .gmatMockRow { display:grid; grid-template-columns:1.2fr repeat(4,.7fr) auto; align-items:center; gap:7px; padding:9px 10px; border-radius:12px; background:#f4f2ff; color:#625b89; font-size:9.5px; font-weight:800; text-align:center; }
-  .gmatMockRow b { color:var(--gmDark); }
-  .gmatEmpty { padding:24px; border:1.5px dashed rgba(62,42,166,.2); border-radius:18px; color:#77709b; text-align:center; font-size:11.5px; line-height:1.5; }
-  @container tile (max-width:330px) {
-    .gmatFocus{padding:9px 10px}
-    .gmatSections{gap:4px}
-    .gmatSectionMini{padding:7px 6px}
-    .gmatSectionTop{font-size:8px}
-    .gmatTileMeta{display:none}
-  }
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatFocus{padding:5px 8px;border-radius:11px}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatKicker,.tile[data-tileid="gmat"][data-rows="1"] .gmatExamCountdown{display:none}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatFocusName{margin:0;font-size:12px}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatSections{display:none}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatTile{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatTileActions{margin:0}
-  .tile[data-tileid="gmat"][data-rows="1"] .gmatTileActions .pill{min-height:28px!important;padding:3px 9px!important;font-size:9px}
-  @media(max-width:700px){
-    .gmatOverlay{padding:10px}
-    .gmatWorkspace{min-height:calc(100vh - 20px);border-radius:20px}
-    .gmatTop{padding:13px 14px}
-    .gmatBody{padding:14px}
-    .gmatDashboard{grid-template-columns:1fr}
-    .gmatAnalytics{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .gmatFeelings{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .gmatMockForm{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .gmatMockForm .gmatBtn{grid-column:1/-1}
-    .gmatMockRow{grid-template-columns:1fr repeat(2,.7fr)}
-    .gmatMockRow span:nth-child(4),.gmatMockRow span:nth-child(5){display:none}
-  }
 
   /* ---- philosophy chat ---- */
   .philoQ { font-size:14.5px; font-weight:700; line-height:1.35; margin-bottom:10px; }
@@ -713,7 +573,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .settings h3 { font-size:18px; letter-spacing:-.025em; margin-bottom:4px; }
   .settings .lab { color:#7a7d91; font-size:10px; letter-spacing:.07em; margin-top:18px; }
   .sinput,.addinput,.bigtextarea,.notearea,.chatInput,.timerInput { border-color:rgba(23,24,44,.09); background:rgba(255,255,255,.64); border-radius:11px; transition:border-color .2s,box-shadow .2s,background .2s; }
-  .sinput:focus,.addinput:focus,.bigtextarea:focus,.notearea:focus,.chatInput:focus,.timerInput:focus { border-color:rgba(98,87,231,.48); background:#fff; box-shadow:0 0 0 4px rgba(98,87,231,.09); }
+  .sinput:focus,.addinput:focus,.bigtextarea:focus,.notearea:focus,.chatInput:focus,.timerInput:focus { border-color:rgba(98,87,231,.48); background:#fff; box-shadow:0 0 0 0 rgba(98,87,231,.09); }
   .savebtn,.ghostbtn,.pill,.mark,.puBtn,.pillBtn { border-radius:10px; transition:transform .18s var(--ease),filter .18s,box-shadow .18s; }
   .savebtn { background:#17182c; }
   .savebtn:hover,.ghostbtn:hover,.pill:hover,.mark:hover,.puBtn:hover { transform:translateY(-1px); }
@@ -1310,7 +1170,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .taskMain .agSub{margin-top:2px;color:var(--dim);font-size:9.5px;line-height:1.25}
   .taskRow.done .agName{text-decoration:line-through 2px;text-decoration-color:currentColor}
   .taskAgenda .agWhen{flex:none;margin-left:auto;padding:4px 7px;border-radius:999px;font-size:8.5px;font-weight:900;white-space:nowrap}
-  .taskAgenda .taskRow.dueNow .agWhen{background:var(--accent);color:#fff}
+  .taskAgenda .taskRow.dueNow .agWhen{color:var(--accentDark);font-weight:900}
   .taskAgenda .taskRow.later .agWhen{border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);color:var(--accentDark);background:rgba(255,255,255,.22)}
   .taskAgenda .taskRow.done .agWhen{color:var(--dim);background:rgba(255,255,255,.32)}
   /* Note is a compact writing card: hidden scrollbar, writing left, actions stacked right. */
@@ -1333,17 +1193,12 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
     .tile[data-tileid="timer"] .timerActions{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:6px;margin:0}
     .tile[data-tileid="timer"] .timerControls button{width:100%;min-height:28px!important;padding:3px 7px!important;font-size:10.5px}
     .tile[data-tileid="timer"] .timerRow{justify-content:flex-start}
-    .tile[data-tileid="note"][data-rows="1"] .noteCard{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:8px}
-    .tile[data-tileid="note"][data-rows="1"] .noteActions{flex-direction:column;align-items:stretch;margin-top:0!important;gap:4px}
-    .tile[data-tileid="note"][data-rows="1"] .noteActions button{width:100%;min-height:27px!important;padding:3px 8px!important;font-size:9.5px}
     .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{flex-direction:row!important;align-items:stretch!important;gap:9px}
     .tile[data-tileid="pushups"][data-rows="1"] .pushCount{display:grid;place-items:center;flex:0 0 32%;width:auto;font-size:clamp(34px,10cqi,46px)}
     .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto;align-self:stretch;height:100%}
     .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puBtn{height:100%!important;min-height:0!important}
   }
   @container tile (max-width:329px){
-    .tile[data-tileid="note"][data-rows="1"] .notearea{min-height:58px}
-    .tile[data-tileid="note"][data-rows="1"] .noteActions{margin-top:5px!important}
     .tile[data-tileid="pushups"][data-rows="1"] .pushWrap{align-items:center!important}
     .tile[data-tileid="pushups"][data-rows="1"] .pushCount{flex:1 1 auto;width:100%;font-size:30px;text-align:center}
     .tile[data-tileid="pushups"][data-rows="1"] .pushBtns{flex:1 1 auto;align-self:center!important;width:min(100%,260px)!important;margin-inline:auto!important}
@@ -1593,14 +1448,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
     display:flex;width:fit-content;min-height:0!important;padding:7px 11px!important;
     border-radius:999px!important;font-size:11px
   }
-  .gmatClose,.gmatChip.del{
-    display:grid!important;place-items:center!important;
-    width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
-    padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;
-    color:inherit!important;box-shadow:none!important;font:900 20px/1 'Nunito',sans-serif!important
-  }
-  .gmatClose:hover,.gmatChip.del:hover{background:transparent!important;transform:scale(1.08)!important}
-
+  
   /* Stats keeps a neutral shell. Habits carry their own colour only in the
      compact completion history, so a quick scan never blends them together. */
   .tile[data-tileid="weekly"] .wrev{gap:10px}
@@ -2144,9 +1992,9 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid] .tilehead .lbl{color:var(--ink)!important;font-size:13px!important;font-weight:800!important}
   .tile[data-tileid] .content{color:var(--ink)!important;text-shadow:none!important}
   .tile[data-tileid] .content :where(p,span,div,label):not(button *){color:inherit}
-  .tile[data-tileid] :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.goalText,.pushCount,.wbig,.weatherTomorrowTemps,.eventCountdown strong,.agName,.miniCalHead,.miniCalNum,.shopSectionLabel,.wcTerm,.wcDef,.wcTermFr,.philoModeRow,.plainEmpty,.gmatTileMeta){color:var(--ink)!important}
+  .tile[data-tileid] :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.goalText,.pushCount,.wbig,.weatherTomorrowTemps,.eventCountdown strong,.agName,.miniCalHead,.miniCalNum,.shopSectionLabel,.wcTerm,.wcDef,.wcTermFr,.philoModeRow,.plainEmpty){color:var(--ink)!important}
   .tile[data-tileid] :is(.muted,.noteSaved,.agSub,.weatherMeta,.weatherTomorrowLabel){opacity:.82}
-  .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventHero,.eventEmpty,.insight,.examLink,.wrevSection,.placeBranch,.flameCard,.achCard,.plainEmpty,.recallFlash,.recallAnswer,.miniCalendar,.habitHistoryCard,.gmatFocus,.gmatFocusCard){background:transparent!important;border-color:var(--hair)!important;box-shadow:none!important}
+  .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventHero,.eventEmpty,.insight,.examLink,.wrevSection,.placeBranch,.flameCard,.achCard,.plainEmpty,.recallFlash,.recallAnswer,.miniCalendar,.habitHistoryCard){background:transparent!important;border-color:var(--hair)!important;box-shadow:none!important}
   .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventEmpty,.plainEmpty,.wrevSection){border:0!important}
   .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.eventEmpty){border-radius:0!important}
   .tile[data-tileid] .content .weatherEmoji{background:none!important;box-shadow:none!important}
@@ -2214,7 +2062,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tilehead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dailySaved{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.02em;opacity:.7;white-space:nowrap}
 .dailyLoadState{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px;min-height:65px;height:100%;padding:3px 0;color:var(--ink);font-size:12px;line-height:1.45}
 .dailyLoadCopy strong{display:block;font-size:14px;font-weight:800;line-height:1.3}.dailyLoadCopy p{margin:5px 0 0;opacity:.83;max-width:46ch}.dailyLoadState .pill{font-size:11px;padding:7px 13px;min-height:32px;white-space:normal;text-align:left}.dailyLoadCopy .genSpin{display:inline-block;width:13px;height:13px;margin-bottom:7px}
-.dailyDependency,.gmatSourceHelp{font-size:11px;line-height:1.5;opacity:.85;margin:4px 0 9px}.dailyDependency .link{margin-left:5px}.gmatSource{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:10px;font-weight:800;margin-bottom:9px;opacity:.8}.gmatSource .link{font-size:10px}
+.dailyDependency{font-size:11px;line-height:1.5;opacity:.85;margin:4px 0 9px}.dailyDependency .link{margin-left:5px}
 @media(max-width:639px){.dailySafety{align-items:flex-start;padding:11px 13px}.dailySafety strong,.dailySafety span:not(.dailySafetyIcon){display:block}.dailySafetyIcon{margin-top:1px}.dailyLoadState{gap:10px}.dailyLoadCopy strong{font-size:13px}.dailySaved{font-size:8px}}
 .dailyProblemCard{position:relative;width:min(540px,calc(100vw - 28px));max-height:85vh;overflow-y:auto;padding:26px;color:#26333d}.dailyProblemCard h2{font-size:22px;line-height:1.25;margin:0 28px 7px 0}.dailyProblemIntro{font-size:12px;line-height:1.5;opacity:.72;margin:0 0 18px}.dailyProblemClose{position:absolute;right:14px;top:12px;display:grid;place-items:center;width:30px;height:30px;background:none;border:0;font-family:inherit;font-size:26px;line-height:1;color:inherit;cursor:pointer}.dailyProblemList{list-style:none;padding:0;margin:0;display:grid;gap:14px}.dailyProblemList li{padding:15px;border:1px solid rgba(31,48,60,.12);border-radius:18px;background:rgba(255,255,255,.26)}.dailyProblemTile{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;opacity:.63;margin-bottom:5px}.dailyProblemList h3{font-size:15px;margin:0 0 6px}.dailyProblemList p{font-size:12px;line-height:1.5;margin:0 0 12px}.dailyProblemList .ghostbtn{font-size:12px;min-height:36px}.dailyProblemFooter{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.dailyLoadActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.settingsHelp a{font-weight:800;color:inherit}#daily-content:focus{outline:2px solid rgba(50,72,90,.35);outline-offset:5px}
 @media(max-width:639px){.dailyProblemCard{padding:22px 18px}.dailyProblemCard h2{font-size:20px}.dailyProblemList li{padding:13px}}
@@ -2228,8 +2076,11 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tileExpand svg,.tileArrangeHandle svg{width:19px;height:19px}.tileExpand:hover{background:rgba(255,255,255,.17)}.tileExpand:focus-visible,.tileArrangeHandle:focus-visible,.tileFocusClose:focus-visible{outline:2px solid currentColor;outline-offset:3px}.tileArrangeHandle{cursor:grab;touch-action:none}
 .tileFocusOverlay{padding:30px!important;align-items:center!important;background:rgba(22,31,42,.27)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;animation:focusBackdropIn .2s ease both}
 .tileFocus{width:min(860px,100%);max-height:calc(100dvh - 60px);overflow:auto;overscroll-behavior:contain;border-radius:30px;border:1px solid rgba(255,255,255,.6);background:rgba(245,248,250,.75);box-shadow:0 26px 90px rgba(12,23,37,.2);backdrop-filter:blur(26px) saturate(1.3);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both;scrollbar-width:none}
-.tileFocusHeader{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px 10px;color:var(--ink)}.tileFocusHeader h2{margin:0;font-size:16px;font-weight:750}.tileFocusClose{display:grid;place-items:center;width:44px;height:44px;flex:none;border:0;border-radius:50%;background:rgba(255,255,255,.32);color:inherit;font-size:29px;line-height:1;cursor:pointer}
-.tileFocusSurface{padding:8px 28px 30px;color:var(--ink);background:linear-gradient(160deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.04));container-type:inline-size}
+/* The expanded tile is the whole popup: no header bar, the close cross sits inside the design. */
+.tile.tileFocusSurface .tileFocusClose{position:absolute;z-index:7;top:14px;right:14px;display:grid;place-items:center;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;max-width:40px!important;flex:none;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.34)!important;box-shadow:none!important;color:var(--ink)!important;font-size:25px;line-height:1;cursor:pointer;opacity:.85;transform:none!important;transition:opacity .18s,background .18s}
+.tile.tileFocusSurface .tileFocusClose:hover{opacity:1;background:rgba(255,255,255,.55)!important;transform:none!important}
+.tile.completed.tileFocusSurface .tileFocusClose{background:rgba(255,255,255,.26)!important;color:#fff!important}
+.tileFocusSurface{padding:24px 28px 30px;color:var(--ink);background:linear-gradient(160deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.04));container-type:inline-size}
 .tileFocus.completed .tileFocusSurface{background:linear-gradient(160deg,rgba(var(--glass-rgb),.29),rgba(var(--glass-rgb),.14))}
 .tileFocusBody,.tileFocusBody>.content{height:auto!important;max-height:none!important;overflow:visible!important;min-width:0}.tileFocusBody .content{font-size:16px;line-height:1.6}.tileFocusBody p{line-height:1.6}.tileFocusBody input,.tileFocusBody textarea,.tileFocusBody select{font-size:16px}.tileFocusBody .story{max-height:none!important;overflow:visible!important}.tileFocusBody .chatLog{max-height:none!important;overflow:visible!important}
 .tileFocusOverlay.isClosing{animation:focusBackdropOut .18s ease both}.tileFocusOverlay.isClosing .tileFocus{animation:tileFocusOut .18s ease both}
@@ -2239,7 +2090,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .eventComposition{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.eventComposition .eventHero{min-width:0;width:auto!important;padding:14px!important}.eventComposition .eventCountdown strong{font-size:36px!important}.eventComposition .eventTitle{font-size:15px!important;overflow-wrap:anywhere}.tileFocusSurface .eventComposition{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .curatedTile .goalDay:nth-child(n+3),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:639px){
- .tileFocusOverlay{padding:16px 0 0!important;align-items:flex-end!important}.tileFocus{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top)));border-radius:28px 28px 0 0;padding-bottom:env(safe-area-inset-bottom);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both}.tileFocusHeader{padding:12px 18px 6px}.tileFocusSurface{padding:8px 20px 28px}.tileFocusBody .content{font-size:16px}
+ .tileFocusOverlay{padding:16px 0 0!important;align-items:flex-end!important}.tileFocus{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top)));border-radius:28px 28px 0 0;padding-bottom:env(safe-area-inset-bottom);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both}.tileFocusSurface{padding:20px 20px 28px}.tileFocusBody .content{font-size:16px}
  .wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}.topbar:not(.learnNav){position:static!important;min-height:44px!important;background:transparent!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;padding:0!important;margin-bottom:20px!important}.topnav{position:fixed!important;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;display:flex!important;width:calc(100% - 32px);max-width:420px;box-sizing:border-box;padding:5px!important;border:1px solid rgba(255,255,255,.75)!important;border-radius:24px!important;background:rgba(239,243,246,.84)!important;backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 6px 28px rgba(24,34,48,.12)}.topnav .navbtn{flex:1;min-height:44px;padding:10px 8px!important;font-size:14px!important;border-radius:19px!important}.topActions{width:100%;justify-content:flex-end!important;gap:8px!important}.topActions .actionBtn:last-child{display:inline-flex!important}.topActions .actionBtn{min-height:44px;height:auto!important;font-size:12px!important;padding:10px 12px!important;white-space:normal}.tileSaveState{font-size:11px}.tileFoot{margin-top:8px}
 }
 @media(prefers-reduced-motion:reduce){.tileFocusOverlay,.tileFocus,.tileFocusOverlay.isClosing,.tileFocusOverlay.isClosing .tileFocus{animation:none!important;transition:none!important}}
@@ -2290,10 +2141,10 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 
 
 /* Expanded cards retain their tile-specific internals without grid geometry. */
-.tile.tileFocusSurface{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:block!important;container-type:inline-size!important;transform:none!important;animation:none!important;box-shadow:none!important;padding:8px 28px 30px!important;border:0!important;border-radius:0 0 30px 30px!important}
+.tile.tileFocusSurface{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:block!important;container-type:inline-size!important;transform:none!important;animation:none!important;box-shadow:none!important;padding:24px 28px 30px!important;border:0!important;border-radius:30px!important}
 .tileFocusSurface>.tileFocusBody{position:relative;z-index:2}.tile.tileFocusSurface::before,.tile.tileFocusSurface::after{border-radius:inherit!important}
 .curatedTile[data-tileid="philo"] .philoThinkArea{min-height:44px!important;height:44px!important;resize:none}.curatedTile[data-tileid="philo"] .philoCard{gap:8px!important}
-@media(max-width:639px){.tile.tileFocusSurface{padding:8px 20px 28px!important}}
+@media(max-width:639px){.tile.tileFocusSurface{padding:20px 20px 28px!important;border-radius:28px 28px 0 0!important}}
 
 
 /* Intrinsic spans reserve room for one card without stretching its neighbours. */
@@ -2312,8 +2163,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 /* Quiet widget chrome and familiar, touch-friendly actions. */
 .curatedTile .tileFoot{position:absolute;z-index:6;top:8px;right:9px;min-height:44px;margin:0!important;gap:1px;justify-content:flex-end}
 .curatedTile .tileFoot>span:empty{display:none}.curatedTile .tileFootMinimal:not(:has(.tileSaveState)){display:none!important}
-.curatedTile:not(.editing):not(.cornerOutside)[data-expandable] .tileMount{padding-top:30px}
-.curatedTile:not(.editing):not(.cornerOutside)[data-family="small"] .tileMount{padding-top:18px}
 .curatedTile.cornerOutside .tilehead,.curatedTile.editing .tilehead{padding-right:64px}
 .tile[data-tileid] :is(.tileExpand,.tileArrangeHandle){display:inline-flex!important;align-items:center;justify-content:center;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;opacity:.58;transform:none!important;transition:opacity .18s,background .18s}
 .tile[data-tileid] :is(.tileExpand,.tileArrangeHandle):hover{opacity:1;background:rgba(255,255,255,.3)!important;border:0!important;transform:none!important}
@@ -2332,6 +2181,8 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid] .timerActions,.tile[data-tileid] .breathActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap}
 .tile[data-tileid] .noteActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}.tile[data-tileid] .noteSaved{flex:none!important;opacity:.45}.noteSaved svg{width:16px;height:16px}
 .tile[data-tileid] .eventAddToggle,.tile[data-tileid] .philoPreviewAction{align-self:flex-end;margin-top:12px!important}
+/* adding an event lives in the expanded view; the preview stays a clean stack of tickets */
+.grid>.tile[data-tileid="events"] .tileMount .eventAddToggle{display:none!important}
 .tile[data-tileid] .shoppingPreviewActions{margin-top:10px;justify-content:flex-end}.tile[data-tileid] .shopSectionLabel{font-size:11px;letter-spacing:.02em;font-weight:700;opacity:.6}
 .tile[data-tileid] :is(.pill,.mark,.ghostbtn,.pillBtn){box-shadow:none!important;font-weight:700!important;letter-spacing:0!important}
 
@@ -2370,8 +2221,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .grid>.tile[data-tileid="breathing"][data-rows] .breathCard{align-items:center!important}
 .grid>.tile[data-family="small"] .tileMount{display:flex;flex-direction:column;justify-content:center}
 @media(max-width:639px){
- .grid>.curatedTile:not(.editing):not(.cornerOutside)[data-expandable] .tileMount{padding-top:18px}
- .grid>.curatedTile:not(.editing):not(.cornerOutside)[data-family="small"] .tileMount{padding-top:4px}
  .grid>.curatedTile[data-tileid="timer"] .tileMount{padding-top:6px!important}
  .grid>.curatedTile[data-tileid="music"] .tileMount{padding-top:10px!important}
  .grid>.tile[data-tileid="timer"] .content{padding:0!important}
@@ -2404,20 +2253,28 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile.completed .dictLangTag{background:rgba(255,255,255,.2)}
 .tile.completed .dictIpa,.tile.completed .dictXlatDef{color:rgba(255,255,255,.76)!important}
 
-/* --- Music: the big bold note IS the link --- */
-.musicCard{display:flex;gap:14px;align-items:flex-start;min-height:0}
-a.musicNote,.tile a.musicNote{flex:none;display:grid;place-items:center;width:clamp(54px,26cqi,84px);height:clamp(54px,26cqi,84px);min-height:0;border-radius:26px;font:900 clamp(32px,17cqi,52px)/1 Georgia,serif;color:#fff;background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 86%,#fff),var(--accent) 55%,var(--accentDark));box-shadow:0 10px 24px -10px color-mix(in srgb,var(--accent) 65%,transparent),inset 0 1px 0 rgba(255,255,255,.35);text-decoration:none;transform:rotate(-6deg);transition:transform .25s ease,box-shadow .25s ease;padding:0;border:0}
-a.musicNote:hover{transform:rotate(-6deg) scale(1.06)}
-a.musicNote:active{transform:rotate(-6deg) scale(.94)}
-a.musicNote.matching{animation:musicPulse 1.1s ease-in-out infinite}
-@keyframes musicPulse{50%{transform:rotate(-6deg) scale(.96);opacity:.82}}
-.musicMeta{min-width:0;flex:1}
+/* --- Music: a spinning vinyl record IS the link --- */
+.musicCard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;min-height:0}
+a.musicDisc,.tile a.musicDisc{display:block;flex:none;width:clamp(104px,52cqi,164px);aspect-ratio:1;margin:-10px 4px -10px -30px;border-radius:50%;line-height:0;transition:transform .25s var(--ease)}
+a.musicDisc:hover{transform:scale(1.04)}
+a.musicDisc:active{transform:scale(.97)}
+.vinyl{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 10px 18px rgba(10,8,6,.3))}
+.vinyl .vinylSpin{transform-origin:50px 50px;animation:vinylSpin 11s linear infinite}
+a.musicDisc.matching .vinylSpin{animation-duration:2.6s}
+@keyframes vinylSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.vinyl .vinylSpin{animation:none}}
+.musicMeta{min-width:0;padding-right:30px}
 .musicComposer{font-size:12px;color:var(--dim);margin-top:2px}
 .musicWhy{font-size:12.5px;line-height:1.45;color:var(--dim);margin:6px 0 6px}
 .musicGenre{display:inline-block;font-size:10px!important}
-.tile.completed a.musicNote{background:rgba(255,255,255,.95)!important;color:var(--accentDark)!important;box-shadow:0 10px 22px -12px rgba(0,0,0,.35)}
+.tile.completed .vinyl .vinylLabel{fill:#fff}
+.tile.completed .vinyl .vinylGlyph{fill:var(--accentDark)}
 .tile.completed .musicComposer,.tile.completed .musicWhy{color:rgba(255,255,255,.78)!important}
-.tile[data-cols="1"] .musicCard{flex-direction:column;align-items:center;text-align:center}
+.tile[data-cols="1"] .musicCard{grid-template-columns:1fr;justify-items:center;text-align:center}
+.tile[data-cols="1"] a.musicDisc{margin:-4px 0 2px;width:clamp(92px,60cqi,130px)}
+.tile[data-cols="1"] .musicMeta{padding-right:0}
+.musicTitle{font-size:16px;font-weight:850;line-height:1.22;letter-spacing:-.01em}
+.musicArtist{font-size:12.5px;font-weight:750;opacity:.85;margin-top:3px}
 
 /* --- Recall: a real flashcard deck --- */
 .recallDeck{display:flex;flex-direction:column;gap:9px;flex:1;min-height:0}
@@ -2458,8 +2315,9 @@ a.musicNote.matching{animation:musicPulse 1.1s ease-in-out infinite}
 .recallDeck.big .recallPrompt{font-size:17.5px}
 .recallDeck.big .recallAnswerBig{font-size:19px}
 .recallDeck.big .recallDetail{font-size:13.5px;max-height:9em}
-.recallDeck.big .recallRating{flex-direction:column;gap:3px}
-.recallWhen{font:700 10px/1.1 'Nunito',sans-serif;color:var(--dim,#667)}
+.recallDeck.big .recallRating{gap:3px}
+.recallRating .recallWhen{font:850 13.5px/1.1 'Nunito',sans-serif;color:var(--accentDark);letter-spacing:-.01em}
+.recallGradeName{font:750 9.5px/1.1 'Nunito',sans-serif;color:var(--dim,#667);text-transform:uppercase;letter-spacing:.07em}
 .recallSource{font-size:12px;color:var(--dim,#778);margin:2px 2px 0;text-align:center}
 
 /* --- Breathing: the circle is the button --- */
@@ -2525,16 +2383,24 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 /* --- Note as ruled paper: faint lines, a red margin, writing straight on it. --- */
 .tile[data-tileid="note"] .notearea{
   background:
-    linear-gradient(90deg,transparent 27px,rgba(224,82,110,.5) 27px,rgba(224,82,110,.5) 28.5px,transparent 28.5px),
-    repeating-linear-gradient(to bottom,transparent 0 20.5px,color-mix(in srgb,var(--accent) 30%,transparent) 20.5px 21.5px,transparent 21.5px 22px),
-    rgba(255,255,255,.88)!important;
-  background-position:0 0,0 5px,0 0!important;
-  line-height:22px!important;padding:5px 12px 10px 38px!important;
-  border-radius:4px 14px 14px 4px!important;font-size:14px}
+    linear-gradient(90deg,transparent 29px,color-mix(in srgb,var(--accentDark) 50%,transparent) 29px,color-mix(in srgb,var(--accentDark) 50%,transparent) 30.5px,transparent 30.5px),
+    repeating-linear-gradient(to bottom,transparent 0 22.5px,color-mix(in srgb,var(--accent) 42%,transparent) 22.5px 23.5px,transparent 23.5px 24px)!important;
+  background-position:0 0,0 6px!important;
+  line-height:24px!important;padding:6px 46px 6px 40px!important;
+  border:none!important;border-radius:0!important;box-shadow:none!important;font-size:14.5px;flex:1 1 auto;min-height:0}
+/* the paper runs the whole tile: stretch mount and content, park the archive button on the sheet */
+.grid>.tile[data-tileid="note"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="note"] .tileMount{flex:1 1 auto!important;display:flex}
+.grid>.tile[data-tileid="note"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid="note"] .noteCard{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.tile[data-tileid="note"] .noteActions{position:absolute;right:12px;bottom:10px;margin:0!important;z-index:3}
+.tile[data-tileid="note"] .noteSaved{display:none!important}
+.tile[data-tileid="note"] .noteActions .widgetIconButton{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;flex-basis:34px!important;opacity:.6}
+.tile[data-tileid="note"] .noteActions .widgetIconButton:hover{opacity:1}
 .tile.completed[data-tileid="note"] .notearea{background:
-    linear-gradient(90deg,transparent 27px,rgba(224,82,110,.5) 27px,rgba(224,82,110,.5) 28.5px,transparent 28.5px),
-    repeating-linear-gradient(to bottom,transparent 0 20.5px,color-mix(in srgb,var(--accent) 38%,transparent) 20.5px 21.5px,transparent 21.5px 22px),
-    rgba(255,255,255,.9)!important;background-position:0 0,0 5px,0 0!important}
+    linear-gradient(90deg,transparent 29px,rgba(255,255,255,.65) 29px,rgba(255,255,255,.65) 30.5px,transparent 30.5px),
+    repeating-linear-gradient(to bottom,transparent 0 22.5px,rgba(255,255,255,.4) 22.5px 23.5px,transparent 23.5px 24px)!important;
+  background-position:0 0,0 6px!important}
 
 /* --- Philosophy: the day's question set like a quotation. --- */
 .philoQ{position:relative;font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-style:italic;font-size:16.5px;line-height:1.45;font-weight:600;color:var(--accentDark);padding:12px 2px 0 27px;margin-bottom:12px}
@@ -2574,7 +2440,6 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed .bdayLeafMonth{background:var(--accent)}
 /* --- Breathe: the dial fills the whole square, no words --- */
 .srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
-.tile[data-tileid="breathing"] .tileMount{padding-top:0!important}
 .tile[data-tileid="breathing"] .content{display:flex;align-items:center;justify-content:center;padding:0!important;min-height:0!important}
 .breathFull{width:100%;display:grid;place-items:center}
 .breathDial{position:relative;width:100%;max-width:calc(var(--tile-base-rows,2) * var(--dashboard-unit,140px) + (var(--tile-base-rows,2) - 1) * var(--dashboard-gap,14px) - 2 * var(--dashboard-pad,18px) - 12px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
@@ -2593,22 +2458,29 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed button.breathCore{background:radial-gradient(circle at 34% 28%,#fff,rgba(255,255,255,.82) 60%,rgba(255,255,255,.6))!important}
 .tile.completed .breathDial::after{background:conic-gradient(#fff var(--breath-progress,0deg),rgba(255,255,255,.28) 0)}
 button.breathCore:focus-visible{outline:2px solid var(--accentDark);outline-offset:6px}
-@media(prefers-reduced-motion:reduce){.breathDial.isIdle .breathCore{animation:none}}
+@media(prefers-reduced-motion:reduce){.breathDial.isIdle .breathCore{animation:none}.breathRipples i{animation:none;display:none}}
+/* each exhale releases soft rings that drift outward and dissolve */
+.breathRipples{position:absolute;inset:0;z-index:2;border-radius:50%;pointer-events:none}
+.breathRipples i{position:absolute;inset:11%;border-radius:50%;border:2px solid color-mix(in srgb,var(--accent) 55%,#fff);opacity:0;animation:breathRipple 3.4s ease-out forwards}
+.breathRipples i:nth-child(2){animation-delay:.85s}
+.breathRipples i:nth-child(3){animation-delay:1.7s}
+@keyframes breathRipple{0%{transform:scale(.6);opacity:.5}70%{opacity:.16}100%{transform:scale(1.05);opacity:0}}
+.tile.completed .breathRipples i{border-color:rgba(255,255,255,.75)}
 /* --- Habits: big emoji circles; editing lives in the expanded view --- */
 .grid>.tile[data-tileid="habits"]>.tbody,.grid>.tile[data-tileid="breathing"]>.tbody{display:flex!important;flex-direction:column}
 /* centre via the mount; .content keeps its natural height because the tile measures it */
 .grid>.tile[data-tileid="habits"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
 .grid>.tile[data-tileid="habits"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:flex!important;justify-content:center!important;padding:0!important}
-.tile[data-tileid] .habitBoard.hgrid{display:flex!important;flex-wrap:wrap;align-items:flex-start!important;justify-content:center!important;align-content:center!important;gap:clamp(10px,1.4vw,18px)!important;width:100%;grid-template-columns:none!important}
+.tile[data-tileid] .habitBoard.hgrid{display:flex!important;flex-wrap:wrap;align-items:flex-start!important;justify-content:center!important;align-content:center!important;gap:clamp(8px,1vw,14px)!important;width:100%;grid-template-columns:none!important}
 .tile[data-tileid] .habitBoard .habitControl{position:relative;flex:none!important;display:flex;flex-direction:column;align-items:center;gap:6px;width:auto!important}
-.tile[data-tileid="habits"] .habitBoard .hsq,.tileFocusSurface .habitBoard .hsq{width:clamp(58px,calc(var(--dashboard-unit,90px) * .95),112px)!important;height:auto!important;aspect-ratio:1!important;min-height:0!important;border-radius:50%!important;padding:0!important}
-.tile[data-tileid="habits"] .habitBoard .hsq.emojiOnly .hicon,.tileFocusSurface .habitBoard .hsq.emojiOnly .hicon{font-size:clamp(26px,calc(var(--dashboard-unit,90px) * .38),48px)!important;line-height:1}
+.tile[data-tileid="habits"] .habitBoard .hsq,.tileFocusSurface .habitBoard .hsq{width:clamp(46px,calc(var(--dashboard-unit,90px) * .66),78px)!important;height:auto!important;aspect-ratio:1!important;min-height:0!important;border-radius:50%!important;padding:0!important}
+.tile[data-tileid="habits"] .habitBoard .hsq.emojiOnly .hicon,.tileFocusSurface .habitBoard .hsq.emojiOnly .hicon{font-size:clamp(22px,calc(var(--dashboard-unit,90px) * .28),36px)!important;line-height:1}
 .habitBoard .hdel{position:static!important;opacity:1!important}
 .habitEditRow{display:flex;align-items:center;gap:4px;max-width:120px}
 .habitEditRow[hidden]{display:none!important}
 .habitEditName{font-size:12px;font-weight:750;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .habitAddSlot[hidden]{display:none!important}
-.habitAddSlot .hsq.plus{width:clamp(58px,calc(var(--dashboard-unit,90px) * .95),112px)!important;height:auto!important;aspect-ratio:1;border-radius:50%!important;border-style:dashed!important}
+.habitAddSlot .hsq.plus{width:clamp(46px,calc(var(--dashboard-unit,90px) * .66),78px)!important;height:auto!important;aspect-ratio:1;border-radius:50%!important;border-style:dashed!important}
 /* --- Push-ups: a leaning pile of weight plates sized by value --- */
 .grid>.tile[data-tileid="pushups"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="pushups"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
@@ -2647,16 +2519,15 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .newsLead .newsBody{text-align:justify}
 .newsHeadline{font-weight:700!important}
 .newsLead{padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid color-mix(in srgb,currentColor 30%,transparent)}
-.newsColumns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0}
+.newsColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
 .newsItem{padding:0 11px 6px;border-left:1px solid color-mix(in srgb,currentColor 25%,transparent)}
 .newsColumns .newsItem:first-child{padding-left:0;border-left:none}
-.tileFocusSurface .newsColumns{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.tileFocusSurface .newsColumns{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:9px}
 .tile[data-tileid="world"] .content{container-type:inline-size}
 /* --- Goals: minimal add field, round checks, no counters --- */
 .goalInputMinimal{position:relative;display:flex;align-items:center;margin-top:4px}
-.tile input.goalInputField,.tile.completed input.goalInputField{flex:1;min-width:0;height:30px;padding:2px 26px 2px 30px!important;border:none!important;border-bottom:1px dashed color-mix(in srgb,var(--accent) 40%,transparent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:13.5px!important;transform:none!important}
-.tile input.goalInputField:focus{border-bottom-style:solid!important;border-bottom-color:var(--accent)!important}
-.goalInputMinimal::before{content:"";position:absolute;left:5px;width:17px;height:17px;border-radius:50%;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,transparent);pointer-events:none}
+.tile input.goalInputField,.tile.completed input.goalInputField{flex:1;min-width:0;height:30px;padding:2px 26px 2px 2px!important;border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:13.5px!important;transform:none!important}
+.tile input.goalInputField::placeholder{color:color-mix(in srgb,var(--ink) 42%,transparent)}
 .tile button.goalInputAdd{position:absolute;right:0;width:24px;height:24px;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:var(--accent)!important;color:#fff!important;font-size:13px;box-shadow:none!important}
 .tile .goalTick,.tile button.goalTick{border-radius:50%!important}
 /* --- Timer: a small square that is the dial --- */
@@ -2684,7 +2555,6 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed .timerNudge button{background:rgba(255,255,255,.2)!important;color:#fff!important}
 .tile.completed button.timerResetGlyph{color:rgba(255,255,255,.85)!important}
 /* --- Reminders: compact rows, visible due state, uniform form controls --- */
-.grid>.tile[data-tileid="agenda"] .tileMount{padding-top:0!important}
 .grid>.tile[data-tileid="agenda"] .tileMount>.content{padding-bottom:0!important}
 .grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:2px!important;padding-top:34px}
 .grid>.tile[data-tileid="agenda"] .agRow{padding:3px 2px!important;min-height:0!important;gap:8px!important}
@@ -2696,8 +2566,10 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile[data-tileid="agenda"] .agSub{font-size:11px!important;line-height:1.2!important;margin-top:1px}
 .tile[data-tileid="agenda"] .taskMain{min-width:0;flex:1}
 .tile[data-tileid="agenda"] .agWhen{flex:none;font-size:10.5px!important;font-weight:800;white-space:nowrap}
-.tile[data-tileid="agenda"] .taskRow.dueNow .agWhen{padding:2px 8px;border-radius:99px;background:var(--accent)!important;color:#fff!important}
-.tile.completed[data-tileid="agenda"] .taskRow.dueNow .agWhen{background:#fff!important;color:var(--accentDark)!important}
+.tile[data-tileid="agenda"] .taskRow.dueNow .agWhen{padding:0;border-radius:0;background:transparent!important;color:var(--accentDark)!important;font-weight:900}
+.tile[data-tileid="agenda"] .taskRow.dueNow .agWhen::before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:var(--accent);vertical-align:1px}
+.tile.completed[data-tileid="agenda"] .taskRow.dueNow .agWhen{background:transparent!important;color:#fff!important}
+.tile.completed[data-tileid="agenda"] .taskRow.dueNow .agWhen::before{background:#fff}
 .tile[data-tileid="agenda"] .miniCalendar button.miniCalDay{min-height:26px!important;height:26px!important;padding:0!important;font-size:11.5px!important}
 .tile[data-tileid="agenda"] .miniCalendar .miniCalWeekday,.tile[data-tileid="agenda"] .miniCalendar [class*="Weekday"]{font-size:9.5px!important}
 .agendaForm{display:flex;flex-direction:column;gap:8px;margin-top:6px}
@@ -2710,17 +2582,13 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .agendaEvery{font-size:12.5px;font-weight:750;color:var(--dim);flex:none}
 .tile button.agendaBtn,.tile.completed button.agendaBtn{flex:1;height:38px;min-height:38px!important;padding:0!important;border-radius:11px!important;border:none!important;background:var(--accent)!important;color:#fff!important;font-weight:800;font-size:13px;box-shadow:none!important}
 .tile button.agendaBtn.ghost{background:transparent!important;color:var(--accentDark)!important;border:1.5px solid color-mix(in srgb,var(--accent) 35%,transparent)!important}
-/* --- Brainflex: a quiet gear to choose the kinds of challenge --- */
-.brainFlexCard{position:relative}
-.tile button.brainGear,.tile.completed button.brainGear{position:absolute;top:-2px;right:-2px;width:28px;height:28px;min-height:0!important;padding:0!important;border:none!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:16px;opacity:.55;transition:transform .35s ease,opacity .2s;z-index:2}
-.tile button.brainGear:hover,.tile button.brainGear[aria-expanded="true"]{opacity:1;transform:rotate(60deg);border:none!important;background:color-mix(in srgb,var(--accent) 12%,transparent)!important}
-.tile.completed button.brainGear{color:#fff!important}
-.brainTuner{margin:8px 0 10px;padding:10px;border-radius:14px;background:color-mix(in srgb,var(--accent) 9%,rgba(255,255,255,.55));border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
-.brainTunerChips{display:flex;flex-wrap:wrap;gap:6px}
-.tile button.brainChip,.tile.completed button.brainChip{display:inline-flex;align-items:center;gap:5px;height:30px;min-height:30px!important;padding:0 11px!important;border-radius:99px!important;border:1.5px solid color-mix(in srgb,var(--accent) 30%,transparent)!important;background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:12px;font-weight:750}
-.tile button.brainChip.on{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
-.brainTunerNote{margin:8px 2px 0;font-size:11px;color:var(--dim)}
-.tile.completed .brainTuner{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3)}
+/* --- Brainflex: a decorative cog half-buried in the lower corner, slowly turning --- */
+/* anchored to the tile itself, so the cog is cropped by the tile's lower-right edge */
+.brainFlexCard>*{position:relative;z-index:1}
+.brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
+@keyframes gearTurn{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.brainFlexCard .brainGearArt{animation:none}}
+.tile.completed .brainFlexCard .brainGearArt{color:#fff;opacity:.4}
 /* --- Daily content meter: one dot per daily tile, filled once its content is in --- */
 .dailyMeter{display:inline-flex;align-items:center;gap:10px;margin:-10px 0 20px;padding:6px 12px 6px 10px;border-radius:99px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 14px -8px rgba(30,40,60,.25);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);cursor:default}
 .dailyMeterDots{display:inline-flex;gap:5px}
@@ -2753,30 +2621,31 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .wxSnow circle{animation:wxFlake 2.6s ease-in-out infinite}
 @keyframes wxFlake{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}100%{opacity:0;transform:translate(3px,8px)}}
 @media(prefers-reduced-motion:reduce){.wxRays,.wxRain path,.wxSnow circle{animation:none}}
-/* --- Language tiles: flag on a pole, main point in a speech bubble --- */
-.langHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
-.langDe .langHead{justify-content:flex-start;padding-right:30px}
-.langEs .langHead{padding-right:30px}
+/* --- Language tiles: the flag is woven in as a stripe bar beside the day's point --- */
+.langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;padding-right:34px}
 .langTitle{font-size:17px!important;font-weight:800!important;line-height:1.2!important;flex:1;min-width:0}
-.langFlag{flex:none;width:40px;height:36px;margin-top:-4px}
-.langBubble{position:relative;padding:11px 14px;border-radius:18px;background:rgba(255,255,255,.7);color:#2a2e40;font-size:13.5px;line-height:1.45;font-weight:600;box-shadow:0 6px 16px -10px rgba(var(--glass-depth),.4);margin:0 0 16px}
-.langBubble::after{content:"";position:absolute;bottom:-9px;width:18px;height:14px;background:inherit;clip-path:polygon(0 0,100% 0,0 100%)}
-.langEs .langBubble{border-bottom-left-radius:6px}
-.langEs .langBubble::after{left:14px}
-.langDe .langBubble{border-bottom-right-radius:6px}
-.langDe .langBubble::after{right:14px;clip-path:polygon(0 0,100% 0,100% 100%)}
+.langLede{position:relative;margin:0 0 13px;font-size:13.5px;line-height:1.5;font-weight:650;color:#2a2e40}
+.langEs .langLede{padding-left:14px}
+.langDe .langLede{padding-right:14px;text-align:right}
+.langLede::before{content:"";position:absolute;top:2px;bottom:2px;width:5px;border-radius:99px}
+.langEs .langLede::before{left:0;background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75% 100%)}
+.langDe .langLede::before{right:0;background:linear-gradient(180deg,#1d1d1f 0 33%,#DD0000 33% 66%,#FFCE00 66% 100%)}
+.langDe .langHead{justify-content:flex-end}
+.langDe .langHead .langTitle{text-align:right}
 .langEs .langVocab{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:5px}
 .langEs .langWord{display:contents}
 .langEs .langTerm{font-weight:800;font-size:14px;color:var(--accentDark);padding:3px 0;border-bottom:1px solid var(--hair)}
 .langEs .langGloss{font-size:13px;color:var(--dim);text-align:right;padding:3px 0;border-bottom:1px solid var(--hair)}
 .langEs .langWord[hidden]{display:none!important}
 .langEs .langWord[hidden] *{display:none}
-.tile.completed .langBubble{background:rgba(255,255,255,.88)}
+.tile.completed .langLede{color:#fff}
+.tile.completed .langLede::before{opacity:.9}
 /* --- Knowledge: a watering can spilling the day's field --- */
-.lessonHead{display:grid;grid-template-columns:minmax(0,1fr) 96px;grid-template-rows:auto auto;column-gap:4px;align-items:start;margin-bottom:6px;padding-right:22px}
-.lessonTitle{grid-column:1;grid-row:1;font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
-.waterCan{grid-column:2;grid-row:1/3;width:96px;height:84px;color:var(--accentDark);overflow:visible;margin-top:-6px}
-.lessonField{grid-column:1;grid-row:2;justify-self:end;align-self:end;margin-top:30px;margin-right:-8px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--waterDrop,#4FA9E8) 16%,rgba(255,255,255,.6));color:var(--accentDark);font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.tile[data-tileid="worth"] .content,.tileFocusSurface[data-tileid="worth"] .tileFocusBody{position:relative}
+.lessonHead{position:relative;z-index:1;margin-bottom:6px;padding-right:118px}
+.lessonTitle{font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
+.waterCan{position:absolute;z-index:0;top:-30px;right:-34px;width:126px;height:110px;color:var(--accentDark);opacity:.8;overflow:visible;pointer-events:none}
+.lessonField{display:inline-block;margin:6px 0 2px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--waterDrop,#4FA9E8) 16%,rgba(255,255,255,.6));color:var(--accentDark);font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 .waterDrops path{animation:waterDrip 1.8s ease-in infinite;transform-box:fill-box}
 .waterDrops path:nth-child(2){animation-delay:.6s}.waterDrops path:nth-child(3){animation-delay:1.2s}
 @keyframes waterDrip{0%{opacity:0;transform:translateY(-6px)}25%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
@@ -2784,40 +2653,40 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed .waterCan{color:#fff}
 .tile.completed .lessonField{background:rgba(255,255,255,.25);color:#fff}
 /* ================= Insights ================= */
-.insights{display:flex;flex-direction:column;gap:var(--dashboard-gap,16px);padding-bottom:40px}
-.insCard{position:relative;border-radius:28px;padding:20px 22px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
-.insCardHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-.insCardHead h2{margin:0;font-size:17px;font-weight:850;letter-spacing:-.01em}
+.insights{display:flex;flex-direction:column;gap:10px;padding-bottom:40px;max-width:56rem;margin-inline:auto;width:100%}
+.insCard{position:relative;border-radius:18px;padding:12px 14px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.insCardHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.insCardHead h2{margin:0;font-size:13px;font-weight:850;letter-spacing:-.01em}
 .insNav{display:flex;align-items:center;gap:6px}
-.insNav>button{width:30px;height:30px;border:none;border-radius:50%;background:rgba(255,255,255,.6);color:var(--c,#1f2a33);font-size:18px;font-weight:800;cursor:pointer;line-height:1}
+.insNav>button{width:24px;height:24px;border:none;border-radius:50%;background:rgba(255,255,255,.6);color:var(--c,#1f2a33);font-size:15px;font-weight:800;cursor:pointer;line-height:1}
 .insNav>button:disabled{opacity:.3;cursor:default}
 .insSeg{display:flex;gap:2px;padding:3px;border-radius:99px;background:rgba(255,255,255,.5)}
-.insSeg button{height:26px;padding:0 11px;border:none;border-radius:99px;background:transparent;font:800 11.5px/1 'Nunito',sans-serif;color:#556270;cursor:pointer}
+.insSeg button{height:21px;padding:0 9px;border:none;border-radius:99px;background:transparent;font:800 10px/1 'Nunito',sans-serif;color:#556270;cursor:pointer}
 .insSeg button.on{background:#fff;color:#1f2a33;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.insMuted{font-size:12.5px;font-weight:700;color:#6a7682;margin:0}
-.insSmall{font-size:12px;line-height:1.45;color:#6a7682;margin:8px 0 0}
-.insIcon{width:22px;height:22px}
+.insMuted{font-size:11px;font-weight:700;color:#6a7682;margin:0}
+.insSmall{font-size:10.5px;line-height:1.4;color:#6a7682;margin:6px 0 0}
+.insIcon{width:16px;height:16px}
 /* records */
-.insRecords{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--dashboard-gap,16px)}
-.insRecord{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;padding:18px 20px}
-.insRecord b{grid-row:1;font-size:clamp(26px,3vw,36px);font-weight:900;letter-spacing:-.04em;line-height:1}
-.insRecord .insIcon{grid-column:2;grid-row:1;width:26px;height:26px}
-.insRecord span{grid-column:1/-1;margin-top:6px;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6a7682}
+.insRecords{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.insRecord{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;padding:10px 12px}
+.insRecord b{grid-row:1;font-size:clamp(18px,2vw,24px);font-weight:900;letter-spacing:-.04em;line-height:1}
+.insRecord .insIcon{grid-column:2;grid-row:1;width:18px;height:18px}
+.insRecord span{grid-column:1/-1;margin-top:3px;font-size:9px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6a7682}
 /* calendar + side */
-.insMain{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:var(--dashboard-gap,16px)}
+.insMain{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px}
 .insCalendar{background:linear-gradient(140deg,color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.5)),color-mix(in srgb,var(--c) 14%,rgba(255,255,255,.38)))}
 .insCalendar .insCardHead h2{color:color-mix(in srgb,var(--c) 70%,#1f1235)}
-.insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:6px}
-.insCalWd{text-align:center;font-size:10.5px;font-weight:850;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 55%,#3a3550);padding-bottom:4px}
-.insCalDay{position:relative;display:grid;place-items:center;height:40px}
-.insCalDay svg{position:absolute;width:36px;height:36px;transform:rotate(-90deg)}
-.insCalDay span{position:relative;font-size:12.5px;font-weight:800;color:#2a2440}
+.insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
+.insCalWd{text-align:center;font-size:9px;font-weight:850;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 55%,#3a3550);padding-bottom:4px}
+.insCalDay{position:relative;display:grid;place-items:center;height:28px}
+.insCalDay svg{position:absolute;width:25px;height:25px;transform:rotate(-90deg)}
+.insCalDay span{position:relative;font-size:10px;font-weight:800;color:#2a2440}
 .insCalDay.out{opacity:.35}
 .insCalTrack{fill:none;stroke:color-mix(in srgb,var(--c) 20%,transparent);stroke-width:3.5}
 .insCalArc{fill:none;stroke:var(--c);stroke-width:3.5;stroke-linecap:round}
 .insCalFill{fill:var(--c)}
 .insCalDay.full span{color:#fff}
-.insCalDay.joinL::before,.insCalDay.joinR::after{content:"";position:absolute;top:50%;height:6px;margin-top:-3px;background:var(--c);z-index:0}
+.insCalDay.joinL::before,.insCalDay.joinR::after{content:"";position:absolute;top:50%;height:4px;margin-top:-2px;background:var(--c);z-index:0}
 .insCalDay.joinL::before{left:0;right:50%}
 .insCalDay.joinR::after{left:50%;right:0}
 .insCalDay svg,.insCalDay span{z-index:1}
@@ -2825,56 +2694,60 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insCalDay.full.today span{text-decoration:none}
 /* ice */
 .insIce{background:linear-gradient(150deg,color-mix(in srgb,var(--c) 22%,rgba(255,255,255,.55)),rgba(255,255,255,.4))}
-.insIceBig{display:flex;align-items:center;gap:14px;margin:6px 0 10px}
-.insIceBig b{font-size:46px;font-weight:900;letter-spacing:-.04em;color:color-mix(in srgb,var(--c) 70%,#0b2a3a)}
-.insIceCube{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#e9f8ff,#9fdcff 55%,#62c2f5);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),inset -4px -6px 10px rgba(30,120,180,.25),0 8px 18px -8px rgba(30,140,200,.6);transform:rotate(-8deg)}
+.insIceBig{display:flex;align-items:center;gap:10px;margin:2px 0 6px}
+.insIceBig b{font-size:28px;font-weight:900;letter-spacing:-.04em;color:color-mix(in srgb,var(--c) 70%,#0b2a3a)}
+.insIceCube{width:28px;height:28px;border-radius:8px;background:linear-gradient(145deg,#e9f8ff,#9fdcff 55%,#62c2f5);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),inset -4px -6px 10px rgba(30,120,180,.25),0 8px 18px -8px rgba(30,140,200,.6);transform:rotate(-8deg)}
 /* history table */
-.insTable{display:grid;grid-template-columns:minmax(110px,170px) repeat(var(--cols),minmax(0,1fr));align-items:center;row-gap:8px}
+.insTable{display:grid;grid-template-columns:minmax(88px,128px) repeat(var(--cols),minmax(0,1fr));align-items:center;row-gap:4px}
 .insTable.dense{row-gap:6px}
-.insColHead{text-align:center;font-size:11px;font-weight:850;color:#6a7682}
+.insColHead{text-align:center;font-size:9.5px;font-weight:850;color:#6a7682}
 .insColHead.today{color:#1f2a33;text-decoration:underline;text-underline-offset:3px}
-.insGroup{grid-column:1/-1;margin-top:6px;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8a95a0}
-.insRowLabel{display:flex;align-items:center;gap:7px;min-width:0;font-size:13.5px;font-weight:750}
-.insRowIcon{font-size:16px}
+.insGroup{grid-column:1/-1;margin-top:4px;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8a95a0}
+.insRowLabel{display:flex;align-items:center;gap:5px;min-width:0;font-size:11px;font-weight:750}
+.insRowIcon{font-size:12px}
 .insRowName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.insCell{position:relative;display:grid;place-items:center;height:28px}
-.insCell::before{content:"";width:24px;height:24px;border-radius:50%;background:rgba(40,52,64,.10);position:relative;z-index:1;grid-area:1/1}
-.insCell svg,.insCell i{grid-area:1/1;position:relative;z-index:2;width:14px;height:14px;font-style:normal;font-size:12px;color:#fff}
+.insCell{position:relative;display:grid;place-items:center;height:19px}
+.insCell::before{content:"";width:15px;height:15px;border-radius:50%;background:rgba(40,52,64,.10);position:relative;z-index:1;grid-area:1/1}
+.insCell svg,.insCell i{grid-area:1/1;position:relative;z-index:2;width:10px;height:10px;font-style:normal;font-size:8.5px;color:#fff}
 .insCell.done::before{background:var(--c)}
 .insCell.frozen::before{background:linear-gradient(145deg,#d6f2ff,#7cc9f2)}
-.insCell.pending::before{background:transparent;box-shadow:inset 0 0 0 2.5px var(--c)}
+.insCell.pending::before{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
 .insCell.future::before{background:rgba(40,52,64,.05)}
-.insCell.joinL::after,.insCell.joinR::after{content:"";position:absolute;top:50%;height:8px;margin-top:-4px;background:var(--c);z-index:0}
+.insCell.joinL::after,.insCell.joinR::after{content:"";position:absolute;top:50%;height:5px;margin-top:-2.5px;background:var(--c);z-index:0}
 .insCell.joinL::after{left:0;right:50%}
 .insCell.joinR.joinL::after{left:0;right:0}
 .insCell.joinR:not(.joinL)::after{left:50%;right:0}
 .insCell.frozen.joinL::after,.insCell.frozen.joinR::after{background:#9fd9f7}
-.insTable.dense .insCell{height:18px}
-.insTable.dense .insCell::before{width:12px;height:12px}
+.insTable.dense .insCell{height:14px}
+.insTable.dense .insCell::before{width:9px;height:9px}
 .insTable.dense .insCell.joinL::after,.insTable.dense .insCell.joinR::after{height:4px;margin-top:-2px}
 /* per-section streaks, each in its tile colour */
-.insStreaks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--dashboard-gap,16px)}
-.insStreak{padding:16px 18px;background:linear-gradient(140deg,rgba(var(--glass-rgb),.30),rgba(var(--glass-rgb),.18));color:var(--ink)}
+.insStreaks{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px}
+.insStreak{padding:10px 12px;background:linear-gradient(140deg,rgba(var(--glass-rgb),.30),rgba(var(--glass-rgb),.18));color:var(--ink)}
 .insStreakTop{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.insStreakName{font-size:14px;font-weight:850}
-.insStreakNow{display:inline-flex;align-items:center;gap:3px;font-size:24px;font-weight:900;letter-spacing:-.03em;color:var(--accentDark)}
-.insStreakNow .insIcon{width:18px;height:18px;color:var(--accent)}
+.insStreakName{font-size:11.5px;font-weight:850}
+.insStreakNow{display:inline-flex;align-items:center;gap:3px;font-size:17px;font-weight:900;letter-spacing:-.03em;color:var(--accentDark)}
+.insStreakNow .insIcon{width:13px;height:13px;color:var(--accent)}
 .insStreakNow.zero{opacity:.45}
-.insWeek{display:flex;gap:5px;margin:12px 0 10px}
-.insWeek span{flex:1;height:8px;border-radius:99px;background:rgba(var(--glass-rgb),.22)}
+.insWeek{display:flex;gap:4px;margin:8px 0 6px}
+.insWeek span{flex:1;height:6px;border-radius:99px;background:rgba(var(--glass-rgb),.22)}
 .insWeek span.on{background:var(--accent)}
-.insStreakMeta{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--dim)}
+.insStreakMeta{display:flex;justify-content:space-between;font-size:9.5px;font-weight:700;color:var(--dim)}
 .insStreakMeta b{color:var(--ink);font-weight:900}
 /* push-ups + small numbers */
 .insPush{background:linear-gradient(140deg,rgba(var(--glass-rgb),.26),rgba(var(--glass-rgb),.14));color:var(--ink)}
-.insPush .pushLine{height:120px}
-.insSide{display:flex;flex-direction:column;gap:var(--dashboard-gap,16px)}
+.insPush .pushLine{height:72px}
+.insSide{display:flex;flex-direction:column;gap:10px}
 .insSide .insIce{flex:1}
-.insMini{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.insMini{display:flex;flex-direction:column;justify-content:center;gap:7px}
 .insMini div{display:flex;align-items:baseline;gap:10px}
-.insMini b{font-size:30px;font-weight:900;letter-spacing:-.03em;min-width:48px}
-.insMini span{font-size:12.5px;font-weight:750;color:#6a7682}
+.insMini b{font-size:19px;font-weight:900;letter-spacing:-.03em;min-width:32px}
+.insMini span{font-size:10.5px;font-weight:750;color:#6a7682}
 @media(max-width:760px){.insStreaks{grid-template-columns:repeat(2,minmax(0,1fr))}.insStreak{padding:13px 14px}.insStreakMeta span:last-child{display:none}.insRecords{grid-template-columns:repeat(2,minmax(0,1fr))}.insMain{grid-template-columns:1fr}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:12.5px}.insCard{padding:16px}}
+
+/* Typing shows a caret, not a container: no focus rings or boxes anywhere in tiles. */
+.tile :is(input,textarea,select):focus,.tile :is(input,textarea,select):focus-visible{outline:none!important;box-shadow:none!important}
+.tile.tileFocusSurface :is(input,textarea,select):focus,.tile.tileFocusSurface :is(input,textarea,select):focus-visible{outline:none!important;box-shadow:none!important}
 </style>
 </head>
 <body>
@@ -2912,7 +2785,6 @@ const COL = {
   events:   {p:"#FFF3D6", v:"#FFB000", d:"#9A5B00"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
   academic: {p:"#E0F4E5", v:"#2CC05E", d:"#1C7440"},
-  gmat:     {p:"#FFE1D8", v:"#F05A36", d:"#A7341B"},
   brainflex:{p:"#FFF0D8", v:"#FF9A2E", d:"#B0560F"},
   philo:    {p:"#E8F4FF", v:"#178FE5", d:"#0B5D99"},
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
@@ -2962,7 +2834,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
 const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
-const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","brainflex","philo","gmat"]);
+const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","brainflex","philo"]);
 /* Garmin (and any scripted health source) push daily summaries to this token-keyed
    store; the dashboard pulls them in on load and merges into the local health log.
    Its own little Worker — separate from sync so a script write can never clobber the
@@ -3093,7 +2965,6 @@ function validDailyTile(key,value){
     case "brainflex": return dailyText(value.format)&&dailyText(value.prompt)&&dailyText(value.solution);
     case "philo": return dailyText(value.theme)&&dailyText(value.question);
     case "academic": return dailyText(value.concept)&&dailyText(value.explain)&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
-    case "gmat": return Array.isArray(value)&&value.length>0&&value.every(q=>dailyQuiz(q)&&dailyText(q.explain));
     default: return false;
   }
 }
@@ -3103,10 +2974,10 @@ function mergeDailyContent(existing,incoming){
   return next;
 }
 const dailyRequestKeys=(keys,content)=>[...new Set(keys)].filter(key=>!validDailyTile(key,(content||{})[key]));
-const DAILY_CONTENT_KEYS=["word","worth","spanish","german","music","world","weather","brainflex","philo","academic","gmat"];
+const DAILY_CONTENT_KEYS=["word","worth","spanish","german","music","world","weather","brainflex","philo","academic"];
 /* DAILY_CONTENT_CONTRACT_END */
 /* DAILY_UX_CONTRACT_START */
-const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",german:"Deutsch",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",gmat:"GMAT lesson",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
+const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",german:"Deutsch",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
 const DAILY_SETUP_STATES=new Set(["disabled","personal_key","missing_key","invalid_key","missing_course","server_unconfigured","service_update","browser_lock_unavailable","signin_required"]);
 function dailyIssueInfo(key,state,message="",personalOverride=false){
   const personal=key==="academic"||personalOverride;
@@ -3226,7 +3097,7 @@ const BRAINFLEX_KINDS={
   lateral:{label:"Lateral riddle",icon:"💡",brief:"a lateral-thinking riddle with one satisfying answer that every clue supports"}
 };
 function brainflexKindFor(chosen){ const keys=(Array.isArray(chosen)?chosen:[]).filter(k=>BRAINFLEX_KINDS[k]); const pool=keys.length?keys:Object.keys(BRAINFLEX_KINDS); return pool[Math.floor(Date.now()/86400000)%pool.length]; }
-const genBrainFlex=(avoid)=>{ const kind=brainflexKindFor(load("brainflexKinds",null)); return callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
+const genBrainFlex=(avoid)=>{ const kind=brainflexKindFor(null); return callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
   `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind].brief}. Vary the topic from these recent ones: ${(avoid||[]).join(" | ")||"none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, {max:500}).then(extractJSON); };
 
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
@@ -3501,11 +3372,13 @@ const LEGACY_RECALL_INTERVALS=[1,3,7,16,35,90];
 const FSRS_W=[0.212,1.2931,2.3065,8.2956,6.4133,0.8334,3.0194,0.001,1.8722,0.1666,0.796,1.4835,0.0614,0.2629,1.6483,0.6014,1.8729,0.5425,0.0912,0.0658,0.1542];
 const FSRS_RETENTION=.9;
 const FSRS_RATINGS=[
-  {value:1,name:"Again",face:"😵"},
-  {value:2,name:"Hard",face:"😕"},
-  {value:3,name:"Good",face:"🙂"},
-  {value:4,name:"Easy",face:"😄"}
+  {value:1,name:"Again"},
+  {value:2,name:"Hard"},
+  {value:3,name:"Good"},
+  {value:4,name:"Easy"}
 ];
+/* Grade buttons wear the interval the algorithm would schedule, e.g. "3 d" or "2 w". */
+const shortInterval=days=>{const d=Math.max(0,Math.round(Number(days)||0));return d===0?"today":d===1?"1 d":d<7?d+" d":d<30?Math.max(1,Math.round(d/7))+" w":d<365?Math.max(1,Math.round(d/30))+" mo":Math.max(1,Math.round(d/365))+" y";};
 const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
 const initialStability=rating=>Math.max(.01,FSRS_W[rating-1]);
 const initialDifficulty=rating=>clamp(FSRS_W[4]-Math.exp(FSRS_W[5]*(rating-1))+1,1,10);
@@ -3589,115 +3462,6 @@ const scheduleRecall=(item,rating,reviewDate=todayKey)=>{
 };
 const humanInterval=days=>days===1?"tomorrow":days<7?`in ${days} days`:days<14?"in 1 week":days<60?`in ${Math.round(days/7)} weeks`:days<730?`in ${Math.round(days/30)} months`:`in ${Math.round(days/365)} years`;
 
-/* Original GMAT-style practice bank. Questions are written for this dashboard,
-   not copied from official or commercial preparation material. */
-const GMAT_SECTIONS={
-  quant:{name:"Quant",full:"Quantitative Reasoning",mark:"Q",target:125},
-  verbal:{name:"Verbal",full:"Verbal Reasoning",mark:"V",target:115},
-  data:{name:"Data",full:"Data Insights",mark:"DI",target:135}
-};
-/* Curated bank — the always-available fallback if the AI daily lesson hasn't
-   loaded (offline, first paint, or a generation hiccup). */
-const GMAT_QUESTIONS_BASE=[
-  {id:"q-profit",section:"quant",skill:"Percents & ratios",type:"Problem solving",target:120,prompt:"A company’s revenue rises from $100,000 to $120,000 while costs rise from $60,000 to $66,000. By what percent does profit increase?",options:["20%","30%","35%","40%","45%"],answer:2,explain:"Profit rises from $40,000 to $54,000. The $14,000 increase is 35% of the original $40,000 profit."},
-  {id:"q-work",section:"quant",skill:"Rates & averages",type:"Problem solving",target:120,prompt:"Machine A completes a job in 6 hours and Machine B in 4 hours. Working together at constant rates, how many hours do they need?",options:["2","2.4","2.5","3","5"],answer:1,explain:"Their combined hourly rate is 1/6 + 1/4 = 5/12 of the job, so time is 12/5 = 2.4 hours."},
-  {id:"q-remainder",section:"quant",skill:"Numbers & algebra",type:"Problem solving",target:135,prompt:"What is the least positive integer that leaves remainder 2 when divided by 5 and remainder 4 when divided by 7?",options:["12","18","25","32","39"],answer:3,explain:"Numbers congruent to 2 mod 5 are 2, 7, 12, 17, 22, 27, 32… and 32 leaves remainder 4 when divided by 7."},
-  {id:"q-average",section:"quant",skill:"Rates & averages",type:"Problem solving",target:105,prompt:"Five numbers have an average of 18. If one of the numbers, 24, is removed, what is the average of the remaining four?",options:["15","16","16.5","17","17.5"],answer:2,explain:"The original total is 5 × 18 = 90. Removing 24 leaves 66, and 66 ÷ 4 = 16.5."},
-  {id:"q-mixture",section:"quant",skill:"Percents & ratios",type:"Problem solving",target:135,prompt:"A 10-litre solution is 20% salt. How many litres of water must be added to make the solution 16% salt?",options:["1.5","2","2.5","3","4"],answer:2,explain:"The 2 litres of salt stay constant. For 2 litres to be 16%, total volume must be 12.5 litres, so add 2.5."},
-  {id:"q-algebra",section:"quant",skill:"Numbers & algebra",type:"Problem solving",target:110,prompt:"If x is positive and x + 1/x = 5, what is x² + 1/x²?",options:["21","23","25","27","29"],answer:1,explain:"Squaring gives x² + 2 + 1/x² = 25, so x² + 1/x² = 23."},
-  {id:"v-assumption",section:"verbal",skill:"Argument structure",type:"Critical reasoning",target:125,prompt:"A firm will replace most business travel with video meetings because video meetings cost less. Therefore, the change will increase profit without reducing productivity. Which assumption is required?",options:["Employees prefer video meetings","Travel costs exceeded office rent","Most clients own new computers","In-person meetings are not materially more productive for the trips replaced","Competitors will also reduce travel"],answer:3,explain:"The conclusion requires the savings not to be offset by a meaningful productivity loss. That is exactly what option D supplies."},
-  {id:"v-weaken",section:"verbal",skill:"Causal reasoning",type:"Critical reasoning",target:115,prompt:"Gym members who attend group classes renew more often than members who do not. The gym concludes that classes cause higher retention. Which fact most weakens the conclusion?",options:["Classes are offered every day","Long-term members are more likely to choose group classes","Some classes require equipment","The gym recently raised prices","Members may attend more than one class"],answer:1,explain:"Pre-existing commitment could cause both class attendance and renewal, reversing the proposed causal direction."},
-  {id:"v-strengthen",section:"verbal",skill:"Causal reasoning",type:"Critical reasoning",target:120,prompt:"A city claims a new protected bike lane reduced car commuting. Which finding most strengthens that claim?",options:["Petrol prices rose nationwide","Cyclists report feeling safer","Car commuting fell near the lane but stayed stable in comparable districts","The lane cost less than forecast","Bus ridership also increased"],answer:2,explain:"A comparison with similar unaffected districts makes the bike lane, rather than a broad outside trend, the stronger explanation."},
-  {id:"v-inference",section:"verbal",skill:"Inference & evaluation",type:"Reading comprehension",target:120,prompt:"A study found remote teams produced more output on routine tasks but generated fewer novel proposals. The authors caution that task type may mediate remote work’s effects. Which statement is best supported?",options:["Remote work always increases output","Novel work cannot be done remotely","The effect of remote work may depend on the work being performed","Office teams avoid routine tasks","Proposal quality was higher remotely"],answer:2,explain:"The contrast between routine output and novel proposals directly supports a task-dependent effect, not a universal advantage or disadvantage."},
-  {id:"v-structure",section:"verbal",skill:"Argument structure",type:"Critical reasoning",target:130,prompt:"A retailer says: ‘Our new packaging is recyclable. Because customers prefer sustainable products, sales will rise.’ What role does the first sentence play?",options:["It states the final conclusion","It provides evidence intended to support the prediction","It presents an objection","It defines customer preference","It reports the sales increase"],answer:1,explain:"The packaging claim is a premise. Together with the customer-preference premise, it is intended to support the predicted sales increase."},
-  {id:"v-evaluate",section:"verbal",skill:"Inference & evaluation",type:"Critical reasoning",target:135,prompt:"A restaurant plans to shorten its menu to reduce kitchen delays without losing customers. Which question is most useful in evaluating the plan?",options:["How old is the restaurant?","Do frequently ordered dishes account for most current orders?","How many cooks wear uniforms?","Did food prices rise last year?","Are nearby restaurants profitable?"],answer:1,explain:"If most demand is concentrated in dishes the shorter menu retains, the plan can reduce complexity without sacrificing many orders."},
-  {id:"d-table",section:"data",skill:"Tables & graphics",type:"Table analysis",target:130,prompt:"Four divisions report revenue and cost: A 80/56, B 120/90, C 90/63, D 150/112 (millions). Which division has the highest profit margin?",options:["A","B","C","D","A and C tie"],answer:4,explain:"Margins are A 30%, B 25%, C 30%, and D about 25.3%. A and C tie for the highest."},
-  {id:"d-sufficiency",section:"data",skill:"Sufficiency & constraints",type:"Data sufficiency",target:125,prompt:"Is x positive? (1) x³ > 0. (2) x² > 0. Which information is sufficient?",options:["Statement 1 alone","Statement 2 alone","Both together, neither alone","Each statement alone","Neither statement"],answer:0,explain:"A positive cube requires x > 0. A positive square only shows x ≠ 0, so statement 2 permits positive or negative x."},
-  {id:"d-graphics",section:"data",skill:"Tables & graphics",type:"Graphics interpretation",target:120,prompt:"A chart shows conversions rising from 240 to 300 while site visits rise from 4,000 to 6,000. How does the conversion rate change?",options:["Rises by 1 percentage point","Falls by 1 percentage point","Falls by 20%","Stays at 6%","Rises by 25%"],answer:1,explain:"The rate moves from 240/4,000 = 6% to 300/6,000 = 5%, a fall of 1 percentage point."},
-  {id:"d-multisource",section:"data",skill:"Multi-source synthesis",type:"Multi-source reasoning",target:135,prompt:"Store A ships 120 units with an 8% return rate. Store B ships 90 units with a 4% return rate. Approximately how many more units does A keep after returns?",options:["18","20","22","24","28"],answer:3,explain:"A keeps 120 × .92 = 110.4 units; B keeps 90 × .96 = 86.4. The difference is 24."},
-  {id:"d-twopart",section:"data",skill:"Sufficiency & constraints",type:"Two-part analysis",target:140,prompt:"A firm sells Basic units for $30 and Pro units for $50. It sells 100 units for $3,800 total. How many Basic and Pro units are sold?",options:["70 Basic, 30 Pro","60 Basic, 40 Pro","55 Basic, 45 Pro","50 Basic, 50 Pro","40 Basic, 60 Pro"],answer:1,explain:"Let Pro = p. Then 30(100−p)+50p=3,800, so 20p=800 and p=40; Basic=60."},
-  {id:"d-synthesis",section:"data",skill:"Multi-source synthesis",type:"Data synthesis",target:125,prompt:"A portfolio is 40% Fund X returning 8% and 60% Fund Y returning −2%. What is the portfolio’s overall return?",options:["0.8%","1.2%","2.0%","3.2%","6.0%"],answer:2,explain:"The weighted return is .40(8%) + .60(−2%) = 3.2% − 1.2% = 2.0%."}
-];
-/* The live pool. GMAT_QUESTIONS is reassigned in place when the AI daily lesson
-   arrives (fresh questions first, curated bank behind), so every consumer —
-   session builder, focus picker, analytics, mistake review — keeps working with
-   no changes. Flagged questions (reported as wrong) are filtered out. */
-let GMAT_AI_QUESTIONS=[];
-let GMAT_FLAGGED=(()=>{ try{ return load("gmatFlagged",[]); }catch(e){ return []; } })();
-let GMAT_QUESTIONS=GMAT_QUESTIONS_BASE.slice();
-const GMAT_SECTION_TARGET={quant:120,verbal:120,data:130};
-function rebuildGmatPool(){
-  const flagged=new Set(GMAT_FLAGGED);
-  GMAT_QUESTIONS=[...GMAT_AI_QUESTIONS,...GMAT_QUESTIONS_BASE].filter(q=>!flagged.has(q.id));
-  if(!GMAT_QUESTIONS.length) GMAT_QUESTIONS=GMAT_QUESTIONS_BASE.slice();
-}
-function normalizeGmatAI(list,dateKey){
-  if(!Array.isArray(list)) return [];
-  const out=[];
-  list.forEach((raw,i)=>{
-    if(!raw||typeof raw!=="object") return;
-    const section=["quant","verbal","data"].includes(raw.section)?raw.section:"quant";
-    const options=Array.isArray(raw.options)?raw.options.map(o=>String(o)).filter(Boolean):[];
-    let answer=Number(raw.answer);
-    if(options.length<2||!(answer>=0&&answer<options.length)) return; // skip malformed
-    const prompt=String(raw.prompt||"").trim(); if(!prompt) return;
-    out.push({
-      id:"ai-"+dateKey+"-"+i,
-      section,
-      skill:String(raw.skill||GMAT_SECTIONS[section].name).slice(0,60),
-      type:String(raw.type||"Problem solving").slice(0,40),
-      target:Number(raw.target)>0?Number(raw.target):GMAT_SECTION_TARGET[section],
-      prompt,
-      options,
-      answer,
-      explain:String(raw.explain||"").trim()||"See the worked reasoning above.",
-      ai:true,
-      genDate:dateKey,
-    });
-  });
-  return out;
-}
-function flagGmatQuestion(id){
-  if(!id||GMAT_FLAGGED.includes(id)) return;
-  GMAT_FLAGGED=[...GMAT_FLAGGED,id].slice(-300);
-  try{ save("gmatFlagged",GMAT_FLAGGED); }catch(e){}
-  rebuildGmatPool();
-}
-const defaultGmatState=()=>({version:1,examDate:"",weeklyGoal:180,history:[],sessions:[],memory:{},mocks:[]});
-const gmatStateOf=state=>({...defaultGmatState(),...(state||{}),history:Array.isArray(state&&state.history)?state.history:[],sessions:Array.isArray(state&&state.sessions)?state.sessions:[],memory:(state&&state.memory)||{},mocks:Array.isArray(state&&state.mocks)?state.mocks:[]});
-const gmatHistoryFor=(state,id)=>gmatStateOf(state).history.filter(h=>h.questionId===id);
-const gmatQuestionPriority=(state,q)=>{
-  const s=gmatStateOf(state), history=gmatHistoryFor(s,q.id), attempts=history.length;
-  const correct=history.filter(h=>h.correct).length, accuracy=attempts?correct/attempts:0;
-  const average=attempts?history.reduce((sum,h)=>sum+(h.seconds||q.target),0)/attempts:q.target;
-  const last=attempts?history[history.length-1]:null;
-  const memory=s.memory[q.skill], due=!memory||!memory.nextReview||memory.nextReview<=todayKey;
-  const seenToday=history.some(h=>h.date===todayKey);
-  const stableNoise=(q.id.split("").reduce((n,ch)=>n+ch.charCodeAt(0),0)+Number(todayKey.slice(-2)))%17/100;
-  return (attempts?0:3)+(1-accuracy)*3+Math.max(0,average/q.target-1)*1.4+(due?2.2:0)+(last&&!last.correct?1.2:0)-(seenToday?3:0)+stableNoise;
-};
-const gmatStats=(state,section)=>{
-  const rows=gmatStateOf(state).history.filter(h=>!section||h.section===section);
-  const correct=rows.filter(h=>h.correct).length;
-  const seconds=rows.reduce((sum,h)=>sum+(h.seconds||0),0);
-  return {attempts:rows.length,correct,accuracy:rows.length?Math.round(correct/rows.length*100):0,average:rows.length?Math.round(seconds/rows.length):0};
-};
-const buildGmatSession=(state,mode="daily",section=null)=>{
-  const s=gmatStateOf(state);
-  let pool=GMAT_QUESTIONS.filter(q=>!section||q.section===section);
-  if(mode==="repair"){
-    const wrongIds=[...s.history].reverse().filter(h=>!h.correct).map(h=>h.questionId);
-    const unique=[...new Set(wrongIds)];
-    const repair=unique.map(id=>GMAT_QUESTIONS.find(q=>q.id===id)).filter(Boolean);
-    if(repair.length) return repair.slice(0,5);
-  }
-  const ranked=[...pool].sort((a,b)=>gmatQuestionPriority(s,b)-gmatQuestionPriority(s,a));
-  if(section) return ranked.slice(0,Math.min(6,ranked.length));
-  const picks=Object.keys(GMAT_SECTIONS).map(key=>ranked.find(q=>q.section===key)).filter(Boolean);
-  ranked.forEach(q=>{ if(picks.length<5&&!picks.some(p=>p.id===q.id))picks.push(q); });
-  return picks;
-};
-const gmatFocusQuestion=state=>[...GMAT_QUESTIONS].sort((a,b)=>gmatQuestionPriority(state,b)-gmatQuestionPriority(state,a))[0];
 
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
 function weekCount(log,id){ let c=0; for(let d=0;d<7;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) c++; } return c; }
@@ -3798,11 +3562,11 @@ function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const undo=()=>onUnlearned&&onUnlearned(lesson);
   return (
     <div className="lessonCard readingCard">
-      {/* knowledge as something you water: the can pours onto today's field */}
+      {/* knowledge as something you water: the can tips in from the corner and pours onto the title */}
+      <WateringCan/>
       <div className="lessonHead">
-        <div className="lessonTitle">{lesson.title}</div>
-        <WateringCan/>
         {lesson.category && <span className="lessonField">{lesson.category}</span>}
+        <div className="lessonTitle">{lesson.title}</div>
       </div>
       <div className="story cardReadingCopy" style={{marginTop:8}}>{paragraphs.map((p,i)=><p key={i} hidden={!expanded&&i>0}>{p}</p>)}</div>
       {lesson.insight && <div className="insight">💡 {lesson.insight}</div>}
@@ -3862,13 +3626,13 @@ function WeatherCard({data,busy,onGenerate}){
 const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360?2:1;
 const CURATED_TILE_LAYOUT={
   goals:{desktop:[4,3],phone:[2,2],family:"large"},
-  habits:{desktop:[4,3],phone:[2,2],family:"large"},
+  habits:{desktop:[4,2],phone:[2,2],family:"large"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
-  shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
-  agenda:{desktop:[6,3],phone:[2,2],family:"large"},
-  events:{desktop:[4,4],phone:[2,2],family:"large-square"},
-  note:{desktop:[4,2],phone:[2,1],family:"wide"},
+  shopping:{desktop:[2,2],phone:[2,2],family:"tall"},
+  agenda:{desktop:[4,3],phone:[2,2],family:"large"},
+  events:{desktop:[4,2],phone:[2,2],family:"wide"},
+  note:{desktop:[4,1],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,3],phone:[2,2],family:"large"},
@@ -3878,14 +3642,13 @@ const CURATED_TILE_LAYOUT={
   german:{desktop:[4,3],phone:[2,2],family:"large"},
   movie:{desktop:[2,2],phone:[2,1],family:"wide"},
   world:{desktop:[4,3],phone:[2,2],family:"large"},
-  recall:{desktop:[4,3],phone:[2,2],family:"large"},
+  recall:{desktop:[4,2],phone:[2,2],family:"wide"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
   weekly:{desktop:[4,3],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
-  brainflex:{desktop:[4,3],phone:[2,2],family:"large"},
+  brainflex:{desktop:[4,2],phone:[2,2],family:"wide"},
   academic:{desktop:[4,3],phone:[2,2],family:"large"},
-  gmat:{desktop:[4,2],phone:[2,1],family:"wide"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"}
 };
@@ -3917,7 +3680,6 @@ const LIBRARY_META={
   recall:["discover","recall flashcards memory review revision"],
   brain:["discover","memory second brain knowledge notes mind map"],
   academic:["discover","study academic course notes material"],
-  gmat:["discover","gmat exam practice quant verbal data insights"],
   brainflex:["discover","brainflex puzzle logic riddle challenge"],
   philo:["discover","philosophy philosopher socrates ideas conversation"],
   breathing:["wellbeing","breathing breath relax calm exercise"],
@@ -3938,18 +3700,16 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","gmat","philo","people"];
+const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
-const GMAT_TILE_INTRODUCED=load("gmatTileIntroduced",false);
 const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
 const HEALTH_TILE_INTRODUCED=load("healthTileIntroduced",false);
 const GERMAN_TILE_INTRODUCED=load("germanTileIntroduced",false);
 const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
-const placeGmatAfterStudy=list=>{ const next=list.filter(id=>id!=="gmat"), at=next.indexOf("academic"); next.splice(at<0?next.length:at+1,0,"gmat"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
 const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"health"); return next; };
 const placeGermanAfterSpanish=list=>{ const next=list.filter(id=>id!=="german"), at=next.indexOf("spanish"); next.splice(at<0?next.length:at+1,0,"german"); return next; };
@@ -4067,9 +3827,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   const showLabel=edit||cornerOutside||(contentState&&contentState!=="ready");
   /* ⤢ only appears when it earns its place: Recall's focused session always, otherwise
      only while this tile's preview — at the current size and zoom — is actually hiding
-     something (expanded-only blocks, clamped text, collapsed rows). Birthdays, GMAT and
+     something (expanded-only blocks, clamped text, collapsed rows). Birthdays and
      Philosophy open through their own controls instead. */
-  const expandable=!["birthdays","gmat","philo"].includes(id);
+  const expandable=!["birthdays","philo"].includes(id);
   const [hasMore,setHasMore]=useState(false);
   const canExpand=expandable&&(TILE_ALWAYS_EXPAND.has(id)||hasMore);
   useLayoutEffect(()=>{
@@ -4107,8 +3867,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
         {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Use arrow keys to reorder."} title="Drag to move · arrow keys to reorder" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const delta=event.key==="ArrowUp"||event.key==="ArrowLeft"?-1:event.key==="ArrowDown"||event.key==="ArrowRight"?1:0;if(delta){event.preventDefault();onMoveBy?.(delta);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
       </div>
       {expanded&&<DashboardModal label={label} onClose={close} overlayClassName={"tileFocusOverlay"+(closing?" isClosing":"")} className={"tileFocus"+(done?" completed":"")}>
-        <div className="tileFocusHeader" style={t}><h2>{label}</h2><button type="button" className="tileFocusClose" aria-label={"Close "+label} onClick={close}>×</button></div>
-        <div className={"tile tileFocusSurface"+(done?" completed":"")} data-tileid={id} style={t}><div ref={focusRef} className="tileFocusBody"/></div>
+        <div className={"tile tileFocusSurface"+(done?" completed":"")} data-tileid={id} style={t}><button type="button" className="tileFocusClose" aria-label={"Close "+label} onClick={close}>×</button><div ref={focusRef} className="tileFocusBody"/></div>
       </DashboardModal>}
     </section>
   </TilePresentationContext.Provider>;
@@ -4176,11 +3935,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GMAT_TILE_INTRODUCED) placed=placeGmatAfterStudy(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GMAT_TILE_INTRODUCED&&!next.includes("gmat")) next=[...next,"gmat"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GMAT_TILE_INTRODUCED) save("gmatTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); return next; });
-  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED||!GMAT_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping")&&(GMAT_TILE_INTRODUCED||id!=="gmat"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); return next; });
+  const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
   const [goalsLog,setGoalsLog]=useState(()=>load("goalsLog",{}));
@@ -4201,7 +3960,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const [birthdays,setBirthdays]=useState(()=>load("birthdays",[]));
   const [people,setPeople]=useState(()=>load("peopleMet",[]));
   const [recallList,setRecallList]=useState(()=>load("recall",[]));
-  const [gmat,setGmat]=useState(()=>gmatStateOf(load("gmat",null)));
   const [keyField,setKeyField]=useState(()=>getKey());
   const [garminKeyField,setGarminKeyField]=useState(()=>load("garminKey",""));
   const [profileName,setProfileName]=useState(()=>load("profileName","Fefe"));
@@ -4250,11 +4008,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   /* Daily AI content: which shared server-generated tiles to actually produce
      each day. null = all (default). Untick a tile → the worker stops spending
      tokens on it. Persisted to the worker (shared_config) so its cron obeys. */
-  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"],["gmat","GMAT lesson"]];
+  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"]];
   const [genPrefs,setGenPrefs]=useState(()=>load("genPrefs",null));
   const [genCfgStatus,setGenCfgStatus]=useState("");
   const [genCfgBusy,setGenCfgBusy]=useState(false);
-  const genEnabled=id=> (genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs).includes(id);
+  const genEnabled=id=> (genPrefs===null?(genServerState?.tiles||["word","german"]):genPrefs).includes(id);
   const pushGenConfig=async(tiles)=>{
     if(!SHARED_URL) return;
     setGenCfgStatus("Saving…");
@@ -4262,7 +4020,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     catch(e){ setGenCfgStatus("Couldn’t save to the daily service. Your selection remains on this device; apply again to finish.");showLoadProblems([{...dailyIssueInfo("settings","service_error","Your selection could not be saved to the daily service. Check your connection, then Apply preferences again."),actionType:"settings",action:"Open daily settings"}]); return false; }
   };
   const toggleGenTile=(id)=>{
-    const base = genPrefs===null ? (genServerState?.tiles||["word","gmat"]) : genPrefs.slice();
+    const base = genPrefs===null ? (genServerState?.tiles||["word","german"]) : genPrefs.slice();
     const next = base.includes(id) ? base.filter(x=>x!==id) : [...base,id];
     setGenPrefs(next); save("genPrefs",next); pushGenConfig(next);
   };
@@ -4289,7 +4047,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const applyGenNow=async()=>{
     if(!SHARED_URL||genCfgBusy)return;
     setGenCfgBusy(true);
-    try{if(!await pushGenConfig(genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs))return;await runGen((genPrefs===null?(genServerState?.tiles||["word","gmat"]):genPrefs),{silent:true});setGenCfgStatus("Preferences applied. Saved content is kept; only missing tiles were retried.");}
+    try{if(!await pushGenConfig(genPrefs===null?(genServerState?.tiles||["word","german"]):genPrefs))return;await runGen((genPrefs===null?(genServerState?.tiles||["word","german"]):genPrefs),{silent:true});setGenCfgStatus("Preferences applied. Saved content is kept; only missing tiles were retried.");}
     finally{setGenCfgBusy(false);}
   };
 
@@ -4471,16 +4229,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const genBusyRef=useRef(false);
   const updateLoadStatus=patch=>setLoadStatus(previous=>{const next={...previous,...patch};save("dailyStatus:"+todayKey,next);return next;});
   const acceptDaily=content=>{const next=storeDailyContent(todayKey,content);setDaily(next);return next;};
-  /* Merge the AI daily GMAT lesson into the live question pool whenever it
-     arrives. Fresh questions surface first (the priority model favours unseen
-     ones); analytics, recap and mistake-repair keep working unchanged. */
-  const [gmatPoolVersion,setGmatPoolVersion]=useState(0);
-  useEffect(()=>{
-    const list=daily&&daily.gmat;
-    const next=normalizeGmatAI(list,todayKey);
-    const changed=JSON.stringify(next.map(q=>q.prompt))!==JSON.stringify(GMAT_AI_QUESTIONS.map(q=>q.prompt));
-    if(changed){ GMAT_AI_QUESTIONS=next; rebuildGmatPool(); setGmatPoolVersion(v=>v+1); }
-  },[daily]);
   const haveKey=!!getKey();
   const view=Object.fromEntries(Object.entries(daily||{}).filter(([key,value])=>validDailyTile(key,value)));
   const weather=view.weather||null;
@@ -4554,7 +4302,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   useEffect(()=>{ let alive=true; (async()=>{ const days=await pullHealth(); if(alive&&days) mergeHealthDays(days); })(); return ()=>{ alive=false; }; },[]);
   const [manualTileDone,setManualTileDone]=useState(()=>load("manualTileDone:"+todayKey,{}));
   const toggleManualTile=id=>updateStoredProgress("manualTileDone:"+todayKey,setManualTileDone,previous=>{
-    if(DAILY_CONTENT_KEYS.includes(id)&&id!=="gmat"&&!validDailyTile(id,load("daily:"+todayKey,{})[id]))return previous;
+    if(DAILY_CONTENT_KEYS.includes(id)&&!validDailyTile(id,load("daily:"+todayKey,{})[id]))return previous;
     return {...previous,[id]:!previous[id]};
   },{});
 
@@ -4637,16 +4385,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   };
   const persistRecall=update=>updateStoredProgress("recall",setRecallList,previous=>typeof update==="function"?update(previous):update,[]);
   const appendDailyRecall=(type,additions)=>persistRecall(previous=>previous.some(item=>item.type===type&&item.addedOn===todayKey)?previous:[...previous,...additions.map((item,index)=>({...item,id:"daily-"+todayKey+"-"+type+"-"+index}))]);
-  const persistGmat=v=>{
-    if(typeof v==="function"){
-      setGmat(previous=>{ const next=gmatStateOf(v(gmatStateOf(previous))); save("gmat",next); return next; });
-      return;
-    }
-    const next=gmatStateOf(v); setGmat(next); save("gmat",next);
-  };
   const toggleHabit=id=>{ const day={...hToday,[id]:!hToday[id]}; const m={...habitLog,[todayKey]:day}; setHabitLog(m); save("habitLog",m); };
   const updateRitual=(key,mode)=>updateStoredProgress("ritualLog",setRitualLog,previous=>{
-    if(DAILY_CONTENT_KEYS.includes(key)&&key!=="gmat"&&mode!==false&&!validDailyTile(key,load("daily:"+todayKey,{})[key]))return previous;
+    if(DAILY_CONTENT_KEYS.includes(key)&&mode!==false&&!validDailyTile(key,load("daily:"+todayKey,{})[key]))return previous;
     const day=previous[todayKey]||{};
     return {...previous,[todayKey]:{...day,[key]:mode==="toggle"?!day[key]:mode}};
   },{});
@@ -5023,11 +4764,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","gmat","note","recall","brainflex","philo"];
+  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","note","recall","brainflex","philo"];
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
-     clicked to full colour (manualTileDone) — e.g. GMAT done outside the app. */
+     clicked to full colour (manualTileDone) — e.g. a lesson done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
-  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return (k!==todayKey||!DAILY_CONTENT_KEYS.includes(id)||id==="gmat"||validDailyTile(id,view[id]))&&(!!r[id]||!!manualDoneFor(k)[id]); };
+  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return (k!==todayKey||!DAILY_CONTENT_KEYS.includes(id)||validDailyTile(id,view[id]))&&(!!r[id]||!!manualDoneFor(k)[id]); };
   const ritualOK=k=>{ const active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:ritualDoneOn(k,id)); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
@@ -5088,7 +4829,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     setTimeout(()=>{const control=document.getElementById(target||"daily-content");if(control){control.scrollIntoView({block:"center",behavior:"smooth"});control.focus({preventScroll:true});}},80);
   };
   const enableDailyTile=async key=>{
-    const base=load("genPrefs",null)||genServerState?.tiles||["word","gmat"],next=[...new Set([...base,key])];
+    const base=load("genPrefs",null)||genServerState?.tiles||["word","german"],next=[...new Set([...base,key])];
     setGenCfgBusy(true);
     try{
       if(!await pushGenConfig(next)){showLoadProblems([dailyIssueInfo(key,"service_error","The daily setting could not be saved to the service. Check the connection, then try enabling it again.")]);return;}
@@ -5157,7 +4898,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const libraryCorner=page==="library"?(onDaily
       ? <button className="libraryRemoveToday" aria-label={`Remove ${label} from Today`} title="Remove from Today" onClick={e=>{e.stopPropagation();setTileActive(id,false);}}>×</button>
       : <button className="libraryAddToday" aria-label={`Add ${label} to Today`} title="Add to Today" onClick={e=>{e.stopPropagation();setTileActive(id,true);}}>+</button>):null;
-    const generated=DAILY_CONTENT_KEYS.includes(id)&&id!=="gmat", ready=!generated||validDailyTile(id,view[id]);
+    const generated=DAILY_CONTENT_KEYS.includes(id), ready=!generated||validDailyTile(id,view[id]);
     const state=generated&&!ready?dailyStateFor(id):null;
     const visualDone=ready&&(!!done||!!manualTileDone[id]);
     return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onMoveBy={delta=>{const next=moveVisibleTile(orderRef.current,id,delta,activeNow);if(next===orderRef.current)return;orderRef.current=next;setOrder(next);save("widgetOrder",next);}}>{state?<DailyLoadState {...state}/>:children}</Tile>;
@@ -5237,7 +4978,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
               <div className="habitHistoryHead"><span className="habitHistoryName" title={h.name}>{h.name}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span><button className="iceBtn" title="Cover one missed day" onClick={e=>{e.stopPropagation();coverGap(h.id);}}>🧊</button></div>
               <div className="habitSquares" aria-label={`${h.name}: ${st} day streak`}>{history.map(day=>{ const done=!!(habitLog[day]&&habitLog[day][h.id]), frozen=(freezes[h.id]||[]).includes(day); return <span key={day} className={`habitSquare${done?" done":""}${frozen?" frozen":""}`} title={`${day}: ${done?"completed":frozen?"covered":"not completed"}`}/>; })}</div>
             </div>; })}
-            {[{id:"gmat",label:"GMAT",emoji:"🎓",color:COL.gmat.v},{id:"breathing",label:"Breathing",emoji:"🌬️",color:COL.breathing.v}].map(r=>{ const st=streakOf(ritualLog,r.id), history=Array.from({length:28},(_,i)=>addDays(todayKey,i-27)); return <div key={r.id} className="habitHistoryCard" style={{"--habit-color":r.color}}>
+            {[{id:"breathing",label:"Breathing",emoji:"🌬️",color:COL.breathing.v}].map(r=>{ const st=streakOf(ritualLog,r.id), history=Array.from({length:28},(_,i)=>addDays(todayKey,i-27)); return <div key={r.id} className="habitHistoryCard" style={{"--habit-color":r.color}}>
               <div className="habitHistoryHead"><span className="habitHistoryName" title={r.label}>{r.emoji} {r.label}</span><span className="habitHistoryStreak">{st} day{st===1?"":"s"}</span></div>
               <div className="habitSquares" aria-label={`${r.label}: ${st} day streak`}>{history.map(day=>{ const done=!!(ritualLog[day]&&ritualLog[day][r.id]); return <span key={day} className={`habitSquare${done?" done":""}`} title={`${day}: ${done?"completed":"not completed"}`}/>; })}</div>
             </div>; })}
@@ -5270,8 +5011,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     academic: T("academic","Study",!!rToday.academic,null,<>
       <AcademicCard academic={view.academic} busy={genBusy} hasCourses={courses.length>0} onLearned={learnAcademic} onUnlearned={unlearnAcademic} onOpenEditor={()=>setShowCourseEditor(true)} onGenerate={()=>regenerateOne("academic")} />
       <RetryNote tileKey="academic"/></>),
-    gmat: T("gmat","GMAT",!!rToday.gmat,null,
-      <><div className="gmatSource">{view.gmat?"Today’s lesson + practice library":"Practice library · daily lesson not loaded"}{!view.gmat&&<button className="link" disabled={loadingKeys.includes("gmat")} onClick={()=>regenerateOne("gmat")}>{loadingKeys.includes("gmat")?"Loading…":"Load daily lesson"}</button>}</div>{!view.gmat&&loadStatus.gmat&&<div className="gmatSourceHelp">{dailyStateFor("gmat").title}. {dailyStateFor("gmat").detail}</div>}<GmatCard state={gmat} onChange={persistGmat} done={!!rToday.gmat} onComplete={()=>setRitual("gmat")} onIncomplete={()=>unsetRitual("gmat")} /></>),
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
       <BrainFlexCard brain={view.brainflex} busy={genBusy} revealed={!!rToday.brainflex} onReveal={()=>setRitual("brainflex")} onHide={()=>unsetRitual("brainflex")} onGenerate={()=>regenerateOne("brainflex")} />
       <RetryNote tileKey="brainflex"/></>),
@@ -5570,18 +5309,6 @@ function NoteCard({saved,onSave,onView}){
     </div>
   );
 }
-/* A small flag on a pole, gently waving, marking a language tile. */
-function LangFlag({lang}){
-  const id=React.useId().replace(/:/g,"");
-  const bands=lang==="de"?[["#1d1d1f",0,1],["#DD0000",1,1],["#FFCE00",2,1]]:[["#AA151B",0,1],["#F1BF00",1,2],["#AA151B",3,1]];
-  const total=bands.reduce((n,b)=>n+b[2],0);
-  return <svg className="langFlag" viewBox="0 0 44 40" aria-label={lang==="de"?"German":"Spanish"} role="img">
-    <defs><clipPath id={id}><path d="M8 5 C16 2 22 8 30 5 C35 3.4 38 4 41 5 L41 25 C38 24 35 23.4 30 25 C22 28 16 22 8 25 Z"/></clipPath>
-      <linearGradient id={id+"g"} x1="0" x2="1"><stop offset="0" stopColor="#fff" stopOpacity=".18"/><stop offset=".5" stopColor="#000" stopOpacity=".08"/><stop offset="1" stopColor="#fff" stopOpacity=".14"/></linearGradient></defs>
-    <line x1="7" y1="3" x2="7" y2="39" stroke="#6b5a4a" strokeWidth="2.4" strokeLinecap="round"/>
-    <g clipPath={`url(#${id})`}>{(()=>{let y=2;return bands.map(([c,,h],i)=>{const hh=h/total*26;const r=<rect key={i} x="7" y={y} width="36" height={hh+.4} fill={c}/>;y+=hh;return r;});})()}<rect x="7" y="2" width="36" height="26" fill={`url(#${id}g)`}/></g>
-  </svg>;
-}
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!sp)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
@@ -5590,8 +5317,8 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const undo=index=>onUnlearned&&onUnlearned(sp);
   return (
     <div className="langCard langEs readingCard">
-      <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div><LangFlag lang="es"/></div>
-      {sp.punto && <div className="langBubble">{sp.punto}</div>}
+      <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div></div>
+      {sp.punto && <div className="langLede">{sp.punto}</div>}
       {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
         {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord">
           <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
@@ -5611,8 +5338,8 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const undo=index=>onUnlearned&&onUnlearned(de);
   return (
     <div className="langCard langDe readingCard">
-      <div className="langHead"><LangFlag lang="de"/><div className="cardContentTitle langTitle">{de.thema}</div></div>
-      {de.punkt && <div className="langBubble">{de.punkt}</div>}
+      <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
+      {de.punkt && <div className="langLede">{de.punkt}</div>}
       {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
         {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord deRow">
           <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
@@ -5628,10 +5355,11 @@ const recallAnswerFor=item=>{
   const q=item&&item.quiz?item.quiz:{};
   const option=Array.isArray(q.options)?q.options[Number(q.answer)||0]:"";
   const explain=q.explain||"";
-  if(option&&explain) return {short:option, detail:explain};
-  if(option) return {short:option, detail:""};
-  if(explain) return {short:"Answer", detail:explain};
-  return {short:item.term||item.title||"Answer", detail:item.meta||""};
+  // The translation (item.meta) belongs on the answer face itself, not in a footnote.
+  const detail=[explain,item.meta].filter(Boolean).join(" — ");
+  if(option) return {short:option, detail};
+  if(detail) return {short:"Answer", detail};
+  return {short:item.term||item.title||"Answer", detail:""};
 };
 const RECALL_TYPE_TAG={word:"Word",lesson:"Lesson",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
 /* One real flashcard at a time: the front shows only the prompt (never the title or
@@ -5688,8 +5416,8 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
         <div className="recallRatings" role="group" aria-label="Rate this memory">
           {FSRS_RATINGS.map(c=>{ const preview=scheduleRecall(current,c.value); return (
             <button type="button" key={c.value} className="recallRating" title={`${c.name} · ${humanInterval(preview.fsrs.scheduledDays)}`} aria-label={`${c.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(c.value)}>
-              <span className="face" aria-hidden="true">{c.face}</span>
-              {expanded&&<span className="recallWhen">{humanInterval(preview.fsrs.scheduledDays)}</span>}
+              <span className="recallWhen">{shortInterval(preview.fsrs.scheduledDays)}</span>
+              {expanded&&<span className="recallGradeName">{c.name}</span>}
             </button>); })}
         </div>
       ) : (
@@ -5699,7 +5427,7 @@ function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
           <span className="recallBackSpacer" aria-hidden="true"/>
         </div>
       )}
-      {expanded&&flipped&&(current.title||current.meta)&&<p className="recallSource">{current.title}{current.meta?` · ${current.meta}`:""}</p>}
+      {expanded&&flipped&&current.title&&<p className="recallSource">{current.title}</p>}
       <div className="recallSegs" aria-hidden="true">{snap.map((it,i)=><span key={it.id} className={"recallSeg"+(i<done?" on":i===done?" cur":"")} />)}</div>
     </div>
   );
@@ -5770,11 +5498,12 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
 /* World news set as a small newspaper page: masthead between double rules, a dateline,
    the lead story across the top, the rest in ruled columns. */
 function NewsPage({items,dateLabel}){
+  const {expanded}=useTilePresentation();
   const [lead,...rest]=items;
   return <article className="newsPage">
     <header className="newsMast"><span className="newsMastTitle">The World</span><span className="newsDateline">{dateLabel}</span></header>
     <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className="newsBody worldSummary">{clean(lead.summary)}</p></section>
-    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
+    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} hidden={!expanded&&i>=2} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
   </article>;
 }
 function MovieAdd({onAdd,autoFocus}){
@@ -5875,6 +5604,7 @@ function BreathingCard({done,onComplete,onIncomplete}){
   return (
     <div className="breathFull">
       <div className={"breathDial"+(running?" isRunning":finished||done?" isDone":" isIdle")} role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
+        {running&&phaseKey==="exhale"&&<span key={Math.floor(elapsed/CYCLE_MS)} className="breathRipples" aria-hidden="true"><i/><i/><i/></span>}
         <button type="button" className="breathCore" style={{"--breath-scale":breathScale}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?`${phase}. Tap to stop the breathing exercise`:finished||done?"Breathing done. Tap to breathe again":"Start the three-minute breathing exercise"}/>
       </div>
       <span className="srOnly" aria-live="polite">{running?phase:""}</span>
@@ -5916,6 +5646,22 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
+/* A vinyl record: grooved black disc, light sheen, tile-coloured label. It spins
+   slowly, faster while the exact recording is still being matched. */
+function VinylDisc({matching}){
+  return <svg className="vinyl" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="49" fill="#1b1713"/>
+    <g className="vinylSpin">
+      {[45,41,37,33,29,25].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.09)" strokeWidth=".9"/>)}
+      <path d="M50 3.5 a46.5 46.5 0 0 1 32.9 13.6" stroke="rgba(255,255,255,.28)" strokeWidth="3" fill="none" strokeLinecap="round"/>
+      <path d="M50 96.5 a46.5 46.5 0 0 1 -32.9 -13.6" stroke="rgba(255,255,255,.14)" strokeWidth="3" fill="none" strokeLinecap="round"/>
+      <circle className="vinylLabel" cx="50" cy="50" r="19" fill="var(--accent)"/>
+      <circle cx="50" cy="50" r="19" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
+      <text className="vinylGlyph" x="50" y="56.5" textAnchor="middle" fontFamily="Georgia,serif" fontWeight="900" fontSize="19" fill="rgba(255,255,255,.92)">♪</text>
+      <circle cx="50" cy="50" r="2.7" fill="#1b1713"/>
+    </g>
+  </svg>;
+}
 function MusicCard({music,done}){
   const catalogMatch=()=>{
     if(!music||!music.catalogMatched||!music.url) return null;
@@ -5932,10 +5678,10 @@ function MusicCard({music,done}){
     return ()=>{ live=false; };
   },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
   const href=match&&match.url?appleGeoUrl(match.url):appleMusicSearchUrl(music);
-  /* The note IS the tile's identity and its only control: tapping it opens the exact
+  /* The record IS the tile's identity and its only control: tapping it opens the exact
      song in Apple Music. Tapping anywhere else on the tile marks the song heard. */
   return <div className="musicCard">
-    <a className={"musicNote"+(matching?" matching":"")} href={href} target="_blank" rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}>♪</a>
+    <a className={"musicDisc"+(matching?" matching":"")} href={href} target="_blank" rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
     <div className="musicMeta">
       <div className="musicTitle">{music.title}</div>
       <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
@@ -6318,7 +6064,6 @@ function ShoppingCard({items,onChange}){
     return (
     <div className="shoppingCard">
       <div className="shoppingSection basket">
-        <div className="shopSectionLabel">Your list</div>
         <div className="shoppingPicked">
           {list.length===0 ? <PlainEmpty>Your list is empty.</PlainEmpty> : visibleList.map(item=>{ const p=shoppingProduct(item.key); return (
             <div key={item.id} className={"shopChip"+(item.checked?" done":"")}><button type="button" className="shopItemToggle" aria-pressed={!!item.checked} aria-label={(item.checked?"Mark needed: ":"Mark bought: ")+(item.label||p.label)} onClick={()=>toggleCheck(item.id)}>
@@ -6329,7 +6074,7 @@ function ShoppingCard({items,onChange}){
       </div>
       {!expanded&&<div className="shoppingPreviewActions"><button type="button" className="widgetIconButton" aria-label="Add shopping items" title="Add items" onClick={open}><WidgetGlyph name="plus"/></button>{list.length>4&&<button type="button" className="link" onClick={open}>{list.length-4} more items</button>}</div>}
       <div className="shoppingSection picker" hidden={!expanded}>
-        <div className="shopSectionLabel">Choose products</div>
+        
         <div className="shopShelf">
           {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
         </div>
@@ -6409,198 +6154,26 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEdit
   );
 }
 
-function GmatCard({state,onChange,done,onComplete,onIncomplete}){
-  const [open,setOpen]=useState(false);
-  const [launchMode,setLaunchMode]=useState(null);
-  const safe=gmatStateOf(state), focus=gmatFocusQuestion(safe);
-  const examDays=safe.examDate?daysBetween(todayKey,safe.examDate):null;
-  const todayAttempts=safe.history.filter(h=>h.date===todayKey).length;
-  const openWorkspace=mode=>{ setLaunchMode(mode||null); setOpen(true); };
-  return (
-    <>
-      <div className="gmatTile">
-        <div className="gmatFocus">
-          <div className="gmatFocusCopy"><div className="gmatKicker">Adaptive focus</div><div className="gmatFocusName">{focus?focus.skill:"Start your baseline"}</div></div>
-          <div className="gmatExamCountdown">{examDays===null?<><strong>—</strong><span>set exam date</span></>:<><strong>{Math.max(0,examDays)}</strong><span>days to exam</span></>}</div>
-        </div>
-        <div className="gmatSections">
-          {Object.entries(GMAT_SECTIONS).map(([key,section])=>{ const stats=gmatStats(safe,key); return <div className="gmatSectionMini" key={key}><div className="gmatSectionTop"><span>{section.name}</span><b>{stats.attempts?stats.accuracy+"%":"—"}</b></div><div className="gmatMeter"><span style={{width:`${stats.attempts?Math.max(5,stats.accuracy):5}%`}}/></div></div>; })}
-        </div>
-        <div className="gmatTileActions">
-          <button className="pill primary" onClick={()=>openWorkspace("daily")}>{done?"Practise again":"Start sprint"}</button>
-          <button className="link" onClick={()=>openWorkspace(null)}>Workspace</button>
-          {done&&<button className="tileUndo" aria-label="Mark GMAT incomplete" title="Mark incomplete" onClick={onIncomplete}>↶</button>}
-          <span className="gmatTileMeta">{todayAttempts?`${todayAttempts} today`:"5 questions"}</span>
-        </div>
-      </div>
-      {open&&ReactDOM.createPortal(<GmatWorkspace state={safe} onChange={onChange} initialMode={launchMode} onComplete={onComplete} onClose={()=>setOpen(false)} />,document.body)}
-    </>
-  );
+/* The gear is pure decoration now: a big line-art cog half-buried in the lower corner,
+   slowly turning. The day's challenge type is simply announced, never chosen. */
+function BrainGearArt(){
+  const teeth=Array.from({length:12},(_,i)=>i*30);
+  return <svg className="brainGearArt" viewBox="0 0 100 100" aria-hidden="true">
+    <g fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round">
+      <circle cx="50" cy="50" r="23"/>
+      {teeth.map(a=><line key={a} x1={50+30*Math.cos(a*Math.PI/180)} y1={50+30*Math.sin(a*Math.PI/180)} x2={50+40*Math.cos(a*Math.PI/180)} y2={50+40*Math.sin(a*Math.PI/180)}/>)}
+    </g>
+    <circle cx="50" cy="50" r="9" fill="currentColor"/>
+  </svg>;
 }
-
-function GmatWorkspace({state,onChange,initialMode,onComplete,onClose}){
-  const safe=gmatStateOf(state);
-  const makeSession=(mode="daily",section=null)=>{
-    const questions=buildGmatSession(safe,mode,section);
-    return {id:uid(),mode,section,questionIds:questions.map(q=>q.id),index:0,startedAt:Date.now(),results:[],complete:false};
-  };
-  const [screen,setScreen]=useState(initialMode?"practice":"home");
-  const [session,setSession]=useState(()=>initialMode?makeSession(initialMode):null);
-  const [selected,setSelected]=useState(null);
-  const [answerSeconds,setAnswerSeconds]=useState(0);
-  const [errorType,setErrorType]=useState("");
-  const [questionStarted,setQuestionStarted]=useState(Date.now());
-  const [tick,setTick]=useState(Date.now());
-  const [mockForm,setMockForm]=useState({total:"",quant:"",verbal:"",data:""});
-  useEffect(()=>{
-    if(screen!=="practice"||!session||session.complete||selected!==null)return;
-    const timer=setInterval(()=>setTick(Date.now()),1000);
-    return ()=>clearInterval(timer);
-  },[screen,session&&session.id,session&&session.index,session&&session.complete,selected]);
-  const begin=(mode="daily",section=null)=>{ setSession(makeSession(mode,section)); setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now()); setScreen("practice"); };
-  const current=session&&!session.complete?GMAT_QUESTIONS.find(q=>q.id===session.questionIds[session.index]):null;
-  const choose=index=>{ if(selected!==null||!current)return; setSelected(index); setAnswerSeconds(Math.max(1,Math.round((Date.now()-questionStarted)/1000))); };
-  const rate=rating=>{
-    if(!current||selected===null)return;
-    const correct=selected===current.answer;
-    if(!correct&&!errorType)return;
-    const result={questionId:current.id,section:current.section,skill:current.skill,date:todayKey,correct,selected,seconds:answerSeconds,rating,errorType:correct?null:errorType};
-    const results=[...session.results,result], last=session.index>=session.questionIds.length-1;
-    onChange(previous=>{
-      const next=gmatStateOf(previous);
-      const memoryBase=next.memory[current.skill]||newRecallItem({id:"gmat-"+current.skill,type:"gmat-skill",addedOn:todayKey,title:current.skill,reviewLog:[]});
-      const memory=scheduleRecall(memoryBase,correct?rating:Math.min(rating,2));
-      const updated={...next,history:[...next.history,result],memory:{...next.memory,[current.skill]:memory}};
-      if(last){
-        const duration=Math.max(1,Math.round((Date.now()-session.startedAt)/60000));
-        updated.sessions=[...updated.sessions,{id:session.id,date:todayKey,mode:session.mode,section:session.section||null,questions:session.questionIds.length,correct:results.filter(r=>r.correct).length,minutes:duration,completedAt:new Date().toISOString()}];
-      }
-      return updated;
-    });
-    if(last){
-      setSession({...session,results,complete:true});
-      onComplete();
-    }else{
-      setSession({...session,results,index:session.index+1});
-      setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now());
-    }
-  };
-  const reportBad=()=>{
-    if(!current)return;
-    flagGmatQuestion(current.id);
-    const last=session.index>=session.questionIds.length-1;
-    if(last){ setSession({...session,complete:true}); onComplete(); }
-    else{ setSession({...session,index:session.index+1}); setSelected(null); setErrorType(""); setQuestionStarted(Date.now()); setTick(Date.now()); }
-  };
-  const addMock=()=>{
-    const total=Number(mockForm.total), quant=Number(mockForm.quant), verbal=Number(mockForm.verbal), data=Number(mockForm.data);
-    if(total<205||total>805||[quant,verbal,data].some(n=>n<60||n>90)){ alert("Use a total score from 205–805 and section scores from 60–90."); return; }
-    onChange(previous=>{ const next=gmatStateOf(previous); return {...next,mocks:[...next.mocks,{id:uid(),date:todayKey,total,quant,verbal,data}]}; });
-    setMockForm({total:"",quant:"",verbal:"",data:""});
-  };
-  const removeMock=id=>onChange(previous=>{ const next=gmatStateOf(previous); return {...next,mocks:next.mocks.filter(m=>m.id!==id)}; });
-  const focus=gmatFocusQuestion(safe);
-  const examDays=safe.examDate?daysBetween(todayKey,safe.examDate):null;
-  const recentMistakes=[...safe.history].reverse().filter(h=>!h.correct).slice(0,30);
-  const dueSkills=Object.entries(safe.memory).filter(([,m])=>!m.nextReview||m.nextReview<=todayKey).slice(0,5);
-  const weeklyMinutes=safe.sessions.filter(s=>s.date>=addDays(todayKey,-6)).reduce((sum,s)=>sum+(s.minutes||0),0);
-  const sessionSeconds=current&&selected===null?Math.max(0,Math.round((tick-questionStarted)/1000)):answerSeconds;
-  const answerLetters=["A","B","C","D","E"];
-  return <DashboardModal label="GMAT workspace" onClose={onClose} overlayClassName="gmatOverlay" className="ovlcard gmatWorkspace">
-      <div className="gmatTop">
-        <div className="gmatBrand"><div className="gmatBrandMark">GMAT</div><div><h2>GMAT workspace</h2><p>Fresh daily lesson · adaptive practice · FSRS review</p></div></div>
-        <button className="gmatClose" aria-label="Close GMAT workspace" onClick={onClose}>×</button>
-      </div>
-      <div className="gmatBody">
-        {screen!=="practice"&&<div className="gmatNav">
-          <button className={"gmatNavBtn"+(screen==="home"?" on":"")} onClick={()=>setScreen("home")}>Overview</button>
-          <button className={"gmatNavBtn"+(screen==="mistakes"?" on":"")} onClick={()=>setScreen("mistakes")}>Mistakes · {recentMistakes.length}</button>
-          <button className={"gmatNavBtn"+(screen==="mocks"?" on":"")} onClick={()=>setScreen("mocks")}>Official mocks · {safe.mocks.length}</button>
-        </div>}
-        {screen==="home"&&<div className="gmatDashboard">
-          <div>
-            <section className="gmatPanel gmatHeroPanel">
-              <div><h3>Today’s best next move</h3><p className="gmatPanelSub">Chosen from weakness, timing, coverage and memory decay.</p><div className="gmatHeroFocus">{focus?focus.skill:"Build your baseline"}</div></div>
-              <div className="gmatHeroActions"><button className="gmatBtn light" onClick={()=>begin("daily")}>Start 5-question sprint</button>{recentMistakes.length>0&&<button className="gmatBtn ghost" onClick={()=>begin("repair")}>Repair mistakes</button>}</div>
-            </section>
-            <div className="gmatAnalytics">
-              {Object.entries(GMAT_SECTIONS).map(([key,section])=>{ const stats=gmatStats(safe,key); return <div className="gmatStatCard" key={key}><div className="gmatStatHead"><span>{section.mark}</span><span>{stats.average?stats.average+"s avg":"No baseline"}</span></div><div className="gmatStatValue">{stats.attempts?stats.accuracy+"%":"—"}</div><div className="gmatStatSub">{stats.attempts} answered · target ~{section.target}s</div></div>; })}
-            </div>
-            <section className="gmatPanel" style={{marginTop:14}}>
-              <h3>Focused section sets</h3><p className="gmatPanelSub">Six timed questions from one section, ordered by your weakest skills.</p>
-              <div className="gmatHeroActions">{Object.entries(GMAT_SECTIONS).map(([key,section])=><button className="gmatBtn soft" key={key} onClick={()=>begin("section",key)}>{section.name}</button>)}</div>
-            </section>
-          </div>
-          <div className="gmatSideStack">
-            <section className="gmatPanel">
-              <h3>Exam target</h3><p className="gmatPanelSub">{examDays===null?"Add a date to turn preparation into a countdown.":examDays>=0?`${examDays} days remaining`:"Exam date has passed"}</p>
-              <div className="gmatSettingRow"><input className="gmatField" type="date" value={safe.examDate} onChange={e=>onChange(previous=>({...gmatStateOf(previous),examDate:e.target.value}))}/><button className="gmatBtn soft" onClick={()=>onChange(previous=>({...gmatStateOf(previous),examDate:""}))}>Clear</button></div>
-            </section>
-            <section className="gmatPanel">
-              <h3>Seven-day rhythm</h3><p className="gmatPanelSub">{weeklyMinutes} of {safe.weeklyGoal} focused minutes completed.</p>
-              <div className="gmatMeter" style={{height:7,marginTop:10}}><span style={{width:`${Math.min(100,weeklyMinutes/Math.max(1,safe.weeklyGoal)*100)}%`}}/></div>
-              <div className="gmatSettingRow"><input className="gmatField" type="number" min="30" max="1200" step="15" aria-label="Weekly GMAT minutes goal" value={safe.weeklyGoal} onChange={e=>onChange(previous=>({...gmatStateOf(previous),weeklyGoal:Math.max(30,Math.min(1200,Number(e.target.value)||30))}))}/><span className="gmatBtn soft" style={{cursor:"default"}}>min/week</span></div>
-            </section>
-            <section className="gmatPanel">
-              <h3>Due for memory repair</h3><p className="gmatPanelSub">Concepts FSRS predicts are ready to be refreshed.</p>
-              <div className="gmatDueList">{dueSkills.length?dueSkills.map(([skill,m])=><div className="gmatDueRow" key={skill}><b>{skill}</b><span>{m.nextReview&&m.nextReview<todayKey?"overdue":"today"}</span></div>):<div className="gmatEmpty">No learned skills are due yet. Your first sprint creates the schedule.</div>}</div>
-            </section>
-            <section className="gmatPanel">
-              <h3>Practice source</h3><p className="gmatPanelSub">A new AI-written lesson is generated every day, with a curated bank as backup. These are original training questions, not official GMAT items — use official mocks for score estimates. Hit “Report a wrong question” on anything that looks off.</p>
-              <div className="gmatHeroActions"><a className="gmatBtn soft" href="https://www.mba.com/exam-prep/gmat-official-starter-kit" target="_blank" rel="noreferrer">Official practice ↗</a></div>
-            </section>
-          </div>
-        </div>}
-        {screen==="practice"&&session&&session.complete&&<div className="gmatSessionDone">
-          <div className="gmatDoneMark">✓</div><h3>Sprint complete</h3><p>Your answers now update both the weakness model and the FSRS review calendar.</p>
-          <div className="gmatDoneStats"><div><b>{session.results.filter(r=>r.correct).length}/{session.results.length}</b><span>correct</span></div><div><b>{Math.round(session.results.reduce((n,r)=>n+r.seconds,0)/Math.max(1,session.results.length))}s</b><span>average</span></div><div><b>{session.results.filter(r=>!r.correct).length}</b><span>repairs</span></div></div>
-          <div className="gmatHeroActions" style={{justifyContent:"center"}}><button className="gmatBtn" onClick={()=>begin("daily")}>Another sprint</button><button className="gmatBtn soft" onClick={()=>setScreen("home")}>Back to overview</button></div>
-        </div>}
-        {screen==="practice"&&session&&!session.complete&&current&&<div className="gmatQuestionShell">
-          <div className="gmatPracticeHead"><button className="gmatNavBtn" onClick={()=>setScreen("home")}>← Exit sprint</button><span className="gmatKicker">Original practice · not official</span></div>
-          <div className="gmatQuestionMeta"><span><b>{GMAT_SECTIONS[current.section].full}</b> · {current.type}</span><span>{sessionSeconds}s · target {current.target}s</span></div>
-          <div className="gmatSessionProgress"><span style={{width:`${(session.index+(selected!==null ? 0.45 : 0))/session.questionIds.length*100}%`}}/></div>
-          <p className="gmatQuestion">{current.prompt}</p>
-          <div className="gmatOptions">{current.options.map((option,i)=>{ let cls="gmatOption"; if(selected!==null){ if(i===current.answer)cls+=" correct"; else if(i===selected)cls+=" wrong"; else cls+=" dim"; } return <button className={cls} disabled={selected!==null} key={i} onClick={()=>choose(i)}><span className="gmatLetter">{answerLetters[i]}</span><span>{option}</span></button>; })}</div>
-          {selected!==null&&<><div className="gmatFeedback"><b>{selected===current.answer?"Correct.":"Not quite."}</b> {current.explain}{current.ai&&<button className="gmatReport" type="button" onClick={reportBad} title="Hide this question and skip it — it won't come back">⚑ Report a wrong question</button>}</div>
-            {selected!==current.answer&&<div className="gmatErrorWrap"><div className="gmatPromptLabel">What broke?</div><div className="gmatChips">{["Concept","Setup","Calculation","Timing","Trap"].map(reason=><button className={"gmatChip"+(errorType===reason?" on":"")} key={reason} onClick={()=>setErrorType(reason)}>{reason}</button>)}</div></div>}
-            <div className="gmatPromptLabel" style={{marginTop:14,marginBottom:0}}>How did the reasoning feel?</div>
-            <div className="gmatFeelings">{[
-              {rating:1,face:"😵",label:"Guessed"},{rating:2,face:"😕",label:"Struggled"},{rating:3,face:"🙂",label:"Understood"},{rating:4,face:"😄",label:"Automatic"}
-            ].map(feel=><button className="gmatFeeling" disabled={selected!==current.answer&&!errorType} key={feel.rating} onClick={()=>rate(feel.rating)}><span className="face">{feel.face}</span><b>{feel.label}</b></button>)}</div>
-          </>}
-        </div>}
-        {screen==="mistakes"&&<div>
-          <div className="gmatPracticeHead"><div><h3 style={{margin:0}}>Mistake notebook</h3><p className="gmatPanelSub">Recent errors, including why they happened.</p></div>{recentMistakes.length>0&&<button className="gmatBtn" onClick={()=>begin("repair")}>Repair set</button>}</div>
-          <div className="gmatMistakes">{recentMistakes.length?recentMistakes.map((mistake,i)=>{ const q=GMAT_QUESTIONS.find(item=>item.id===mistake.questionId); if(!q)return null; return <div className="gmatMistake" key={i}><div className="gmatMistakeTop"><span>{GMAT_SECTIONS[q.section].name} · {q.skill}</span><span>{mistake.seconds}s</span></div><div className="gmatMistakeText">{q.prompt}</div><span className="gmatMistakeReason">{mistake.errorType||"Unclassified"}</span></div>; }):<div className="gmatEmpty">No mistakes yet. Your errors will become a focused repair queue instead of disappearing.</div>}</div>
-        </div>}
-        {screen==="mocks"&&<div>
-          <div><h3 style={{margin:0}}>Official mock history</h3><p className="gmatPanelSub">Log official practice results here. The dashboard will not invent a predicted score.</p></div>
-          <div className="gmatMockForm"><input className="gmatField" inputMode="numeric" placeholder="Total 205–805" value={mockForm.total} onChange={e=>setMockForm({...mockForm,total:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Quant 60–90" value={mockForm.quant} onChange={e=>setMockForm({...mockForm,quant:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Verbal 60–90" value={mockForm.verbal} onChange={e=>setMockForm({...mockForm,verbal:e.target.value})}/><input className="gmatField" inputMode="numeric" placeholder="Data 60–90" value={mockForm.data} onChange={e=>setMockForm({...mockForm,data:e.target.value})}/><button className="gmatBtn" onClick={addMock}>Log mock</button></div>
-          <div className="gmatMocks">{safe.mocks.length?[...safe.mocks].reverse().map(mock=><div className="gmatMockRow" key={mock.id}><b>{formatDateKey(mock.date)}</b><span>Total <b>{mock.total}</b></span><span>Q <b>{mock.quant}</b></span><span>V <b>{mock.verbal}</b></span><span>DI <b>{mock.data}</b></span><button className="gmatChip del" aria-label="Delete mock score" onClick={()=>removeMock(mock.id)}>×</button></div>):<div className="gmatEmpty">No official mock logged yet. Add one after using the GMAT Official Starter Kit.</div>}</div>
-        </div>}
-      </div>
-  </DashboardModal>;
-}
-
 function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
   const {expanded}=useTilePresentation();
-  const [kinds,setKinds]=useState(()=>load("brainflexKinds",null));
-  const [tuning,setTuning]=useState(false);
-  const chosen=Array.isArray(kinds)?kinds:[];
-  const toggleKind=k=>{ const next=chosen.includes(k)?chosen.filter(x=>x!==k):[...chosen,k]; const value=next.length?next:null; setKinds(value); save("brainflexKinds",value);
-    if(SHARED_URL) fetch(SHARED_URL+"/shared/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({brainflexKinds:value})}).catch(()=>{}); };
-  const gear=<button type="button" className="brainGear" aria-label="Choose puzzle types" aria-expanded={tuning} title="Puzzle types" onClick={e=>{e.stopPropagation();setTuning(t=>!t);}}>⚙</button>;
-  const tuner=tuning&&<div className="brainTuner" onClick={e=>e.stopPropagation()}>
-    <div className="brainTunerChips">{Object.entries(BRAINFLEX_KINDS).map(([k,v])=><button type="button" key={k} className={"brainChip"+(chosen.includes(k)?" on":"")} aria-pressed={chosen.includes(k)} onClick={()=>toggleKind(k)}><span aria-hidden="true">{v.icon}</span>{v.label}</button>)}</div>
-    <p className="brainTunerNote">{chosen.length?"Rotates through these from the next puzzle.":"Nothing picked: rotates through all of them."}</p>
-  </div>;
-  if(!brain) return <div className="brainFlexCard">{gear}{tuner}<GenerateEmpty busy={busy} onGenerate={onGenerate} /></div>;
+  const todayKind=BRAINFLEX_KINDS[brainflexKindFor(null)];
+  if(!brain) return <div className="brainFlexCard"><BrainGearArt/><span className="brainFormat">{todayKind.label}</span><GenerateEmpty busy={busy} onGenerate={onGenerate} /></div>;
   return (
     <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
-      {gear}
-      <span className="brainFormat">{brain.format}</span>
-      {tuner}
+      <BrainGearArt/>
+      <span className="brainFormat">{brain.format||todayKind.label}</span>
       <p className="brainPrompt">{brain.prompt}</p>
       {!revealed ? <button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button> : (
         <button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>
