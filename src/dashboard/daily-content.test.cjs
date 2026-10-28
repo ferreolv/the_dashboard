@@ -34,8 +34,7 @@ const fixtures = {
   weather: {temp: 0, code: 0, hi: 0, lo: -2, tomorrow: {hi: 1, lo: 0, code: 0}, place: 'Sydney', timezone: 'Australia/Sydney', at: 1792188000000},
   brainflex: {format: 'Logic challenge', prompt: 'A complete challenge with all necessary information.', solution: 'A worked and self-contained solution.'},
   philo: {theme: 'Reasons and causes', question: 'What would make a reason a cause?'},
-  academic: {courseId: 'course-1', courseName: 'A saved course', concept: 'A course concept', explain: 'A complete explanation from the uploaded notes.', bigPicture: 'How it fits into the course.', quiz: [copy(quiz), copy(quiz)]},
-  gmat: Array.from({length: 5}, (_, index) => ({section: ['quant', 'verbal', 'data'][index % 3], skill: 'A tested skill', type: 'Practice', target: 120, ...copy(quiz), prompt: `Original practice question ${index + 1}?`}))
+  academic: {courseId: 'course-1', courseName: 'A saved course', concept: 'A course concept', explain: 'A complete explanation from the uploaded notes.', bigPicture: 'How it fits into the course.', quiz: [copy(quiz), copy(quiz)]}
 };
 const keys = Object.keys(fixtures);
 
@@ -52,7 +51,7 @@ test('empty or primitive API results never masquerade as a loaded tile', () => {
 });
 
 test('a generated quiz must contain usable options and an integer answer in range', () => {
-  for (const key of ['word', 'worth', 'spanish', 'academic', 'gmat']) {
+  for (const key of ['word', 'worth', 'spanish', 'academic']) {
     for (const malformed of [
       {options: [], answer: 0},
       {options: ['Only one'], answer: 0},
@@ -63,7 +62,6 @@ test('a generated quiz must contain usable options and an integer answer in rang
     ]) {
       const value = copy(fixtures[key]);
       if (key === 'word') value.quiz = malformed;
-      else if (key === 'gmat') value[0] = {...value[0], ...malformed};
       else value.quiz[0] = {...value.quiz[0], ...malformed};
       assert.equal(validDailyTile(key, value), false, `${key}: ${JSON.stringify(malformed)}`);
     }
@@ -73,7 +71,6 @@ test('a generated quiz must contain usable options and an integer answer in rang
 test('non-empty arrays with incomplete stories or questions remain retryable', () => {
   assert.equal(validDailyTile('world', [{headline: 'A headline'}]), false);
   assert.equal(validDailyTile('world', [{headline: '', summary: 'A summary'}]), false);
-  assert.equal(validDailyTile('gmat', [{...fixtures.gmat[0], prompt: ''}]), false);
   assert.equal(validDailyTile('word', {...fixtures.word, term_en: '   '}), false);
   assert.equal(validDailyTile('brainflex', {...fixtures.brainflex, solution: ''}), false);
   assert.equal(validDailyTile('philo', {...fixtures.philo, question: ''}), false);
@@ -82,7 +79,6 @@ test('non-empty arrays with incomplete stories or questions remain retryable', (
 test('malformed array entries are rejected without crashing the dashboard', () => {
   for (const malformed of [null, false, 0, 'Incomplete result']) {
     assert.equal(validDailyTile('world', [malformed]), false);
-    assert.equal(validDailyTile('gmat', [malformed]), false);
     assert.equal(validDailyTile('spanish', {...fixtures.spanish, vocab: [malformed]}), false);
     assert.equal(validDailyTile('worth', {...fixtures.worth, quiz: [malformed]}), false);
     assert.equal(validDailyTile('academic', {...fixtures.academic, quiz: [malformed]}), false);
@@ -91,10 +87,9 @@ test('malformed array entries are rejected without crashing the dashboard', () =
 
 test('question aliases cannot freeze choices whose prompt the tile cannot render', () => {
   const questionOnly = {...copy(quiz), prompt: undefined, question: 'A question in the wrong field?'};
-  for (const key of ['worth', 'spanish', 'academic', 'gmat']) {
+  for (const key of ['worth', 'spanish', 'academic']) {
     const value = copy(fixtures[key]);
-    if (key === 'gmat') value[0] = {...value[0], ...questionOnly};
-    else value.quiz[0] = copy(questionOnly);
+    value.quiz[0] = copy(questionOnly);
     assert.equal(validDailyTile(key, value), false, key);
     assert.equal(validServerTile(key, value), false, `worker ${key}`);
   }
@@ -115,7 +110,6 @@ test('the first valid result is kept through replacements, failures and later re
     const original = copy(fixtures[key]);
     const alternative = copy(fixtures[key]);
     if (key === 'world') alternative[0].headline = 'Different headline';
-    else if (key === 'gmat') alternative[0].prompt = 'Different original practice question?';
     else if (key === 'weather') Object.assign(alternative, {temp: 8, hi: 8});
     else alternative[({word: 'term_en', worth: 'title', spanish: 'tema', music: 'title', brainflex: 'prompt', philo: 'question', academic: 'concept'})[key]] = 'A different valid result';
     assert.equal(validDailyTile(key, alternative), true, `replacement fixture: ${key}`);
@@ -179,7 +173,6 @@ test('browser and worker agree on every complete and malformed daily payload', (
     }
     if (key === 'spanish') values.push({...fixtures.spanish, vocab: [null]});
     if (key === 'academic') values.push({...fixtures.academic, bigPicture: ''});
-    if (key === 'gmat') values.push([copy(fixtures.gmat[0])], [{...fixtures.gmat[0], section: undefined}], [null, null, null, null, null, null]);
     if (key === 'weather') {
       values.push({...fixtures.weather, hi: undefined}, {...fixtures.weather, lo: null}, {...fixtures.weather, tomorrow: {}}, {...fixtures.weather, tomorrow: {...fixtures.weather.tomorrow, lo: NaN}});
     }

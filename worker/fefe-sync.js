@@ -10,7 +10,7 @@
 // namespaced `shared:*` so they never collide with the `dashboard:<code>` sync blobs.
 
 /* ---------------- shared-content config ---------------- */
-var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo", "gmat"];
+var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo"];
 var MODEL = "claude-haiku-4-5-20251001";
 var TZ = "Europe/Paris"; // the shared "day" flips at local midnight here
 var RSS_FEEDS = [
@@ -304,12 +304,7 @@ var sharedGen = {
   },
 
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
-    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 16 words, no preamble or setup — depth comes from the idea, not the length"}.`, 220).then(extractJSON),
-
-  gmat: (env, avoid) => callClaude(env,
-    "You are a meticulous GMAT item writer. You output ONLY a valid minified JSON array, no markdown. Accuracy of the answer key is paramount: solve every question yourself step by step BEFORE writing options, make sure EXACTLY ONE option is correct, and set \"answer\" to that option's 0-based index. If unsure a question is airtight, replace it with a simpler one you can fully verify.",
-    `Write today's GMAT practice lesson: 6 fresh, original, self-contained multiple-choice questions for a serious test-taker — 2 Quantitative Reasoning ("quant"), 2 Verbal Reasoning ("verbal"), and 2 Data Insights ("data"). Cover a spread of skills and vary from recent lessons; avoid re-using these skills/topics: ${(avoid || []).join(" | ") || "none"}. Requirements: each question fully self-contained (all data needed is in the prompt — no external tables/images); realistic GMAT difficulty (medium-to-hard); 5 options for quant and data, 4 or 5 for verbal; distractors must be plausible and reflect real mistakes, never absurd. Verbal = critical reasoning or reading-style inference stated inline. Data Insights = quantitative reasoning over numbers given in the prompt (two-part, table-style described in words, or data sufficiency). Each "explain" is 1-2 sentences giving the decisive reasoning. Output a JSON array of exactly 6 objects, each: {"section":"quant|verbal|data","skill":"3-5 word skill tag","type":"e.g. Problem solving / Critical reasoning / Data sufficiency","target":seconds_as_integer,"prompt":"","options":["",""],"answer":0,"explain":""}. "target" is a realistic per-question time in seconds (quant ~120, verbal ~110, data ~135).`,
-    2200).then(extractJSON).then((a) => Array.isArray(a) ? a : null)
+    `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 16 words, no preamble or setup — depth comes from the idea, not the length"}.`, 220).then(extractJSON)
 };
 
 var sharedHistLabel = {
@@ -320,8 +315,7 @@ var sharedHistLabel = {
   music: (v) => v && `${v.title} — ${v.artist} [${v.genre || "?"}]`,
   world: (v) => Array.isArray(v) ? v.map((x) => x.headline) : null,
   brainflex: (v) => v && v.format,
-  philo: (v) => v && v.theme,
-  gmat: (v) => Array.isArray(v) ? v.map((x) => x && x.skill).filter(Boolean) : null
+  philo: (v) => v && v.theme
 };
 
 /* ---------------- news (server-side RSS, no CORS) ---------------- */
@@ -389,10 +383,10 @@ async function resolveMusic(m) {
      1. the `shared_config` KV key {tiles:[...]} — set from the dashboard's
         Settings → "Daily AI content" checklist (per-tile, no Cloudflare edits);
      2. the `SHARED_TILES` Worker variable (comma-separated), as a manual fallback;
-     3. DEFAULT_SHARED (word + gmat) when neither is set — a minimal, token-frugal
+     3. DEFAULT_SHARED (word + german) when neither is set — a minimal, token-frugal
         default so a fresh deploy never generates tiles nobody asked for. To
         generate everything, set the in-app checklist or SHARED_TILES explicitly. */
-const DEFAULT_SHARED = ["word", "gmat", "german"];
+const DEFAULT_SHARED = ["word", "german"];
 async function activeSharedKeys(env) {
   let wanted = null;
   try {
@@ -419,7 +413,6 @@ function validDailyContent(key, value) {
     case "brainflex": return textPresent(value.format) && textPresent(value.prompt) && textPresent(value.solution);
     case "philo": return textPresent(value.theme) && textPresent(value.question);
     case "academic": return textPresent(value.concept) && textPresent(value.explain) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
-    case "gmat": return Array.isArray(value) && value.length > 0 && value.every(q => validQuiz(q) && textPresent(q.explain));
     case "weather": return !!value.tomorrow && [value.temp, value.code, value.hi, value.lo, value.tomorrow.hi, value.tomorrow.lo, value.tomorrow.code].every(v => typeof v === "number" && Number.isFinite(v)) && textPresent(value.place);
     default: return false;
   }
