@@ -2088,7 +2088,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 [hidden]{display:none!important}
 .shoppingPreviewActions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}.curatedTile .shoppingPicked{display:flex;flex-direction:column;align-items:stretch;gap:8px}.curatedTile .shopChip{width:100%;box-sizing:border-box;min-height:36px;white-space:normal}
 .eventComposition{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.eventComposition .eventHero{min-width:0;width:auto!important;padding:14px!important}.eventComposition .eventCountdown strong{font-size:36px!important}.eventComposition .eventTitle{font-size:15px!important;overflow-wrap:anywhere}.tileFocusSurface .eventComposition{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.curatedTile .goalDay:nth-child(n+3),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.curatedTile .goalDay:nth-child(n+4),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:639px){
  .tileFocusOverlay{padding:16px 0 0!important;align-items:flex-end!important}.tileFocus{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top)));border-radius:28px 28px 0 0;padding-bottom:env(safe-area-inset-bottom);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both}.tileFocusSurface{padding:20px 20px 28px}.tileFocusBody .content{font-size:16px}
  .wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}.topbar:not(.learnNav){position:static!important;min-height:44px!important;background:transparent!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;padding:0!important;margin-bottom:20px!important}.topnav{position:fixed!important;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;display:flex!important;width:calc(100% - 32px);max-width:420px;box-sizing:border-box;padding:5px!important;border:1px solid rgba(255,255,255,.75)!important;border-radius:24px!important;background:rgba(239,243,246,.84)!important;backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 6px 28px rgba(24,34,48,.12)}.topnav .navbtn{flex:1;min-height:44px;padding:10px 8px!important;font-size:14px!important;border-radius:19px!important}.topActions{width:100%;justify-content:flex-end!important;gap:8px!important}.topActions .actionBtn:last-child{display:inline-flex!important}.topActions .actionBtn{min-height:44px;height:auto!important;font-size:12px!important;padding:10px 12px!important;white-space:normal}.tileSaveState{font-size:11px}.tileFoot{margin-top:8px}
@@ -2147,7 +2147,8 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 @media(max-width:639px){.tile.tileFocusSurface{padding:20px 20px 28px!important;border-radius:28px 28px 0 0!important}}
 
 
-/* Intrinsic spans reserve room for one card without stretching its neighbours. */
+/* Fixed modules: an overfull preview fades out at the bottom and opens via the corner expand. */
+.grid>.curatedTile[data-expandable]:not([data-tileid="recall"]):not([data-tileid="note"]):not([data-tileid="movie"]):not([data-tileid="brainflex"]):not([data-tileid="worth"]) .tileMount{overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 26px),transparent)}
 .grid>.tile[data-tileid] .tileMount>.content{flex:none!important}
 .curatedTile[data-tileid="shopping"] .shopChip{display:flex!important;align-items:center;gap:8px;min-height:44px!important;width:100%!important;border-radius:12px!important;font-size:16px!important}
 .curatedTile[data-tileid="shopping"] .shopChip>span:nth-child(2){display:block!important;flex:1;min-width:0;white-space:normal!important;overflow-wrap:anywhere}.curatedTile[data-tileid="shopping"] .shopChip>.del{display:none!important}
@@ -2157,6 +2158,12 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .curatedTile[data-tileid="health"] .healthHint{display:none}.curatedTile[data-tileid="timer"] .timerSteppers{display:none!important}.curatedTile[data-tileid="timer"] .timerSub{display:none!important}.curatedTile[data-tileid="timer"] .timerControls{justify-content:center!important}
 
 
+/* Local horizontal clearances so nothing sits under the corner expand (no vertical shifts). */
+.grid>.curatedTile[data-expandable][data-tileid="agenda"] button.miniCalToday{margin-right:44px!important}
+.grid>.curatedTile[data-expandable][data-tileid="people"] .addrow .addbtn{margin-right:42px}
+.grid>.curatedTile[data-expandable][data-tileid="weekly"] .wrevTitle{padding-right:48px}
+.grid>.curatedTile[data-expandable][data-tileid="shopping"] .shoppingPicked{padding-right:36px}
+.grid>.curatedTile[data-expandable][data-tileid="goals"] .goalDay:first-child{padding-right:34px}
 .tileFootMinimal{min-height:0!important;margin:0!important}
 .curatedTile .timerDial[role="button"]{cursor:pointer}.curatedTile .timerDial[role="button"]:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:18px}
 
@@ -2188,7 +2195,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 
 /* The month is a date map; reminder names stay in the readable list. */
 .grid>.tile[data-cols="6"]{grid-column:span 6!important}
-.tile[data-tileid="agenda"] .taskAgenda{display:grid!important;grid-template-columns:minmax(0,1fr);gap:16px!important;align-items:start}
+.tile[data-tileid="agenda"] .taskAgenda{display:grid!important;grid-template-columns:minmax(0,1fr);gap:10px!important;align-items:start}
 .tile[data-tileid="agenda"] .miniCalendar{display:block!important;border:0!important;border-radius:0!important;overflow:visible!important}
 .tile[data-tileid="agenda"] .miniCalHead{padding:0 0 8px!important;gap:4px;font-weight:800;font-size:15px!important}
 .tile[data-tileid="agenda"] .miniCalNavGroup{grid-template-columns:32px minmax(0,1fr) 32px!important;gap:0!important}
@@ -2263,10 +2270,10 @@ a.musicDisc:active{transform:scale(.97)}
 a.musicDisc.matching .vinylSpin{animation-duration:2.6s}
 @keyframes vinylSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.vinyl .vinylSpin{animation:none}}
-.musicMeta{min-width:0;padding-right:30px}
+.musicMeta{min-width:0;padding-right:34px;align-self:center;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}
 .musicComposer{font-size:12px;color:var(--dim);margin-top:2px}
-.musicWhy{font-size:12.5px;line-height:1.45;color:var(--dim);margin:6px 0 6px}
-.musicGenre{display:inline-block;font-size:10px!important}
+.musicWhy{font-size:12.5px;line-height:1.45;color:var(--dim);margin:7px 0 0;max-width:34ch}
+.musicGenre{display:inline-block;margin-top:7px;font-size:10px!important;letter-spacing:.09em}
 .tile.completed .vinyl .vinylLabel{fill:#fff}
 .tile.completed .vinyl .vinylGlyph{fill:var(--accentDark)}
 .tile.completed .musicComposer,.tile.completed .musicWhy{color:rgba(255,255,255,.78)!important}
@@ -2278,6 +2285,10 @@ a.musicDisc.matching .vinylSpin{animation-duration:2.6s}
 
 /* --- Recall: a real flashcard deck --- */
 .recallDeck{display:flex;flex-direction:column;gap:9px;flex:1;min-height:0}
+/* the flashcard fills the tile instead of leaving a dead band under it */
+.grid>.tile[data-tileid="recall"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="recall"] .tileMount{flex:1 1 auto!important;display:flex}
+.grid>.tile[data-tileid="recall"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0}
 .recallCard3d{position:relative;flex:1;min-height:118px;perspective:900px;-webkit-tap-highlight-color:transparent}
 .tile button.recallCard3d,.tile.completed button.recallCard3d,button.recallCard3d{min-height:118px;height:auto;border:none!important;border-radius:17px!important;background:transparent!important;box-shadow:none!important;padding:0;font:inherit;color:inherit;cursor:pointer}
 .tile button.recallCard3d:hover{background:transparent!important;border:none!important;transform:none;filter:none}
@@ -2338,8 +2349,9 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed .deFr{color:rgba(255,255,255,.78)}
 .tile.completed .dePron{color:rgba(255,255,255,.62)}
 
-/* --- Movies: a strip of film in the dark --- */
+/* --- Movies: a strip of film running diagonally across the whole tile --- */
 .movieCard{display:flex;flex-direction:column;flex:1;min-height:0;gap:10px}
+.grid>.tile[data-tileid="movie"] .movieStrip{position:absolute;left:-26px;right:-26px;top:50%;transform:translateY(-50%) rotate(-8deg);border-radius:0;min-height:96px;box-shadow:0 10px 24px -14px rgba(10,4,6,.55)}
 .movieStrip{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:84px;border-radius:14px;background:linear-gradient(165deg,color-mix(in srgb,var(--accentDark) 82%,#000),color-mix(in srgb,var(--accentDark) 55%,#000));padding:8px 10px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 22px -14px color-mix(in srgb,var(--accentDark) 80%,#000)}
 .movieSprockets{display:block;height:7px;flex:none;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.75) 6px 14px,transparent 14px 20px);border-radius:2px}
 .movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
@@ -2438,6 +2450,9 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .bdayLeafMonth{display:block;padding:2.5px 0 2px;background:var(--accent);color:#fff;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;text-align:center}
 .bdayLeafDay{display:block;padding:3px 0 4px;font-size:19px;font-weight:900;color:#2a2e40;text-align:center;line-height:1}
 .tile.completed .bdayLeafMonth{background:var(--accent)}
+.birthdayTodayEmoji{display:inline-block;transform-origin:50% 85%;animation:cakeFlicker 2.6s ease-in-out infinite}
+@keyframes cakeFlicker{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg) translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.birthdayTodayEmoji{animation:none}}
 /* --- Breathe: the dial fills the whole square, no words --- */
 .srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
 .tile[data-tileid="breathing"] .content{display:flex;align-items:center;justify-content:center;padding:0!important;min-height:0!important}
@@ -2454,6 +2469,9 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
   transform:scale(var(--breath-scale,.8));transition:transform .1s linear}
 .tile button.breathCore:hover{transform:scale(calc(var(--breath-scale,.8) * 1.03))!important;border:none!important;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 40%,white),var(--accent) 58%,var(--accentDark))!important}
 .breathDial.isIdle .breathCore{animation:breathIdle 4.5s ease-in-out infinite}
+.breathPlay{width:36%;height:36%;margin-left:7%;color:rgba(255,255,255,.92);filter:drop-shadow(0 3px 7px rgba(0,0,0,.18))}
+.breathDial.isDone .breathPlay{opacity:.55}
+.tile button.breathCore{display:grid;place-items:center}
 @keyframes breathIdle{0%,100%{transform:scale(.74)}50%{transform:scale(.84)}}
 .tile.completed button.breathCore{background:radial-gradient(circle at 34% 28%,#fff,rgba(255,255,255,.82) 60%,rgba(255,255,255,.6))!important}
 .tile.completed .breathDial::after{background:conic-gradient(#fff var(--breath-progress,0deg),rgba(255,255,255,.28) 0)}
@@ -2556,9 +2574,9 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed button.timerResetGlyph{color:rgba(255,255,255,.85)!important}
 /* --- Reminders: compact rows, visible due state, uniform form controls --- */
 .grid>.tile[data-tileid="agenda"] .tileMount>.content{padding-bottom:0!important}
-.grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:2px!important;padding-top:34px}
+.grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:0!important;padding-top:30px}
 .grid>.tile[data-tileid="agenda"] .agRow{padding:3px 2px!important;min-height:0!important;gap:8px!important}
-.grid>.tile[data-tileid="agenda"] button.taskMain{min-height:36px!important}
+.grid>.tile[data-tileid="agenda"] button.taskMain{min-height:30px!important}
 /* the add control sits level with the calendar header instead of taking its own line */
 .grid>.tile[data-tileid="agenda"] .agendaItems>button.taskAddLink{position:absolute;top:0;right:0;width:30px!important;height:30px!important;min-height:0!important;margin:0!important}
 .grid>.tile[data-tileid="agenda"] .agendaItems:has(.agendaForm){padding-top:0}
@@ -2642,18 +2660,24 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed .langLede::before{opacity:.9}
 /* --- Knowledge: a watering can spilling the day's field --- */
 .tile[data-tileid="worth"] .content,.tileFocusSurface[data-tileid="worth"] .tileFocusBody{position:relative}
-.lessonHead{position:relative;z-index:1;margin-bottom:6px;padding-right:118px}
+.lessonHead{position:relative;z-index:1;margin-bottom:6px;padding-right:86px}
 .lessonTitle{font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
-.waterCan{position:absolute;z-index:0;top:-30px;right:-34px;width:126px;height:110px;color:var(--accentDark);opacity:.8;overflow:visible;pointer-events:none}
-.lessonField{display:inline-block;margin:6px 0 2px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--waterDrop,#4FA9E8) 16%,rgba(255,255,255,.6));color:var(--accentDark);font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
-.waterDrops path{animation:waterDrip 1.8s ease-in infinite;transform-box:fill-box}
-.waterDrops path:nth-child(2){animation-delay:.6s}.waterDrops path:nth-child(3){animation-delay:1.2s}
-@keyframes waterDrip{0%{opacity:0;transform:translateY(-6px)}25%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
-@media(prefers-reduced-motion:reduce){.waterDrops path{animation:none}}
-.tile.completed .waterCan{color:#fff}
-.tile.completed .lessonField{background:rgba(255,255,255,.25);color:#fff}
+.waterCan{position:absolute;z-index:0;top:-4px;right:0;width:76px;height:56px;color:var(--accentDark);opacity:.5;pointer-events:none}
+.lessonField{display:block;margin:0 0 3px;color:var(--dim);font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.tile.completed .waterCan{color:#fff;opacity:.6}
+.tile.completed .lessonField{color:rgba(255,255,255,.8)}
 /* ================= Insights ================= */
-.insights{display:flex;flex-direction:column;gap:10px;padding-bottom:40px;max-width:56rem;margin-inline:auto;width:100%}
+.insights{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;align-items:stretch;padding-bottom:40px;width:100%;max-width:var(--dashboard-max,100rem);margin-inline:auto}
+.insights>*{min-width:0}
+.insRecords,.insMain,.insSide,.insStreaks{display:contents}
+.insRecord{grid-column:span 3}
+.insCalendar{grid-column:span 4}
+.insIce{grid-column:span 4}
+.insMini{grid-column:span 4}
+.insHistory{grid-column:span 8}
+.insPush{grid-column:span 4}
+.insStreak{grid-column:span 2}
+@media(max-width:1100px){.insRecord{grid-column:span 3}.insCalendar{grid-column:span 6}.insIce{grid-column:span 3}.insMini{grid-column:span 3}.insHistory{grid-column:span 12}.insPush{grid-column:span 6}.insStreak{grid-column:span 3}}
 .insCard{position:relative;border-radius:18px;padding:12px 14px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
 .insCardHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .insCardHead h2{margin:0;font-size:13px;font-weight:850;letter-spacing:-.01em}
@@ -2667,13 +2691,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insSmall{font-size:10.5px;line-height:1.4;color:#6a7682;margin:6px 0 0}
 .insIcon{width:16px;height:16px}
 /* records */
-.insRecords{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .insRecord{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;padding:10px 12px}
 .insRecord b{grid-row:1;font-size:clamp(18px,2vw,24px);font-weight:900;letter-spacing:-.04em;line-height:1}
 .insRecord .insIcon{grid-column:2;grid-row:1;width:18px;height:18px}
 .insRecord span{grid-column:1/-1;margin-top:3px;font-size:9px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6a7682}
 /* calendar + side */
-.insMain{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:10px}
 .insCalendar{background:linear-gradient(140deg,color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.5)),color-mix(in srgb,var(--c) 14%,rgba(255,255,255,.38)))}
 .insCalendar .insCardHead h2{color:color-mix(in srgb,var(--c) 70%,#1f1235)}
 .insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
@@ -2722,7 +2744,6 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insTable.dense .insCell::before{width:9px;height:9px}
 .insTable.dense .insCell.joinL::after,.insTable.dense .insCell.joinR::after{height:4px;margin-top:-2px}
 /* per-section streaks, each in its tile colour */
-.insStreaks{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px}
 .insStreak{padding:10px 12px;background:linear-gradient(140deg,rgba(var(--glass-rgb),.30),rgba(var(--glass-rgb),.18));color:var(--ink)}
 .insStreakTop{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .insStreakName{font-size:11.5px;font-weight:850}
@@ -2737,13 +2758,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 /* push-ups + small numbers */
 .insPush{background:linear-gradient(140deg,rgba(var(--glass-rgb),.26),rgba(var(--glass-rgb),.14));color:var(--ink)}
 .insPush .pushLine{height:72px}
-.insSide{display:flex;flex-direction:column;gap:10px}
-.insSide .insIce{flex:1}
 .insMini{display:flex;flex-direction:column;justify-content:center;gap:7px}
 .insMini div{display:flex;align-items:baseline;gap:10px}
 .insMini b{font-size:19px;font-weight:900;letter-spacing:-.03em;min-width:32px}
 .insMini span{font-size:10.5px;font-weight:750;color:#6a7682}
-@media(max-width:760px){.insStreaks{grid-template-columns:repeat(2,minmax(0,1fr))}.insStreak{padding:13px 14px}.insStreakMeta span:last-child{display:none}.insRecords{grid-template-columns:repeat(2,minmax(0,1fr))}.insMain{grid-template-columns:1fr}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:12.5px}.insCard{padding:16px}}
+@media(max-width:760px){.insRecord{grid-column:span 6}.insCalendar{grid-column:span 12}.insIce{grid-column:span 6}.insMini{grid-column:span 6}.insHistory{grid-column:span 12}.insPush{grid-column:span 12}.insStreak{grid-column:span 6}.insStreakMeta span:last-child{display:none}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:10.5px}.insCard{padding:12px}}
 
 /* Typing shows a caret, not a container: no focus rings or boxes anywhere in tiles. */
 .tile :is(input,textarea,select):focus,.tile :is(input,textarea,select):focus-visible{outline:none!important;box-shadow:none!important}
@@ -3538,18 +3557,15 @@ function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
-/* Minimal line watering can, tipped forward, its rose dripping onto the category. */
+/* A quiet upright line watering can resting in the tile's corner. */
 function WateringCan(){
-  return <svg className="waterCan" viewBox="0 0 100 86" aria-hidden="true">
-    <g transform="rotate(-24 58 40)" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M44 30 h34 l-3 34 a4 4 0 0 1-4 4 h-20 a4 4 0 0 1-4-4 z" fill="color-mix(in srgb,currentColor 14%,transparent)"/>
-      <path d="M78 36 c12 0 14 18 -2 20"/>
-      <path d="M46 52 L18 36"/>
-      <path d="M12 30 l9 2 l-5 9 z" fill="currentColor"/>
-      <path d="M50 30 c0-8 22-8 22 0"/>
-    </g>
-    <g className="waterDrops" fill="var(--waterDrop,#4FA9E8)">
-      <path d="M12 54 q3 5 0 7 q-3-2 0-7z"/><path d="M5 62 q3 5 0 7 q-3-2 0-7z"/><path d="M15 70 q3 5 0 7 q-3-2 0-7z"/>
+  return <svg className="waterCan" viewBox="0 0 100 74" aria-hidden="true">
+    <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M36 28 h34 l-3 32 a4 4 0 0 1-4 4 h-20 a4 4 0 0 1-4-4 z" fill="color-mix(in srgb,currentColor 10%,transparent)"/>
+      <path d="M70 34 c13-1 15 17 -1 19"/>
+      <path d="M38 42 L14 26"/>
+      <path d="M8 18 l9 2 l-5 9 z" fill="currentColor" stroke="none"/>
+      <path d="M42 28 c0-8 22-8 22 0"/>
     </g>
   </svg>;
 }
@@ -3625,13 +3641,13 @@ function WeatherCard({data,busy,onGenerate}){
 /* sizing: authored compositions, with browser-zoom reflow */
 const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360?2:1;
 const CURATED_TILE_LAYOUT={
-  goals:{desktop:[4,3],phone:[2,2],family:"large"},
+  goals:{desktop:[4,4],phone:[2,2],family:"large"},
   habits:{desktop:[4,2],phone:[2,2],family:"large"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
   shopping:{desktop:[2,2],phone:[2,2],family:"tall"},
-  agenda:{desktop:[4,3],phone:[2,2],family:"large"},
-  events:{desktop:[4,2],phone:[2,2],family:"wide"},
+  agenda:{desktop:[4,4],phone:[2,2],family:"large"},
+  events:{desktop:[4,3],phone:[2,2],family:"large"},
   note:{desktop:[4,1],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -3702,6 +3718,7 @@ const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
 const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
+let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
 const BREATHING_TILE_INTRODUCED=load("breathingTileIntroduced",false);
 const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
@@ -3812,7 +3829,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   const [expanded,setExpanded]=useState(false),[closing,setClosing]=useState(false);
   const [contentHost]=useState(()=>{const node=document.createElement("div");node.className="content";return node;});
   const previewRef=useRef(null),focusRef=useRef(null),tileRef=useRef(null),closeTimer=useRef(null),openButtonRef=useRef(null),focusedContentRef=useRef(null),wasExpandedRef=useRef(false),returnFocusRef=useRef(null);
-  const [previewHeight,setPreviewHeight]=useState(null),[measuredRows,setMeasuredRows]=useState(size.r);
+  const [previewHeight,setPreviewHeight]=useState(null);
   const open=()=>{if(edit||expanded)return;returnFocusRef.current=document.activeElement;focusedContentRef.current=contentHost.contains(document.activeElement)?document.activeElement:null;setPreviewHeight(tileRef.current?.getBoundingClientRect().height||null);setClosing(false);setExpanded(true);};
   const close=()=>{if(closing)return;setClosing(true);closeTimer.current=setTimeout(()=>{setExpanded(false);setClosing(false);setPreviewHeight(null);},window.matchMedia("(prefers-reduced-motion: reduce)").matches?0:180);};
   useLayoutEffect(()=>{
@@ -3844,14 +3861,16 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
       const footerHeight=footer&&getComputedStyle(footer).position!=="absolute"?footer.getBoundingClientRect().height+(parseFloat(getComputedStyle(footer).marginTop)||0):0;
       const mountPadding=previewRef.current?parseFloat(getComputedStyle(previewRef.current).paddingTop)||0:0;
       const needed=contentHost.getBoundingClientRect().height+mountPadding+headHeight+footerHeight+(parseFloat(style.paddingTop)||0)+(parseFloat(style.paddingBottom)||0)+2;
-      const rows=tileRowSpan(needed,unit,gap,size.r);setMeasuredRows(current=>current===rows?current:rows);
-      const more=expandable&&previewHidesContent(contentHost);setHasMore(current=>current===more?current:more);
+      /* The tile never grows: when the content would need more rows than the
+         module provides, the corner expand opens it in the pop-up instead. */
+      const rows=tileRowSpan(needed,unit,gap,size.r);
+      const more=expandable&&(rows>size.r||previewHidesContent(contentHost));setHasMore(current=>current===more?current:more);
     });};
     measure();const observer=new ResizeObserver(measure);observer.observe(contentHost);observer.observe(grid);
     return()=>{cancelAnimationFrame(frame);observer.disconnect();};
   },[expanded,size.r,size.c,cols,showLabel]);
 
-  const renderedRows=expanded?measuredRows:Math.max(size.r,measuredRows);
+  const renderedRows=size.r;
   const span={"--tile-span-rows":renderedRows,"--tile-base-rows":size.r,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
   return <TilePresentationContext.Provider value={{expanded,open}}>
     <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expandable={canExpand||undefined} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
@@ -4009,7 +4028,16 @@ function App({forceSignIn=false,initialAuthMode="login"}){
      each day. null = all (default). Untick a tile → the worker stops spending
      tokens on it. Persisted to the worker (shared_config) so its cron obeys. */
   const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["brainflex","Brain teaser"],["philo","Philosophy"]];
-  const [genPrefs,setGenPrefs]=useState(()=>load("genPrefs",null));
+  const [genPrefs,setGenPrefs]=useState(()=>{
+    const stored=load("genPrefs",null);
+    if(!Array.isArray(stored))return null;
+    /* GMAT no longer exists. Prefs saved before its removal would silently skip
+       Deutsch (it was never added to them), so swap gmat out for german once. */
+    if(!stored.includes("gmat"))return stored;
+    const next=[...new Set([...stored.filter(k=>k!=="gmat"),"german"])];
+    save("genPrefs",next); GEN_PREFS_MIGRATED=true;
+    return next;
+  });
   const [genCfgStatus,setGenCfgStatus]=useState("");
   const [genCfgBusy,setGenCfgBusy]=useState(false);
   const genEnabled=id=> (genPrefs===null?(genServerState?.tiles||["word","german"]):genPrefs).includes(id);
@@ -4044,6 +4072,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     }
   };
   useEffect(()=>{if(SHARED_URL)verifyGenConfig({silent:true});},[]);
+  useEffect(()=>{if(GEN_PREFS_MIGRATED&&SHARED_URL){GEN_PREFS_MIGRATED=false;Promise.resolve(pushGenConfig(genPrefs)).catch(()=>{});}},[]);
   const applyGenNow=async()=>{
     if(!SHARED_URL||genCfgBusy)return;
     setGenCfgBusy(true);
@@ -4476,6 +4505,18 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           remember(key,value);
         }catch(error){const issue=dailyRequestFailure(error);failed(key,issue.state,issue.message);}
       }).catch(error=>{const issue=dailyRequestFailure(error);failed(key,issue.state,issue.message);}));
+      /* If the shared service is unreachable or too old to know a tile (e.g. an
+         un-updated worker without Deutsch), quietly produce it with the personal
+         key instead of leaving the tile stuck. */
+      const personalFallback=async key=>{
+        if(!GEN_TASKS[key]||!getKey())return false;
+        try{
+          let value=await GEN_TASKS[key]();
+          if(!validDailyTile(key,value))return false;
+          if(key==="music"){const match=await resolveMusicTrack(value).catch(()=>null);if(match)value={...value,...match};}
+          remember(key,value);return true;
+        }catch(error){return false;}
+      };
       if(shared.length)jobs.push(withDailyLock(todayKey,"shared",async()=>{
         const needed=dailyRequestKeys(shared,load("daily:"+todayKey,{}));
         if(!needed.length){acceptDaily(load("daily:"+todayKey,{}));return;}
@@ -4486,9 +4527,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           if(doc.date!==todayKey)throw Error("wrong_day");
           for(const key of needed){
             if(validDailyTile(key,doc.content&&doc.content[key]))remember(key,doc.content[key]);
+            else if(await personalFallback(key))continue;
             else{const status=doc.status&&doc.status[key];failed(key,status?.state||"invalid_content",status?.message);}
           }
-        }catch(error){const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}
+        }catch(error){const issue=dailyRequestFailure(error);for(const key of needed){if(!(await personalFallback(key)))failed(key,issue.state,issue.message);}}
       }).catch(error=>{const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}));
       await Promise.all(jobs);
       const saved=load("daily:"+todayKey,{}),remaining=keys.filter(key=>!validDailyTile(key,saved[key]));
@@ -5605,7 +5647,9 @@ function BreathingCard({done,onComplete,onIncomplete}){
     <div className="breathFull">
       <div className={"breathDial"+(running?" isRunning":finished||done?" isDone":" isIdle")} role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
         {running&&phaseKey==="exhale"&&<span key={Math.floor(elapsed/CYCLE_MS)} className="breathRipples" aria-hidden="true"><i/><i/><i/></span>}
-        <button type="button" className="breathCore" style={{"--breath-scale":breathScale}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?`${phase}. Tap to stop the breathing exercise`:finished||done?"Breathing done. Tap to breathe again":"Start the three-minute breathing exercise"}/>
+        <button type="button" className="breathCore" style={{"--breath-scale":breathScale}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?`${phase}. Tap to stop the breathing exercise`:finished||done?"Breathing done. Tap to breathe again":"Start the three-minute breathing exercise"}>
+          {!running&&<svg className="breathPlay" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.3 7.4c0-1.55 1.7-2.5 3-1.66l6.9 4.26c1.25.77 1.25 2.57 0 3.34l-6.9 4.26c-1.3.84-3-.11-3-1.66Z" fill="currentColor" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>}
+        </button>
       </div>
       <span className="srOnly" aria-live="polite">{running?phase:""}</span>
     </div>
@@ -5657,8 +5701,7 @@ function VinylDisc({matching}){
       <path d="M50 96.5 a46.5 46.5 0 0 1 -32.9 -13.6" stroke="rgba(255,255,255,.14)" strokeWidth="3" fill="none" strokeLinecap="round"/>
       <circle className="vinylLabel" cx="50" cy="50" r="19" fill="var(--accent)"/>
       <circle cx="50" cy="50" r="19" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
-      <text className="vinylGlyph" x="50" y="56.5" textAnchor="middle" fontFamily="Georgia,serif" fontWeight="900" fontSize="19" fill="rgba(255,255,255,.92)">♪</text>
-      <circle cx="50" cy="50" r="2.7" fill="#1b1713"/>
+      <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="17" fill="rgba(255,255,255,.95)">♫</text>
     </g>
   </svg>;
 }
@@ -5844,15 +5887,15 @@ function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,da
       </div>
     </div>
     <HistoryTable rows={rows}/>
+    <section className="insCard insPush" style={themeVars("pushups",false)}>
+      <header className="insCardHead"><h2>Push-ups · 14 days</h2><span className="insMuted"><b>{pushTotal14}</b> total · ~{pushAvg14}/day</span></header>
+      <PushBars values={push14}/>
+    </section>
     <section className="insStreaks">{sections.map(x=><div key={x.id} className="insCard insStreak" style={themeVars(x.id,false)}>
       <div className="insStreakTop"><span className="insStreakName">{x.label}</span><span className={"insStreakNow"+(x.current?"":" zero")}><InsIcon name="flame" color="currentColor"/>{x.current}</span></div>
       <div className="insWeek" aria-label="Last 7 days">{x.week.map((d,i)=><span key={i} className={d?"on":""}/>)}</div>
       <div className="insStreakMeta"><span>Best <b>{x.best}</b></span><span>30d <b>{x.rate}%</b></span><span>Total <b>{x.total}</b></span></div>
     </div>)}</section>
-    <section className="insCard insPush" style={themeVars("pushups",false)}>
-      <header className="insCardHead"><h2>Push-ups · 14 days</h2><span className="insMuted"><b>{pushTotal14}</b> total · ~{pushAvg14}/day</span></header>
-      <PushBars values={push14}/>
-    </section>
   </div>;
 }
 
@@ -6157,13 +6200,10 @@ function AcademicCard({academic,busy,hasCourses,onLearned,onUnlearned,onOpenEdit
 /* The gear is pure decoration now: a big line-art cog half-buried in the lower corner,
    slowly turning. The day's challenge type is simply announced, never chosen. */
 function BrainGearArt(){
-  const teeth=Array.from({length:12},(_,i)=>i*30);
+  const teeth=Array.from({length:8},(_,i)=>i*45);
   return <svg className="brainGearArt" viewBox="0 0 100 100" aria-hidden="true">
-    <g fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round">
-      <circle cx="50" cy="50" r="23"/>
-      {teeth.map(a=><line key={a} x1={50+30*Math.cos(a*Math.PI/180)} y1={50+30*Math.sin(a*Math.PI/180)} x2={50+40*Math.cos(a*Math.PI/180)} y2={50+40*Math.sin(a*Math.PI/180)}/>)}
-    </g>
-    <circle cx="50" cy="50" r="9" fill="currentColor"/>
+    {teeth.map(a=><rect key={a} x="44.5" y="5" width="11" height="16" rx="3" fill="currentColor" transform={`rotate(${a} 50 50)`}/>)}
+    <circle cx="50" cy="50" r="26" fill="none" stroke="currentColor" strokeWidth="15"/>
   </svg>;
 }
 function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
