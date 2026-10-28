@@ -747,7 +747,9 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tileManage.on { color:#fff; background:var(--accent); border-color:var(--accent); }
   .edithint { padding:11px 14px; border-radius:12px; background:rgba(98,87,231,.07); color:#6257e7; font-size:12px; font-weight:650; }
   .enter { animation:cardIn .55s var(--ease) both; }
-  @keyframes cardIn { from{opacity:0;transform:translateY(10px) scale(.99)} to{opacity:1;transform:none} }
+  /* Movement only: an opacity animation would make each tile a backdrop root and stop its
+     frosted glass from blurring the page behind it. */
+  @keyframes cardIn { from{transform:translateY(10px) scale(.99)} to{transform:none} }
   @keyframes panelIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
   @keyframes modalIn { from{opacity:0;transform:translateY(14px) scale(.985)} to{opacity:1;transform:none} }
 
@@ -2111,7 +2113,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid]{
     --glass-radius:34px;
     border:1px solid rgba(255,255,255,.46)!important;border-radius:var(--glass-radius)!important;
-    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,0) 40%,rgba(255,255,255,.04)),linear-gradient(125deg,rgba(var(--glass-rgb),.12),rgba(var(--glass-rgb),.05));
+    --glass-surface:linear-gradient(140deg,rgba(var(--glass-rgb),.30),rgba(var(--glass-rgb),.19));
     background:transparent!important;
     -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
     box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.1),0 10px 26px -14px rgba(var(--glass-depth),.16),0 2px 6px rgba(30,40,50,.025)!important;
@@ -2120,29 +2122,24 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid]::before{
     content:''!important;display:block!important;position:absolute;z-index:-1;inset:0!important;width:auto!important;height:auto!important;margin:0!important;border-radius:inherit;pointer-events:none;opacity:1!important;transform:none!important;
     background:var(--glass-surface)!important;box-shadow:inset 0 0 12px 2px rgba(255,255,255,.035);
-    /* Liquid glass is clear in the middle: the background shows through untouched.
-       Only the rim (::after below) bends light, so busy wallpapers stay crisp. */
-    -webkit-backdrop-filter:saturate(135%);backdrop-filter:saturate(135%);
+    /* Frosted, vivid glass: a strong blur with extra saturation, so whatever is behind
+       turns into soft colour instead of washing out, tinted with the tile's own hue. */
+    -webkit-backdrop-filter:blur(18px) saturate(185%);backdrop-filter:blur(18px) saturate(185%);
   }
   .tile[data-tileid]::after{
     content:'';display:block!important;position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;opacity:1!important;
-    /* the lensing rim: a ~11px band that refracts and brightens what is behind the edge */
-    padding:11px;box-sizing:border-box;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-    mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
-    -webkit-backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06);backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06);
-    -webkit-backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06) url('#dashboard-glass-refraction');backdrop-filter:blur(1.5px) saturate(160%) brightness(1.06) url('#dashboard-glass-refraction');
-    background:linear-gradient(155deg,rgba(255,255,255,.42),rgba(255,255,255,.06) 30%,rgba(255,255,255,0) 60%,rgba(255,255,255,.16))!important;
-    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 1px 0 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.25),inset -1px 0 0 rgba(255,255,255,.18);
+    /* just a soft top sheen and a hairline inner edge — no rim band */
+    background:linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,0) 38%)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 0 0 1px rgba(255,255,255,.14);
   }
   .tile[data-tileid]:not(.editing):hover{transform:none!important;border-color:rgba(255,255,255,.7)!important;box-shadow:inset 1px 1px 1px rgba(255,255,255,.65),inset -1px -1px 1px rgba(var(--glass-depth),.12),0 12px 28px -14px rgba(var(--glass-depth),.2)!important}
   .tile.completed[data-tileid]{
-    --glass-surface:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,0) 40%),linear-gradient(125deg,rgba(var(--glass-rgb),.46),rgba(var(--glass-rgb),.30));
+    --glass-surface:linear-gradient(140deg,rgba(var(--glass-rgb),.62),rgba(var(--glass-rgb),.48));
     background:transparent!important;
     border-color:rgba(255,255,255,.38)!important;
     box-shadow:inset 1px 1px 1px rgba(255,255,255,.5),inset -1px -1px 1px rgba(var(--glass-depth),.15),0 12px 28px -14px rgba(var(--glass-depth),.23)!important;
   }
-  .tile.completed[data-tileid]::after{background:linear-gradient(155deg,rgba(255,255,255,.34),rgba(255,255,255,.05) 30%,rgba(255,255,255,0) 60%,rgba(255,255,255,.12))!important}
+  .tile.completed[data-tileid]::after{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 38%)!important}
   .tile[data-tileid] .tilehead .ldot{background:currentColor!important;opacity:.65}
   .tile[data-tileid] .tilehead .lbl{color:var(--ink)!important;font-size:13px!important;font-weight:800!important}
   .tile[data-tileid] .content{color:var(--ink)!important;text-shadow:none!important}
@@ -2732,6 +2729,152 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .dailyMeterText{font-size:12px;font-weight:800;letter-spacing:.01em;color:#33424d}
 .dailyMeter.isComplete .dailyMeterDot.on{background:#1f9d6a;border-color:#1f9d6a}
 .dailyMeter.isComplete .dailyMeterText{color:#1f7a55}
+/* --- Weather: illustrated, filling the tile --- */
+.grid>.tile[data-tileid="weather"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="weather"] .tileMount{flex:1 1 auto!important;display:flex!important;padding-top:0!important}
+.grid>.tile[data-tileid="weather"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:block!important;padding:0!important;container-type:inline-size}
+.wxCard{position:relative;width:100%;height:calc(var(--tile-base-rows,2) * var(--dashboard-unit,140px) + (var(--tile-base-rows,2) - 1) * var(--dashboard-gap,14px) - 2 * var(--dashboard-pad,18px) - 12px);min-height:120px;overflow:visible;color:var(--ink)}
+.wxHero{position:absolute;right:-5%;top:50%;transform:translateY(-52%);height:128%;width:auto;max-width:58%;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(30,50,80,.12))}
+.tile .wxNow{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left!important;height:100%;max-width:62%;padding-bottom:30px;box-sizing:border-box}
+.wxTemp{font-weight:900;font-size:clamp(40px,14cqi,72px);line-height:.9;letter-spacing:-.05em;color:var(--accentDark)}
+.wxLabel{margin-top:6px;font-size:clamp(14px,3.6cqi,17px);font-weight:800}
+.wxMeta{margin-top:2px;font-size:12.5px;font-weight:700;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wxTomorrow{position:absolute;left:0;bottom:0;z-index:1;display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 9px;border-radius:99px;background:rgba(255,255,255,.38);font-size:12px;font-weight:800}
+.wxTomorrowLbl{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.wxMini{width:24px;height:24px}
+.wxTomorrowTemps i{font-style:normal;opacity:.6;font-weight:700}
+.tile.completed .wxTemp{color:#fff}
+.tile.completed .wxTomorrow{background:rgba(255,255,255,.22)}
+@container (max-width:300px){.tile .wxNow{justify-content:flex-start;padding-top:2px}.wxTemp{font-size:42px}.wxMeta{display:none}.wxHero{max-width:62%;height:96%}}
+.wxRays{animation:wxSpin 40s linear infinite}
+@keyframes wxSpin{to{transform:rotate(360deg)}}
+.wxRain path{animation:wxDrop 1.4s ease-in infinite}
+@keyframes wxDrop{0%{opacity:0;transform:translateY(-4px)}30%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
+.wxSnow circle{animation:wxFlake 2.6s ease-in-out infinite}
+@keyframes wxFlake{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}100%{opacity:0;transform:translate(3px,8px)}}
+@media(prefers-reduced-motion:reduce){.wxRays,.wxRain path,.wxSnow circle{animation:none}}
+/* --- Language tiles: flag on a pole, main point in a speech bubble --- */
+.langHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.langDe .langHead{justify-content:flex-start;padding-right:30px}
+.langEs .langHead{padding-right:30px}
+.langTitle{font-size:17px!important;font-weight:800!important;line-height:1.2!important;flex:1;min-width:0}
+.langFlag{flex:none;width:40px;height:36px;margin-top:-4px}
+.langBubble{position:relative;padding:11px 14px;border-radius:18px;background:rgba(255,255,255,.7);color:#2a2e40;font-size:13.5px;line-height:1.45;font-weight:600;box-shadow:0 6px 16px -10px rgba(var(--glass-depth),.4);margin:0 0 16px}
+.langBubble::after{content:"";position:absolute;bottom:-9px;width:18px;height:14px;background:inherit;clip-path:polygon(0 0,100% 0,0 100%)}
+.langEs .langBubble{border-bottom-left-radius:6px}
+.langEs .langBubble::after{left:14px}
+.langDe .langBubble{border-bottom-right-radius:6px}
+.langDe .langBubble::after{right:14px;clip-path:polygon(0 0,100% 0,100% 100%)}
+.langEs .langVocab{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:5px}
+.langEs .langWord{display:contents}
+.langEs .langTerm{font-weight:800;font-size:14px;color:var(--accentDark);padding:3px 0;border-bottom:1px solid var(--hair)}
+.langEs .langGloss{font-size:13px;color:var(--dim);text-align:right;padding:3px 0;border-bottom:1px solid var(--hair)}
+.langEs .langWord[hidden]{display:none!important}
+.langEs .langWord[hidden] *{display:none}
+.tile.completed .langBubble{background:rgba(255,255,255,.88)}
+/* --- Knowledge: a watering can spilling the day's field --- */
+.lessonHead{display:grid;grid-template-columns:minmax(0,1fr) 96px;grid-template-rows:auto auto;column-gap:4px;align-items:start;margin-bottom:6px;padding-right:22px}
+.lessonTitle{grid-column:1;grid-row:1;font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
+.waterCan{grid-column:2;grid-row:1/3;width:96px;height:84px;color:var(--accentDark);overflow:visible;margin-top:-6px}
+.lessonField{grid-column:1;grid-row:2;justify-self:end;align-self:end;margin-top:30px;margin-right:-8px;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--waterDrop,#4FA9E8) 16%,rgba(255,255,255,.6));color:var(--accentDark);font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.waterDrops path{animation:waterDrip 1.8s ease-in infinite;transform-box:fill-box}
+.waterDrops path:nth-child(2){animation-delay:.6s}.waterDrops path:nth-child(3){animation-delay:1.2s}
+@keyframes waterDrip{0%{opacity:0;transform:translateY(-6px)}25%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
+@media(prefers-reduced-motion:reduce){.waterDrops path{animation:none}}
+.tile.completed .waterCan{color:#fff}
+.tile.completed .lessonField{background:rgba(255,255,255,.25);color:#fff}
+/* ================= Insights ================= */
+.insights{display:flex;flex-direction:column;gap:var(--dashboard-gap,16px);padding-bottom:40px}
+.insCard{position:relative;border-radius:28px;padding:20px 22px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.insCardHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.insCardHead h2{margin:0;font-size:17px;font-weight:850;letter-spacing:-.01em}
+.insNav{display:flex;align-items:center;gap:6px}
+.insNav>button{width:30px;height:30px;border:none;border-radius:50%;background:rgba(255,255,255,.6);color:var(--c,#1f2a33);font-size:18px;font-weight:800;cursor:pointer;line-height:1}
+.insNav>button:disabled{opacity:.3;cursor:default}
+.insSeg{display:flex;gap:2px;padding:3px;border-radius:99px;background:rgba(255,255,255,.5)}
+.insSeg button{height:26px;padding:0 11px;border:none;border-radius:99px;background:transparent;font:800 11.5px/1 'Nunito',sans-serif;color:#556270;cursor:pointer}
+.insSeg button.on{background:#fff;color:#1f2a33;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.insMuted{font-size:12.5px;font-weight:700;color:#6a7682;margin:0}
+.insSmall{font-size:12px;line-height:1.45;color:#6a7682;margin:8px 0 0}
+.insIcon{width:22px;height:22px}
+/* records */
+.insRecords{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--dashboard-gap,16px)}
+.insRecord{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;align-items:center;padding:18px 20px}
+.insRecord b{grid-row:1;font-size:clamp(26px,3vw,36px);font-weight:900;letter-spacing:-.04em;line-height:1}
+.insRecord .insIcon{grid-column:2;grid-row:1;width:26px;height:26px}
+.insRecord span{grid-column:1/-1;margin-top:6px;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6a7682}
+/* calendar + side */
+.insMain{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:var(--dashboard-gap,16px)}
+.insCalendar{background:linear-gradient(140deg,color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.5)),color-mix(in srgb,var(--c) 14%,rgba(255,255,255,.38)))}
+.insCalendar .insCardHead h2{color:color-mix(in srgb,var(--c) 70%,#1f1235)}
+.insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:6px}
+.insCalWd{text-align:center;font-size:10.5px;font-weight:850;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 55%,#3a3550);padding-bottom:4px}
+.insCalDay{position:relative;display:grid;place-items:center;height:40px}
+.insCalDay svg{position:absolute;width:36px;height:36px;transform:rotate(-90deg)}
+.insCalDay span{position:relative;font-size:12.5px;font-weight:800;color:#2a2440}
+.insCalDay.out{opacity:.35}
+.insCalTrack{fill:none;stroke:color-mix(in srgb,var(--c) 20%,transparent);stroke-width:3.5}
+.insCalArc{fill:none;stroke:var(--c);stroke-width:3.5;stroke-linecap:round}
+.insCalFill{fill:var(--c)}
+.insCalDay.full span{color:#fff}
+.insCalDay.joinL::before,.insCalDay.joinR::after{content:"";position:absolute;top:50%;height:6px;margin-top:-3px;background:var(--c);z-index:0}
+.insCalDay.joinL::before{left:0;right:50%}
+.insCalDay.joinR::after{left:50%;right:0}
+.insCalDay svg,.insCalDay span{z-index:1}
+.insCalDay.today span{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.insCalDay.full.today span{text-decoration:none}
+/* ice */
+.insIce{background:linear-gradient(150deg,color-mix(in srgb,var(--c) 22%,rgba(255,255,255,.55)),rgba(255,255,255,.4))}
+.insIceBig{display:flex;align-items:center;gap:14px;margin:6px 0 10px}
+.insIceBig b{font-size:46px;font-weight:900;letter-spacing:-.04em;color:color-mix(in srgb,var(--c) 70%,#0b2a3a)}
+.insIceCube{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#e9f8ff,#9fdcff 55%,#62c2f5);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),inset -4px -6px 10px rgba(30,120,180,.25),0 8px 18px -8px rgba(30,140,200,.6);transform:rotate(-8deg)}
+/* history table */
+.insTable{display:grid;grid-template-columns:minmax(110px,170px) repeat(var(--cols),minmax(0,1fr));align-items:center;row-gap:8px}
+.insTable.dense{row-gap:6px}
+.insColHead{text-align:center;font-size:11px;font-weight:850;color:#6a7682}
+.insColHead.today{color:#1f2a33;text-decoration:underline;text-underline-offset:3px}
+.insGroup{grid-column:1/-1;margin-top:6px;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8a95a0}
+.insRowLabel{display:flex;align-items:center;gap:7px;min-width:0;font-size:13.5px;font-weight:750}
+.insRowIcon{font-size:16px}
+.insRowName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.insCell{position:relative;display:grid;place-items:center;height:28px}
+.insCell::before{content:"";width:24px;height:24px;border-radius:50%;background:rgba(40,52,64,.10);position:relative;z-index:1;grid-area:1/1}
+.insCell svg,.insCell i{grid-area:1/1;position:relative;z-index:2;width:14px;height:14px;font-style:normal;font-size:12px;color:#fff}
+.insCell.done::before{background:var(--c)}
+.insCell.frozen::before{background:linear-gradient(145deg,#d6f2ff,#7cc9f2)}
+.insCell.pending::before{background:transparent;box-shadow:inset 0 0 0 2.5px var(--c)}
+.insCell.future::before{background:rgba(40,52,64,.05)}
+.insCell.joinL::after,.insCell.joinR::after{content:"";position:absolute;top:50%;height:8px;margin-top:-4px;background:var(--c);z-index:0}
+.insCell.joinL::after{left:0;right:50%}
+.insCell.joinR.joinL::after{left:0;right:0}
+.insCell.joinR:not(.joinL)::after{left:50%;right:0}
+.insCell.frozen.joinL::after,.insCell.frozen.joinR::after{background:#9fd9f7}
+.insTable.dense .insCell{height:18px}
+.insTable.dense .insCell::before{width:12px;height:12px}
+.insTable.dense .insCell.joinL::after,.insTable.dense .insCell.joinR::after{height:4px;margin-top:-2px}
+/* per-section streaks, each in its tile colour */
+.insStreaks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--dashboard-gap,16px)}
+.insStreak{padding:16px 18px;background:linear-gradient(140deg,rgba(var(--glass-rgb),.30),rgba(var(--glass-rgb),.18));color:var(--ink)}
+.insStreakTop{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.insStreakName{font-size:14px;font-weight:850}
+.insStreakNow{display:inline-flex;align-items:center;gap:3px;font-size:24px;font-weight:900;letter-spacing:-.03em;color:var(--accentDark)}
+.insStreakNow .insIcon{width:18px;height:18px;color:var(--accent)}
+.insStreakNow.zero{opacity:.45}
+.insWeek{display:flex;gap:5px;margin:12px 0 10px}
+.insWeek span{flex:1;height:8px;border-radius:99px;background:rgba(var(--glass-rgb),.22)}
+.insWeek span.on{background:var(--accent)}
+.insStreakMeta{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--dim)}
+.insStreakMeta b{color:var(--ink);font-weight:900}
+/* push-ups + small numbers */
+.insPush{background:linear-gradient(140deg,rgba(var(--glass-rgb),.26),rgba(var(--glass-rgb),.14));color:var(--ink)}
+.insPush .pushLine{height:120px}
+.insSide{display:flex;flex-direction:column;gap:var(--dashboard-gap,16px)}
+.insSide .insIce{flex:1}
+.insMini{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.insMini div{display:flex;align-items:baseline;gap:10px}
+.insMini b{font-size:30px;font-weight:900;letter-spacing:-.03em;min-width:48px}
+.insMini span{font-size:12.5px;font-weight:750;color:#6a7682}
+@media(max-width:760px){.insStreaks{grid-template-columns:repeat(2,minmax(0,1fr))}.insStreak{padding:13px 14px}.insStreakMeta span:last-child{display:none}.insRecords{grid-template-columns:repeat(2,minmax(0,1fr))}.insMain{grid-template-columns:1fr}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:12.5px}.insCard{padding:16px}}
 </style>
 </head>
 <body>
@@ -3631,6 +3774,21 @@ function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
+/* Minimal line watering can, tipped forward, its rose dripping onto the category. */
+function WateringCan(){
+  return <svg className="waterCan" viewBox="0 0 100 86" aria-hidden="true">
+    <g transform="rotate(-24 58 40)" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M44 30 h34 l-3 34 a4 4 0 0 1-4 4 h-20 a4 4 0 0 1-4-4 z" fill="color-mix(in srgb,currentColor 14%,transparent)"/>
+      <path d="M78 36 c12 0 14 18 -2 20"/>
+      <path d="M46 52 L18 36"/>
+      <path d="M12 30 l9 2 l-5 9 z" fill="currentColor"/>
+      <path d="M50 30 c0-8 22-8 22 0"/>
+    </g>
+    <g className="waterDrops" fill="var(--waterDrop,#4FA9E8)">
+      <path d="M12 54 q3 5 0 7 q-3-2 0-7z"/><path d="M5 62 q3 5 0 7 q-3-2 0-7z"/><path d="M15 70 q3 5 0 7 q-3-2 0-7z"/>
+    </g>
+  </svg>;
+}
 function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!lesson) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
@@ -3640,30 +3798,62 @@ function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const undo=()=>onUnlearned&&onUnlearned(lesson);
   return (
     <div className="lessonCard readingCard">
-      <div style={{fontSize:16,fontWeight:700,lineHeight:1.2,marginBottom:2}}>{lesson.title}</div>
-      {lesson.category && <span className="lbl">{lesson.category}</span>}
+      {/* knowledge as something you water: the can pours onto today's field */}
+      <div className="lessonHead">
+        <div className="lessonTitle">{lesson.title}</div>
+        <WateringCan/>
+        {lesson.category && <span className="lessonField">{lesson.category}</span>}
+      </div>
       <div className="story cardReadingCopy" style={{marginTop:8}}>{paragraphs.map((p,i)=><p key={i} hidden={!expanded&&i>0}>{p}</p>)}</div>
       {lesson.insight && <div className="insight">💡 {lesson.insight}</div>}
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}</div>
     </div>
   );
 }
+/* Weather art drawn for the tile (no emoji): soft-gradient sun, clouds, rain, snow,
+   storm and fog, combined per WMO code. Gradient ids are scoped per instance. */
+const weatherKind=code=>{ const c=Number(code);
+  if(c===0) return "sun"; if(c===1) return "mostlySun"; if(c===2) return "partly"; if(c===3) return "cloud";
+  if(c===45||c===48) return "fog"; if(c>=95) return "storm";
+  if((c>=71&&c<=77)||c===85||c===86) return "snow"; if(c>=51) return "rain"; return "cloud"; };
+function WeatherArt({code,className}){
+  const id=React.useId().replace(/:/g,"");
+  const kind=weatherKind(code);
+  const sun=(cx,cy,r)=><g className="wxSun"><g className="wxRays" style={{transformOrigin:`${cx}px ${cy}px`}}>{Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return <line key={i} x1={cx+Math.cos(a)*(r+6)} y1={cy+Math.sin(a)*(r+6)} x2={cx+Math.cos(a)*(r+13)} y2={cy+Math.sin(a)*(r+13)} stroke="#FFB52E" strokeWidth="4.5" strokeLinecap="round"/>;})}</g><circle cx={cx} cy={cy} r={r} fill={`url(#${id}s)`}/></g>;
+  const cloud=(x,y,k,dark)=><g transform={`translate(${x} ${y}) scale(${k})`} filter={`url(#${id}sh)`}><g fill={`url(#${id}${dark?"d":"c"})`}><circle cx="34" cy="50" r="15"/><circle cx="52" cy="42" r="20"/><circle cx="70" cy="52" r="13"/><rect x="20" y="50" width="64" height="17" rx="8.5"/></g></g>;
+  const drops=(cls)=><g className={cls}>{[[36,78],[50,82],[64,78]].map(([x,y],i)=><path key={i} d={`M${x} ${y} l-4 9`} stroke="#4C9BE8" strokeWidth="4" strokeLinecap="round" style={{animationDelay:`${i*.25}s`}}/>)}</g>;
+  return <svg className={"wxArt "+(className||"")} viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <radialGradient id={id+"s"} cx="40%" cy="38%" r="70%"><stop offset="0" stopColor="#FFE38A"/><stop offset=".65" stopColor="#FFBE3B"/><stop offset="1" stopColor="#FF9F1C"/></radialGradient>
+      <linearGradient id={id+"c"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFFFFF"/><stop offset="1" stopColor="#DCE6F2"/></linearGradient>
+      <linearGradient id={id+"d"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#A9B6C8"/><stop offset="1" stopColor="#6F7D92"/></linearGradient>
+      <filter id={id+"sh"} x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#24334a" floodOpacity=".18"/></filter>
+    </defs>
+    {kind==="sun"&&sun(50,50,20)}
+    {kind==="mostlySun"&&<>{sun(46,44,19)}{cloud(30,22,.62)}</>}
+    {kind==="partly"&&<>{sun(40,38,17)}{cloud(8,12,.95)}</>}
+    {kind==="cloud"&&<>{cloud(-6,-4,1.12)}</>}
+    {kind==="rain"&&<>{cloud(-2,-12,1.05)}{drops("wxRain")}</>}
+    {kind==="snow"&&<>{cloud(-2,-12,1.05)}<g className="wxSnow" fill="#fff" stroke="#BCD3EC" strokeWidth="1">{[[36,80],[52,86],[66,79]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="3.6" style={{animationDelay:`${i*.4}s`}}/>)}</g></>}
+    {kind==="storm"&&<>{cloud(-2,-12,1.05,true)}<path d="M54 64 L44 80 h9 l-6 14 l16-20 h-9 l6-10z" fill="#FFC93C" stroke="#F0A202" strokeWidth="1" strokeLinejoin="round"/></>}
+    {kind==="fog"&&<g className="wxFog" stroke="#C9D5E3" strokeWidth="6" strokeLinecap="round">{[[22,42,78],[14,56,66],[28,70,86]].map(([x1,y,x2],i)=><line key={i} x1={x1} y1={y} x2={x2} y2={y} opacity={.95-i*.15}/>)}</g>}
+  </svg>;
+}
 function WeatherCard({data,busy,onGenerate}){
   if(busy && !data) return <Note>Checking local skies…</Note>;
   if(!data) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
-  const [label,emoji]=WMO[data.code]||["—","🌡️"];
+  const [label]=WMO[data.code]||["—"];
   const t=data.tomorrow;
-  const [tlab,temoji]=t?(WMO[t.code]||["—","🌡️"]):["",""];
+  const [tlab]=t?(WMO[t.code]||["—"]):[""];
   return (
-    <div className="weatherSplit">
-      <div className="weatherNow">
-        <span className="weatherEmoji">{emoji}</span>
-        <div>
-          <div className="weatherReading"><span className="wbig">{data.temp}°</span><span className="muted weatherLabel">{label}</span></div>
-          <div className="muted weatherMeta">{data.place||"Local"} · H {data.hi}° · L {data.lo}°</div>
-        </div>
+    <div className="wxCard">
+      <WeatherArt code={data.code} className="wxHero"/>
+      <div className="wxNow">
+        <div className="wxTemp">{data.temp}°</div>
+        <div className="wxLabel">{label}</div>
+        <div className="wxMeta">{data.place||"Local"} · H {data.hi}° L {data.lo}°</div>
       </div>
-      {t && <div className="wtomorrow"><span className="lbl">Tomorrow</span><span className="weatherTomorrowEmoji">{temoji}</span><span className="weatherTomorrowTemps">H {t.hi}° · L {t.lo}°</span><span className="muted weatherTomorrowLabel">{tlab}</span></div>}
+      {t&&<div className="wxTomorrow" title={`Tomorrow: ${tlab}`}><span className="wxTomorrowLbl">Tomorrow</span><WeatherArt code={t.code} className="wxMini"/><span className="wxTomorrowTemps">{t.hi}° <i>{t.lo}°</i></span></div>}
     </div>
   );
 }
@@ -3683,7 +3873,7 @@ const CURATED_TILE_LAYOUT={
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,3],phone:[2,2],family:"large"},
   word:{desktop:[2,2],phone:[2,1],family:"wide"},
-  music:{desktop:[2,2],phone:[2,1],family:"wide"},
+  music:{desktop:[4,2],phone:[2,1],family:"wide"},
   spanish:{desktop:[4,3],phone:[2,2],family:"large"},
   german:{desktop:[4,3],phone:[2,2],family:"large"},
   movie:{desktop:[2,2],phone:[2,1],family:"wide"},
@@ -3822,7 +4012,7 @@ function DashboardModal({label,onClose,overlayClassName="",className="ovlcard",a
     <Card ref={cardRef} className={className} role="dialog" aria-modal="true" aria-label={label} tabIndex={-1} onClick={event=>event.stopPropagation()} onSubmit={onSubmit}>{children}</Card>
   </div>,document.body);
 }
-const DASHBOARD_ROUTES=["dashboard","library","settings"];
+const DASHBOARD_ROUTES=["dashboard","insights","library","settings"];
 const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");return DASHBOARD_ROUTES.includes(route)?route:"dashboard";};
 
 /* TILE_INTERACTION_CONTRACT_START */
@@ -4050,7 +4240,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const notify=(message,action=null,actionLabel="Undo")=>setNotice({message,action,actionLabel});
   useEffect(()=>{const show=event=>{const issue=dailyIssueInfo(event.detail?.key||"answers","storage_error");showLoadProblems([{...issue,actionType:"none",action:null}]);};window.addEventListener("dashboard-storage-error",show);return()=>window.removeEventListener("dashboard-storage-error",show);},[]);
   useEffect(()=>{if(!notice)return;const timer=setTimeout(()=>setNotice(null),6500);return()=>clearTimeout(timer);},[notice]);
-  useEffect(()=>{document.title=page==="dashboard"?"Today":page==="library"?"Library":"Settings";},[page]);
+  useEffect(()=>{document.title=page==="dashboard"?"Today":page==="insights"?"Insights":page==="library"?"Library":"Settings";},[page]);
   /* Woven white becomes the default; anyone still on the old default grey moves to it once.
      A deliberate later choice (including going back to grey) is never overridden. */
   const [backgroundTheme,setBackgroundTheme]=useState(()=>{ const stored=load("backgroundTheme",null); if(!load("weaveIntroduced",false)){ save("weaveIntroduced",true); if(stored===null||stored==="neutral"){ save("backgroundTheme","weave"); return "weave"; } } return stored||"weave"; });
@@ -4929,6 +5119,37 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const pushTotal14=push14.reduce((a,b)=>a+b,0); const pushAvg14=Math.round(pushTotal14/14);
   let goalsHit7=0; for(let i=0;i<7;i++){ (goalsLog[addDays(todayKey,-i)]||[]).forEach(g=>{ if(g.done) goalsHit7++; }); }
   const learned7=recallList.filter(f=>f.addedOn>=addDays(todayKey,-6)).length;
+  /* ---- Insights: every number derives from the same logs the tiles write ---- */
+  const dayCompletion=k=>{
+    if(k>todayKey) return null;
+    const active=activeForDay(k);
+    const r=ritualScoreIds.filter(id=>active.has(id)&&!(id==="spanish"&&k<spanishSince));
+    const h=active.has("habits")?habits:[], g=active.has("goals")?(goalsLog[k]||[]):[];
+    const total=r.length+h.length+g.length; if(!total) return null;
+    const done=r.filter(id=>ritualDoneOn(k,id)).length+h.filter(x=>habitLog[k]&&habitLog[k][x.id]).length+g.filter(x=>x.done).length;
+    return done/total;
+  };
+  const firstDay=[...appDays].sort()[0]||todayKey;
+  /* strict streak: today may still be pending, but any earlier missed day resets to 0 */
+  const strictStreak=done=>{ let n=0; for(let d=done(todayKey)?0:1; d<400; d++){ if(done(addDays(todayKey,-d))) n++; else break; } return n; };
+  const bestStreak=done=>{ let best=0,run=0; for(let d=365; d>=0; d--){ const k=addDays(todayKey,-d); if(k<firstDay){ continue; } if(done(k)){ run++; best=Math.max(best,run); } else run=0; } return best; };
+  const insightSections=page!=="insights"?[]:(()=>{
+    const defs=[
+      ["goals","Goals",k=>(goalsLog[k]||[]).length>0&&(goalsLog[k]||[]).every(g=>g.done)],
+      ["habits","Habits",k=>habits.length>0&&habits.every(h=>habitLog[k]&&habitLog[k][h.id])],
+      ["pushups","Push-ups",k=>(pushLog[k]||0)>0],
+      ...ritualScoreIds.map(id=>[id,DAILY_TILE_LABELS[id]||({breathing:"Breathe",note:"Note",recall:"Recall"})[id]||id,id==="note"?(k=>!!String(notes[k]||"").trim()):(k=>ritualDoneOn(k,id))])
+    ];
+    return defs.map(([id,label,done])=>{
+      let total=0,last30=0,span=0; for(let d=0; d<365; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; if(done(k)){ total++; if(d<30) last30++; } if(d<30) span++; }
+      const week=Array.from({length:7},(_,i)=>done(addDays(todayKey,i-6)));
+      return {id,label,done,current:strictStreak(done),best:bestStreak(done),total,rate:span?Math.round(last30/span*100):0,week,active:activeNow.has(id)};
+    }).filter(x=>x.active||x.total>0);
+  })();
+  const insightOverall=page!=="insights"?null:(()=>{
+    let sum=0,n=0; for(let d=0; d<30; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; const c=dayCompletion(k); if(c!=null){ sum+=c; n++; } }
+    return { current:strictStreak(isPerfectDay), best:bestStreak(isPerfectDay), perfect:ice.perfect, rate:n?Math.round(sum/n*100):0 };
+  })();
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
   const sz=id=>curatedTileSize(id,cols);
   const T=(id,label,done,topright,children,onTap)=>{
@@ -5088,11 +5309,12 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <nav className="topbar" aria-label="Primary navigation">
         <div className="topnav">
           <button className={"navbtn"+(page==="dashboard"?" active":"")} aria-current={page==="dashboard"?"page":undefined} onClick={()=>openPage("dashboard")}>Today</button>
+          <button className={"navbtn"+(page==="insights"?" active":"")} aria-current={page==="insights"?"page":undefined} onClick={()=>openPage("insights")}>Insights</button>
           <button className={"navbtn"+(page==="library"?" active":"")} aria-current={page==="library"?"page":undefined} onClick={()=>openPage("library")}>Library</button>
           <button className={"navbtn"+(page==="settings"?" active":"")} aria-current={page==="settings"?"page":undefined} onClick={()=>openPage("settings")}>Settings</button>
         </div>
         <div className="topActions">
-          {page!=="settings"&&<button className="actionBtn primary" aria-label={refreshPlan.label} title={refreshPlan.detail} onClick={generateToday} disabled={genBusy||expectedGenKeys.length===0}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1"/></svg><span>{refreshPlan.label}</span></button>}
+          {page!=="settings"&&page!=="insights"&&<button className="actionBtn primary" aria-label={refreshPlan.label} title={refreshPlan.detail} onClick={generateToday} disabled={genBusy||expectedGenKeys.length===0}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3a7 7 0 0 0 11.6-1"/></svg><span>{refreshPlan.label}</span></button>}
           {page==="dashboard"&&<button className={"actionBtn"+(edit?" active":"")} title={edit?"Finish arranging":"Arrange dashboard"} aria-label={edit?"Finish arranging":"Arrange dashboard"} aria-pressed={edit} onClick={()=>setEdit(a=>!a)}><AppIcon name={edit?"check":"layout"}/><span>{edit?"Done":"Arrange"}</span></button>}
         </div>
       </nav>
@@ -5101,8 +5323,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <header className="dashboardHero">
         <div className="heroCopy">
           {page==="dashboard"&&<div className="heroEyebrow">{displayDateLabel}</div>}
-          <h1>{page==="library"?"Library":page==="settings"?"Settings":`${greeting}, ${profileName}`}</h1>
-          <p className="heroStatus">{page==="library"?"Choose what appears on Today.":page==="settings"?"Your profile, preferences and connections.":genBusy?"Loading missing tiles. Saved content stays put.":litTotal?`${litDone} of ${litTotal} daily actions complete.`:"Choose a few tiles to start your day."}</p>
+          <h1>{page==="library"?"Library":page==="settings"?"Settings":page==="insights"?"Insights":`${greeting}, ${profileName}`}</h1>
+          <p className="heroStatus">{page==="insights"?"Streaks, history and records across every tile.":page==="library"?"Choose what appears on Today.":page==="settings"?"Your profile, preferences and connections.":genBusy?"Loading missing tiles. Saved content stays put.":litTotal?`${litDone} of ${litTotal} daily actions complete.`:"Choose a few tiles to start your day."}</p>
           {lateNight&&page==="dashboard"&&<div className="bedtime">Past midnight. Today rolls over at 1am.</div>}
         </div>
         <div className="heroSummary" aria-label="Daily summary">
@@ -5117,6 +5339,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         <span className="dailyMeterText">{contentReady?"All in":`${readyGenCount} of ${expectedGenKeys.length} in`}</span>
       </div>}
 
+      {page==="insights"&&<InsightsPage overall={insightOverall} sections={insightSections} habits={habits} habitLog={habitLog} freezes={freezes} ice={ice} icesSpent={icesSpent} dayCompletion={dayCompletion} firstDay={firstDay} push14={push14} pushTotal14={pushTotal14} pushAvg14={pushAvg14} goalsHit7={goalsHit7} learned7={learned7} recallTotal={recallList.length} />}
       {page==="settings"&&(
         <div className="settings">
           <div className="settingsGrid">
@@ -5194,7 +5417,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
 
       {page==="dashboard" && edit && <div className="edithint">Drag the handle to move a tile, or use its arrow keys. Sizes are fitted to the content.</div>}
 
-      {page==="settings" ? null : page==="library" ? (
+      {page==="settings"||page==="insights" ? null : page==="library" ? (
         <div className="libraryShelves">
           <div className="libraryTools">
             <div className="librarySearchRow">
@@ -5347,6 +5570,18 @@ function NoteCard({saved,onSave,onView}){
     </div>
   );
 }
+/* A small flag on a pole, gently waving, marking a language tile. */
+function LangFlag({lang}){
+  const id=React.useId().replace(/:/g,"");
+  const bands=lang==="de"?[["#1d1d1f",0,1],["#DD0000",1,1],["#FFCE00",2,1]]:[["#AA151B",0,1],["#F1BF00",1,2],["#AA151B",3,1]];
+  const total=bands.reduce((n,b)=>n+b[2],0);
+  return <svg className="langFlag" viewBox="0 0 44 40" aria-label={lang==="de"?"German":"Spanish"} role="img">
+    <defs><clipPath id={id}><path d="M8 5 C16 2 22 8 30 5 C35 3.4 38 4 41 5 L41 25 C38 24 35 23.4 30 25 C22 28 16 22 8 25 Z"/></clipPath>
+      <linearGradient id={id+"g"} x1="0" x2="1"><stop offset="0" stopColor="#fff" stopOpacity=".18"/><stop offset=".5" stopColor="#000" stopOpacity=".08"/><stop offset="1" stopColor="#fff" stopOpacity=".14"/></linearGradient></defs>
+    <line x1="7" y1="3" x2="7" y2="39" stroke="#6b5a4a" strokeWidth="2.4" strokeLinecap="round"/>
+    <g clipPath={`url(#${id})`}>{(()=>{let y=2;return bands.map(([c,,h],i)=>{const hh=h/total*26;const r=<rect key={i} x="7" y={y} width="36" height={hh+.4} fill={c}/>;y+=hh;return r;});})()}<rect x="7" y="2" width="36" height="26" fill={`url(#${id}g)`}/></g>
+  </svg>;
+}
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!sp)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
@@ -5354,13 +5589,12 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(sp);};
   const undo=index=>onUnlearned&&onUnlearned(sp);
   return (
-    <div className="spanishCard readingCard">
-      <div className="cardContentTitle" style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{sp.tema}</div>
-      {sp.punto && <div className="insight" style={{marginTop:8}}>{sp.punto}</div>}
-      {(sp.vocab||[]).length>0 && <div className="spanishVocabulary" style={{margin:"2px 0 4px"}}>
-        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="trow" style={{padding:"5px 0"}}>
-          <span style={{fontWeight:700,fontSize:14}}>{v.es}</span>
-          <span className="muted" style={{fontSize:13,marginLeft:"auto"}}>{v.en}</span>
+    <div className="langCard langEs readingCard">
+      <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div><LangFlag lang="es"/></div>
+      {sp.punto && <div className="langBubble">{sp.punto}</div>}
+      {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
+        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord">
+          <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
         </div>))}
       </div>}
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
@@ -5376,12 +5610,12 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
   return (
-    <div className="germanCard readingCard">
-      <div className="cardContentTitle" style={{fontSize:16,fontWeight:700,lineHeight:1.2}}>{de.thema}</div>
-      {de.punkt && <div className="insight" style={{marginTop:8}}>{de.punkt}</div>}
-      {(de.vocab||[]).length>0 && <div className="germanVocabulary" style={{margin:"2px 0 4px"}}>
-        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="deRow">
-          <div className="deWords"><span className="deTerm">{v.de}</span><span className="deFr">{v.fr}</span></div>
+    <div className="langCard langDe readingCard">
+      <div className="langHead"><LangFlag lang="de"/><div className="cardContentTitle langTitle">{de.thema}</div></div>
+      {de.punkt && <div className="langBubble">{de.punkt}</div>}
+      {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
+        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord deRow">
+          <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
           {v.pron && <span className="dePron">{v.pron}</span>}
         </div>))}
       </div>}
@@ -5765,6 +5999,117 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
     </div>
   );
 }
+/* ================= Insights page =================
+   Records, a month of completion rings, a habit + tile history table and per-section
+   streak cards. Every section keeps its tile colour. */
+const INS_ICONS={
+  flame:<path d="M12 2.8c3.1 3.7 5.2 6.3 5.2 9.7a5.2 5.2 0 0 1-10.4 0c0-1.8.8-3.1 1.9-4.2.2 1.4 1.2 2.1 1.2 2.1 0-2.6 1-4.8 2.1-7.6Z"/>,
+  medal:<><circle cx="12" cy="14.5" r="5.5"/><path d="M8.5 9.6 6 3h4l2 4 2-4h4l-2.5 6.6"/></>,
+  list:<><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1.2 1.2L7 5M3.5 12l1.2 1.2L7 11"/></>,
+  flag:<><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></>
+};
+const InsIcon=({name,color})=><svg className="insIcon" viewBox="0 0 24 24" style={{color}} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{INS_ICONS[name]}</svg>;
+const WEEKDAY_LETTERS=["M","T","W","T","F","S","S"];
+const weekdayIndex=key=>{ const [y,m,d]=key.split("-").map(Number); return (new Date(y,m-1,d).getDay()+6)%7; };
+const mondayOf=key=>{ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); const off=(dt.getDay()+6)%7; return addDays(key,-off); };
+const shortDate=key=>{ const [y,m,d]=key.split("-").map(Number); return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric"}).format(new Date(y,m-1,d)); };
+
+function CompletionCalendar({dayCompletion,firstDay}){
+  const [offset,setOffset]=useState(0);
+  const [ty,tm]=todayKey.split("-").map(Number);
+  const first=new Date(ty,tm-1+offset,1);
+  const monthLabel=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(first);
+  const start=mondayOf(dateKey(first));
+  const days=Array.from({length:42},(_,i)=>addDays(start,i));
+  const inMonth=k=>Number(k.split("-")[1])===first.getMonth()+1;
+  const pct=k=>k<firstDay?null:dayCompletion(k);
+  const full=k=>{ const p=pct(k); return p!=null&&p>=1; };
+  const R=13, C=2*Math.PI*R;
+  return <section className="insCard insCalendar" style={{"--c":"#8B5CF6"}}>
+    <header className="insCardHead"><h2>{monthLabel}</h2><div className="insNav"><button type="button" aria-label="Previous month" onClick={()=>setOffset(o=>o-1)}>‹</button><button type="button" aria-label="Next month" disabled={offset>=0} onClick={()=>setOffset(o=>Math.min(0,o+1))}>›</button></div></header>
+    <div className="insCalGrid">
+      {WEEKDAY_LETTERS.map((d,i)=><span key={"h"+i} className="insCalWd">{d}</span>)}
+      {days.map((k,i)=>{ const p=pct(k), f=full(k), col=i%7;
+        const joinL=f&&col>0&&full(days[i-1]), joinR=f&&col<6&&full(days[i+1]);
+        return <div key={k} className={"insCalDay"+(inMonth(k)?"":" out")+(k===todayKey?" today":"")+(f?" full":"")+(joinL?" joinL":"")+(joinR?" joinR":"")} title={p==null?shortDate(k):`${shortDate(k)} · ${Math.round(p*100)}%`}>
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            {f?<circle cx="16" cy="16" r={R+1.5} className="insCalFill"/>:<>
+              <circle cx="16" cy="16" r={R} className="insCalTrack"/>
+              {p>0&&<circle cx="16" cy="16" r={R} className="insCalArc" style={{strokeDasharray:`${C*p} ${C}`}}/>}
+            </>}
+          </svg>
+          <span>{Number(k.split("-")[2])}</span>
+        </div>; })}
+    </div>
+  </section>;
+}
+
+function HistoryTable({rows}){
+  const [range,setRange]=useState(7);
+  const [weeks,setWeeks]=useState(0);
+  const end=range===7?addDays(mondayOf(todayKey),6+7*weeks):addDays(todayKey,28*weeks);
+  const days=Array.from({length:range},(_,i)=>addDays(end,i-range+1));
+  const title=`${shortDate(days[0])} – ${shortDate(days[days.length-1])}`;
+  return <section className="insCard insHistory">
+    <header className="insCardHead"><h2>{title}</h2>
+      <div className="insNav"><div className="insSeg"><button type="button" className={range===7?"on":""} onClick={()=>{setRange(7);setWeeks(0);}}>Week</button><button type="button" className={range===28?"on":""} onClick={()=>{setRange(28);setWeeks(0);}}>4 weeks</button></div>
+        <button type="button" aria-label="Earlier" onClick={()=>setWeeks(w=>w-1)}>‹</button><button type="button" aria-label="Later" disabled={weeks>=0} onClick={()=>setWeeks(w=>Math.min(0,w+1))}>›</button></div>
+    </header>
+    <div className={"insTable"+(range===28?" dense":"")} style={{"--cols":range}}>
+      <span/>{days.map(k=><span key={k} className={"insColHead"+(k===todayKey?" today":"")}>{range===7?WEEKDAY_LETTERS[weekdayIndex(k)]:(weekdayIndex(k)===0||k===todayKey?Number(k.split("-")[2]):"")}</span>)}
+      {rows.map(r=><React.Fragment key={r.key}>
+        {r.group&&<div className="insGroup">{r.group}</div>}
+        <div className="insRowLabel" title={r.label}>{r.icon&&<span className="insRowIcon">{r.icon}</span>}<span className="insRowName">{r.label}</span></div>
+        {days.map((k,i)=>{ const st=k>todayKey?"future":r.done(k)?"done":r.frozen&&r.frozen(k)?"frozen":k===todayKey?"pending":"missed";
+          const linked=d=>d&&d<=todayKey&&(r.done(d)||(r.frozen&&r.frozen(d)));
+          const joinL=(st==="done"||st==="frozen")&&i>0&&linked(days[i-1]), joinR=(st==="done"||st==="frozen")&&i<days.length-1&&linked(days[i+1]);
+          return <span key={k} className={"insCell "+st+(joinL?" joinL":"")+(joinR?" joinR":"")} style={{"--c":r.color}} title={`${r.label} · ${shortDate(k)}: ${st==="done"?"done":st==="frozen"?"covered with ice":st==="pending"?"not yet":st==="future"?"":"missed"}`}>
+            {range===7&&st==="done"&&<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4.5 8.3 2.3 2.2 4.7-5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+            {range===7&&st==="frozen"&&<i aria-hidden="true">❄</i>}
+          </span>; })}
+      </React.Fragment>)}
+    </div>
+  </section>;
+}
+
+function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,dayCompletion,firstDay,push14,pushTotal14,pushAvg14,goalsHit7,learned7,recallTotal}){
+  if(!overall) return null;
+  const rows=[
+    ...habits.map((h,i)=>{ const {icon,label}=splitHabit(h); return {key:"h"+h.id,group:i===0?"Habits":null,icon,label:label||h.name,color:HABIT_STREAK_COLORS[i%HABIT_STREAK_COLORS.length],done:k=>!!(habitLog[k]&&habitLog[k][h.id]),frozen:k=>(freezes[h.id]||[]).includes(k)}; }),
+    ...sections.filter(x=>x.id!=="habits").map((x,i)=>({key:"s"+x.id,group:i===0?"Tiles":null,label:x.label,color:(COL[x.id]||{}).v||"#7B8190",done:x.done}))
+  ];
+  const records=[["flame","#FF8A3D",overall.current,"Current streak"],["medal","#C04CF0",overall.best,"Best streak"],["list","#F0507A",overall.perfect,"Perfect days"],["flag","#22B573",overall.rate+"%","30-day success"]];
+  return <div className="insights">
+    <section className="insRecords">{records.map(([icon,color,v,l])=><div key={l} className="insCard insRecord"><InsIcon name={icon} color={color}/><b>{v}</b><span>{l}</span></div>)}</section>
+    <div className="insMain">
+      <CompletionCalendar dayCompletion={dayCompletion} firstDay={firstDay}/>
+<div className="insSide">
+      <section className="insCard insIce" style={{"--c":"#38BDF8"}}>
+        <header className="insCardHead"><h2>Ice</h2></header>
+        <div className="insIceBig"><span className="insIceCube" aria-hidden="true"/><b>{ice.available}</b></div>
+        <p className="insMuted">{ice.perfect} earned · {icesSpent} used</p>
+        <p className="insSmall">Every 100% day earns one. Use it to cover a missed habit day without losing the streak.</p>
+      </section>
+        <section className="insCard insMini">
+        <div><b style={{color:(COL.goals||{}).v}}>{goalsHit7}</b><span>goals done · 7 days</span></div>
+        <div><b style={{color:(COL.recall||{}).v}}>{learned7}</b><span>cards learned · 7 days</span></div>
+        <div><b style={{color:(COL.recall||{}).v}}>{recallTotal}</b><span>cards in recall</span></div>
+      </section>
+      </div>
+    </div>
+    <HistoryTable rows={rows}/>
+    <section className="insStreaks">{sections.map(x=><div key={x.id} className="insCard insStreak" style={themeVars(x.id,false)}>
+      <div className="insStreakTop"><span className="insStreakName">{x.label}</span><span className={"insStreakNow"+(x.current?"":" zero")}><InsIcon name="flame" color="currentColor"/>{x.current}</span></div>
+      <div className="insWeek" aria-label="Last 7 days">{x.week.map((d,i)=><span key={i} className={d?"on":""}/>)}</div>
+      <div className="insStreakMeta"><span>Best <b>{x.best}</b></span><span>30d <b>{x.rate}%</b></span><span>Total <b>{x.total}</b></span></div>
+    </div>)}</section>
+    <section className="insCard insPush" style={themeVars("pushups",false)}>
+      <header className="insCardHead"><h2>Push-ups · 14 days</h2><span className="insMuted"><b>{pushTotal14}</b> total · ~{pushAvg14}/day</span></header>
+      <PushBars values={push14}/>
+    </section>
+  </div>;
+}
+
 function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone}){
   const [showAdd,setShowAdd]=useState(false);
   const [selectedDate,setSelectedDate]=useState("");
