@@ -2162,7 +2162,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .grid>.curatedTile[data-expandable][data-tileid="agenda"] button.miniCalToday{margin-right:44px!important}
 .grid>.curatedTile[data-expandable][data-tileid="people"] .addrow .addbtn{margin-right:42px}
 .grid>.curatedTile[data-expandable][data-tileid="weekly"] .wrevTitle{padding-right:48px}
-.grid>.curatedTile[data-expandable][data-tileid="shopping"] .shoppingPicked{padding-right:36px}
 .grid>.curatedTile[data-expandable][data-tileid="goals"] .goalDay:first-child{padding-right:34px}
 .tileFootMinimal{min-height:0!important;margin:0!important}
 .curatedTile .timerDial[role="button"]{cursor:pointer}.curatedTile .timerDial[role="button"]:focus-visible{outline:2px solid currentColor;outline-offset:3px;border-radius:18px}
@@ -2607,6 +2606,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 /* --- Brainflex: a decorative cog half-buried in the lower corner, slowly turning --- */
 /* anchored to the tile itself, so the cog is cropped by the tile's lower-right edge */
 .brainFlexCard>*{position:relative;z-index:1}
+/* previews clamp long copy to whole lines; the pop-up (or the chat for Philosophy) has the rest */
+.grid>.tile[data-tileid="brainflex"] .brainPrompt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden;max-height:16em}
+.grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden;max-height:17em}
+.grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-height:4em}
+.grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden;max-height:10em}
 .brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
 @keyframes gearTurn{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.brainFlexCard .brainGearArt{animation:none}}
@@ -3655,7 +3659,7 @@ const CURATED_TILE_LAYOUT={
   note:{desktop:[4,1],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
-  worth:{desktop:[4,3],phone:[2,2],family:"large"},
+  worth:{desktop:[4,4],phone:[2,2],family:"large"},
   word:{desktop:[2,2],phone:[2,1],family:"wide"},
   music:{desktop:[4,2],phone:[2,1],family:"wide"},
   spanish:{desktop:[4,4],phone:[2,2],family:"large"},
@@ -3667,7 +3671,7 @@ const CURATED_TILE_LAYOUT={
   weekly:{desktop:[4,3],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
-  brainflex:{desktop:[4,2],phone:[2,2],family:"wide"},
+  brainflex:{desktop:[4,3],phone:[2,2],family:"wide"},
   academic:{desktop:[4,3],phone:[2,2],family:"large"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"}
