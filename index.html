@@ -2266,7 +2266,7 @@ a.musicDisc,.tile a.musicDisc{display:block;flex:none;width:clamp(104px,52cqi,16
 a.musicDisc:hover{transform:scale(1.04)}
 a.musicDisc:active{transform:scale(.97)}
 .vinyl{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 10px 18px rgba(10,8,6,.3))}
-.vinyl .vinylSpin{transform-origin:50px 50px;animation:vinylSpin 11s linear infinite}
+.vinyl .vinylSpin{transform-origin:50px 50px;transform-box:view-box;animation:vinylSpin 6.5s linear infinite}
 a.musicDisc.matching .vinylSpin{animation-duration:2.6s}
 @keyframes vinylSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.vinyl .vinylSpin{animation:none}}
@@ -2351,7 +2351,7 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 
 /* --- Movies: a strip of film running diagonally across the whole tile --- */
 .movieCard{display:flex;flex-direction:column;flex:1;min-height:0;gap:10px}
-.grid>.tile[data-tileid="movie"] .movieStrip{position:absolute;left:-26px;right:-26px;top:50%;transform:translateY(-50%) rotate(-8deg);border-radius:0;min-height:96px;box-shadow:0 10px 24px -14px rgba(10,4,6,.55)}
+.grid>.tile[data-tileid="movie"] .movieStrip{position:absolute;left:-18%;right:-18%;top:50%;transform:translateY(-50%) rotate(-8deg);border-radius:0;min-height:96px;box-shadow:0 10px 24px -14px rgba(10,4,6,.55)}
 .movieStrip{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:84px;border-radius:14px;background:linear-gradient(165deg,color-mix(in srgb,var(--accentDark) 82%,#000),color-mix(in srgb,var(--accentDark) 55%,#000));padding:8px 10px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 22px -14px color-mix(in srgb,var(--accentDark) 80%,#000)}
 .movieSprockets{display:block;height:7px;flex:none;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.75) 6px 14px,transparent 14px 20px);border-radius:2px}
 .movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
@@ -2469,7 +2469,7 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
   transform:scale(var(--breath-scale,.8));transition:transform .1s linear}
 .tile button.breathCore:hover{transform:scale(calc(var(--breath-scale,.8) * 1.03))!important;border:none!important;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--accent) 40%,white),var(--accent) 58%,var(--accentDark))!important}
 .breathDial.isIdle .breathCore{animation:breathIdle 4.5s ease-in-out infinite}
-.breathPlay{width:36%;height:36%;margin-left:7%;color:rgba(255,255,255,.92);filter:drop-shadow(0 3px 7px rgba(0,0,0,.18))}
+.breathPlay{width:30%;height:30%;margin-left:5%;color:rgba(255,255,255,.85);filter:drop-shadow(0 2px 5px rgba(0,0,0,.14))}
 .breathDial.isDone .breathPlay{opacity:.55}
 .tile button.breathCore{display:grid;place-items:center}
 @keyframes breathIdle{0%,100%{transform:scale(.74)}50%{transform:scale(.84)}}
@@ -2489,16 +2489,16 @@ button.breathCore:focus-visible{outline:2px solid var(--accentDark);outline-offs
 /* centre via the mount; .content keeps its natural height because the tile measures it */
 .grid>.tile[data-tileid="habits"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
 .grid>.tile[data-tileid="habits"] .tileMount>.content{flex:0 0 auto!important;width:100%;height:auto!important;display:flex!important;justify-content:center!important;padding:0!important}
-.tile[data-tileid] .habitBoard.hgrid{display:flex!important;flex-wrap:wrap;align-items:flex-start!important;justify-content:center!important;align-content:center!important;gap:clamp(8px,1vw,14px)!important;width:100%;grid-template-columns:none!important}
+.tile[data-tileid] .habitBoard.hgrid{display:flex!important;flex-wrap:wrap;align-items:flex-start!important;justify-content:center!important;align-content:center!important;gap:clamp(10px,1.2vw,16px)!important;width:100%;grid-template-columns:none!important}
 .tile[data-tileid] .habitBoard .habitControl{position:relative;flex:none!important;display:flex;flex-direction:column;align-items:center;gap:6px;width:auto!important}
-.tile[data-tileid="habits"] .habitBoard .hsq,.tileFocusSurface .habitBoard .hsq{width:clamp(46px,calc(var(--dashboard-unit,90px) * .66),78px)!important;height:auto!important;aspect-ratio:1!important;min-height:0!important;border-radius:50%!important;padding:0!important}
-.tile[data-tileid="habits"] .habitBoard .hsq.emojiOnly .hicon,.tileFocusSurface .habitBoard .hsq.emojiOnly .hicon{font-size:clamp(22px,calc(var(--dashboard-unit,90px) * .28),36px)!important;line-height:1}
+.tile[data-tileid="habits"] .habitBoard .hsq,.tileFocusSurface .habitBoard .hsq{width:clamp(54px,calc(var(--dashboard-unit,90px) * .82),96px)!important;height:auto!important;aspect-ratio:1!important;min-height:0!important;border-radius:50%!important;padding:0!important}
+.tile[data-tileid="habits"] .habitBoard .hsq.emojiOnly .hicon,.tileFocusSurface .habitBoard .hsq.emojiOnly .hicon{font-size:clamp(25px,calc(var(--dashboard-unit,90px) * .35),44px)!important;line-height:1}
 .habitBoard .hdel{position:static!important;opacity:1!important}
 .habitEditRow{display:flex;align-items:center;gap:4px;max-width:120px}
 .habitEditRow[hidden]{display:none!important}
 .habitEditName{font-size:12px;font-weight:750;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .habitAddSlot[hidden]{display:none!important}
-.habitAddSlot .hsq.plus{width:clamp(46px,calc(var(--dashboard-unit,90px) * .66),78px)!important;height:auto!important;aspect-ratio:1;border-radius:50%!important;border-style:dashed!important}
+.habitAddSlot .hsq.plus{width:clamp(54px,calc(var(--dashboard-unit,90px) * .82),96px)!important;height:auto!important;aspect-ratio:1;border-radius:50%!important;border-style:dashed!important}
 /* --- Push-ups: a leaning pile of weight plates sized by value --- */
 .grid>.tile[data-tileid="pushups"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="pushups"] .tileMount{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;padding-top:0!important}
@@ -2575,6 +2575,10 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 /* --- Reminders: compact rows, visible due state, uniform form controls --- */
 .grid>.tile[data-tileid="agenda"] .tileMount>.content{padding-bottom:0!important}
 .grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:0!important;padding-top:30px}
+/* preview shows whole rows only; the rest lives in the pop-up (like the newspaper) */
+.grid>.tile[data-tileid="agenda"] .agendaItems .taskRow:nth-of-type(n+4){display:none}
+.grid>.tile[data-tileid="shopping"] .shoppingPicked .shopChip:nth-of-type(n+8){display:none}
+.grid>.tile[data-tileid="goals"] .goalDay .goalRow:nth-of-type(n+5){display:none}
 .grid>.tile[data-tileid="agenda"] .agRow{padding:3px 2px!important;min-height:0!important;gap:8px!important}
 .grid>.tile[data-tileid="agenda"] button.taskMain{min-height:30px!important}
 /* the add control sits level with the calendar header instead of taking its own line */
@@ -2675,7 +2679,7 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insIce{grid-column:span 4}
 .insMini{grid-column:span 4}
 .insHistory{grid-column:span 8}
-.insPush{grid-column:span 4}
+.insPush{grid-column:span 4;align-self:start}
 .insStreak{grid-column:span 2}
 @media(max-width:1100px){.insRecord{grid-column:span 3}.insCalendar{grid-column:span 6}.insIce{grid-column:span 3}.insMini{grid-column:span 3}.insHistory{grid-column:span 12}.insPush{grid-column:span 6}.insStreak{grid-column:span 3}}
 .insCard{position:relative;border-radius:18px;padding:12px 14px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
@@ -3097,11 +3101,11 @@ const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no mar
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:650}).then(extractJSON);
 
-/* German mirrors the Spanish principle at a much lower level (A1–A2): a French native
+/* German mirrors the Spanish principle one level down (A2–B1): a French native
    can't guess German the way they guess Spanish, so everything is taught explicitly —
    articles included, pronunciation respelled the French way, explanations in French. */
 const genGerman=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif DÉBUTANT-FAUX-DÉBUTANT (A1–A2). Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A1–A2 (ordre des mots, genres, cas de base, verbes fréquents…) expliqué en 2–3 phrases simples en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" très fréquents et utiles à l'oral — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions FACILES dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:700}).then(extractJSON);
+  `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif FAUX-DÉBUTANT SOLIDE (A2–B1) : il connaît déjà les bases absolues, ne les lui réexplique pas. Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A2–B1 (cas accusatif/datif en situation, verbes à particule, subordonnées, prépositions mixtes, passé composé…) expliqué en 2–3 phrases précises en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" utiles et PAS évidents (pas de vocabulaire touristique ultra-basique) — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions de vraie difficulté A2–B1 dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:700}).then(extractJSON);
 
 /* Use-your-brain: one quick daily challenge that trains thinking. The owner picks the
    formats with the ⚙ on the tile; each day rotates through them (all when none chosen).
@@ -3121,7 +3125,7 @@ const genBrainFlex=(avoid)=>{ const kind=brainflexKindFor(null); return callClau
 
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 16 words, no preamble or setup — depth comes from the idea, not the length"}.`, {max:220}).then(extractJSON);
+  `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 12 words, no preamble or setup — depth comes from the idea, not the length"}.`, {max:220}).then(extractJSON);
 
 const PHILO_MODES=[
   {id:"standard",label:"Standard · go deeper",icon:"🔎"},
@@ -3645,7 +3649,7 @@ const CURATED_TILE_LAYOUT={
   habits:{desktop:[4,2],phone:[2,2],family:"large"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
-  shopping:{desktop:[2,2],phone:[2,2],family:"tall"},
+  shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
   events:{desktop:[4,3],phone:[2,2],family:"large"},
   note:{desktop:[4,1],phone:[2,1],family:"wide"},
@@ -3654,10 +3658,10 @@ const CURATED_TILE_LAYOUT={
   worth:{desktop:[4,3],phone:[2,2],family:"large"},
   word:{desktop:[2,2],phone:[2,1],family:"wide"},
   music:{desktop:[4,2],phone:[2,1],family:"wide"},
-  spanish:{desktop:[4,3],phone:[2,2],family:"large"},
-  german:{desktop:[4,3],phone:[2,2],family:"large"},
+  spanish:{desktop:[4,4],phone:[2,2],family:"large"},
+  german:{desktop:[4,4],phone:[2,2],family:"large"},
   movie:{desktop:[2,2],phone:[2,1],family:"wide"},
-  world:{desktop:[4,3],phone:[2,2],family:"large"},
+  world:{desktop:[4,4],phone:[2,2],family:"large"},
   recall:{desktop:[4,2],phone:[2,2],family:"wide"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
   weekly:{desktop:[4,3],phone:[2,2],family:"large"},
@@ -3841,7 +3845,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
     contentHost.className="content"+(expanded?" expandedContent":"")+(edit?" locked":"");
   });
   useEffect(()=>()=>clearTimeout(closeTimer.current),[]);
-  const showLabel=edit||cornerOutside||(contentState&&contentState!=="ready");
+  /* cornerOutside = Library: tiles there never show a name, even while loading,
+     so every card keeps the exact same silhouette. */
+  const showLabel=edit||(!cornerOutside&&contentState&&contentState!=="ready");
   /* ⤢ only appears when it earns its place: Recall's focused session always, otherwise
      only while this tile's preview — at the current size and zoom — is actually hiding
      something (expanded-only blocks, clamped text, collapsed rows). Birthdays and
@@ -5362,7 +5368,7 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
       <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div></div>
       {sp.punto && <div className="langLede">{sp.punto}</div>}
       {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
-        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord">
+        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord">
           <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
         </div>))}
       </div>}
@@ -5370,7 +5376,7 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
-/* German mirrors the Spanish tile one level down (A1–A2): article + word, French gloss,
+/* German mirrors the Spanish tile one level down (A2–B1): article + word, French gloss,
    and a French-respelled pronunciation under each entry, since German can't be guessed. */
 function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
@@ -5383,7 +5389,7 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
       <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
       {de.punkt && <div className="langLede">{de.punkt}</div>}
       {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
-        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=3} className="langWord deRow">
+        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow">
           <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
           {v.pron && <span className="dePron">{v.pron}</span>}
         </div>))}
@@ -5545,7 +5551,7 @@ function NewsPage({items,dateLabel}){
   return <article className="newsPage">
     <header className="newsMast"><span className="newsMastTitle">The World</span><span className="newsDateline">{dateLabel}</span></header>
     <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className="newsBody worldSummary">{clean(lead.summary)}</p></section>
-    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} hidden={!expanded&&i>=2} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
+    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} hidden={!expanded&&i>=4} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
   </article>;
 }
 function MovieAdd({onAdd,autoFocus}){
@@ -5648,7 +5654,7 @@ function BreathingCard({done,onComplete,onIncomplete}){
       <div className={"breathDial"+(running?" isRunning":finished||done?" isDone":" isIdle")} role="progressbar" aria-label="Breathing exercise progress" aria-valuemin="0" aria-valuemax="180" aria-valuenow={Math.round(elapsed/1000)} style={{"--breath-progress":`${running?elapsed/TOTAL_MS*360:finished||done?360:0}deg`}}>
         {running&&phaseKey==="exhale"&&<span key={Math.floor(elapsed/CYCLE_MS)} className="breathRipples" aria-hidden="true"><i/><i/><i/></span>}
         <button type="button" className="breathCore" style={{"--breath-scale":breathScale}} onClick={e=>{e.stopPropagation(); if(running){stop();}else{begin();}}} aria-label={running?`${phase}. Tap to stop the breathing exercise`:finished||done?"Breathing done. Tap to breathe again":"Start the three-minute breathing exercise"}>
-          {!running&&<svg className="breathPlay" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.3 7.4c0-1.55 1.7-2.5 3-1.66l6.9 4.26c1.25.77 1.25 2.57 0 3.34l-6.9 4.26c-1.3.84-3-.11-3-1.66Z" fill="currentColor" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>}
+          {!running&&<svg className="breathPlay" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.8 8.1v7.8c0 1.15 1.26 1.85 2.24 1.24l6.24-3.9c.92-.57.92-1.91 0-2.48l-6.24-3.9C11.06 6.25 9.8 6.95 9.8 8.1Z" fill="currentColor"/></svg>}
         </button>
       </div>
       <span className="srOnly" aria-live="polite">{running?phase:""}</span>
@@ -5701,8 +5707,9 @@ function VinylDisc({matching}){
       <path d="M50 96.5 a46.5 46.5 0 0 1 -32.9 -13.6" stroke="rgba(255,255,255,.14)" strokeWidth="3" fill="none" strokeLinecap="round"/>
       <circle className="vinylLabel" cx="50" cy="50" r="19" fill="var(--accent)"/>
       <circle cx="50" cy="50" r="19" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
-      <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="17" fill="rgba(255,255,255,.95)">♫</text>
+      <circle cx="50" cy="36.5" r="1.6" fill="rgba(255,255,255,.55)"/>
     </g>
+    <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="17" fill="rgba(255,255,255,.95)">♫</text>
   </svg>;
 }
 function MusicCard({music,done}){
@@ -6145,10 +6152,14 @@ function CourseAddForm({onAdd}){
 }
 
 function PeopleMetCard({people,onAdd,onRemove}){
+  const {expanded}=useTilePresentation();
   const [place,setPlace]=useState(""); const [name,setName]=useState(""); const [desc,setDesc]=useState("");
   const submit=()=>{ if(!place.trim()||!name.trim())return; onAdd({place:place.trim(),name:name.trim(),desc:desc.trim()}); setName(""); setDesc(""); };
   const places=[...new Set(people.map(p=>p.place))];
-  return <div><div className="addrow peopleAddRow"><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div><div className="pplBadges">{people.filter(p=>p.place===pl).map(p=><div className="pplBadge" key={p.id}><span className="pplBadgeBand" aria-hidden="true">HELLO</span><b className="pplBadgeName">{p.name}</b>{p.desc&&<span className="pplBadgeNote">{p.desc}</span>}<button className="del pplBadgeDel" aria-label={"Remove "+p.name} onClick={()=>onRemove(p.id)}>×</button></div>)}</div></div>)}</div></div>;
+  /* The preview is the badge wall; adding people lives in the expanded view
+     (the form only shows inline while the wall is still empty). */
+  const showForm=expanded||people.length===0;
+  return <div><div className="addrow peopleAddRow" hidden={!showForm}><input className="addinput" placeholder="Place" value={place} onChange={e=>setPlace(e.target.value)}/><input className="addinput" placeholder="Name" value={name} onChange={e=>setName(e.target.value)}/><button className="addbtn" onClick={submit}>+</button></div><input className="addinput" style={{marginTop:7}} hidden={!showForm} placeholder="Tiny note, optional" value={desc} onChange={e=>setDesc(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()}/><div className="peopleTree" style={{marginTop:10}}>{places.map(pl=><div className="placeBranch" key={pl}><div className="mindLabel">📍 {pl}</div><div className="pplBadges">{people.filter(p=>p.place===pl).map((p,i)=><div className="pplBadge" key={p.id} hidden={!expanded&&i>=2}><span className="pplBadgeBand" aria-hidden="true">HELLO</span><b className="pplBadgeName">{p.name}</b>{p.desc&&<span className="pplBadgeNote">{p.desc}</span>}<button className="del pplBadgeDel" aria-label={"Remove "+p.name} onClick={()=>onRemove(p.id)}>×</button></div>)}</div></div>)}</div></div>;
 }
 
 function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){

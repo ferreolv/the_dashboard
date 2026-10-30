@@ -31,7 +31,7 @@ test('phone families retain compact squares, wide cards and large cards',()=>{
 });
 
 test('desktop compositions come from a small module set so rows pack without holes',()=>{
-  const modules=new Set(['2x2','4x1','4x2','4x3','4x4']);
+  const modules=new Set(['2x2','2x4','4x1','4x2','4x3','4x4']);
   for(const [id,layout] of Object.entries(api.CURATED_TILE_LAYOUT)){
     assert.ok(modules.has(layout.desktop.join('x')),id+' uses a standard module, got '+layout.desktop.join('x'));
   }
