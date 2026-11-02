@@ -2154,7 +2154,8 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
    the bottom; decorative art (film strip, cog, can) is positioned against the tile
    itself, which the body's clip and mask cannot touch. */
 .grid>.curatedTile>.tbody{overflow:hidden!important}
-.grid>.curatedTile[data-expandable]:not([data-tileid="recall"]):not([data-tileid="note"]):not([data-tileid="movie"]):not([data-tileid="brainflex"]):not([data-tileid="worth"])>.tbody{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 24px),transparent)}
+.grid>.tile[data-tileid="word"] .dictSense>span:last-child{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.grid>.tile[data-tileid="weekly"] .achCard:nth-of-type(n+4){display:none}
 .grid>.tile[data-tileid] .tileMount>.content{flex:none!important}
 .curatedTile[data-tileid="shopping"] .shopChip{display:flex!important;align-items:center;gap:8px;min-height:44px!important;width:100%!important;border-radius:12px!important;font-size:16px!important}
 .curatedTile[data-tileid="shopping"] .shopChip>span:nth-child(2){display:block!important;flex:1;min-width:0;white-space:normal!important;overflow-wrap:anywhere}.curatedTile[data-tileid="shopping"] .shopChip>.del{display:none!important}
@@ -2356,7 +2357,7 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 
 /* --- Movies: a strip of film running diagonally across the whole tile --- */
 .movieCard{display:flex;flex-direction:column;flex:1;min-height:0;gap:10px}
-.grid>.tile[data-tileid="movie"] .movieStrip{position:absolute;left:-18%;right:-18%;top:50%;transform:translateY(-50%) rotate(-8deg);border-radius:0;min-height:96px;box-shadow:0 10px 24px -14px rgba(10,4,6,.55)}
+.grid>.tile[data-tileid="movie"] .movieStrip{position:absolute;left:-34%;right:-34%;top:50%;transform:translateY(-50%) rotate(-8deg);border-radius:0;min-height:96px;box-shadow:0 10px 24px -14px rgba(10,4,6,.55)}
 .movieStrip{position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:84px;border-radius:14px;background:linear-gradient(165deg,color-mix(in srgb,var(--accentDark) 82%,#000),color-mix(in srgb,var(--accentDark) 55%,#000));padding:8px 10px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 22px -14px color-mix(in srgb,var(--accentDark) 80%,#000)}
 .movieSprockets{display:block;height:7px;flex:none;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.75) 6px 14px,transparent 14px 20px);border-radius:2px}
 .movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
@@ -2368,6 +2369,7 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .movieList{display:flex;flex-direction:column;gap:2px}
 .movieManager .movieAddInput{margin-bottom:8px}
 .tile.completed .movieStrip{background:rgba(20,8,10,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.tileFocusSurface .movieStrip{margin:0 -28px 12px;border-radius:0}
 
 /* ================= tile identity pass, round 2 ================= */
 .tile[data-tileid="movie"] .content{display:flex;flex-direction:column}
@@ -2450,7 +2452,12 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed .pplBadgeBand{background:var(--accent)}
 
 /* --- Birthdays: the next one as a tear-off calendar leaf. --- */
-.birthdayNextWrap{display:flex;align-items:center;gap:11px;text-align:left}
+.birthdayNextWrap{display:flex;align-items:center;justify-content:center;gap:11px;text-align:left}
+.grid>.tile[data-tileid="birthdays"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="birthdays"] .tileMount{flex:1 1 auto!important;display:flex;align-items:center;justify-content:center}
+.grid>.tile[data-tileid="birthdays"] .tileMount>.content{width:100%}
+.grid>.tile[data-tileid="birthdays"] .birthdaysSummary{width:100%;display:flex;justify-content:center}
+.grid>.tile[data-tileid="birthdays"] .birthdayTodaySummary{justify-content:center}
 .bdayLeaf{flex:none;width:46px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;background:#fff;border:1px solid color-mix(in srgb,var(--accent) 30%,#fff);box-shadow:0 4px 10px color-mix(in srgb,var(--accent) 16%,transparent)}
 .bdayLeafMonth{display:block;padding:2.5px 0 2px;background:var(--accent);color:#fff;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;text-align:center}
 .bdayLeafDay{display:block;padding:3px 0 4px;font-size:19px;font-weight:900;color:#2a2e40;text-align:center;line-height:1}
@@ -2614,9 +2621,10 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .brainFlexCard>*{position:relative;z-index:1}
 /* previews clamp long copy to whole lines; the pop-up (or the chat for Philosophy) has the rest */
 .grid>.tile[data-tileid="brainflex"] .brainPrompt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden;max-height:16em}
+.grid>.tile[data-tileid="brainflex"] .brainSolution{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;margin-bottom:8px}
 .grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden;max-height:17em}
 .grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-height:4em}
-.grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden;max-height:10em}
+.grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;max-height:8.5em}
 .brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
 @keyframes gearTurn{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.brainFlexCard .brainGearArt{animation:none}}
@@ -2673,12 +2681,9 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed .langLede{color:#fff}
 .tile.completed .langLede::before{opacity:.9}
 /* --- Knowledge: a watering can spilling the day's field --- */
-.tile[data-tileid="worth"] .content,.tileFocusSurface[data-tileid="worth"] .tileFocusBody{position:relative}
-.lessonHead{position:relative;z-index:1;margin-bottom:6px;padding-right:86px}
+.lessonHead{margin-bottom:6px;padding-right:34px}
 .lessonTitle{font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
-.waterCan{position:absolute;z-index:0;top:-4px;right:0;width:76px;height:56px;color:var(--accentDark);opacity:.5;pointer-events:none}
 .lessonField{display:block;margin:0 0 3px;color:var(--dim);font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
-.tile.completed .waterCan{color:#fff;opacity:.6}
 .tile.completed .lessonField{color:rgba(255,255,255,.8)}
 /* ================= Insights ================= */
 .insights{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;align-items:stretch;padding-bottom:40px;width:100%;max-width:var(--dashboard-max,100rem);margin-inline:auto}
@@ -3092,15 +3097,24 @@ function clean(s){ if(s==null) return ""; return String(s)
   .replace(/【[^】]*】/g,"").replace(/\[[0-9]+\]/g,"").replace(/\((?:https?:[^)]+)\)/g,"")
   .replace(/https?:\/\/\S+/g,"").replace(/[*_`#>\\]+/g,"").replace(/\s+([.,;:!?])/g,"$1")
   .replace(/\s{2,}/g," ").trim(); }
+/* Generation models, newest first: if the API no longer serves one (400/404,
+   e.g. a retired snapshot), the next is tried, so the dashboard outlives model
+   retirements without an update. */
+const GEN_MODELS=["claude-haiku-5-5","claude-haiku-4-5-20251001"];
 async function callClaude(system,user,opts={}){
   const key=getKey(); if(!key) throw new Error("no-key");
-  const body={ model:opts.model||"claude-haiku-4-5-20251001", max_tokens:opts.max||600, system, messages:[{role:"user",content:user}] };
-  const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
-    headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
-    body:JSON.stringify(body) });
-  if(!res.ok)throw Object.assign(new Error("Claude returned HTTP "+res.status),{dailyState:[401,403].includes(res.status)?"invalid_key":res.status===429?"rate_limit":"service_error"});
-  const data=await res.json();
-  return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  const models=opts.model?[opts.model]:GEN_MODELS;
+  let failure=null;
+  for(const model of models){
+    const body={ model, max_tokens:opts.max||600, system, messages:[{role:"user",content:user}] };
+    const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
+      headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
+      body:JSON.stringify(body) });
+    if(res.ok){ const data=await res.json(); return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n"); }
+    failure=Object.assign(new Error("Claude returned HTTP "+res.status),{dailyState:[401,403].includes(res.status)?"invalid_key":res.status===429?"rate_limit":"service_error"});
+    if(res.status!==400&&res.status!==404) throw failure;
+  }
+  throw failure||new Error("Claude request failed");
 }
 const genWord=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `One moderately uncommon but useful English word a curious bilingual reader probably doesn't know, with its French equivalent and a quick synonym quiz. Avoid: ${avoid.join(", ")||"none"}. Shape:{"term_en":"","ipa":"","pos":"","def_en":"","term_fr":"","def_fr":"","quiz":{"options":["","","",""],"answer":0,"alt_prompts":["","",""]}}. Exactly one option is the closest synonym. Every option must be a familiar everyday word, so the quiz tests the new word rather than four obscure words. Distractors remain meaningfully close. Provide 3 short alternative prompts. Defs under 12 words.`, {max:400}).then(extractJSON);
@@ -3129,9 +3143,9 @@ const BRAINFLEX_KINDS={
   mental:{label:"Mental math",icon:"➗",brief:"a mental-math challenge that rewards a clever shortcut, with one exact answer"},
   lateral:{label:"Lateral riddle",icon:"💡",brief:"a lateral-thinking riddle with one satisfying answer that every clue supports"}
 };
-function brainflexKindFor(chosen){ const keys=(Array.isArray(chosen)?chosen:[]).filter(k=>BRAINFLEX_KINDS[k]); const pool=keys.length?keys:Object.keys(BRAINFLEX_KINDS); return pool[Math.floor(Date.now()/86400000)%pool.length]; }
+function brainflexKindFor(chosen){ const keys=(Array.isArray(chosen)?chosen:[]).filter(k=>BRAINFLEX_KINDS[k]); const pool=keys.length?keys:Object.keys(BRAINFLEX_KINDS); const day=Math.floor(Date.now()/86400000); return pool[Math.abs((day*2654435761)%2147483647)%pool.length]; }
 const genBrainFlex=(avoid)=>{ const kind=brainflexKindFor(null); return callClaude("You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
-  `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind].brief}. Vary the topic from these recent ones: ${(avoid||[]).join(" | ")||"none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, {max:500}).then(extractJSON); };
+  `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind].brief}. Vary the topic from these recent ones: ${(avoid||[]).join(" | ")||"none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Make it feel fresh and specific: anchor it in a concrete, unexpected real-world setting (a night market, a cargo port, a vintage arcade, an alpine refuge…) that genuinely changes day to day, never a generic textbook setup — while keeping every detail load-bearing. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, {max:500}).then(extractJSON); };
 
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
@@ -3191,7 +3205,7 @@ async function philoReply(question,history,mode="standard"){
     : `You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking and keep digging below the surface: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
 /* The philosophy chat survives model retirements: try the preferred stronger model,
    then fall back on a 4xx (retired/unknown id) instead of failing the whole chat. */
-const PHILO_CHAT_MODELS=["claude-sonnet-4-5-20250929","claude-haiku-4-5-20251001"];
+const PHILO_CHAT_MODELS=["claude-sonnet-5-5","claude-haiku-5-5","claude-haiku-4-5-20251001"];
   let lastErr=null;
   for(const model of PHILO_CHAT_MODELS){
     const body={ model, max_tokens:420, system, messages:history.map(h=>({role:h.role,content:h.text})) };
@@ -3571,18 +3585,6 @@ function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
     </div>
   );
 }
-/* A quiet upright line watering can resting in the tile's corner. */
-function WateringCan(){
-  return <svg className="waterCan" viewBox="0 0 100 74" aria-hidden="true">
-    <g fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M36 28 h34 l-3 32 a4 4 0 0 1-4 4 h-20 a4 4 0 0 1-4-4 z" fill="color-mix(in srgb,currentColor 10%,transparent)"/>
-      <path d="M70 34 c13-1 15 17 -1 19"/>
-      <path d="M38 42 L14 26"/>
-      <path d="M8 18 l9 2 l-5 9 z" fill="currentColor" stroke="none"/>
-      <path d="M42 28 c0-8 22-8 22 0"/>
-    </g>
-  </svg>;
-}
 function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!lesson) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
@@ -3592,8 +3594,6 @@ function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
   const undo=()=>onUnlearned&&onUnlearned(lesson);
   return (
     <div className="lessonCard readingCard">
-      {/* knowledge as something you water: the can tips in from the corner and pours onto the title */}
-      <WateringCan/>
       <div className="lessonHead">
         {lesson.category && <span className="lessonField">{lesson.category}</span>}
         <div className="lessonTitle">{lesson.title}</div>
@@ -3679,7 +3679,7 @@ const CURATED_TILE_LAYOUT={
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
   brainflex:{desktop:[4,3],phone:[2,2],family:"wide"},
   academic:{desktop:[4,3],phone:[2,2],family:"large"},
-  philo:{desktop:[4,2],phone:[2,1],family:"wide"},
+  philo:{desktop:[4,3],phone:[2,2],family:"large"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"}
 };
 const curatedTileSize=(id,availableCols)=>{
@@ -6012,8 +6012,14 @@ const SHOPPING_PRODUCTS=[
   ["soap","🧼","Soap"],["paper","🧻","Paper"],["cleaner","🧽","Cleaner"],["pet","🐾","Pet"],["medicine","💊","Medicine"],["other","🛒","Other"]
 ].map(([key,icon,label])=>({key,icon,label}));
 const shoppingProduct=key=>SHOPPING_PRODUCTS.find(p=>p.key===key)||SHOPPING_PRODUCTS[SHOPPING_PRODUCTS.length-1];
+const dayOrdinal=n=>{const t=n%100;return n+(t>=11&&t<=13?"th":({1:"st",2:"nd",3:"rd"})[n%10]||"th");};
 function positiveEventDate(key){
-  return formatDateKey(key);
+  const [y,m,d]=String(key||"").split("-").map(Number);
+  if(!y||!m||!d)return formatDateKey(key);
+  const date=new Date(y,m-1,d);
+  const weekday=new Intl.DateTimeFormat("en-US",{weekday:"long"}).format(date);
+  const month=new Intl.DateTimeFormat("en-US",{month:"long"}).format(date);
+  return `${weekday} ${dayOrdinal(d)} ${month}`;
 }
 function PositiveEventsCard({events,onAdd,onRemove}){
   const {expanded,open}=useTilePresentation();
@@ -6235,10 +6241,9 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
     <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
       <BrainGearArt/>
       <span className="brainFormat">{brain.format||todayKind.label}</span>
+      {revealed&&<button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>}
       <p className="brainPrompt">{brain.prompt}</p>
-      {!revealed ? <button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button> : (
-        <button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>
-      )}
+      {!revealed&&<button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button>}
     </div>
   );
 }

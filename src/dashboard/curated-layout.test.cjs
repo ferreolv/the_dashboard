@@ -35,8 +35,8 @@ test('desktop compositions come from a small module set so rows pack without hol
   for(const [id,layout] of Object.entries(api.CURATED_TILE_LAYOUT)){
     assert.ok(modules.has(layout.desktop.join('x')),id+' uses a standard module, got '+layout.desktop.join('x'));
   }
-  assert.deepEqual(plain(api.curatedTileSize('philo',6)),{c:4,r:2,family:'wide'});
-  assert.deepEqual(plain(api.curatedTileSize('philo',2)),{c:2,r:1,family:'wide'});
+  assert.deepEqual(plain(api.curatedTileSize('philo',6)),{c:4,r:3,family:'large'});
+  assert.deepEqual(plain(api.curatedTileSize('philo',2)),{c:2,r:2,family:'large'});
 });
 
 test('Reminders keeps full phone width',()=>{
@@ -58,7 +58,7 @@ test('legacy arbitrary dimensions neither drive rendering nor mutate saved data'
   const curated=api.clampTileSizes(legacy,6);
   assert.equal(JSON.stringify(legacy),before);
   assert.deepEqual(plain(curated.events),{c:4,r:3,family:'large'});
-  assert.deepEqual(plain(curated.philo),{c:4,r:2,family:'wide'});
+  assert.deepEqual(plain(curated.philo),{c:4,r:3,family:'large'});
   assert.match(html,/const sz=id=>curatedTileSize\(id,cols\)/);
   const initializer=html.slice(html.indexOf('const [sizes,setSizes]'),html.indexOf('const [activeTiles,setActiveTiles]'));
   assert.match(initializer,/load\("sizes",\{\}\)/);
