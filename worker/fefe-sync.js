@@ -259,7 +259,7 @@ function brainflexKindFor(chosen) {
   const keys = (Array.isArray(chosen) ? chosen : []).filter((k) => BRAINFLEX_KINDS[k]);
   const pool = keys.length ? keys : Object.keys(BRAINFLEX_KINDS);
   const day = Math.floor(Date.now() / 86400000);
-  return pool[day % pool.length];
+  return pool[Math.abs((day * 2654435761) % 2147483647) % pool.length];
 }
 
 /* ---------------- per-key generators (prompts mirror the client) ---------------- */
@@ -300,7 +300,7 @@ var sharedGen = {
     const kind = brainflexKindFor(chosen);
     return callClaude(env,
       "You output ONLY valid minified JSON, no markdown. You are a rigorous puzzle setter who helps someone think better, fast: SOLVE the challenge completely yourself before writing it down and check the solution is right; if you cannot verify it, replace it with a simpler one you can. Never pad the prompt with decorative details, extra names, numbers or backstory that play no role in the solution — difficulty comes from the reasoning alone, not from length or noise.",
-      `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind]}. Vary the topic from these recent ones: ${(avoid || []).join(" | ") || "none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, 500).then(extractJSON);
+      `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind]}. Vary the topic from these recent ones: ${(avoid || []).join(" | ") || "none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Make it feel fresh and specific: anchor it in a concrete, unexpected real-world setting (a night market, a cargo port, a vintage arcade, an alpine refuge…) that genuinely changes day to day, never a generic textbook setup — while keeping every detail load-bearing. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, 500).then(extractJSON);
   },
 
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
