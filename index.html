@@ -2827,7 +2827,8 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="shopping"] .shoppingPicked{gap:0!important}
 .grid>.tile[data-tileid="shopping"] .shopChip{min-height:0!important;padding:0!important;border:0!important;border-bottom:1px solid color-mix(in srgb,var(--accentDark) 14%,transparent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
 .grid>.tile[data-tileid="shopping"] button.shopItemToggle{gap:10px!important;min-height:40px!important;padding:6px 0!important}
-.grid>.tile[data-tileid="shopping"] .shopItemToggle>span:nth-child(2){display:none!important}
+.grid>.tile[data-tileid="shopping"] .shopItemToggle>span:nth-child(2){flex:none;font-size:17px;line-height:1;width:20px;text-align:center}
+.grid>.tile[data-tileid="shopping"] .shopChip.done .shopItemToggle>span:nth-child(2){filter:grayscale(1)}
 .grid>.tile[data-tileid="shopping"] .shopItemToggle>span:last-child{font-size:15px!important;font-weight:750!important;line-height:1.25!important;color:var(--ink)!important}
 .grid>.tile[data-tileid="shopping"] .shopTick{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accentDark) 45%,transparent);color:transparent;transition:background .15s,color .15s}
 .grid>.tile[data-tileid="shopping"] .shopTick svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -2836,11 +2837,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="shopping"] button.shopAddRow{display:flex!important;align-items:center;justify-content:space-between;width:100%!important;min-height:36px!important;height:auto!important;margin-top:2px;padding:4px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:.02em;cursor:pointer;transform:none!important}
 .grid>.tile[data-tileid="shopping"] button.shopAddRow:hover{color:var(--accentDark)!important}
 /* --- Recall: one row of bars per source tile (in that tile's colour); Word cards are fill-in-the-blank --- */
-.recallDeck .recallTag{color:var(--srcDark,var(--accent));background:color-mix(in srgb,var(--src,var(--accent)) 14%,transparent)}
-.recallDeck .recallFace{border-color:color-mix(in srgb,var(--src,var(--accent)) 24%,#fff)}
+.recallDeck .recallTag{color:#fff;background:var(--src,var(--accent))}
+.recallDeck .recallFace{border-color:var(--srcPale,#fff)}
 .recallCloze{font-size:15.5px;line-height:1.45;font-weight:700;text-wrap:pretty}
 .clozeGap{display:inline-block;width:3.6em;height:.95em;margin:0 .16em;vertical-align:-.1em;border-bottom:2.5px solid var(--src,var(--accent))}
-.recallHeadword{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.1;color:var(--srcDark,var(--accentDark))}
+.recallHeadword{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.1;color:var(--ink,#1d2030)}
 .recallFr{font-size:12.5px;font-style:italic;line-height:1.3;color:var(--dim,#667)}
 .recallDeck .recallDetail i{font-family:Georgia,serif}
 .recallRatings.waiting .recallWhen{color:var(--dim,#667)}
@@ -2857,13 +2858,13 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .recallRows.many .recallBar::before{height:5px}
 .recallRows.many .recallBar.here::before{height:7px}
 .tile button.recallBar,.tile.completed button.recallBar,button.recallBar{position:relative;flex:1 1 0;min-width:3px;width:auto!important;height:12px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;filter:none!important;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.recallBar::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:99px;background:color-mix(in srgb,var(--bar) 22%,#fff);transition:height .15s ease,background .15s ease,box-shadow .15s ease}
+.recallBar::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:99px;background:var(--barPale);transition:height .15s ease,background .15s ease,box-shadow .15s ease}
 .recallBar.done::before{background:var(--bar)}
-.recallBar.again::before{background:#fff;box-shadow:inset 0 0 0 1.5px var(--bar)}
-.recallBar.next::before{background:color-mix(in srgb,var(--bar) 42%,#fff)}
-.recallBar.here::before{height:9px;background:var(--barDark)}
-.recallBar.again.here::before{background:var(--barDark);box-shadow:none}
-.recallBar:focus-visible{outline:2px solid var(--barDark);outline-offset:1px;border-radius:4px}
+.recallBar.again::before{background:repeating-linear-gradient(-45deg,var(--bar) 0 2.5px,#fff 2.5px 5px);box-shadow:inset 0 0 0 1.5px var(--bar)}
+.recallBar.next::before{background:var(--barPale);box-shadow:inset 0 0 0 1.5px var(--bar)}
+.recallBar.here::before{height:10px;background:var(--bar);box-shadow:0 0 0 2px #fff}
+.recallBar.again.here::before{background:var(--bar);box-shadow:0 0 0 2px #fff}
+.recallBar:focus-visible{outline:2px solid var(--bar);outline-offset:1px;border-radius:4px}
 .tile.completed .recallBar::before{box-shadow:0 0 0 1px rgba(255,255,255,.7)}
 .tile.completed .recallBar.again::before{box-shadow:inset 0 0 0 1.5px var(--bar),0 0 0 1px rgba(255,255,255,.7)}
 .tile.completed .recallHeadword{color:#fff}
@@ -2884,7 +2885,51 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="music"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile[data-tileid="music"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0;padding-bottom:0!important}
 .grid>.tile[data-tileid="music"] .musicCard{flex:1 1 auto;height:100%;grid-template-rows:minmax(0,1fr)}
-.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(170px,62cqi,250px);max-width:none!important;margin:0 4px 0 calc(-17cqi - var(--dashboard-pad,18px));align-self:center}
+.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(150px,54cqi,218px);max-width:none!important;margin:0 4px 0 calc(-12cqi - var(--dashboard-pad,18px));align-self:center}
+/* --- Library: the +/x corner sits outside the tile, so the tile can't clip; its body is a
+   full-bleed clipping layer instead (rounded like the tile), so film strips, records, cogs
+   and any long content stop at the tile's edge there too --- */
+.grid>.tile.cornerOutside>.tbody{position:relative;box-sizing:border-box;width:calc(100% + 2 * var(--dashboard-pad,1rem))!important;max-width:none!important;margin:calc(-1 * var(--dashboard-pad,1rem));padding:var(--dashboard-pad,1rem);min-height:0!important;overflow:hidden!important;border-radius:inherit}
+/* --- Music: liner-note hierarchy beside the record --- */
+.grid>.tile[data-tileid="music"] .musicMeta{gap:0;padding-right:26px}
+.grid>.tile[data-tileid="music"] .musicGenre{display:block;margin:0 0 7px;font:850 10px/1.15 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.grid>.tile[data-tileid="music"] .musicTitle{font-size:clamp(17px,5.4cqi,21px)!important;font-weight:850!important;line-height:1.12!important;letter-spacing:-.02em}
+.grid>.tile[data-tileid="music"] .musicArtist{margin-top:5px;font-size:13px;font-weight:650!important;line-height:1.3!important;color:var(--dim)}
+.grid>.tile[data-tileid="music"] .musicWhy{margin:11px 0 0;padding-left:10px;border-left:2px solid var(--accent);font-size:12.5px;line-height:1.45;font-style:italic;color:var(--dim);max-width:none}
+.tile.completed[data-tileid="music"] .musicGenre{color:rgba(255,255,255,.88)}
+.tile.completed[data-tileid="music"] .musicWhy{border-left-color:rgba(255,255,255,.6)}
+/* --- Shopping pop-up: add field, checklist, labelled quick-add shelf --- */
+.tileFocusSurface[data-tileid="shopping"] .shopPanel{display:flex;flex-direction:column;gap:20px;padding-top:4px}
+.tileFocusSurface[data-tileid="shopping"] .shopAddBar{display:flex;align-items:center;gap:10px;margin-right:44px;padding:6px 6px 6px 16px;border-radius:999px;background:rgba(255,255,255,.78);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),0 8px 22px -14px rgba(20,40,30,.4)}
+.tileFocusSurface[data-tileid="shopping"] .shopAddGlyph{flex:none;width:18px;height:18px;fill:none;stroke:var(--dim);stroke-width:1.8;stroke-linecap:round}
+.tileFocusSurface[data-tileid="shopping"] input.shopAddInput{flex:1;min-width:0;height:40px;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none;font:700 16px/1.3 'Nunito',sans-serif;color:var(--ink)}
+.tileFocusSurface[data-tileid="shopping"] button.shopAddGo{flex:none;display:grid!important;place-items:center;width:40px!important;height:40px!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:var(--accent)!important;color:#fff!important;box-shadow:none!important;transform:none!important;cursor:pointer}
+.tileFocusSurface[data-tileid="shopping"] button.shopAddGo:disabled{background:color-mix(in srgb,var(--accent) 30%,#fff)!important;cursor:default}
+.tileFocusSurface[data-tileid="shopping"] button.shopAddGo svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.tileFocusSurface[data-tileid="shopping"] .shopPanelBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:28px;align-items:start}
+@media(max-width:639px){.tileFocusSurface[data-tileid="shopping"] .shopPanelBody{grid-template-columns:1fr;gap:20px}}
+.tileFocusSurface[data-tileid="shopping"] .shopRows{list-style:none;margin:0;padding:0}
+.tileFocusSurface[data-tileid="shopping"] .shopRow{display:flex;align-items:center;gap:4px;border-bottom:1px solid color-mix(in srgb,var(--accentDark) 12%,transparent)}
+.tileFocusSurface[data-tileid="shopping"] button.shopRowToggle{flex:1;min-width:0;display:flex!important;align-items:center;gap:12px;min-height:50px!important;height:auto!important;margin:0!important;padding:6px 2px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;text-align:left;font:750 16px/1.25 'Nunito',sans-serif!important;transform:none!important;cursor:pointer}
+.tileFocusSurface[data-tileid="shopping"] .shopTick{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accentDark) 45%,transparent);color:transparent;transition:background .15s,color .15s}
+.tileFocusSurface[data-tileid="shopping"] .shopTick svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tileFocusSurface[data-tileid="shopping"] .shopRow.done .shopTick{background:var(--accentDark);box-shadow:none;color:#fff}
+.tileFocusSurface[data-tileid="shopping"] .shopRowIcon{flex:none;width:24px;font-size:20px;line-height:1;text-align:center}
+.tileFocusSurface[data-tileid="shopping"] .shopRowName{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tileFocusSurface[data-tileid="shopping"] .shopRow.done .shopRowName{text-decoration:line-through;color:var(--dim)}
+.tileFocusSurface[data-tileid="shopping"] .shopRow.done .shopRowIcon{filter:grayscale(1)}
+.tileFocusSurface[data-tileid="shopping"] button.shopRowRemove{flex:none;display:grid!important;place-items:center;width:34px!important;height:34px!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:19px!important;line-height:1!important;transform:none!important;cursor:pointer}
+.tileFocusSurface[data-tileid="shopping"] button.shopRowRemove:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)!important;color:var(--ink)!important}
+.tileFocusSurface[data-tileid="shopping"] .shopBoughtHead{display:flex;align-items:center;justify-content:space-between;margin:18px 2px 0;font:850 10.5px/1 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tileFocusSurface[data-tileid="shopping"] button.shopClear{min-height:0!important;height:auto!important;margin:0!important;padding:7px 10px!important;border:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:.02em;text-transform:none;transform:none!important;cursor:pointer}
+.tileFocusSurface[data-tileid="shopping"] button.shopClear:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)!important}
+.tileFocusSurface[data-tileid="shopping"] .shopEmpty{margin:8px 2px;color:var(--dim);font-size:14px;line-height:1.5}
+.tileFocusSurface[data-tileid="shopping"] .shopShelfChips{display:flex;flex-wrap:wrap;gap:8px}
+.tileFocusSurface[data-tileid="shopping"] button.shopPick{display:inline-flex!important;align-items:center;gap:7px;min-height:38px!important;height:auto!important;margin:0!important;padding:6px 13px 6px 10px!important;border:0!important;border-radius:999px!important;background:rgba(255,255,255,.66)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accentDark) 10%,transparent)!important;color:var(--ink)!important;font:700 13.5px/1.1 'Nunito',sans-serif!important;transform:none!important;cursor:pointer;transition:background .15s,color .15s}
+.tileFocusSurface[data-tileid="shopping"] button.shopPick>span{font-size:17px;line-height:1}
+.tileFocusSurface[data-tileid="shopping"] button.shopPick:hover{background:#fff!important}
+.tileFocusSurface[data-tileid="shopping"] button.shopPick.on{background:var(--accent)!important;box-shadow:none!important;color:#fff!important}
+.tileFocusSurface[data-tileid="shopping"] button.shopPick.custom{background:transparent!important;box-shadow:inset 0 0 0 1.5px var(--accent)!important;color:var(--accentDark)!important}
 </style>
 </head>
 <body>
@@ -4103,7 +4148,7 @@ const CURATED_TILE_LAYOUT={
   music:{desktop:[4,2],phone:[2,1],family:"wide"},
   spanish:{desktop:[4,4],phone:[2,2],family:"large"},
   german:{desktop:[4,4],phone:[2,2],family:"large"},
-  movie:{desktop:[2,2],phone:[2,1],family:"wide"},
+  movie:{desktop:[2,2],phone:[1,1],family:"small"},
   world:{desktop:[4,4],phone:[2,2],family:"large"},
   recall:{desktop:[4,3],phone:[2,2],family:"large"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -4275,7 +4320,8 @@ function previewContentBottom(root){
   let bottom=-Infinity;
   for(const el of root.querySelectorAll("*")){
     if(!FIT_CONTROLS.has(el.tagName)&&![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())) continue;
-    const r=el.getBoundingClientRect(); if(!r.width||!r.height||el.closest("[data-preview-optional]")) continue;
+    // decorations (the record, a cog) may bleed past the edge on purpose: only content counts
+    const r=el.getBoundingClientRect(); if(!r.width||!r.height||el.closest("[data-preview-optional],[aria-hidden=\"true\"]")) continue;
     const cs=getComputedStyle(el); if(cs.position==="absolute"||cs.position==="fixed"||cs.visibility==="hidden") continue;
     bottom=Math.max(bottom,r.bottom);
   }
@@ -5987,7 +6033,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
     else { setActive(key); setView(null); setFlipped(false); }
   };
   return (
-    <div className={"recallDeck"+(expanded?" big":"")} style={{"--src":tone.v,"--srcDark":tone.d}}>
+    <div className={"recallDeck"+(expanded?" big":"")} style={{"--src":tone.v,"--srcPale":tone.p}}>
       {shown?<>
         <button type="button" className={"recallCard3d"+(flipped?" flipped":"")} onClick={()=>setFlipped(f=>!f)} aria-label={flipped?"Show the question":"Show the answer"}>
           <span className="recallFace recallFront" aria-hidden={flipped}><RecallFront item={shown} tag={tag}/></span>
@@ -6005,7 +6051,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
       </>:<div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">{total} reviewed</span></div>}
       <div className={"recallRows"+(keys.length>4?" many":"")}>
         {keys.map(key=>{ const source=recallSourceByKey(key), c=COL[source.tile]||COL.recall, entries=session.rows[key], next=recallFrontier(session,key); return (
-          <div key={key} className={"recallRow"+(key===rowKey?" recallRowOn":"")+(entries.length>24?" dense":"")} style={{"--bar":c.v,"--barDark":c.d}} role="group" aria-label={source.label}>
+          <div key={key} className={"recallRow"+(key===rowKey?" recallRowOn":"")+(entries.length>24?" dense":"")} style={{"--bar":c.v,"--barPale":c.p}} role="group" aria-label={source.label}>
             {entries.map((e,i)=>{ const g=session.grades[recallEntryKey(e)], here=key===rowKey&&i===index; return (
               <button type="button" key={recallEntryKey(e)} className={"recallBar"+(g===1?" again":g?" done":i===next?" next":" ahead")+(here?" here":"")}
                 tabIndex={g||i===next?0:-1} aria-current={here?"step":undefined} aria-label={`${source.label} ${i+1} of ${entries.length}${g?" · "+FSRS_RATINGS[g-1].name:i===next?" · next":""}`}
@@ -6237,14 +6283,14 @@ function VinylDisc({matching}){
   return <svg className="vinyl" viewBox="0 0 100 100" aria-hidden="true">
     <circle cx="50" cy="50" r="49" fill="#1b1713"/>
     <g className="vinylSpin">
-      {[45,41,37,33,29,25].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.09)" strokeWidth=".9"/>)}
+      {[45,41,37,33,29].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.09)" strokeWidth=".9"/>)}
       <path d="M50 3.5 a46.5 46.5 0 0 1 32.9 13.6" stroke="rgba(255,255,255,.28)" strokeWidth="3" fill="none" strokeLinecap="round"/>
       <path d="M50 96.5 a46.5 46.5 0 0 1 -32.9 -13.6" stroke="rgba(255,255,255,.14)" strokeWidth="3" fill="none" strokeLinecap="round"/>
-      <circle className="vinylLabel" cx="50" cy="50" r="19" fill="var(--accent)"/>
-      <circle cx="50" cy="50" r="19" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
-      <circle cx="50" cy="36.5" r="1.6" fill="rgba(255,255,255,.55)"/>
+      <circle className="vinylLabel" cx="50" cy="50" r="25" fill="var(--accent)"/>
+      <circle cx="50" cy="50" r="25" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
+      <circle cx="50" cy="29.5" r="1.9" fill="rgba(255,255,255,.55)"/>
     </g>
-    <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="17" fill="rgba(255,255,255,.95)">♫</text>
+    <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="23" fill="rgba(255,255,255,.95)">♫</text>
   </svg>;
 }
 function MusicCard({music,done}){
@@ -6268,11 +6314,11 @@ function MusicCard({music,done}){
   return <div className="musicCard">
     <a className={"musicDisc"+(matching?" matching":"")} href={href} target="_blank" rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
     <div className="musicMeta">
+      {music.genre&&<span className="musicGenre" data-fit-drop="1">{music.genre}</span>}
       <div className="musicTitle">{music.title}</div>
-      <div className="musicArtist">{music.artist}{music.year?' · '+music.year:''}</div>
-      {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="musicComposer">{music.composer}</div>}
-      {music.why&&<p className="musicWhy">{music.why}</p>}
-      {music.genre&&<span className="lbl musicGenre">{music.genre}</span>}
+      <div className="musicArtist">{music.artist}{music.year?<span className="musicYear"> · {music.year}</span>:null}</div>
+      {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="musicComposer" data-fit-drop="2">{music.composer}</div>}
+      {music.why&&<p className="musicWhy" data-fit-clamp="">{music.why}</p>}
     </div>
   </div>;
 }
@@ -6652,6 +6698,47 @@ function ShoppingCard({items,onChange}){
   const toggleCheck=id=>onChange(list.map(item=>item.id===id?{...item,checked:!item.checked}:item));
   const remove=id=>onChange(list.filter(item=>item.id!==id));
   const addCustom=()=>toggleProduct(shoppingProduct("other"));
+  /* The pop-up: one field to add or find, the list as a checklist (bought items below,
+     clearable), and a labelled quick-add shelf whose picks light up. */
+  if(expanded){
+    const query=custom.trim().toLowerCase();
+    const shelf=SHOPPING_PRODUCTS.filter(p=>p.key!=="other"&&(!query||p.label.toLowerCase().includes(query)));
+    const exact=query?SHOPPING_PRODUCTS.find(p=>p.key!=="other"&&p.label.toLowerCase()===query):null;
+    const submit=()=>{ if(!query) return; if(exact){ if(!hasKey(exact.key)) toggleProduct(exact); setCustom(""); } else addCustom(); };
+    const needed=list.filter(item=>!item.checked), bought=list.filter(item=>item.checked);
+    const row=item=>{ const p=shoppingProduct(item.key), name=item.label||p.label; return (
+      <li key={item.id} className={"shopRow"+(item.checked?" done":"")}>
+        <button type="button" className="shopRowToggle" aria-pressed={!!item.checked} aria-label={(item.checked?"Mark needed: ":"Mark bought: ")+name} onClick={()=>toggleCheck(item.id)}>
+          <span className="shopTick" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m4 8.4 2.6 2.5L12 5.5"/></svg></span>
+          <span className="shopRowIcon" aria-hidden="true">{p.icon}</span><span className="shopRowName">{name}</span>
+        </button>
+        <button type="button" className="shopRowRemove" aria-label={"Remove "+name} onClick={()=>remove(item.id)}>×</button>
+      </li>); };
+    return (
+      <div className="shopPanel">
+        <div className="shopAddBar">
+          <svg className="shopAddGlyph" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.6"/><path d="m13.2 13.2 3.6 3.6"/></svg>
+          <input className="shopAddInput" placeholder="Add or find an item" aria-label="Add or find an item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") submit(); }}/>
+          <button type="button" className="shopAddGo" aria-label="Add to the list" disabled={!query} onClick={submit}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4.5v11M4.5 10h11"/></svg></button>
+        </div>
+        <div className="shopPanelBody">
+          <section className="shopListPane" aria-label="Your list">
+            {list.length===0?<p className="shopEmpty">Nothing to buy yet. Pick from the shelf or type an item.</p>:<>
+              {needed.length>0&&<ul className="shopRows">{needed.map(row)}</ul>}
+              {bought.length>0&&<div className="shopBoughtHead"><span>Bought</span><button type="button" className="shopClear" onClick={()=>onChange(list.filter(item=>!item.checked))}>Clear</button></div>}
+              {bought.length>0&&<ul className="shopRows">{bought.map(row)}</ul>}
+            </>}
+          </section>
+          <section className="shopShelfPane" aria-label="Quick add">
+            <div className="shopShelfChips">
+              {shelf.map(p=>{ const on=hasKey(p.key); return <button type="button" key={p.key} className={"shopPick"+(on?" on":"")} aria-pressed={on} onClick={()=>toggleProduct(p)}><span aria-hidden="true">{p.icon}</span>{p.label}</button>; })}
+              {query&&!exact&&<button type="button" className="shopPick custom" onClick={addCustom}><span aria-hidden="true">＋</span>Add “{custom.trim()}”</button>}
+            </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
     return (
     <div className="shoppingCard">
       <div className="shoppingSection basket">
@@ -6664,16 +6751,7 @@ function ShoppingCard({items,onChange}){
         </div>
       </div>
       {!expanded&&<button type="button" className="shopAddRow" aria-label="Add shopping items" onClick={open}><span>＋ add</span>{list.length>visibleList.length&&<span>{list.length-visibleList.length} more</span>}</button>}
-      <div className="shoppingSection picker" hidden={!expanded}>
-        
-        <div className="shopShelf">
-          {SHOPPING_PRODUCTS.filter(p=>p.key!=="other").map(product=><button key={product.key} className={"shopIcon"+(hasKey(product.key)?" on":"")} title={product.label} aria-label={product.label} onClick={()=>toggleProduct(product)}>{product.icon}</button>)}
-        </div>
-        <div className="shopOther">
-          <input className="addinput" placeholder="Other item" value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCustom()} />
-          <button className="addbtn" aria-label="Add custom shopping item" onClick={addCustom}>+</button>
-        </div>
-      </div>
+      <div className="shoppingSection picker" hidden>Add items from the shelf</div>
     </div>
   );
 }
