@@ -224,6 +224,8 @@ function philosophyHarness(chat = {initial: 'An existing reflection', messages: 
   const saved = [], errors = [], busy = [], popups = [];
   const context = vm.createContext({
     daily: {philo: {question: 'What makes a reason persuasive?'}},
+    todayKey: '2026-11-03',
+    philoQuestionOf: philo => philo && philo.question,
     philoChat: structuredClone(chat),
     getKey: () => hasKey ? 'test-key' : '',
     persistPhiloChat: value => saved.push(plain(value)),
@@ -242,7 +244,7 @@ function philosophyHarness(chat = {initial: 'An existing reflection', messages: 
 test('a failed Philosophy reply keeps the reflection and shows a separate error instead of an invented chat reply', async () => {
   const chat = philosophyHarness();
   await chat.philoSubmitInitial('My own reflection');
-  assert.deepEqual(chat.saved, [{initial: 'My own reflection', messages: [], mode: 'standard'}]);
+  assert.deepEqual(chat.saved, [{initial: 'My own reflection', messages: [], mode: 'standard', question: 'What makes a reason persuasive?'}]);
   assert.match(chat.errors.at(-1), /reflection is saved/i);
   assert.doesNotMatch(chat.errors.at(-1), /private|sk-ant|Error:/);
   assert.deepEqual(chat.busy, [true, false]);

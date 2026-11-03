@@ -418,24 +418,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .examLink { font-style:italic; background:var(--field); border-left:3px solid var(--lbl); border-radius:8px; padding:8px 11px; font-size:12.6px; line-height:1.5; margin-top:8px; color:var(--ink); }
 
 
-  /* ---- philosophy chat ---- */
-  .philoQ { font-size:14.5px; font-weight:700; line-height:1.35; margin-bottom:10px; }
-  .philoModeRow { display:flex; align-items:center; gap:7px; margin:-2px 0 9px; }
-  .philoModeRow span { color:var(--dim); font-size:10px; font-weight:850; white-space:nowrap; }
-  .philoModeIcon { display:grid!important; place-items:center; flex:0 0 29px; width:29px; height:29px; border-radius:50%; background:color-mix(in srgb,var(--accent) 15%,rgba(255,255,255,.58)); color:var(--accentDark)!important; font-size:15px!important; line-height:1; }
-  .tile.completed .philoModeIcon { background:rgba(255,255,255,.22); color:#fff!important; }
-  .philoModeSelect { width:100%; min-width:0; border-radius:999px!important; padding:7px 10px!important; font-size:11px!important; font-weight:800!important; }
-  .philoThinkArea { width:100%; min-height:74px; resize:vertical; background:var(--field); border:1px solid var(--fieldbd); border-radius:10px; padding:9px 11px; color:var(--ink); font-family:inherit; font-size:13.5px; line-height:1.5; outline:none; }
-  .philoThinkArea::placeholder { color:var(--dim); }
-  .chatLog { display:flex; flex-direction:column; gap:10px; }
-  .chatMsg { max-width:88%; padding:9px 12px; border-radius:14px; font-size:13.2px; line-height:1.5; white-space:pre-wrap; }
-  .chatMsg.me { align-self:flex-end; background:var(--tickfill); color:var(--tickmark); border-bottom-right-radius:4px; }
-  .chatMsg.them { align-self:flex-start; background:var(--field); border:1px solid var(--fieldbd); border-bottom-left-radius:4px; }
-  .chatThinking { align-self:flex-start; font-style:italic; opacity:.55; font-size:12px; }
-  .chatInputRow { display:flex; gap:7px; margin-top:10px; }
-  .chatInput { flex:1; min-width:0; background:var(--field); border:1px solid var(--fieldbd); border-radius:99px; padding:9px 14px; color:var(--ink); font-size:13.5px; outline:none; font-family:inherit; }
-  .chatSend { background:var(--tickfill); color:var(--tickmark); border:none; border-radius:99px; width:36px; height:36px; flex:none; font-size:15px; cursor:pointer; }
-  .chatSend:disabled { opacity:.4; cursor:default; }
 
   /* ---- use-your-brain tile ---- */
   .brainFormat { font:700 9.5px/1 'Nunito',monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--lbl); }
@@ -598,9 +580,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .ovlcard { max-width:760px; border-radius:24px; padding:24px 26px; background:rgba(255,255,255,.94); border:1px solid rgba(255,255,255,.95); box-shadow:0 34px 100px rgba(22,25,48,.24); animation:modalIn .35s var(--ease); }
   .ovlhead { margin-bottom:18px; }
   .ovlhead h3 { font-size:20px !important; letter-spacing:-.03em; }
-  .chatLog { border-radius:14px; padding:10px; background:rgba(255,255,255,.42); }
-  .chatMsg { border-radius:15px; line-height:1.48; }
-  .chatSend { background:#6257e7; }
   .libraryIntro { padding:20px 22px; margin-bottom:18px; }
   .libraryIntro h2 { font-size:22px; letter-spacing:-.035em; }
   .tileManage { border-radius:9px; padding:7px 10px; font-size:9px; letter-spacing:.03em; background:rgba(255,255,255,.72); }
@@ -1381,7 +1360,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid="habits"] .hgrid{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));align-items:start}
   .tile[data-tileid="habits"] .hsq{width:100%!important;aspect-ratio:1/1!important;min-height:0!important;height:auto!important;overflow:hidden}
   .tile[data-tileid="habits"] .hname{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .tile[data-tileid="philo"] .content,.tile[data-tileid="philo"] .philoCard,.tile[data-tileid="philo"] .philoQ,.tile[data-tileid="philo"] .philoThinkArea,.tile[data-tileid="philo"] .chatLog,.tile[data-tileid="philo"] .chatInputRow{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere}
+  .tile[data-tileid="philo"] .content,.tile[data-tileid="philo"] .philoCard,.tile[data-tileid="philo"] .philoQ{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere}
   .tile[data-tileid="word"] .wordcard{width:100%;max-width:100%;min-height:max-content;overflow-wrap:anywhere}
   .tile[data-tileid="pushups"] .pushBtns{max-width:100%;flex-wrap:wrap;overflow:hidden}
   .tile[data-tileid="pushups"] .pushBtns .puBtn{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1399,15 +1378,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   }
   .tile[data-tileid="weekly"][data-rows="1"] .wrev>*:not(:first-child){display:none}
   .tile[data-tileid="weekly"][data-rows="1"] .wrevSection{min-height:0;height:100%;padding:5px 7px}
-  .tile[data-tileid="philo"][data-rows="1"] .philoModeRow,
-  .tile[data-tileid="philo"][data-rows="1"] .philoThinkArea,
-  .tile[data-tileid="philo"][data-rows="1"] .chatLog,
-  .tile[data-tileid="philo"][data-rows="1"] .chatInputRow,
-  .tile[data-tileid="philo"][data-rows="1"] .pill{display:none!important}
-  .tile[data-tileid="philo"][data-rows="1"] .philoQ{
-    display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3;
-    margin:0!important;font-size:11px!important;line-height:1.3!important;opacity:1!important
-  }
   .tile[data-tileid="people"][data-rows="1"] .content>div>.addinput,
   .tile[data-tileid="people"][data-rows="1"] .peopleTree{display:none}
   .tile[data-tileid="people"][data-rows="1"] .peopleAddRow{height:100%;align-content:center}
@@ -1429,17 +1399,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   @container tile (max-width:320px){
     .tile[data-tileid="shopping"] .shopShelf{grid-auto-columns:calc((100% - 28px)/5)}
   }
-  .philoModeBar{display:flex;align-items:flex-start;gap:6px}
-  .philoModeBar .philoModeRow{flex:1 1 auto;min-width:0}
-  .tile button.tileUndo{
-    display:grid!important;place-items:center!important;flex:0 0 28px!important;
-    width:28px!important;min-width:28px!important;height:28px!important;min-height:28px!important;
-    margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
-    background:transparent!important;color:var(--accentDark)!important;box-shadow:none!important;
-    font-size:18px!important;line-height:1!important;transform:none!important
-  }
-  .tile.completed button.tileUndo{color:#fff!important}
-  .tile button.tileUndo:hover{background:transparent!important;transform:scale(1.08)!important}
   .tile button.brainSolution{
     display:block;width:100%;height:auto;min-height:0!important;margin-top:8px;padding:10px 12px!important;
     border-radius:20px!important;text-align:left;white-space:normal
@@ -1494,12 +1453,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   @media (min-width:640px){
     .tile[data-rows="1"] .tbody{overflow-x:hidden!important;overflow-y:auto!important}
     .tile[data-rows="1"] .content{height:auto!important;overflow:visible!important}
-    .tile[data-tileid="philo"][data-rows="1"] .philoModeRow{display:flex!important}
-    .tile[data-tileid="philo"][data-rows="1"] .philoThinkArea,
-    .tile[data-tileid="philo"][data-rows="1"] .chatLog{display:block!important}
-    .tile[data-tileid="philo"][data-rows="1"] .chatInputRow{display:flex!important}
-    .tile[data-tileid="philo"][data-rows="1"] .pill{display:inline-flex!important}
-    .tile[data-tileid="philo"][data-rows="1"] .philoQ{display:block!important;overflow:visible!important;-webkit-line-clamp:unset}
   }
   .tile[data-tileid="habits"] .hgrid{
     display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;align-content:flex-start!important;
@@ -1537,8 +1490,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid="breathing"][data-rows="1"] .breathProgress::before{width:63px!important}
   .tile[data-tileid="breathing"][data-rows="1"] .breathOrb{width:50px!important}
   .tile[data-tileid="philo"] .philoCard{display:flex;flex-direction:column;width:100%;height:auto;min-width:0;overflow:visible}
-  .tile[data-tileid="philo"] .chatLog{height:auto!important;max-height:none!important;overflow:visible!important}
-  .tile[data-tileid="philo"] .chatMsg{max-width:100%;overflow-wrap:anywhere}
   .tile[data-tileid="weather"] .content,.tile[data-tileid="weather"] .weatherSplit,
   .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{height:auto!important;overflow:visible!important}
   @container tile (max-width:360px){
@@ -1560,11 +1511,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .shoppingSection .shoppingPicked{min-height:30px}
   .shoppingSection .shopShelf{margin-top:0}
   .shoppingSection .shopOther{margin-top:2px}
-  /* Philosophy mode chooser reads as a control card rather than a cramped native field. */
-  .philoModeBar{padding:8px 9px;border:1px solid color-mix(in srgb,var(--accent) 26%,rgba(255,255,255,.64));border-radius:16px;background:rgba(255,255,255,.18);align-items:center}
-  .philoModeRow{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px}
-  .philoModeRow span{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--accentDark)}
-  .philoModeSelect{appearance:auto!important;border-radius:10px!important;padding:7px 9px!important;background:rgba(255,255,255,.62)!important;border:1px solid color-mix(in srgb,var(--accent) 30%,#fff)!important;color:var(--accentDark)!important}
   /* Weather uses a clear current/next-day hierarchy and never stretches empty space. */
   .tile[data-tileid="weather"] .weatherSplit{height:auto!important;display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)!important;gap:10px!important;align-items:stretch!important}
   .tile[data-tileid="weather"] .weatherNow,.tile[data-tileid="weather"] .wtomorrow{min-width:0!important;padding:11px 12px;border:1px solid color-mix(in srgb,var(--accent) 28%,rgba(255,255,255,.58));border-radius:18px;background:rgba(255,255,255,.22);box-sizing:border-box}
@@ -1622,7 +1568,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
     .tilehead{min-height:24px!important;margin-bottom:13px!important}
     .tile .ldot{width:9px!important;height:9px!important}.tile .lbl{font-size:12px!important}
     .tile .content{font-size:14.5px!important}
-    .tile :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:14.5px!important;padding:10px 13px!important}
+    .tile :where(.addinput,.notearea,.timerInput){font-size:14.5px!important;padding:10px 13px!important}
     .tile :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button){min-height:36px!important;font-size:12.5px!important;padding:7px 12px!important}
     .tile .goalRow{gap:10px!important;padding:5px 0!important}.tile .goalRow .goalTick{width:24px!important;height:24px!important;min-height:24px!important}
     .tile .goalText,.tile .agName{font-size:14px!important}.tile .agSub,.tile .agWhen{font-size:11px!important}
@@ -1643,7 +1589,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
     .tile{padding:24px 25px 25px!important;border-radius:29px!important}
     .tilehead{min-height:27px!important;margin-bottom:16px!important}.tile .ldot{width:10px!important;height:10px!important;box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 13%,transparent)!important}
     .tile .lbl{font-size:13.5px!important}.tile .content{font-size:16px!important}
-    .tile :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:16px!important;padding:12px 15px!important;border-radius:14px!important}
+    .tile :where(.addinput,.notearea,.timerInput){font-size:16px!important;padding:12px 15px!important;border-radius:14px!important}
     .tile :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button){min-height:42px!important;font-size:14px!important;padding:9px 15px!important;border-radius:13px!important}
     .tile .goalRow{gap:12px!important;padding:7px 0!important}.tile .goalRow .goalTick{width:27px!important;height:27px!important;min-height:27px!important;font-size:14px!important}
     .tile .goalText,.tile .agName{font-size:15.5px!important}.tile .agSub,.tile .agWhen{font-size:12px!important}
@@ -1995,7 +1941,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .tile[data-tileid] .tilehead .lbl{color:var(--ink)!important;font-size:13px!important;font-weight:800!important}
   .tile[data-tileid] .content{color:var(--ink)!important;text-shadow:none!important}
   .tile[data-tileid] .content :where(p,span,div,label):not(button *){color:inherit}
-  .tile[data-tileid] :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.goalText,.pushCount,.wbig,.weatherTomorrowTemps,.eventCountdown strong,.agName,.miniCalHead,.miniCalNum,.shopSectionLabel,.wcTerm,.wcDef,.wcTermFr,.philoModeRow,.plainEmpty){color:var(--ink)!important}
+  .tile[data-tileid] :is(.muted,.subro,.lbl,.link,.qretry,.noteSaved,.goalText,.pushCount,.wbig,.weatherTomorrowTemps,.eventCountdown strong,.agName,.miniCalHead,.miniCalNum,.shopSectionLabel,.wcTerm,.wcDef,.wcTermFr,.plainEmpty){color:var(--ink)!important}
   .tile[data-tileid] :is(.muted,.noteSaved,.agSub,.weatherMeta,.weatherTomorrowLabel){opacity:.82}
   .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventHero,.eventEmpty,.insight,.examLink,.wrevSection,.placeBranch,.flameCard,.achCard,.plainEmpty,.recallFlash,.recallAnswer,.miniCalendar,.habitHistoryCard){background:transparent!important;border-color:var(--hair)!important;box-shadow:none!important}
   .tile[data-tileid] .content :is(.weatherNow,.wtomorrow,.shoppingSection,.eventEmpty,.plainEmpty,.wrevSection){border:0!important}
@@ -2128,9 +2074,9 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
   .grid>.tile[data-tileid] .content{height:auto!important;min-width:0;max-width:100%;font-size:var(--dashboard-text)!important;line-height:1.45;overflow-wrap:anywhere}
   .grid>.tile[data-tileid] :where(.goalText,.agName,.story,.ptext,.qprompt,.chatMsg,.healthWorkout){font-size:var(--dashboard-text)!important;line-height:1.45}
   .grid>.tile[data-tileid] :where(.agSub,.agWhen,.healthHint,.healthDate,.healthMetric span,.weatherMeta,.weatherTomorrowLabel,.eventDate){font-size:var(--dashboard-support)!important;line-height:1.4}
-  .grid>.tile[data-tileid] :where(.addinput,.notearea,.philoThinkArea,.chatInput,.timerInput){font-size:var(--dashboard-text)!important;line-height:1.45;padding:.625rem .75rem!important;max-width:100%;box-sizing:border-box}
+  .grid>.tile[data-tileid] :where(.addinput,.notearea,.timerInput){font-size:var(--dashboard-text)!important;line-height:1.45;padding:.625rem .75rem!important;max-width:100%;box-sizing:border-box}
   .grid>.tile[data-tileid] :where(.pill,.mark,.puBtn,.qopt,.taskAddLink,.eventAdd,.timerControls button,.addbtn){min-height:2.75rem!important;max-width:100%;font-size:var(--dashboard-support)!important;line-height:1.3;white-space:normal}
-  .grid>.tile[data-tileid] :where(.addrow,.timerControls,.pushBtns,.weatherSplit,.healthGrid,.philoModeBar){min-width:0;max-width:100%}
+  .grid>.tile[data-tileid] :where(.addrow,.timerControls,.pushBtns,.weatherSplit,.healthGrid){min-width:0;max-width:100%}
   .grid>.tile[data-tileid] :where(.resizeH,.sizebadge){display:none!important}
   @media(max-width:1199px){.wrap{--dashboard-columns:8}}
   @media(max-width:959px){.wrap{--dashboard-columns:4}}
@@ -2148,7 +2094,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 /* Expanded cards retain their tile-specific internals without grid geometry. */
 .tile.tileFocusSurface{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;display:block!important;container-type:inline-size!important;transform:none!important;animation:none!important;box-shadow:none!important;padding:24px 28px 30px!important;border:0!important;border-radius:30px!important}
 .tileFocusSurface>.tileFocusBody{position:relative;z-index:2}.tile.tileFocusSurface::before,.tile.tileFocusSurface::after{border-radius:inherit!important}
-.curatedTile[data-tileid="philo"] .philoThinkArea{min-height:44px!important;height:44px!important;resize:none}.curatedTile[data-tileid="philo"] .philoCard{gap:8px!important}
 @media(max-width:639px){.tile.tileFocusSurface{padding:20px 20px 28px!important;border-radius:28px 28px 0 0!important}}
 
 
@@ -2196,7 +2141,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid] .musicTitle{font-weight:800!important;letter-spacing:-.035em;line-height:1.14}.tile[data-tileid] .musicArtist{font-weight:600!important;line-height:1.45}
 .tile[data-tileid] .timerActions,.tile[data-tileid] .breathActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap}
 .tile[data-tileid] .noteActions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}.tile[data-tileid] .noteSaved{flex:none!important;opacity:.45}.noteSaved svg{width:16px;height:16px}
-.tile[data-tileid] .eventAddToggle,.tile[data-tileid] .philoPreviewAction{align-self:flex-end;margin-top:12px!important}
+.tile[data-tileid] .eventAddToggle{align-self:flex-end;margin-top:12px!important}
 /* adding an event lives in the expanded view; the preview stays a clean stack of tickets */
 .grid>.tile[data-tileid="events"] .tileMount .eventAddToggle{display:none!important}
 .tile[data-tileid] .shoppingPreviewActions{margin-top:10px;justify-content:flex-end}.tile[data-tileid] .shopSectionLabel{font-size:11px;letter-spacing:.02em;font-weight:700;opacity:.6}
@@ -2231,7 +2176,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 
 .grid>.tile[data-tileid]{grid-row:span var(--tile-span-rows)!important}
 
-.philoWorkspace[hidden]{display:none!important}.philoPreviewAction{align-self:flex-start;margin-top:4px}.tileFootMinimal{min-height:0!important;margin-top:6px!important}.tileFootMinimal:has(>span:empty):not(:has(.tileSaveState)){display:none!important}
+.tileFootMinimal{min-height:0!important;margin-top:6px!important}.tileFootMinimal:has(>span:empty):not(:has(.tileSaveState)){display:none!important}
 
 /* Compact utilities keep their authored proportions without losing touch targets. */
 .grid>.tile[data-tileid="breathing"][data-rows] .breathCard{align-items:center!important}
@@ -2669,13 +2614,10 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;padding-right:34px}
 .langTitle{font-size:17px!important;font-weight:800!important;line-height:1.2!important;flex:1;min-width:0}
 .langLede{position:relative;margin:0 0 13px;font-size:13.5px;line-height:1.5;font-weight:650;color:#2a2e40}
-.langEs .langLede{padding-left:14px}
-.langDe .langLede{padding-right:14px;text-align:right}
+.langLede{padding-left:14px}
 .langLede::before{content:"";position:absolute;top:2px;bottom:2px;width:5px;border-radius:99px}
 .langEs .langLede::before{left:0;background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75% 100%)}
-.langDe .langLede::before{right:0;background:linear-gradient(180deg,#1d1d1f 0 33%,#DD0000 33% 66%,#FFCE00 66% 100%)}
-.langDe .langHead{justify-content:flex-end}
-.langDe .langHead .langTitle{text-align:right}
+.langDe .langLede::before{left:0;background:linear-gradient(180deg,#1d1d1f 0 33%,#DD0000 33% 66%,#FFCE00 66% 100%)}
 .langEs .langVocab{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:5px}
 .langEs .langWord{display:contents}
 .langEs .langTerm{font-weight:800;font-size:14px;color:var(--accentDark);padding:3px 0;border-bottom:1px solid var(--hair)}
@@ -2842,6 +2784,43 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .sudokuCell.bad,.tile[data-tileid="brainflex"] .sudokuCell.bad{color:#D23B3B!important}
 .tile.completed[data-tileid="brainflex"] .digitsTarget{color:#fff}
 .tile.completed[data-tileid="brainflex"] .sudokuGrid{border-color:#fff}
+/* --- Philosophy: answer from the tile; the pop-up is a calm conversation --- */
+.grid>.tile[data-tileid="philo"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="philo"] .tileMount{flex:1 1 auto!important;display:flex}
+.grid>.tile[data-tileid="philo"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0}
+.tile[data-tileid="philo"] .philoCard{flex:1 1 auto;display:flex;flex-direction:column;gap:10px!important;min-height:0}
+.tile[data-tileid="philo"] .philoQ{margin-bottom:0;padding-right:36px}
+.grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:3;max-height:5.2em}
+.tileFocusSurface[data-tileid="philo"] .philoQ{font-size:19px;padding-right:48px}
+.philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;cursor:pointer}
+.philoHint{margin:0;font-size:11.5px;line-height:1.4;font-weight:650;color:var(--dim)}
+.tile[data-tileid="philo"] .philoHint button.link{display:inline!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0 0 0 2px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--accentDark)!important;font-family:inherit!important;font-size:inherit!important;font-weight:800!important;line-height:inherit!important;text-decoration:underline;text-underline-offset:2px;transform:none!important;cursor:pointer}
+.philoComposer{display:flex;align-items:flex-end;gap:8px;margin-top:auto;padding:5px 5px 5px 16px;border-radius:22px;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 24%,transparent)}
+.tile[data-tileid="philo"] textarea.philoInput{flex:1;min-width:0;min-height:0!important;max-height:140px;margin:0;padding:7px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;overflow-y:auto;font:600 14px/1.45 'Nunito',sans-serif!important;color:#20283a!important;-webkit-text-fill-color:#20283a;transform:none!important}
+.tile[data-tileid="philo"] textarea.philoInput::placeholder{color:color-mix(in srgb,#20283a 45%,transparent);-webkit-text-fill-color:color-mix(in srgb,#20283a 45%,transparent)}
+.tile[data-tileid="philo"] button.philoSend{flex:none;display:grid!important;place-items:center;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;padding:0!important;border:0!important;border-radius:50%!important;background:var(--accentDark)!important;color:#fff!important;box-shadow:none!important;transform:none!important;cursor:pointer;transition:opacity .15s}
+.tile[data-tileid="philo"] button.philoSend:disabled{opacity:.28;cursor:default}
+.tile[data-tileid="philo"] button.philoSend svg{width:17px;height:17px}
+.philoThinkers{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -28px;padding:2px 28px 4px;scroll-padding-inline:28px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 56px),transparent)}
+.philoThinkers::-webkit-scrollbar{display:none}
+.tile[data-tileid="philo"] button.philoThinker{flex:none;height:30px!important;min-height:30px!important;padding:0 13px!important;border:0!important;border-radius:99px!important;background:rgba(255,255,255,.45)!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 12px/1 'Nunito',sans-serif!important;white-space:nowrap;transform:none!important;cursor:pointer}
+.tile[data-tileid="philo"] button.philoThinker.on{background:var(--accentDark)!important;color:#fff!important}
+.tile[data-tileid="philo"] button.philoThinker:disabled{opacity:.5;cursor:default}
+.philoThread{display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.philoMsg{max-width:84%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.55;font-weight:600;white-space:pre-wrap;overflow-wrap:anywhere}
+.philoMsg.me,.tile[data-tileid="philo"] .philoMsg.me{align-self:flex-end;background:var(--accentDark);color:#fff!important;-webkit-text-fill-color:#fff;border-bottom-right-radius:6px}
+.philoMsg.them,.tile[data-tileid="philo"] .philoMsg.them{align-self:flex-start;background:rgba(255,255,255,.66);color:#20283a!important;-webkit-text-fill-color:#20283a;border-bottom-left-radius:6px}
+.philoTyping{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.5)}
+.philoTyping i{width:6px;height:6px;border-radius:50%;background:var(--accentDark);opacity:.35;animation:philoDot 1.2s ease-in-out infinite}
+.philoTyping i:nth-child(2){animation-delay:.2s}
+.philoTyping i:nth-child(3){animation-delay:.4s}
+@keyframes philoDot{30%{opacity:1;transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){.philoTyping i{animation:none;opacity:.7}}
+.tileFocusSurface[data-tileid="philo"] .philoComposer{position:sticky;bottom:0;z-index:3;margin-top:8px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.tile[data-tileid="philo"] button.philoRestart{align-self:center;min-height:30px!important;height:auto!important;padding:4px 6px!important;border:0!important;background:none!important;box-shadow:none!important;color:var(--dim)!important;font:750 12px/1 'Nunito',sans-serif!important;cursor:pointer;transform:none!important}
+.tile[data-tileid="philo"] button.philoRestart:hover{color:var(--accentDark)!important}
+.tile.completed[data-tileid="philo"] .philoLast,.tile.completed[data-tileid="philo"] .philoHint{color:#fff}
+.tile.completed[data-tileid="philo"] .philoLast{border-left-color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
@@ -3301,40 +3280,116 @@ const sudokuConflicts=grid=>{
 const sudokuSolved=grid=>grid.every(row=>row.every(Boolean))&&sudokuConflicts(grid).size===0;
 
 
+/* Short, contested questions for the Philosophy tile. A served question longer than
+   PHILO_MAX_WORDS (an older daily server writes long ones) is replaced by the day's
+   question from this bank, and the bank also covers days when nothing loads. */
+const PHILO_MAX_WORDS=12;
+const PHILO_BANK=[
+ ["consciousness","Could a perfect simulation of your brain feel anything?"],
+ ["consciousness","Is consciousness something the brain does, or something it has?"],
+ ["knowledge argument","Does knowing every physical fact about color include knowing red?"],
+ ["personal identity","If you were teleported atom by atom, would you survive?"],
+ ["personal identity","Are you the same person who fell asleep last night?"],
+ ["moral luck","Can you be blamed for what you couldn't have avoided?"],
+ ["free will","If every choice has a cause, in what sense is it yours?"],
+ ["honesty","Is a lie told to spare feelings still wrong?"],
+ ["obligation","Do we owe strangers in need far more than we think?"],
+ ["procreation","Is it wrong to bring a child into a suffering world?"],
+ ["moral realism","Can a moral fact exist if no one ever recognizes it?"],
+ ["metaethics","Are moral truths discovered, like mathematics, or invented, like games?"],
+ ["moral luck","Does luck undermine the praise we give to good people?"],
+ ["pleasure","Is it better to be Socrates dissatisfied or a fool satisfied?"],
+ ["experience machine","Would you plug into a machine guaranteeing a perfect life?"],
+ ["skepticism","Can you know anything without first knowing how you know it?"],
+ ["knowledge","Is a justified true belief ever not knowledge?"],
+ ["testimony","Should you believe something just because experts agree?"],
+ ["induction","Is trusting induction rational when every defense of it is circular?"],
+ ["skepticism","Could you be a brain in a vat right now?"],
+ ["authority","Does a law lose its authority when it becomes unjust?"],
+ ["justice","Behind a veil of ignorance, which society would you choose?"],
+ ["property","Is taxation a form of forced labor?"],
+ ["consent","Do we owe obedience to a state we never agreed to?"],
+ ["democracy","Should democracy defer to experts on questions of fact?"],
+ ["promising","Can a promise bind you once your reasons have changed?"],
+ ["meaning","Do words get their meaning from minds, or from communities?"],
+ ["private language","Could there be a language only you could understand?"],
+ ["beauty","Is beauty in the object or in the one who sees it?"],
+ ["art","Can a perfect forgery be as valuable as the original?"],
+ ["music","How can music move us when it represents nothing?"],
+ ["posthumous harm","Can something that happens after your death harm you?"],
+ ["death","Is death bad for the one who dies?"],
+ ["immortality","Would living forever make life more meaningful or less?"],
+ ["meaning of life","Can a life be meaningful if no one remembers it?"],
+ ["mathematics","Do numbers exist, or do we merely use them?"],
+ ["time","Does time really flow, or is it just another dimension?"],
+ ["time","Does the past still exist in any sense?"],
+ ["cosmology","Could the universe exist without any reason at all?"],
+ ["scientific realism","Is a successful scientific theory true, or just useful?"],
+ ["colour","Are colors in the world, or only in us?"],
+ ["physicalism","If everything is physical, where does meaning come from?"],
+ ["machine minds","Can a machine that predicts your words truly understand them?"],
+ ["future generations","Should future people matter as much as present ones?"],
+ ["animals","Do animals have rights, or only interests we should weigh?"],
+ ["trolley problem","Is it permissible to kill one person to save five?"],
+ ["doing and allowing","Is doing harm worse than allowing the same harm?"],
+ ["harm","Can you be harmed by something you never find out about?"],
+ ["forgiveness","Is forgiveness ever a duty?"],
+ ["intention","Should we judge actions by their intentions or their outcomes?"],
+ ["free speech","Is free speech valuable even when it spreads falsehoods?"],
+ ["equality","Can a society be just without being equal?"],
+ ["tolerance","Must a tolerant society tolerate the intolerant?"],
+ ["self-deception","Is self-deception possible, or does part of us always know?"],
+ ["belief","Can you choose what to believe?"],
+ ["happiness","Is happiness the goal of life, or a byproduct of it?"],
+ ["emotion","Are emotions obstacles to reason, or a form of it?"],
+ ["authenticity","Can you be authentic when society shapes every desire?"],
+ ["suffering","Would a world without suffering lack something valuable?"],
+ ["love","Is love a reason, or does it need reasons?"]
+];
+const philoWordCount=text=>String(text||"").trim().split(/\s+/).filter(Boolean).length;
+function philoBankEntry(dateKey){
+  const [y,m,d]=String(dateKey).split("-").map(Number);
+  const day=Math.floor(Date.UTC(y,m-1,d)/86400000);
+  const [theme,question]=PHILO_BANK[((day%PHILO_BANK.length)+PHILO_BANK.length)%PHILO_BANK.length];
+  return {theme,question,source:"bank"};
+}
+/* The question shown and discussed today: the served one when it is short enough. */
+const philoQuestionOf=(philo,dateKey)=>philo&&philo.question&&philoWordCount(philo.question)<=PHILO_MAX_WORDS?philo.question:philoBankEntry(dateKey).question;
+
 /* Philosophy: a genuinely advanced daily theme (the chat reply logic is separate, see philoReply). */
 const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 12 words, no preamble or setup — depth comes from the idea, not the length"}.`, {max:220}).then(extractJSON);
 
 const PHILO_MODES=[
-  {id:"standard",label:"Standard · go deeper",icon:"🔎"},
-  {id:"plato",label:"Plato",icon:"🏛️"},
-  {id:"aristotle",label:"Aristotle",icon:"📚"},
-  {id:"epicurus",label:"Epicurus",icon:"🌿"},
-  {id:"augustine",label:"Augustine",icon:"⛪"},
-  {id:"aquinas",label:"Aquinas",icon:"✝️"},
-  {id:"machiavelli",label:"Machiavelli",icon:"🦊"},
-  {id:"descartes",label:"Descartes",icon:"🧠"},
-  {id:"spinoza",label:"Spinoza",icon:"🔷"},
-  {id:"locke",label:"Locke",icon:"🗝️"},
-  {id:"hume",label:"Hume",icon:"👁️"},
-  {id:"rousseau",label:"Rousseau",icon:"🌱"},
-  {id:"kant",label:"Kant",icon:"🧭"},
-  {id:"hegel",label:"Hegel",icon:"🌀"},
-  {id:"mill",label:"J. S. Mill",icon:"⚖️"},
-  {id:"kierkegaard",label:"Kierkegaard",icon:"⚡"},
-  {id:"marx",label:"Marx",icon:"⚒️"},
-  {id:"nietzsche",label:"Nietzsche",icon:"⛰️"},
-  {id:"james",label:"William James",icon:"🧪"},
-  {id:"husserl",label:"Husserl",icon:"🔬"},
-  {id:"heidegger",label:"Heidegger",icon:"⏳"},
-  {id:"wittgenstein",label:"Wittgenstein",icon:"💬"},
-  {id:"arendt",label:"Hannah Arendt",icon:"🌍"},
-  {id:"beauvoir",label:"Simone de Beauvoir",icon:"♀️"},
-  {id:"foucault",label:"Foucault",icon:"👁️‍🗨️"},
-  {id:"rawls",label:"Rawls",icon:"🎭"},
-  {id:"nozick",label:"Nozick",icon:"🛡️"}
+  {id:"standard",label:"Socratic"},
+  {id:"plato",label:"Plato"},
+  {id:"aristotle",label:"Aristotle"},
+  {id:"epicurus",label:"Epicurus"},
+  {id:"augustine",label:"Augustine"},
+  {id:"aquinas",label:"Aquinas"},
+  {id:"machiavelli",label:"Machiavelli"},
+  {id:"descartes",label:"Descartes"},
+  {id:"spinoza",label:"Spinoza"},
+  {id:"locke",label:"Locke"},
+  {id:"hume",label:"Hume"},
+  {id:"rousseau",label:"Rousseau"},
+  {id:"kant",label:"Kant"},
+  {id:"hegel",label:"Hegel"},
+  {id:"mill",label:"J. S. Mill"},
+  {id:"kierkegaard",label:"Kierkegaard"},
+  {id:"marx",label:"Marx"},
+  {id:"nietzsche",label:"Nietzsche"},
+  {id:"james",label:"William James"},
+  {id:"husserl",label:"Husserl"},
+  {id:"heidegger",label:"Heidegger"},
+  {id:"wittgenstein",label:"Wittgenstein"},
+  {id:"arendt",label:"Hannah Arendt"},
+  {id:"beauvoir",label:"Simone de Beauvoir"},
+  {id:"foucault",label:"Foucault"},
+  {id:"rawls",label:"Rawls"},
+  {id:"nozick",label:"Nozick"}
 ];
-const philoModeLabel=id=>(PHILO_MODES.find(m=>m.id===id)||PHILO_MODES[0]).label.replace(/^Standard · /,"");
+const philoModeLabel=id=>(PHILO_MODES.find(m=>m.id===id)||PHILO_MODES[0]).label;
 
 /* Academic: one focused study capsule per day from the student's own pasted course material,
    deliberately tied back to the broader chapter/subject rather than an isolated fact. */
@@ -3961,7 +4016,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -4013,9 +4068,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   const showLabel=edit||(!cornerOutside&&contentState&&contentState!=="ready");
   /* ⤢ only appears when it earns its place: Recall's focused session always, otherwise
      only while this tile's preview — at the current size and zoom — is actually hiding
-     something (expanded-only blocks, clamped text, collapsed rows). Birthdays and
-     Philosophy open through their own controls instead. */
-  const expandable=!["birthdays","philo"].includes(id);
+     something (expanded-only blocks, clamped text, collapsed rows). Birthdays opens
+     through its own control instead. */
+  const expandable=id!=="birthdays";
   const [hasMore,setHasMore]=useState(false);
   const canExpand=expandable&&(TILE_ALWAYS_EXPAND.has(id)||hasMore);
   useLayoutEffect(()=>{
@@ -4702,9 +4757,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         }catch(error){const issue=dailyRequestFailure(error);for(const key of needed){if(!(await personalFallback(key)))failed(key,issue.state,issue.message);}}
       }).catch(error=>{const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}));
       await Promise.all(jobs);
-      /* Deutsch never stays empty: when neither the daily server nor a personal key
-         produced a lesson, the built-in bank provides the day's lesson. */
+      /* Deutsch and Philosophy never stay empty: when neither the daily server nor a
+         personal key produced them, the built-in banks provide the day's content. */
       if(keys.includes("german")&&!validDailyTile("german",load("daily:"+todayKey,{}).german))remember("german",germanBankLesson(todayKey));
+      if(keys.includes("philo")&&!validDailyTile("philo",load("daily:"+todayKey,{}).philo))remember("philo",philoBankEntry(todayKey));
       const saved=load("daily:"+todayKey,{}),remaining=keys.filter(key=>!validDailyTile(key,saved[key]));
       const problems=remaining.map(key=>issues[key]||dailyIssueInfo(key,"error"));
       if(problems.length)showLoadProblems(problems);
@@ -4829,15 +4885,16 @@ function App({forceSignIn=false,initialAuthMode="login"}){
 
   /* ---- philosophy chat ---- */
   const setPhiloMode=mode=>persistPhiloChat({...philoChat,mode});
+  const philoRestart=()=>{ unsetRitual("philo"); setPhiloError(""); persistPhiloChat({initial:"",messages:[],mode:philoChat.mode||"standard"}); };
   const philoSubmitInitial=async(text)=>{
-    const q=daily && daily.philo && daily.philo.question; if(!q) return;
-    const base={initial:text,messages:[],mode:philoChat.mode||"standard"}; persistPhiloChat(base); setRitual("philo"); setPhiloError("");if(!getKey()){setPhiloError("Your reflection is saved. Add your Claude API key in Settings to receive replies.");showLoadProblems([dailyIssueInfo("philo","personal_key")]);return;}setPhiloBusy(true);
+    const q=daily && daily.philo && philoQuestionOf(daily.philo,todayKey); if(!q) return;
+    const base={initial:text,messages:[],mode:philoChat.mode||"standard",question:q}; persistPhiloChat(base); setRitual("philo"); setPhiloError("");if(!getKey()){setPhiloError("Your reflection is saved. Add your Claude API key in Settings to receive replies.");showLoadProblems([dailyIssueInfo("philo","personal_key")]);return;}setPhiloBusy(true);
     try{ const reply=await philoReply(q,[{role:"user",text}],base.mode); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
     catch(e){setPhiloError("Your reflection is saved. Couldn’t receive a reply; check your connection and API key, then retry.");const issue=dailyRequestFailure(e);showLoadProblems([dailyIssueInfo("philo",issue.state,issue.message,true)]);}
     setPhiloBusy(false);
   };
   const philoSend=async(text,retry=false)=>{
-    const q=daily && daily.philo && daily.philo.question; if(!q) return;
+    const q=philoChat.question||(daily&&daily.philo&&daily.philo.question); if(!q) return;
     const withUser=retry?philoChat:{...philoChat,messages:[...philoChat.messages,{role:"user",text}]};
     persistPhiloChat(withUser);setPhiloError("");if(!getKey()){setPhiloError("Your message is saved. Add your Claude API key in Settings to receive replies.");showLoadProblems([dailyIssueInfo("philo","personal_key")]);return;}setPhiloBusy(true);
     try{
@@ -5228,7 +5285,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     brainflex: T("brainflex","Brainflex",!!rToday.brainflex,null,<>
       <BrainGameCard done={!!rToday.brainflex} onFinish={()=>setRitual("brainflex")}/></>),
     philo: T("philo","Philosophy",!!rToday.philo,null,<>
-      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} error={philoError} haveKey={haveKey} onSetup={goSettings} onRetry={()=>philoSend("",true)} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onReset={()=>unsetRitual("philo")} onGenerate={()=>regenerateOne("philo")} />
+      <PhilosophyCard philo={view.philo} busy={genBusy} chat={philoChat} sending={philoBusy} error={philoError} haveKey={haveKey} onSetup={goSettings} onRetry={()=>philoSend("",true)} onModeChange={setPhiloMode} onSubmitInitial={philoSubmitInitial} onSend={philoSend} onReset={philoRestart} onGenerate={()=>regenerateOne("philo")} />
       <RetryNote tileKey="philo"/></>),
     people: T("people","People",people.some(p=>p.date===todayKey),null,
       <PeopleMetCard people={people} onAdd={p=>persistPeople([...people,{id:uid(),date:todayKey,...p}])} onRemove={id=>persistPeople(people.filter(p=>p.id!==id))} />),
@@ -6495,59 +6552,57 @@ function BrainGameCard({done,onFinish}){
   </div>;
 }
 
+/* Philosophy: the day's question as a quotation, answered straight from the tile. The
+   pop-up holds the conversation, with the thinker you argue with as a row of names. */
 function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
   const {expanded,open}=useTilePresentation();
-  const [draft,setDraft]=useState("");
   const [msg,setMsg]=useState("");
-  const logRef=useRef(null);
-  useEffect(()=>{ if(expanded&&logRef.current) logRef.current.scrollTop=logRef.current.scrollHeight; });
+  const inputRef=useRef(null),endRef=useRef(null),thinkersRef=useRef(null);
+  const messages=chat.messages||[];
+  useEffect(()=>{ if(expanded&&endRef.current)endRef.current.scrollIntoView({block:"nearest"}); },[expanded,messages.length,sending]);
+  useEffect(()=>{
+    const row=thinkersRef.current; if(!expanded||!row)return;
+    row.querySelector(".philoThinker.on")?.scrollIntoView({block:"nearest",inline:"center"});
+    const onWheel=e=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)&&row.scrollWidth>row.clientWidth){ e.preventDefault(); row.scrollLeft+=e.deltaY; } };
+    row.addEventListener("wheel",onWheel,{passive:false});
+    return()=>row.removeEventListener("wheel",onWheel);
+  },[expanded]);
   if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
+  /* a conversation keeps the question it began on; a new one gets today's short question */
+  const question=chat.question||(started?philo.question:philoQuestionOf(philo,todayKey));
   const mode=chat.mode||"standard";
-  const modeDef=PHILO_MODES.find(m=>m.id===mode)||PHILO_MODES[0];
-  const messages=chat.messages||[];
-  const latest=messages.length?messages[messages.length-1]:{role:"user",text:chat.initial};
-  const send=()=>{ const t=msg.trim(); if(!t||sending) return; open(); onSend(t); setMsg(""); };
-  const reflect=()=>{ const t=draft.trim(); if(!t) return; open(); onSubmitInitial(t); };
+  const thread=started?[{role:"user",text:chat.initial},...messages]:[];
+  const lastReply=[...thread].reverse().find(m=>m.role==="assistant");
+  const grow=el=>{ if(!el)return; el.style.height="auto"; el.style.height=Math.min(el.scrollHeight,140)+"px"; };
+  const submit=()=>{
+    const text=msg.trim(); if(!text||sending)return;
+    if(!expanded)open();
+    if(started)onSend(text); else onSubmitInitial(text);
+    setMsg(""); requestAnimationFrame(()=>grow(inputRef.current));
+  };
   return (
-    <div className="philoCard">
-      <p className="philoQ" style={started&&expanded?{fontSize:14,lineHeight:1.4,marginBottom:9,opacity:.8}:null}>{philo.question}</p>
-      {!haveKey&&<p className="dailyDependency">Replies need your Claude API key. Your own reflection still saves. <button className="link" onClick={onSetup}>Add key</button></p>}
-      {error&&<div className="dailyDependency" role="alert">{error}{haveKey&&<button className="link" onClick={onRetry} disabled={sending}>Retry reply</button>}</div>}
-      <button type="button" className="widgetIconButton primary philoPreviewAction" hidden={expanded} aria-label={started?"Continue philosophy conversation":"Reflect on this question"} title={started?"Continue conversation":"Reflect"} onClick={open}><WidgetGlyph name="chat"/></button>
-      <div className="philoWorkspace" hidden={!expanded}>
-      <div className="philoModeBar">
-        <span className="philoModeIcon" title={modeDef.label} aria-hidden="true">{modeDef.icon}</span>
-        <label className="philoModeRow">
-          <span>Mode</span>
-          <select className="philoModeSelect" value={mode} disabled={sending} onChange={e=>onModeChange(e.target.value)}>
-            {PHILO_MODES.map(m=><option key={m.id} value={m.id}>{m.label}</option>)}
-          </select>
-        </label>
-        {started&&<button className="tileUndo" aria-label="Mark Philosophy incomplete" title="Mark incomplete" onClick={onReset}>↶</button>}
+    <div className={"philoCard"+(lastReply?" hasReply":"")}>
+      <p className="philoQ">{question}</p>
+      {expanded&&<div className="philoThinkers" ref={thinkersRef} role="group" aria-label="Who answers">
+        {PHILO_MODES.map(m=><button type="button" key={m.id} className={"philoThinker"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
+      </div>}
+      {expanded&&started&&<div className="philoThread">
+        {thread.map((m,i)=><div key={i} className={"philoMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>)}
+        {sending&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
+        <div ref={endRef}/>
+      </div>}
+      {!expanded&&lastReply&&<p className="philoLast" onClick={open}>{lastReply.text}</p>}
+      {!expanded&&sending&&!lastReply&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
+      {!haveKey&&<p className="philoHint">Replies need your Claude API key. <button type="button" className="link" onClick={onSetup}>Add key</button></p>}
+      {error&&<p className="philoHint" role="alert">{error}{haveKey&&<> <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></>}</p>}
+      <div className="philoComposer">
+        <textarea ref={inputRef} rows={1} className="philoInput" aria-label={started?"Reply":"Your answer"} placeholder={started?"Push back, or ask why…":"What do you think?"} value={msg}
+          onChange={e=>{ setMsg(e.target.value); grow(e.target); }}
+          onKeyDown={e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); submit(); } }}/>
+        <button type="button" className="philoSend" aria-label="Send" disabled={!msg.trim()||sending} onClick={submit}><WidgetGlyph name="send"/></button>
       </div>
-      {!started ? (<>
-        <textarea className="philoThinkArea" aria-label="Your reflection" placeholder="What do you think?" value={draft} onFocus={()=>{if(!expanded)open();}} onChange={e=>setDraft(e.target.value)} />
-        <button className="pill primary" style={{marginTop:9,alignSelf:"flex-start"}} disabled={!draft.trim()} onClick={reflect}>Continue reflection →</button>
-      </>) : (<>
-        {!expanded&&<div className="philoConversationPreview">
-          <div className={"chatMsg "+(latest.role==="user"?"me":"them")}>{latest.text}</div>
-          {sending&&<div className="chatThinking">…thinking</div>}
-          <button className="pill" onClick={open}>Continue conversation →</button>
-        </div>}
-        <div hidden={!expanded} className="cardExpandedDetails philoConversation">
-          <div className="chatLog" ref={logRef}>
-            <div className="chatMsg me">{chat.initial}</div>
-            {messages.map((m,i)=>(<div key={i} className={"chatMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>))}
-            {sending && <div className="chatThinking">…thinking</div>}
-          </div>
-          <div className="chatInputRow">
-            <input className="chatInput" aria-label="Reply to the conversation" placeholder="Push back, or ask why…" value={msg} onChange={e=>setMsg(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter") send(); }} />
-            <button className="chatSend" aria-label="Send reply" disabled={!msg.trim()||sending} onClick={send}>↑</button>
-          </div>
-        </div>
-      </>)}
-    </div>
+      {expanded&&started&&<button type="button" className="philoRestart" disabled={sending} onClick={onReset}>Start over</button>}
     </div>
   );
 }
