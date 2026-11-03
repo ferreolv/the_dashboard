@@ -2875,6 +2875,16 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .recallDeck.big .recallCloze{font-size:19px}
 .recallDeck.big .recallHeadword{font-size:30px}
 .recallDeck.big .recallFr{font-size:14.5px}
+/* --- Previews fit their module: dropped items wait in the pop-up --- */
+[data-fit-dropped]{display:none!important}
+.grid>.tile[data-tileid="word"] .dictHeadline{padding-right:24px}
+.grid>.tile[data-tileid="word"] .dictWord{white-space:nowrap}
+/* --- Music: a big record sliding out of the tile's left edge (cropped top, bottom and left; the label and ♫ stay in view) --- */
+.grid>.tile[data-tileid="music"]>.tbody{display:flex!important;flex-direction:column;min-height:0!important}
+.grid>.tile[data-tileid="music"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="music"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0;padding-bottom:0!important}
+.grid>.tile[data-tileid="music"] .musicCard{flex:1 1 auto;height:100%;grid-template-rows:minmax(0,1fr)}
+.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(170px,62cqi,250px);max-width:none!important;margin:0 4px 0 calc(-17cqi - var(--dashboard-pad,18px));align-self:center}
 </style>
 </head>
 <body>
@@ -2902,12 +2912,12 @@ const COL = {
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
   weather:  {p:"#DDF4FF", v:"#00B4DC", d:"#0E6E8C"},
   world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
-  recall:   {p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
+  recall:   {p:"#ECECEE", v:"#8E8E93", d:"#3F3F45"},
   weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
   note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
   birthdays:{p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
   timer:    {p:"#F1DBE0", v:"#7A1F35", d:"#5A1526"},
-  breathing:{p:"#DCF7F6", v:"#0DB9B1", d:"#08736E"},
+  breathing:{p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
   agenda:   {p:"#FFEADD", v:"#FF6A3D", d:"#B44223"},
   events:   {p:"#FFF3D6", v:"#FFB000", d:"#9A5B00"},
   brain:    {p:"#DDF7FA", v:"#00BFD4", d:"#0E7684"},
@@ -3973,18 +3983,36 @@ function Quiz({prompt,options,answer,explain,onDone,onUndo}){
 /* The Word tile reads like a page out of a dictionary: serif headword, IPA,
    italic part of speech, a numbered sense, then the French gloss as a sub-entry.
    The synonym quiz lives in the expanded view, like the other reading tiles. */
+/* A long single word can't wrap: in the preview it shrinks until it fits beside the expand corner. */
+function useShrinkToWidth(ref,active,key){
+  useLayoutEffect(()=>{
+    const el=ref.current; if(!el) return;
+    const fit=()=>{
+      el.style.fontSize=""; if(!active) return;
+      const box=el.parentElement, cs=getComputedStyle(box), room=box.clientWidth-(parseFloat(cs.paddingLeft)||0)-(parseFloat(cs.paddingRight)||0);
+      let size=parseFloat(getComputedStyle(el).fontSize)||22;
+      while(el.getBoundingClientRect().width>room+.5&&size>13){ size-=1; el.style.fontSize=size+"px"; }
+    };
+    fit();
+    if(!window.ResizeObserver) return;
+    const observer=new ResizeObserver(fit); observer.observe(el.parentElement);
+    return ()=>observer.disconnect();
+  },[active,key]);
+}
 function WordCard({word,busy,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
+  const headRef=useRef(null);
+  useShrinkToWidth(headRef,!expanded,word&&word.term_en);
   if(!word) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const ipa=String(word.ipa||"").replace(/^\/+|\/+$/g,"");
   return (
     <div className="dictEntry">
       <div className="dictHeadline">
-        <span className="dictWord">{word.term_en}</span>
-        {ipa && <span className="dictIpa">/{ipa}/</span>}
+        <span ref={headRef} className="dictWord">{word.term_en}</span>
+        {ipa && <span className="dictIpa" data-fit-drop="3">/{ipa}/</span>}
       </div>
-      {word.pos && <div className="dictPos">{word.pos}</div>}
-      <p className="dictSense"><span className="dictNum">1</span><span>{word.def_en}</span></p>
+      {word.pos && <div className="dictPos" data-fit-drop="2">{word.pos}</div>}
+      <p className="dictSense"><span className="dictNum">1</span><span data-fit-clamp="">{word.def_en}</span></p>
       <p className="dictXlat"><span className="dictLangTag">FR</span><b>{word.term_fr}</b>{expanded&&word.def_fr&&<span className="dictXlatDef"> — {word.def_fr}</span>}</p>
       <div hidden={!expanded} className="cardExpandedDetails">{word.quiz && <Quiz prompt="closest word?" options={word.quiz.options} answer={word.quiz.answer} explain={`“${word.term_en}” — ${word.def_en}.`} onDone={()=>onLearned(word)} onUndo={()=>onUnlearned&&onUnlearned(word)} />}</div>
     </div>
@@ -4237,6 +4265,39 @@ const moveVisibleTile=(order,id,delta,active)=>{
   next.splice(target+(delta>0?1:0),0,id);return next;
 };
 /* TILE_INTERACTION_CONTRACT_END */
+/* Newspaper-style fit for a fixed module: whole items marked data-fit-drop leave the
+   preview (higher value first, then from the end) until the rest fits inside the tile's
+   padding edge; a text block marked data-fit-clamp then keeps only the whole lines that
+   fit. What leaves stays in the pop-up (the corner expand appears), so visible content is
+   never cut, faded or pushed past the edge. */
+const FIT_CONTROLS=new Set(["INPUT","TEXTAREA","BUTTON","SELECT","IMG","svg"]);
+function previewContentBottom(root){
+  let bottom=-Infinity;
+  for(const el of root.querySelectorAll("*")){
+    if(!FIT_CONTROLS.has(el.tagName)&&![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())) continue;
+    const r=el.getBoundingClientRect(); if(!r.width||!r.height||el.closest("[data-preview-optional]")) continue;
+    const cs=getComputedStyle(el); if(cs.position==="absolute"||cs.position==="fixed"||cs.visibility==="hidden") continue;
+    bottom=Math.max(bottom,r.bottom);
+  }
+  return bottom;
+}
+function fitPreview(tile,root,active){
+  if(!root) return;
+  const drops=[...root.querySelectorAll("[data-fit-drop]")], clamps=[...root.querySelectorAll("[data-fit-clamp]")];
+  drops.forEach(el=>el.removeAttribute("data-fit-dropped"));
+  clamps.forEach(el=>{ el.style.webkitLineClamp=""; el.style.display=""; el.style.webkitBoxOrient=""; el.style.overflow=""; });
+  if(!active||!tile||(!drops.length&&!clamps.length)) return;
+  const limit=tile.getBoundingClientRect().bottom-(parseFloat(getComputedStyle(tile).paddingBottom)||0)+.5;
+  const over=()=>previewContentBottom(root)>limit;
+  if(!over()) return;
+  const order=drops.map((el,i)=>({el,i,rank:Number(el.dataset.fitDrop)||1})).sort((a,b)=>b.rank-a.rank||b.i-a.i);
+  for(const {el} of order){ el.setAttribute("data-fit-dropped",""); if(!over()) return; }
+  for(const el of clamps){
+    const extra=previewContentBottom(root)-limit; if(extra<=0) return;
+    const lineHeight=parseFloat(getComputedStyle(el).lineHeight)||16, lines=Math.max(1,Math.round(el.getBoundingClientRect().height/lineHeight));
+    Object.assign(el.style,{display:"-webkit-box",webkitBoxOrient:"vertical",overflow:"hidden",webkitLineClamp:String(Math.max(1,lines-Math.ceil(extra/lineHeight)))});
+  }
+}
 const TilePresentationContext=React.createContext({expanded:false,open:()=>{}});
 const useTilePresentation=()=>React.useContext(TilePresentationContext);
 function WidgetGlyph({name}){
@@ -4271,12 +4332,13 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   const [hasMore,setHasMore]=useState(false);
   const canExpand=expandable&&(TILE_ALWAYS_EXPAND.has(id)||hasMore);
   useLayoutEffect(()=>{
-    if(expanded)return;
+    if(expanded){fitPreview(null,contentHost,false);return;}
     const tile=tileRef.current,grid=tile?.parentElement;if(!tile||!grid)return;
     let frame;
     const measure=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
       const gridStyle=getComputedStyle(grid),unit=parseFloat(gridStyle.gridAutoRows),gap=parseFloat(gridStyle.rowGap)||0;
       if(!Number.isFinite(unit)||unit<=0)return;
+      fitPreview(tile,contentHost,true);
       const style=getComputedStyle(tile),footer=tile.querySelector('.tileFoot'),head=tile.querySelector('.tilehead');
       const headHeight=showLabel&&head?head.getBoundingClientRect().height+(parseFloat(getComputedStyle(head).marginBottom)||0):0;
       const footerHeight=footer&&getComputedStyle(footer).position!=="absolute"?footer.getBoundingClientRect().height+(parseFloat(getComputedStyle(footer).marginTop)||0):0;
@@ -6402,7 +6464,7 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
       <div className="agendaItems">
       {shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
-        <div key={r.id} className={"agRow taskRow"+state+(selectedDate&&r.calendarDate===selectedDate?" calendarSelected":"")}>
+        <div key={r.id} data-fit-drop="1" className={"agRow taskRow"+state+(selectedDate&&r.calendarDate===selectedDate?" calendarSelected":"")}>
           <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
             <span className="agName">{r.label}</span><span className="agSub">{r.sub}</span>
           </button>
@@ -6648,7 +6710,7 @@ function BrainBankCard({bank,busy,onAdd,onOpenBrowser,haveKey,onSetup}){
   const submit=async()=>{const t=v.trim();if(!t||busy)return;if(await onAdd(t)){setV("");save("brainDraft","");}};
   return (
     <div>
-      {!haveKey&&<p className="dailyDependency">Memory filing needs your Claude API key. Your draft stays here if filing fails. <button className="link" onClick={onSetup}>Add key</button></p>}
+      {!haveKey&&<p className="dailyDependency" data-fit-drop="2">Memory filing needs your Claude API key. Your draft stays here if filing fails. <button className="link" onClick={onSetup}>Add key</button></p>}
       <textarea className="notearea" style={{minHeight:48}} placeholder="Something you just learned…" value={v} onChange={e=>{setV(e.target.value);save("brainDraft",e.target.value);}} />
       <div style={{display:"flex",gap:8,marginTop:8,alignItems:"center"}}>
         <button type="button" className="widgetIconButton primary" disabled={!v.trim()||busy} aria-label={busy?"Filing memory":"Save to memory"} title={busy?"Filing…":"Save to memory"} onClick={submit}>{busy?<span className="genSpin" aria-hidden="true"/>:<WidgetGlyph name="send"/>}</button>
