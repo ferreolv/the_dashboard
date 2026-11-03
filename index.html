@@ -2835,6 +2835,46 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="shopping"] .shopChip.done .shopItemToggle>span:last-child{text-decoration:line-through}
 .grid>.tile[data-tileid="shopping"] button.shopAddRow{display:flex!important;align-items:center;justify-content:space-between;width:100%!important;min-height:36px!important;height:auto!important;margin-top:2px;padding:4px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:.02em;cursor:pointer;transform:none!important}
 .grid>.tile[data-tileid="shopping"] button.shopAddRow:hover{color:var(--accentDark)!important}
+/* --- Recall: one row of bars per source tile (in that tile's colour); Word cards are fill-in-the-blank --- */
+.recallDeck .recallTag{color:var(--srcDark,var(--accent));background:color-mix(in srgb,var(--src,var(--accent)) 14%,transparent)}
+.recallDeck .recallFace{border-color:color-mix(in srgb,var(--src,var(--accent)) 24%,#fff)}
+.recallCloze{font-size:15.5px;line-height:1.45;font-weight:700;text-wrap:pretty}
+.clozeGap{display:inline-block;width:3.6em;height:.95em;margin:0 .16em;vertical-align:-.1em;border-bottom:2.5px solid var(--src,var(--accent))}
+.recallHeadword{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.1;color:var(--srcDark,var(--accentDark))}
+.recallFr{font-size:12.5px;font-style:italic;line-height:1.3;color:var(--dim,#667)}
+.recallDeck .recallDetail i{font-family:Georgia,serif}
+.recallRatings.waiting .recallWhen{color:var(--dim,#667)}
+/* the four grades stay one row on phones too (the card keeps its room) */
+.tile .recallDeck .recallRatings{grid-template-columns:repeat(4,minmax(0,1fr))}
+@container tile (max-width:360px){.tile .recallDeck .recallRating{min-height:48px!important;border-radius:15px!important}}
+.recallRows{display:flex;flex-direction:column;gap:1px;flex:none}
+.recallRow{display:flex;gap:3px}
+/* no cap on cards: long rows thin out instead of spilling, many rows get slimmer bars */
+.recallRow.dense{gap:1px}
+.tile .recallRow.dense button.recallBar{min-width:0}
+.grid>.tile[data-tileid="recall"] .recallCard3d,.grid>.tile[data-tileid="recall"] button.recallCard3d{min-height:96px}
+.recallRows.many button.recallBar{height:9px!important}
+.recallRows.many .recallBar::before{height:5px}
+.recallRows.many .recallBar.here::before{height:7px}
+.tile button.recallBar,.tile.completed button.recallBar,button.recallBar{position:relative;flex:1 1 0;min-width:3px;width:auto!important;height:12px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;filter:none!important;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.recallBar::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:99px;background:color-mix(in srgb,var(--bar) 22%,#fff);transition:height .15s ease,background .15s ease,box-shadow .15s ease}
+.recallBar.done::before{background:var(--bar)}
+.recallBar.again::before{background:#fff;box-shadow:inset 0 0 0 1.5px var(--bar)}
+.recallBar.next::before{background:color-mix(in srgb,var(--bar) 42%,#fff)}
+.recallBar.here::before{height:9px;background:var(--barDark)}
+.recallBar.again.here::before{background:var(--barDark);box-shadow:none}
+.recallBar:focus-visible{outline:2px solid var(--barDark);outline-offset:1px;border-radius:4px}
+.tile.completed .recallBar::before{box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+.tile.completed .recallBar.again::before{box-shadow:inset 0 0 0 1.5px var(--bar),0 0 0 1px rgba(255,255,255,.7)}
+.tile.completed .recallHeadword{color:#fff}
+.tile.completed .recallFr{color:rgba(255,255,255,.8)}
+.recallDeck.big .recallRows{gap:3px}
+.recallDeck.big button.recallBar{height:18px!important}
+.recallDeck.big .recallBar::before{height:7px}
+.recallDeck.big .recallBar.here::before{height:11px}
+.recallDeck.big .recallCloze{font-size:19px}
+.recallDeck.big .recallHeadword{font-size:30px}
+.recallDeck.big .recallFr{font-size:14.5px}
 </style>
 </head>
 <body>
@@ -3167,7 +3207,18 @@ async function callClaude(system,user,opts={}){
   throw failure||new Error("Claude request failed");
 }
 const genWord=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `One moderately uncommon but useful English word a curious bilingual reader probably doesn't know, with its French equivalent and a quick synonym quiz. Avoid: ${avoid.join(", ")||"none"}. Shape:{"term_en":"","ipa":"","pos":"","def_en":"","term_fr":"","def_fr":"","quiz":{"options":["","","",""],"answer":0,"alt_prompts":["","",""]}}. Exactly one option is the closest synonym. Every option must be a familiar everyday word, so the quiz tests the new word rather than four obscure words. Distractors remain meaningfully close. Provide 3 short alternative prompts. Defs under 12 words.`, {max:400}).then(extractJSON);
+  `One moderately uncommon but useful English word a curious bilingual reader probably doesn't know, with its French equivalent and a quick synonym quiz. Avoid: ${avoid.join(", ")||"none"}. Shape:{"term_en":"","ipa":"","pos":"","def_en":"","term_fr":"","def_fr":"","quiz":{"options":["","","",""],"answer":0,"alt_prompts":["","",""]},"cloze":["","",""]}. Exactly one option is the closest synonym. Every option must be a familiar everyday word, so the quiz tests the new word rather than four obscure words. Distractors remain meaningfully close. Provide 3 short alternative prompts. Defs under 12 words. cloze: 3 short natural sentences (8–16 words), each using the word exactly once, wrapped in braces, e.g. "He was being very {abusive} with me." (inflect it inside the braces only if the grammar needs it). Each sentence's context must make this exact word the clearly best fit, so someone who knows it can produce it with no other hint; use three different situations.`, {max:560}).then(extractJSON);
+/* Sentences for fill-in-the-blank Word cards (personal key), several words per call. */
+const genClozeSentences=async words=>{
+  const list=(words||[]).filter(w=>w&&w.term).slice(0,8);
+  if(!list.length) return {};
+  const text=await callClaude("You output ONLY valid minified JSON, no markdown.",
+    `For each English word below, write 3 short natural sentences (8–16 words) that each use the word exactly once, wrapped in braces, e.g. "He was being very {abusive} with me." Inflect it inside the braces only if the grammar needs it (e.g. {abused}). Each sentence's context must make this exact word the clearly best fit, so someone who knows it can produce it with no other hint; use three different situations. Words: ${JSON.stringify(list.map(w=>({word:w.term,pos:w.pos||undefined,meaning:w.def||undefined})))}. Shape:{"<word>":["","",""]}`,
+    {max:Math.min(1600,200+list.length*150)});
+  const data=extractJSON(text), out={};
+  if(data&&typeof data==="object"&&!Array.isArray(data)) Object.entries(data).forEach(([k,v])=>{ out[String(k).trim().toLowerCase()]=Array.isArray(v)?v:[]; });
+  return out;
+};
 const genMusic=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
   `Recommend ONE specific, real recording that is critically or technically excellent yet UNDERRATED — something most people don't know but that a musicologist or serious critic would admire (craft, innovation, influence, musicianship). Deliberately vary widely across genres, eras and cultures every time (e.g. modal jazz, West African highlife, ambient, post-punk, bossa nova, baroque, experimental electronic, Appalachian folk, dub). It MUST be findable as a track in Apple Music. Give the exact released track title. "artist" is the complete recording credit (all named performers, ensemble and/or conductor as appropriate), not automatically the composer and not artificially reduced to one person. For classical music, include the work's composer separately in "composer"; otherwise "composer" may be empty. Avoid anything mainstream or famous, and do NOT repeat: ${avoid.join(" | ")||"none"}. Shape:{"title":"","artist":"","composer":"","year":"","genre":"","why":""}. "genre" is the specific style; "why" (max 18 words) says what makes it special and why it's overlooked.`, {max:420}).then(extractJSON);
 const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. Select intrinsically useful material whose importance follows naturally from accurate explanation, never from a forced analogy or post-hoc connection. Quiz questions should require a small inference using only material taught in the lesson; do not introduce a new fact or concept.",
@@ -3636,6 +3687,7 @@ async function extractCourseFile(file){
   throw new Error("Use PDF, TXT, Markdown or CSV. DOCX support can be added next.");
 }
 
+/* RECALL_CORE_START */
 /* FSRS-6 spaced repetition — default parameters, 90% desired retention. */
 const LEGACY_RECALL_INTERVALS=[1,3,7,16,35,90];
 const FSRS_W=[0.212,1.2931,2.3065,8.2956,6.4133,0.8334,3.0194,0.001,1.8722,0.1666,0.796,1.4835,0.0614,0.2629,1.6483,0.6014,1.8729,0.5425,0.0912,0.0658,0.1542];
@@ -3730,6 +3782,137 @@ const scheduleRecall=(item,rating,reviewDate=todayKey)=>{
   return {...item,fsrs,seen:(item.seen||1)+1,nextReview:addDays(reviewDate,scheduledDays),reviewLog:[...(item.reviewLog||[]),review]};
 };
 const humanInterval=days=>days===1?"tomorrow":days<7?`in ${days} days`:days<14?"in 1 week":days<60?`in ${Math.round(days/7)} weeks`:days<730?`in ${Math.round(days/30)} months`:`in ${Math.round(days/365)} years`;
+
+/* ---- Recall · Word cards are fill-in-the-blank production cards ----
+   A cloze sentence carries the word in braces: "He was being very {abusive} with me."
+   The front shows only the sentence with a blank (no hint, so the context has to point
+   at the word); the back is the dictionary entry: the word, its short definition and
+   the French equivalent. Several sentences rotate, so the word is learnt, not the line. */
+const CLOZE_SLOT=/\{([^{}]{1,40})\}/;
+const validCloze=(sentence,term)=>{
+  if(typeof sentence!=="string") return false;
+  const s=sentence.trim();
+  if(s.length<12||s.length>180||(s.match(/[{}]/g)||[]).length!==2) return false;
+  const slot=s.match(CLOZE_SLOT); if(!slot) return false;
+  const form=slot[1].trim().toLowerCase(), base=String(term||"").trim().toLowerCase();
+  if(!form) return false;
+  if(!base) return true;
+  // the braces hold the word itself or a regular inflection of it (obfuscate → obfuscated)
+  const stem=base.split(/\s+/)[0].replace(/(ies|es|e|y|s)$/,"");
+  return form===base||form.startsWith(stem.slice(0,Math.max(3,stem.length)));
+};
+const clozeSentences=(list,term)=>[...new Set((Array.isArray(list)?list:[]).filter(s=>validCloze(s,term)).map(s=>s.trim()))].slice(0,4);
+const clozeParts=sentence=>{ const s=String(sentence||""), m=s.match(CLOZE_SLOT); return m?{before:s.slice(0,m.index),form:m[1].trim(),after:s.slice(m.index+m[0].length)}:null; };
+const clozeFor=item=>{ const list=item&&Array.isArray(item.cloze)?item.cloze:[]; return list.length?list[(Number(item.seen)||1)%list.length]:null; };
+const wordCardOf=w=>w?{term:String(w.term_en||"").trim(),pos:w.pos||"",ipa:w.ipa||"",def:w.def_en||"",fr:w.term_fr||""}:null;
+/* Older Word cards ("Closest word to …?") become cloze cards with their schedule intact:
+   the day's saved word fills in the entry, otherwise it is read back from the card. */
+const upgradeWordCard=(item,dayWord)=>{
+  if(!item||item.type!=="word"||item.word) return item;
+  const term=String(item.term||String(item.title||"").replace(/^Word\s*·\s*/,"")).trim();
+  const saved=dayWord&&String(dayWord.term_en||"").trim().toLowerCase()===term.toLowerCase()?wordCardOf(dayWord):null;
+  const explain=String(item.quiz&&item.quiz.explain||"").trim();
+  const def=saved&&saved.def?saved.def:(explain.match(/^“[^”]*”\s*[—–-]\s*(.+)$/)||[null,explain])[1].trim();
+  const fr=saved&&saved.fr?saved.fr:String(item.meta||"").replace(/^En français\s*:\s*/i,"").trim();
+  const sentences=clozeSentences(item.cloze&&item.cloze.length?item.cloze:(saved&&dayWord.cloze)||[],term);
+  return {...item,term,word:{term,pos:saved?saved.pos:"",ipa:saved?saved.ipa:"",def,fr},cloze:sentences};
+};
+
+/* ---- Recall · the day's session: one row per source tile, cards in order ----
+   Every due card is in today's session (no cap): spaced repetition keeps the pile small.
+   Cards are grouped into one row per tile that made them (each row wears that tile's
+   colour); within a row they come in a fixed order, most overdue first. "Again" sends a
+   card to the end of its row for another pass the same day. Grades are a replay from the
+   card's state before today's first grade, so any earlier grade can be changed and
+   everything after it is recomputed. The session is kept for the day, so a reload
+   resumes it with its passes and grades. */
+const RECALL_SOURCES=[
+  {key:"word",tile:"word",types:["word"],label:"Word"},
+  {key:"lesson",tile:"worth",types:["lesson"],label:"Knowledge"},
+  {key:"spanish",tile:"spanish",types:["spanish"],label:"Español"},
+  {key:"german",tile:"german",types:["german"],label:"Deutsch"},
+  {key:"academic",tile:"academic",types:["academic"],label:"Study"},
+  {key:"brain",tile:"brain",types:["brain-bank"],label:"Memory"}
+];
+const RECALL_OTHER={key:"other",tile:"recall",types:[],label:"Recall"};
+const recallSourceOf=item=>RECALL_SOURCES.find(s=>s.types.includes(item&&item.type))||RECALL_OTHER;
+const recallSourceByKey=key=>RECALL_SOURCES.find(s=>s.key===key)||RECALL_OTHER;
+const recallEntryKey=e=>e.id+"#"+e.n;
+const RECALL_SCHEDULE_FIELDS=["fsrs","seen","nextReview","reviewLog","level"];
+const recallSchedule=item=>{ const out={}; RECALL_SCHEDULE_FIELDS.forEach(k=>{ out[k]=item&&item[k]!==undefined?item[k]:null; }); return out; };
+function buildRecallSession(list,day,prev){
+  const items=(Array.isArray(list)?list:[]).filter(x=>x&&x.id);
+  const ids=new Set(items.map(x=>x.id));
+  const resume=!!(prev&&prev.day===day&&prev.rows&&typeof prev.rows==="object");
+  const session={day,rows:{},grades:resume?{...(prev.grades||{})}:{},base:resume?{...(prev.base||{})}:{},active:resume?prev.active||null:null};
+  if(resume) Object.entries(prev.rows).forEach(([key,entries])=>{
+    const kept=(Array.isArray(entries)?entries:[]).filter(e=>e&&ids.has(e.id)&&Number.isInteger(e.n));
+    if(kept.length) session.rows[key]=kept;
+  });
+  const known=new Set(Object.values(session.rows).flat().map(e=>e.id));
+  items.map((x,i)=>({x,i}))
+    .filter(({x})=>!known.has(x.id)&&typeof x.nextReview==="string"&&x.nextReview<=day&&x.addedOn!==day)
+    .sort((a,b)=>a.x.nextReview<b.x.nextReview?-1:a.x.nextReview>b.x.nextReview?1:a.i-b.i)
+    .forEach(({x})=>{ const key=recallSourceOf(x).key; (session.rows[key]=session.rows[key]||[]).push({id:x.id,n:1}); });
+  const entries=Object.values(session.rows).flat(), live=new Set(entries.map(recallEntryKey)), inRows=new Set(entries.map(e=>e.id));
+  Object.keys(session.grades).forEach(k=>{ if(!live.has(k)||![1,2,3,4].includes(session.grades[k])) delete session.grades[k]; });
+  Object.keys(session.base).forEach(id=>{ if(!inRows.has(id)) delete session.base[id]; });
+  if(session.active&&!session.rows[session.active]) session.active=null;
+  return session;
+}
+// Rows follow the order of their tiles on the dashboard.
+const recallRowOrder=(session,order)=>{
+  const at=key=>{ const i=(order||[]).indexOf(recallSourceByKey(key).tile); return i<0?999:i; };
+  const rank=key=>{ const i=RECALL_SOURCES.findIndex(s=>s.key===key); return i<0?99:i; };
+  return Object.keys(session.rows).filter(k=>session.rows[k].length).sort((a,b)=>at(a)-at(b)||rank(a)-rank(b));
+};
+const recallFrontier=(session,key)=>(session.rows[key]||[]).findIndex(e=>!session.grades[recallEntryKey(e)]);
+const recallSessionDone=session=>Object.values(session.rows).every(entries=>entries.every(e=>session.grades[recallEntryKey(e)]));
+const recallSessionSize=session=>Object.values(session.rows).reduce((n,entries)=>n+entries.length,0);
+// The row to study: the one you were on while it has cards left, else the next one with cards left.
+const recallOpenRow=(session,keys,from)=>{
+  if(from&&recallFrontier(session,from)>=0) return from;
+  const start=Math.max(0,keys.indexOf(from));
+  for(let step=0;step<keys.length;step++){ const key=keys[(start+step)%keys.length]; if(recallFrontier(session,key)>=0) return key; }
+  return from&&session.rows[from]?from:keys[0]||null;
+};
+// A card's schedule after today's grades, replayed in session order (optionally stopping before one pass).
+const recallReplay=(session,id,start,beforeKey)=>{
+  let item=start;
+  for(const entries of Object.values(session.rows)) for(const e of entries){
+    if(e.id!==id) continue;
+    if(beforeKey&&recallEntryKey(e)===beforeKey) return item;
+    const rating=session.grades[recallEntryKey(e)];
+    if(rating) item=scheduleRecall(item,rating,session.day);
+  }
+  return item;
+};
+// What the card looked like just before this pass: the base the grade buttons preview from.
+const recallStateBefore=(session,entry,live)=>{
+  const base=session.base[entry.id];
+  return base?recallReplay(session,entry.id,{...live,...base},recallEntryKey(entry)):live;
+};
+function gradeRecallEntry(session,key,index,rating,live){
+  const entries=session.rows[key]||[], entry=entries[index];
+  if(!entry||!live||![1,2,3,4].includes(rating)) return {session,item:live};
+  const next={...session,rows:{...session.rows},grades:{...session.grades},base:{...session.base},active:key};
+  if(!next.base[entry.id]) next.base[entry.id]=recallSchedule(live);
+  next.grades[recallEntryKey(entry)]=rating;
+  let row=[...entries];
+  const later=row.filter((e,i)=>i>index&&e.id===entry.id);
+  if(rating===1){
+    // missed: one more pass at the end of the row, unless a later pass already exists
+    if(!later.length) row.push({id:entry.id,n:Math.max(...row.filter(e=>e.id===entry.id).map(e=>e.n))+1});
+  }else if(later.length){
+    // no longer missed: the extra passes it caused go away
+    row=row.filter((e,i)=>!(i>index&&e.id===entry.id));
+    later.forEach(e=>{ delete next.grades[recallEntryKey(e)]; });
+  }
+  next.rows[key]=row;
+  const replayed=recallReplay(next,entry.id,{...live,...next.base[entry.id]});
+  return {session:next,item:{...live,...recallSchedule(replayed)}};
+}
+/* RECALL_CORE_END */
 
 
 function streakOf(log,id){ const dt=!!(log[todayKey]&&log[todayKey][id]); let s=0,start=dt?0:1; for(let d=start;d<400;d++){ const k=addDays(todayKey,-d); if(log[k]&&log[k][id]) s++; else break; } return s; }
@@ -3894,7 +4077,7 @@ const CURATED_TILE_LAYOUT={
   german:{desktop:[4,4],phone:[2,2],family:"large"},
   movie:{desktop:[2,2],phone:[2,1],family:"wide"},
   world:{desktop:[4,4],phone:[2,2],family:"large"},
-  recall:{desktop:[4,2],phone:[2,2],family:"wide"},
+  recall:{desktop:[4,3],phone:[2,2],family:"large"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
   weekly:{desktop:[4,3],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -4790,7 +4973,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const regenerateOne=key=>runGen([key]);
 
   /* recall scheduling — store alt prompts so review looks different each time */
-  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) appendDailyRecall("word",[newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
+  const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) appendDailyRecall("word",[newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, word:wordCardOf(w), cloze:clozeSentences(w.cloze,w.term_en), quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
   const unlearnWord=w=>{ unsetRitual("word"); persistRecall(previous=>previous.filter(x=>!(x.type==="word"&&x.addedOn===todayKey&&x.term===(w&&w.term_en)))); };
   const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; appendDailyRecall("lesson",[newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
   const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(previous=>previous.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
@@ -4835,8 +5018,27 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   } };
   const unlearnAcademic=a=>{ unsetRitual("academic"); persistRecall(previous=>previous.filter(x=>!(x.type==="academic"&&x.addedOn===todayKey&&x.title===((a&&a.courseName?a.courseName+" · ":"")+(a&&a.concept||""))))); };
   const learnBank=(topic,quiz)=>{ if(!quiz) return; persistRecall(previous=>[...previous,newRecallItem({ id:uid(), type:"brain-bank", addedOn:todayKey, title:"🧠 "+topic, quiz:{ prompts:[quiz.prompt], options:quiz.options, answer:quiz.answer, explain:quiz.explain } })]); };
-  const gradeRecall=(item,rating)=>{ const scheduled=scheduleRecall(item,rating); persistRecall(list=>list.map(x=>x.id===item.id?scheduled:x)); return scheduled; };
-  const restoreRecall=item=>{ persistRecall(list=>list.map(x=>x.id===item.id?item:x)); };
+  /* A grade replaces the card's schedule only; its content stays as stored. */
+  const saveRecallSchedule=item=>persistRecall(list=>list.map(x=>x.id===item.id?{...x,...recallSchedule(item)}:x));
+  // Older Word cards turn into fill-in-the-blank cards once, keeping their schedule.
+  useEffect(()=>{
+    if(!recallList.some(x=>x&&x.type==="word"&&!x.word)) return;
+    persistRecall(list=>list.map(x=>x&&x.type==="word"&&!x.word?upgradeWordCard(x,(load("daily:"+x.addedOn,{})||{}).word):x));
+  },[recallList]);
+  /* A Word card's sentences come with the day's word; when they don't (an older daily
+     server, older cards), your own key writes them the first time the card is up. */
+  const clozeWriting=useRef(false);
+  useEffect(()=>{
+    if(clozeWriting.current||!getKey()) return;
+    const need=recallList.filter(x=>isClozeCard(x)&&!(x.cloze&&x.cloze.length)&&x.clozeTried!==todayKey&&(x.nextReview<=todayKey||x.addedOn===todayKey)).slice(0,8);
+    if(!need.length) return;
+    clozeWriting.current=true;
+    const ids=new Set(need.map(x=>x.id));
+    genClozeSentences(need.map(x=>x.word))
+      .then(found=>persistRecall(list=>list.map(x=>{ if(!ids.has(x.id)||!isClozeCard(x)) return x; const sentences=clozeSentences(found[x.word.term.toLowerCase()],x.word.term); return sentences.length?{...x,cloze:sentences}:{...x,clozeTried:todayKey}; })))
+      .catch(()=>persistRecall(list=>list.map(x=>ids.has(x.id)?{...x,clozeTried:todayKey}:x)))
+      .finally(()=>{ clozeWriting.current=false; });
+  },[recallList]);
 
   /* ---- movies: a plain personal watch-list, no AI. Tapping the tile watches the
      next movie (tap again to undo); the list itself is managed in the expanded view. ---- */
@@ -5077,7 +5279,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const ns=icesSpent+1; setIcesSpent(ns); save("icesSpent",ns); };
 
 
-  const dueFacts=recallList.filter(f=>f.nextReview<=todayKey && f.addedOn!==todayKey).slice(0,8);
   const zoneParts=zonedParts(now,locationProfile.timezone);
   const displayDateLabel=formatLongDateInZone(now,locationProfile.timezone);
   const displayClock=formatClockInZone(now,locationProfile.timezone);
@@ -5241,7 +5442,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       {(!view.world || view.world.length===0) ? <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("world")} /> : <NewsPage items={view.world} dateLabel={displayDateLabel} />}
       <RetryNote tileKey="world"/></>, ()=>toggleRitual("world")),
     recall: T("recall","Recall",!!rToday.recall,null,
-      <RecallCard due={dueFacts} onGrade={gradeRecall} onRestore={restoreRecall} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />, ()=>{}),
+      <RecallCard items={recallList} order={order} onSave={saveRecallSchedule} onComplete={()=>setRitual("recall")} onIncomplete={()=>unsetRitual("recall")} />, ()=>{}),
     weekly: T("weekly","Stats",!!rToday.weekly,null,
       <div className="wrev">
         <div className="wrevSection chartSec">
@@ -5646,73 +5847,109 @@ const recallAnswerFor=item=>{
   return {short:item.term||item.title||"Answer", detail:""};
 };
 const RECALL_TYPE_TAG={word:"Word",lesson:"Lesson",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
-/* One real flashcard at a time: the front shows only the prompt (never the title or
-   meta, which can give the answer away), tapping flips it, an emoji grade slides the
-   next card in. The tile's own expand opens the same session big, with the grade
-   intervals spelled out — the deck keeps its state because the content is reparented. */
-function RecallCard({due,onGrade,onRestore,onComplete,onIncomplete}){
+const isClozeCard=item=>!!(item&&item.type==="word"&&item.word&&item.word.term);
+/* Front: only the cue, never the title or meta (they can give the answer away).
+   Word cards show a sentence with a blank; without a sentence yet, the definition. */
+function RecallFront({item,tag}){
+  if(isClozeCard(item)){
+    const parts=clozeParts(clozeFor(item));
+    return (<>
+      <span className="recallTag">{tag}</span>
+      <span className="recallPrompt recallCloze">
+        {parts?<>{parts.before}<span className="clozeGap" role="img" aria-label="blank"/>{parts.after}</>
+          :<><span className="clozeGap" role="img" aria-label="blank"/>{item.word.def?<> · {item.word.def}</>:null}</>}
+      </span>
+    </>);
+  }
+  const prompts=(item.quiz&&item.quiz.prompts&&item.quiz.prompts.length)?item.quiz.prompts:[(item.quiz&&item.quiz.prompt)||item.title||"What do you remember?"];
+  return (<><span className="recallTag">{tag}</span><span className="recallPrompt">{prompts[(item.seen||1)%prompts.length]||prompts[0]}</span></>);
+}
+/* Back: a Word card is its dictionary entry (the word as the sentence used it, the short
+   definition, the French equivalent); other cards show their answer and explanation. */
+function RecallBack({item,tag}){
+  if(isClozeCard(item)){
+    const w=item.word, parts=clozeParts(clozeFor(item)), form=parts?parts.form:w.term;
+    return (<>
+      <span className="recallTag">{tag}</span>
+      <span className="recallAnswerBig recallHeadword">{form}</span>
+      {w.def?<span className="recallDetail">{form.toLowerCase()!==w.term.toLowerCase()?<><i>{w.term}</i> · </>:null}{w.def}</span>:null}
+      {w.fr?<span className="recallFr">— {w.fr}</span>:null}
+    </>);
+  }
+  const answer=recallAnswerFor(item);
+  return (<><span className="recallTag">{tag}</span><span className="recallAnswerBig">{answer.short}</span>{answer.detail?<span className="recallDetail">{answer.detail}</span>:null}</>);
+}
+/* One real flashcard at a time over one row of bars per tile that made the cards, each in
+   that tile's colour. Tap the card (or any grade) to see the answer, tap a grade to move
+   on. Tap a row to switch to it (its cards keep their order: the bars ahead stay locked),
+   tap an earlier bar to look at that card again or change its grade. Every due card is
+   in the session; "Again" brings the card back at the end of its row. The tile's expand
+   shows the same session big; the session is saved, so a reload resumes it. */
+function RecallCard({items,order,onSave,onComplete,onIncomplete}){
   const {expanded}=useTilePresentation();
-  const [snap]=useState(()=>due);
-  const [log,setLog]=useState([]);
+  const byId=new Map((items||[]).map(x=>[x.id,x]));
+  const [session,setSession]=useState(()=>buildRecallSession(items,todayKey,load("recallSession",null)));
+  const [active,setActive]=useState(null);
+  const [view,setView]=useState(null);
   const [flipped,setFlipped]=useState(false);
-  useEffect(()=>{ if(snap.length===0) onComplete(); /* eslint-disable-next-line */ },[]);
-  const total=snap.length, done=log.length, finished=total>0&&done>=total;
-  const current=finished?null:snap[done];
-  const rate=rating=>{
-    if(!current) return;
-    const scheduled=onGrade(current,rating);
-    setLog(l=>[...l,{item:current,scheduled,rating}]);
-    setFlipped(false);
-    if(done+1>=total) onComplete();
-  };
-  const back=()=>{
-    if(!log.length){ setFlipped(false); return; }
-    const last=log[log.length-1];
-    onRestore(last.item); onIncomplete();
-    setLog(l=>l.slice(0,-1)); setFlipped(true);
-  };
+  useEffect(()=>{ const raw=JSON.stringify(session); try{ if(localStorage.getItem("fefe_recallSession")===raw) return; }catch{} save("recallSession",session); },[session]);
+  const keys=recallRowOrder(session,order);
+  const total=recallSessionSize(session), finished=recallSessionDone(session);
+  const doneRef=useRef(null);
+  useEffect(()=>{ const complete=total===0||finished; if(doneRef.current===complete) return; if(complete) onComplete(); else if(doneRef.current!==null) onIncomplete(); doneRef.current=complete; /* eslint-disable-next-line */ },[total,finished]);
   if(total===0) return <div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">Nothing due</span></div>;
-  if(finished) return (
-    <div className="recallDone">
-      <span className="recallDoneGlyph" aria-hidden="true">✦</span>
-      <span className="recallDoneText">{total} reviewed</span>
-      <button type="button" className="recallBack" onClick={back} aria-label="Undo last review" title="Undo">↶</button>
-    </div>
-  );
-  const answer=recallAnswerFor(current);
-  const prompts=(current.quiz&&current.quiz.prompts&&current.quiz.prompts.length)?current.quiz.prompts:[(current.quiz&&current.quiz.prompt)||current.title||"What do you remember?"];
-  const prompt=prompts[(current.seen||1)%prompts.length]||prompts[0];
-  const tag=RECALL_TYPE_TAG[current.type]||"Recall";
+  const rowKey=view?view.key:recallOpenRow(session,keys,active||session.active);
+  const row=rowKey?session.rows[rowKey]||[]:[];
+  const index=view?view.index:recallFrontier(session,rowKey);
+  const entry=index>=0?row[index]:null;
+  const live=entry?byId.get(entry.id):null;
+  const before=entry&&live?recallStateBefore(session,entry,live):null;
+  const shown=live&&before?{...live,seen:before.seen}:live;
+  const given=entry?session.grades[recallEntryKey(entry)]:null;
+  const tone=COL[recallSourceByKey(rowKey).tile]||COL.recall;
+  const tag=live?(RECALL_TYPE_TAG[live.type]||"Recall"):"";
+  const rate=rating=>{
+    if(!entry||!live) return;
+    if(!flipped){ setFlipped(true); return; }
+    const result=gradeRecallEntry(session,rowKey,index,rating,live);
+    setSession(result.session); onSave(result.item);
+    // a missed card that would come straight back waits while another row goes first
+    const nextUp=(result.session.rows[rowKey]||[])[recallFrontier(result.session,rowKey)];
+    const at=keys.indexOf(rowKey), others=[...keys.slice(at+1),...keys.slice(0,Math.max(0,at))];
+    const elsewhere=nextUp&&nextUp.id===entry.id?others.find(k=>recallFrontier(result.session,k)>=0):null;
+    setActive(elsewhere||rowKey); setView(null); setFlipped(false);
+  };
+  const openBar=(key,i)=>{
+    const e=(session.rows[key]||[])[i]; if(!e) return;
+    if(session.grades[recallEntryKey(e)]){ setView({key,index:i}); setFlipped(true); }
+    else { setActive(key); setView(null); setFlipped(false); }
+  };
   return (
-    <div className={"recallDeck"+(expanded?" big":"")}>
-      <button type="button" className={"recallCard3d"+(flipped?" flipped":"")} onClick={()=>setFlipped(f=>!f)} aria-label={flipped?"Hide answer":"Reveal answer"}>
-        <span className="recallFace recallFront">
-          <span className="recallTag">{tag}</span>
-          <span className="recallPrompt">{prompt}</span>
-        </span>
-        <span className="recallFace recallBackface">
-          <span className="recallTag">{tag}</span>
-          <span className="recallAnswerBig">{answer.short}</span>
-          {answer.detail?<span className="recallDetail">{answer.detail}</span>:null}
-        </span>
-      </button>
-      {flipped ? (
-        <div className="recallRatings" role="group" aria-label="Rate this memory">
-          {FSRS_RATINGS.map(c=>{ const preview=scheduleRecall(current,c.value); return (
-            <button type="button" key={c.value} className="recallRating" title={`${c.name} · ${humanInterval(preview.fsrs.scheduledDays)}`} aria-label={`${c.name}, next review ${humanInterval(preview.fsrs.scheduledDays)}`} onClick={()=>rate(c.value)}>
-              <span className="recallWhen">{shortInterval(preview.fsrs.scheduledDays)}</span>
+    <div className={"recallDeck"+(expanded?" big":"")} style={{"--src":tone.v,"--srcDark":tone.d}}>
+      {shown?<>
+        <button type="button" className={"recallCard3d"+(flipped?" flipped":"")} onClick={()=>setFlipped(f=>!f)} aria-label={flipped?"Show the question":"Show the answer"}>
+          <span className="recallFace recallFront" aria-hidden={flipped}><RecallFront item={shown} tag={tag}/></span>
+          <span className="recallFace recallBackface" aria-hidden={!flipped}><RecallBack item={shown} tag={tag}/></span>
+        </button>
+        <div className={"recallRatings"+(flipped?"":" waiting")} role="group" aria-label="Rate this memory">
+          {FSRS_RATINGS.map(c=>{ const days=scheduleRecall(before,c.value).fsrs.scheduledDays; const again=c.value===1; return (
+            <button type="button" key={c.value} className={"recallRating"+(given===c.value?" given":"")} aria-pressed={given?given===c.value:undefined}
+              title={again?"Again · comes back this session":`${c.name} · ${humanInterval(days)}`}
+              aria-label={again?"Again, comes back this session":`${c.name}, next review ${humanInterval(days)}`} onClick={()=>rate(c.value)}>
+              <span className="recallWhen">{again?"soon":shortInterval(days)}</span>
               {expanded&&<span className="recallGradeName">{c.name}</span>}
             </button>); })}
         </div>
-      ) : (
-        <div className="recallMetaRow">
-          {log.length>0 ? <button type="button" className="recallBack" onClick={back} aria-label="Undo last review" title="Undo">↶</button> : <span className="recallBackSpacer" aria-hidden="true"/>}
-          <span className="recallCount">{done+1} / {total}</span>
-          <span className="recallBackSpacer" aria-hidden="true"/>
-        </div>
-      )}
-      {expanded&&flipped&&current.title&&<p className="recallSource">{current.title}</p>}
-      <div className="recallSegs" aria-hidden="true">{snap.map((it,i)=><span key={it.id} className={"recallSeg"+(i<done?" on":i===done?" cur":"")} />)}</div>
+      </>:<div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">{total} reviewed</span></div>}
+      <div className={"recallRows"+(keys.length>4?" many":"")}>
+        {keys.map(key=>{ const source=recallSourceByKey(key), c=COL[source.tile]||COL.recall, entries=session.rows[key], next=recallFrontier(session,key); return (
+          <div key={key} className={"recallRow"+(key===rowKey?" recallRowOn":"")+(entries.length>24?" dense":"")} style={{"--bar":c.v,"--barDark":c.d}} role="group" aria-label={source.label}>
+            {entries.map((e,i)=>{ const g=session.grades[recallEntryKey(e)], here=key===rowKey&&i===index; return (
+              <button type="button" key={recallEntryKey(e)} className={"recallBar"+(g===1?" again":g?" done":i===next?" next":" ahead")+(here?" here":"")}
+                tabIndex={g||i===next?0:-1} aria-current={here?"step":undefined} aria-label={`${source.label} ${i+1} of ${entries.length}${g?" · "+FSRS_RATINGS[g-1].name:i===next?" · next":""}`}
+                onClick={()=>openBar(key,i)}/>); })}
+          </div>); })}
+      </div>
     </div>
   );
 }
