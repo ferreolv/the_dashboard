@@ -2037,7 +2037,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tileFocusOverlay.isClosing{animation:focusBackdropOut .18s ease both}.tileFocusOverlay.isClosing .tileFocus{animation:tileFocusOut .18s ease both}
 @keyframes tileFocusIn{from{opacity:0;transform:translateY(18px) scale(.975)}to{opacity:1;transform:none}}@keyframes tileFocusOut{to{opacity:0;transform:translateY(12px) scale(.985)}}@keyframes focusBackdropIn{from{background:rgba(22,31,42,0);backdrop-filter:blur(0)}to{background:rgba(22,31,42,.27);backdrop-filter:blur(12px)}}@keyframes focusBackdropOut{to{opacity:0}}
 [hidden]{display:none!important}
-.shoppingPreviewActions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}.curatedTile .shoppingPicked{display:flex;flex-direction:column;align-items:stretch;gap:8px}.curatedTile .shopChip{width:100%;box-sizing:border-box;min-height:36px;white-space:normal}
+.curatedTile .shoppingPicked{display:flex;flex-direction:column;align-items:stretch;gap:8px}.curatedTile .shopChip{width:100%;box-sizing:border-box;min-height:36px;white-space:normal}
 .eventComposition{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.eventComposition .eventHero{min-width:0;width:auto!important;padding:14px!important}.eventComposition .eventCountdown strong{font-size:36px!important}.eventComposition .eventTitle{font-size:15px!important;overflow-wrap:anywhere}.tileFocusSurface .eventComposition{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .curatedTile .goalDay:nth-child(n+5),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:639px){
@@ -2144,7 +2144,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid] .eventAddToggle{align-self:flex-end;margin-top:12px!important}
 /* adding an event lives in the expanded view; the preview stays a clean stack of tickets */
 .grid>.tile[data-tileid="events"] .tileMount .eventAddToggle{display:none!important}
-.tile[data-tileid] .shoppingPreviewActions{margin-top:10px;justify-content:flex-end}.tile[data-tileid] .shopSectionLabel{font-size:11px;letter-spacing:.02em;font-weight:700;opacity:.6}
+.tile[data-tileid] .shopSectionLabel{font-size:11px;letter-spacing:.02em;font-weight:700;opacity:.6}
 .tile[data-tileid] :is(.pill,.mark,.ghostbtn,.pillBtn){box-shadow:none!important;font-weight:700!important;letter-spacing:0!important}
 
 /* The month is a date map; reminder names stay in the readable list. */
@@ -2538,7 +2538,6 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="agenda"] .agendaItems{position:relative;gap:0!important;padding-top:30px}
 /* preview shows whole rows only; the rest lives in the pop-up (like the newspaper) */
 .grid>.tile[data-tileid="agenda"] .agendaItems .taskRow:nth-of-type(n+4){display:none}
-.grid>.tile[data-tileid="shopping"] .shoppingPicked .shopChip:nth-of-type(n+8){display:none}
 .grid>.tile[data-tileid="goals"] .goalDay .goalRow:nth-of-type(n+5){display:none}
 .grid>.tile[data-tileid="agenda"] .agRow{padding:3px 2px!important;min-height:0!important;gap:8px!important}
 .grid>.tile[data-tileid="agenda"] button.taskMain{min-height:30px!important}
@@ -2573,7 +2572,7 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="brainflex"] .brainSolution{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:9;overflow:hidden;margin-top:8px;text-align:left;font-weight:650!important}
 .grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden;max-height:17em}
 .grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:2.5em;font-size:17px}
-.grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;max-height:8.5em}
+.grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-height:5.2em}
 .brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
 @keyframes gearTurn{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.brainFlexCard .brainGearArt{animation:none}}
@@ -2790,7 +2789,9 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .grid>.tile[data-tileid="philo"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0}
 .tile[data-tileid="philo"] .philoCard{flex:1 1 auto;display:flex;flex-direction:column;gap:10px!important;min-height:0}
 .tile[data-tileid="philo"] .philoQ{margin-bottom:0;padding-right:36px}
-.grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:3;max-height:5.2em}
+.grid>.tile[data-tileid="philo"] .philoCard{gap:8px!important}
+.grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:2;max-height:3.6em}
+.grid>.tile[data-tileid="philo"] .philoLast{-webkit-line-clamp:1}
 .tileFocusSurface[data-tileid="philo"] .philoQ{font-size:19px;padding-right:48px}
 .philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;cursor:pointer}
 .philoHint{margin:0;font-size:11.5px;line-height:1.4;font-weight:650;color:var(--dim)}
@@ -2821,6 +2822,19 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile[data-tileid="philo"] button.philoRestart:hover{color:var(--accentDark)!important}
 .tile.completed[data-tileid="philo"] .philoLast,.tile.completed[data-tileid="philo"] .philoHint{color:#fff}
 .tile.completed[data-tileid="philo"] .philoLast{border-left-color:rgba(255,255,255,.6)}
+/* --- Shopping, main widget: a plain checklist (the pop-up keeps its shelf and chips) --- */
+.shopTick{display:none}
+.grid>.tile[data-tileid="shopping"] .shoppingPicked{gap:0!important}
+.grid>.tile[data-tileid="shopping"] .shopChip{min-height:0!important;padding:0!important;border:0!important;border-bottom:1px solid color-mix(in srgb,var(--accentDark) 14%,transparent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.grid>.tile[data-tileid="shopping"] button.shopItemToggle{gap:10px!important;min-height:40px!important;padding:6px 0!important}
+.grid>.tile[data-tileid="shopping"] .shopItemToggle>span:nth-child(2){display:none!important}
+.grid>.tile[data-tileid="shopping"] .shopItemToggle>span:last-child{font-size:15px!important;font-weight:750!important;line-height:1.25!important;color:var(--ink)!important}
+.grid>.tile[data-tileid="shopping"] .shopTick{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--accentDark) 45%,transparent);color:transparent;transition:background .15s,color .15s}
+.grid>.tile[data-tileid="shopping"] .shopTick svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.grid>.tile[data-tileid="shopping"] .shopChip.done .shopTick{background:var(--accentDark);box-shadow:none;color:#fff}
+.grid>.tile[data-tileid="shopping"] .shopChip.done .shopItemToggle>span:last-child{text-decoration:line-through}
+.grid>.tile[data-tileid="shopping"] button.shopAddRow{display:flex!important;align-items:center;justify-content:space-between;width:100%!important;min-height:36px!important;height:auto!important;margin-top:2px;padding:4px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:.02em;cursor:pointer;transform:none!important}
+.grid>.tile[data-tileid="shopping"] button.shopAddRow:hover{color:var(--accentDark)!important}
 </style>
 </head>
 <body>
@@ -3887,7 +3901,7 @@ const CURATED_TILE_LAYOUT={
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
   brainflex:{desktop:[4,3],phone:[2,2],family:"wide"},
   academic:{desktop:[4,3],phone:[2,2],family:"large"},
-  philo:{desktop:[4,3],phone:[2,2],family:"large"},
+  philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"}
 };
 const curatedTileSize=(id,availableCols)=>{
@@ -6329,7 +6343,7 @@ function ShoppingCard({items,onChange}){
   const [custom,setCustom]=useState("");
   const list=Array.isArray(items)?items:[];
   const orderedList=shoppingDisplayItems(list);
-  const visibleList=expanded?orderedList:orderedList.slice(0,4);
+  const visibleList=expanded?orderedList:orderedList.slice(0,7);
   const hasKey=key=>list.some(item=>item.key===key&&!item.custom);
   const toggleProduct=product=>{
     if(product.key==="other"){ const label=custom.trim(); if(!label) return; onChange([...list,{id:uid(),key:"other",label,checked:false,custom:true}]); setCustom(""); return; }
@@ -6345,12 +6359,12 @@ function ShoppingCard({items,onChange}){
         <div className="shoppingPicked">
           {list.length===0 ? <PlainEmpty>Your list is empty.</PlainEmpty> : visibleList.map(item=>{ const p=shoppingProduct(item.key); return (
             <div key={item.id} className={"shopChip"+(item.checked?" done":"")}><button type="button" className="shopItemToggle" aria-pressed={!!item.checked} aria-label={(item.checked?"Mark needed: ":"Mark bought: ")+(item.label||p.label)} onClick={()=>toggleCheck(item.id)}>
-              <span aria-hidden="true">{p.icon}</span><span>{item.label||p.label}</span></button><button type="button" className="del" aria-label={"Remove "+(item.label||p.label)} onClick={()=>remove(item.id)}>×</button>
+              <span className="shopTick" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m4 8.4 2.6 2.5L12 5.5"/></svg></span><span aria-hidden="true">{p.icon}</span><span>{item.label||p.label}</span></button><button type="button" className="del" aria-label={"Remove "+(item.label||p.label)} onClick={()=>remove(item.id)}>×</button>
             </div>
           ); })}
         </div>
       </div>
-      {!expanded&&<div className="shoppingPreviewActions"><button type="button" className="widgetIconButton" aria-label="Add shopping items" title="Add items" onClick={open}><WidgetGlyph name="plus"/></button>{list.length>4&&<button type="button" className="link" onClick={open}>{list.length-4} more items</button>}</div>}
+      {!expanded&&<button type="button" className="shopAddRow" aria-label="Add shopping items" onClick={open}><span>＋ add</span>{list.length>visibleList.length&&<span>{list.length-visibleList.length} more</span>}</button>}
       <div className="shoppingSection picker" hidden={!expanded}>
         
         <div className="shopShelf">
@@ -6594,8 +6608,8 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
       </div>}
       {!expanded&&lastReply&&<p className="philoLast" onClick={open}>{lastReply.text}</p>}
       {!expanded&&sending&&!lastReply&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
-      {!haveKey&&<p className="philoHint">Replies need your Claude API key. <button type="button" className="link" onClick={onSetup}>Add key</button></p>}
-      {error&&<p className="philoHint" role="alert">{error}{haveKey&&<> <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></>}</p>}
+      {expanded&&!haveKey&&<p className="philoHint">Replies need your Claude API key. <button type="button" className="link" onClick={onSetup}>Add key</button></p>}
+      {expanded&&error&&<p className="philoHint" role="alert">{error}{haveKey&&<> <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></>}</p>}
       <div className="philoComposer">
         <textarea ref={inputRef} rows={1} className="philoInput" aria-label={started?"Reply":"Your answer"} placeholder={started?"Push back, or ask why…":"What do you think?"} value={msg}
           onChange={e=>{ setMsg(e.target.value); grow(e.target); }}
