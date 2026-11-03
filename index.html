@@ -1786,6 +1786,9 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
          future days get a quiet collapsible add instead of a full input. --- */
   .tile[data-tileid="goals"] .goalDay{padding:0 0 14px!important;margin:0 0 14px!important;background:none!important;border:0!important;border-bottom:1px solid color-mix(in srgb,var(--accent) 14%,var(--hair))!important;box-shadow:none!important;border-radius:0!important}
   .tile[data-tileid="goals"] .goalDay:last-child{margin-bottom:0!important;padding-bottom:0!important;border-bottom:0!important}
+  .grid>.tile[data-tileid="goals"] .goalDay:not(:first-child):not(:has(.goalRow)){display:flex;align-items:center;justify-content:space-between;padding:0 0 9px!important;margin:0 0 9px!important}
+  .grid>.tile[data-tileid="goals"] .goalDay:not(:first-child):not(:has(.goalRow)) .goalDayHead{margin:0}
+  .grid>.tile[data-tileid="goals"] .goalDay:not(:first-child):not(:has(.goalRow)) .goalAddGhost{margin:0}
   .tile[data-tileid="goals"] .goalDayHead{align-items:center;margin-bottom:7px}
   .tile[data-tileid="goals"] .goalDayHead .lbl{font-size:11px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}
   .tile[data-tileid="goals"] .goalDay:first-child .goalDayHead .lbl{color:var(--accentDark);font-size:12.5px}
@@ -2090,7 +2093,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 [hidden]{display:none!important}
 .shoppingPreviewActions{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px}.curatedTile .shoppingPicked{display:flex;flex-direction:column;align-items:stretch;gap:8px}.curatedTile .shopChip{width:100%;box-sizing:border-box;min-height:36px;white-space:normal}
 .eventComposition{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}.eventComposition .eventHero{min-width:0;width:auto!important;padding:14px!important}.eventComposition .eventCountdown strong{font-size:36px!important}.eventComposition .eventTitle{font-size:15px!important;overflow-wrap:anywhere}.tileFocusSurface .eventComposition{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.curatedTile .goalDay:nth-child(n+4),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.curatedTile .goalDay:nth-child(n+5),.curatedTile .habitStatsSection{display:none}.curatedTile .worldSummary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:639px){
  .tileFocusOverlay{padding:16px 0 0!important;align-items:flex-end!important}.tileFocus{width:100%;max-height:calc(100dvh - max(16px,env(safe-area-inset-top)));border-radius:28px 28px 0 0;padding-bottom:env(safe-area-inset-bottom);animation:tileFocusIn .25s cubic-bezier(.2,.8,.2,1) both}.tileFocusSurface{padding:20px 20px 28px}.tileFocusBody .content{font-size:16px}
  .wrap{padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}.topbar:not(.learnNav){position:static!important;min-height:44px!important;background:transparent!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;padding:0!important;margin-bottom:20px!important}.topnav{position:fixed!important;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;display:flex!important;width:calc(100% - 32px);max-width:420px;box-sizing:border-box;padding:5px!important;border:1px solid rgba(255,255,255,.75)!important;border-radius:24px!important;background:rgba(239,243,246,.84)!important;backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 6px 28px rgba(24,34,48,.12)}.topnav .navbtn{flex:1;min-height:44px;padding:10px 8px!important;font-size:14px!important;border-radius:19px!important}.topActions{width:100%;justify-content:flex-end!important;gap:8px!important}.topActions .actionBtn:last-child{display:inline-flex!important}.topActions .actionBtn{min-height:44px;height:auto!important;font-size:12px!important;padding:10px 12px!important;white-space:normal}.tileSaveState{font-size:11px}.tileFoot{margin-top:8px}
@@ -2551,7 +2554,8 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .newsLead{padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid color-mix(in srgb,currentColor 30%,transparent)}
 .newsColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
 .newsItem{padding:0 11px 6px;border-left:1px solid color-mix(in srgb,currentColor 25%,transparent)}
-.newsColumns .newsItem:first-child{padding-left:0;border-left:none}
+.newsColumns .newsItem:nth-child(odd){padding-left:0;border-left:none}
+.newsColumns .newsItem:nth-child(n+3){padding-top:9px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}
 .tileFocusSurface .newsColumns{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:9px}
 .tile[data-tileid="world"] .content{container-type:inline-size}
 /* --- Goals: minimal add field, round checks, no counters --- */
@@ -2621,9 +2625,9 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .brainFlexCard>*{position:relative;z-index:1}
 /* previews clamp long copy to whole lines; the pop-up (or the chat for Philosophy) has the rest */
 .grid>.tile[data-tileid="brainflex"] .brainPrompt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden;max-height:16em}
-.grid>.tile[data-tileid="brainflex"] .brainSolution{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;margin-bottom:8px}
+.grid>.tile[data-tileid="brainflex"] .brainSolution{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:9;overflow:hidden;margin-top:8px;text-align:left;font-weight:650!important}
 .grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden;max-height:17em}
-.grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-height:4em}
+.grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:2.5em;font-size:17px}
 .grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;max-height:8.5em}
 .brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
 @keyframes gearTurn{to{transform:rotate(360deg)}}
@@ -2681,7 +2685,8 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile.completed .langLede{color:#fff}
 .tile.completed .langLede::before{opacity:.9}
 /* --- Knowledge: a watering can spilling the day's field --- */
-.lessonHead{margin-bottom:6px;padding-right:34px}
+.lessonHead{margin-bottom:6px}
+.lessonHead .lessonField{padding-right:40px}
 .lessonTitle{font-size:18px;font-weight:850;line-height:1.2;letter-spacing:-.01em}
 .lessonField{display:block;margin:0 0 3px;color:var(--dim);font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
 .tile.completed .lessonField{color:rgba(255,255,255,.8)}
@@ -3033,6 +3038,7 @@ function dailyIssueInfo(key,state,message="",personalOverride=false){
     offline:["You’re offline","Reconnect to the internet, then retry this tile. Saved content and progress are kept.","retry","Retry tile"],
     timeout:["The request timed out","The service took too long to respond. It may still be saving your tile; retry will check the saved result first.","retry","Retry tile"],
     rate_limit:["Service limit reached","The content service is busy or its allowance is exhausted. Wait a little; the app owner may need to check service credit.","retry","Retry tile"],
+    server_outdated:["Your daily server predates this tile","The deployed daily service doesn’t know this tile yet. Add your Claude API key to create it yourself now, or paste the updated worker into Cloudflare once.","key","Add API key"],
     invalid_content:["Incomplete response","The service returned incomplete content, so it was not shown or marked as loaded. Retry to fetch a valid tile.","retry","Retry tile"],
     bad_response:["Unexpected service response","The service returned an unreadable response. Retry; if it continues, check the daily service deployment.","retry","Retry tile"],
     server_storage_error:["The service couldn’t save this tile","Server storage is unavailable. Nothing unsaved is shown as a real tile. Retry when storage is working.","retry","Retry tile"],
@@ -4544,7 +4550,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           for(const key of needed){
             if(validDailyTile(key,doc.content&&doc.content[key]))remember(key,doc.content[key]);
             else if(await personalFallback(key))continue;
-            else{const status=doc.status&&doc.status[key];failed(key,status?.state||"invalid_content",status?.message);}
+            else{const status=doc.status&&doc.status[key];failed(key,status?.state||"server_outdated",status?.message);}
           }
         }catch(error){const issue=dailyRequestFailure(error);for(const key of needed){if(!(await personalFallback(key)))failed(key,issue.state,issue.message);}}
       }).catch(error=>{const issue=dailyRequestFailure(error);shared.forEach(key=>failed(key,issue.state,issue.message));}));
@@ -6241,8 +6247,9 @@ function BrainFlexCard({brain,busy,revealed,onReveal,onHide,onGenerate}){
     <div className={"brainFlexCard"+(expanded?" isExpanded":"")}>
       <BrainGearArt/>
       <span className="brainFormat">{brain.format||todayKind.label}</span>
-      {revealed&&<button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" onClick={onHide}>💡 {brain.solution}</button>}
-      <p className="brainPrompt">{brain.prompt}</p>
+      {/* the answer replaces the question in the preview, like turning a card; the pop-up shows both */}
+      {(!revealed||expanded)&&<p className="brainPrompt">{brain.prompt}</p>}
+      {revealed&&<button className="insight brainSolution" aria-label="Hide answer and mark Brainflex incomplete" title="Back to the question" onClick={onHide}>💡 {brain.solution}</button>}
       {!revealed&&<button type="button" className="widgetIconButton" style={{marginTop:9}} aria-label="Reveal answer" title="Reveal answer" onClick={onReveal}><WidgetGlyph name="eye"/></button>}
     </div>
   );
