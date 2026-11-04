@@ -248,7 +248,7 @@ async function callClaude(env, system, user, max = 600) {
       return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
     }
     failure = new Error("API " + res.status); failure.status = res.status;
-    if (res.status !== 400 && res.status !== 404) throw failure;
+    if (![400, 403, 404].includes(res.status)) throw failure;
   }
   throw failure;
 }
@@ -300,10 +300,11 @@ async function philoReplyRoute(env, request) {
       last = 502; break;
     }
     last = res.status;
-    if (res.status !== 400 && res.status !== 404) break;
+    if (![400, 403, 404].includes(res.status)) break;
   }
-  const code = last === 401 || last === 403 ? "invalid_key" : last === 429 ? "rate_limit" : "service_error";
-  const error = code === "invalid_key" ? "The daily server's Claude key was rejected." : code === "rate_limit" ? "Claude is busy right now. Try again in a minute." : "Claude couldn't answer right now. Try again.";
+  const code = last === 401 ? "invalid_key" : last === 429 ? "rate_limit" : "service_error";
+  const error = code === "invalid_key" ? "The daily server's Claude key was rejected." : code === "rate_limit" ? "Claude is busy right now. Try again in a minute."
+    : last === 402 ? "The daily server's Anthropic account has a billing problem." : last === 403 ? "The daily server's Claude key isn't allowed to use the Philosophy models." : "Claude couldn't answer right now. Try again.";
   return sharedJson({ error, code }, 502);
 }
 
