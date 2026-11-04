@@ -454,3 +454,30 @@ test("Philosophy replies run on the service key for signed-in accounts, with the
   assert.equal(rejected.code, 502);
   assert.equal(rejected.data.code, "invalid_key");
 });
+
+test("a model the server's key can't use (403) gives way to the next one; only a 401 means a bad key", async () => {
+  const { env } = environment(["word"]);
+  const history = [{ role: "user", text: "Only if it can feel." }];
+  const models = [];
+  globalThis.fetch = async (url, init) => {
+    models.push(JSON.parse(init.body).model);
+    return models.length === 1
+      ? Response.json({ type: "error", error: { type: "permission_error", message: "Access to this model requires an access grant your request does not have." } }, { status: 403 })
+      : Response.json({ content: [{ type: "text", text: "From the next model." }] });
+  };
+  const reply = await request(env, "/philo/reply", { question: "Q?", history }, true);
+  assert.equal(reply.data.reply, "From the next model.");
+  assert.equal(models.length, 2);
+  assert.notEqual(models[0], models[1]);
+  globalThis.fetch = async () => new Response("{}", { status: 403 });
+  const denied = await request(env, "/philo/reply", { question: "Q?", history }, true);
+  assert.equal(denied.code, 502);
+  assert.equal(denied.data.code, "service_error", "a 403 is not reported as a rejected key");
+  assert.match(denied.data.error, /isn't allowed/);
+  // daily content takes the same path past a model the key can't use
+  const calls = provider((key, n) => n === 1 ? new Response("{}", { status: 403 }) : null);
+  const daily = await request(env);
+  assert.equal(daily.data.status.word.state, "ready");
+  assert.equal(daily.data.content.word.term_en, "lucid");
+  assert.equal(calls.length, 2);
+});
