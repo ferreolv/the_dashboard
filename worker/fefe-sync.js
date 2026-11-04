@@ -11,7 +11,9 @@
 
 /* ---------------- shared-content config ---------------- */
 var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo"];
-var MODEL = "claude-haiku-4-5-20251001";
+/* Newest first: a model the API no longer serves (400/404) gives way to the next one, so the
+   server outlives model retirements without an update. */
+var MODELS = ["claude-haiku-5-5", "claude-haiku-4-5-20251001"];
 var TZ = "Europe/Paris"; // the shared "day" flips at local midnight here
 var RSS_FEEDS = [
   "https://feeds.bbci.co.uk/news/world/rss.xml",
@@ -233,15 +235,76 @@ function extractJSON(text) {
   try { return JSON.parse(t.slice(a, b + 1)); } catch { return null; }
 }
 async function callClaude(env, system, user, max = 600) {
-  const body = { model: MODEL, max_tokens: max, system, messages: [{ role: "user", content: user }] };
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify(body), signal: AbortSignal.timeout(45000)
-  });
-  if (!res.ok) { const error = new Error("API " + res.status); error.status = res.status; throw error; }
-  const data = await res.json();
-  return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+  let failure = null;
+  for (const model of MODELS) {
+    const body = { model, max_tokens: max, system, messages: [{ role: "user", content: user }] };
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify(body), signal: AbortSignal.timeout(45000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+    }
+    failure = new Error("API " + res.status); failure.status = res.status;
+    if (res.status !== 400 && res.status !== 404) throw failure;
+  }
+  throw failure;
+}
+
+/* ---------------- Philosophy conversation (service key) ---------------- */
+// Philosophy replies run here with the service key, so the dashboard needs no personal key.
+// Only signed-in accounts may ask; the system prompt is built here from the question and the
+// chosen thinker (never taken from the client), and each account has a daily allowance.
+var PHILO_MODELS = ["claude-sonnet-5-5", "claude-haiku-5-5", "claude-haiku-4-5-20251001"];
+var PHILO_DAILY_LIMIT = 80;
+function philoSystem(question, philosopher) {
+  return philosopher
+    ? `You are reconstructing ${philosopher}'s philosophical response to a live conversation. Do not roleplay theatrically or invent views. Use only claims, arguments, distinctions, and likely extensions that are well grounded in ${philosopher}'s primary texts or widely accepted scholarship. If ${philosopher} has no clear basis for answering the user's exact claim, say that the textual basis is unclear, then offer only a careful nearby distinction if one is genuinely grounded. Defend ${philosopher}'s opposition as ${philosopher} plausibly would, but never fabricate a counterargument. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." You may imitate the philosopher's argumentative style at a high level, but do not invent quotations. End every answer with a short parenthetical source note naming the relevant work(s), e.g. "(Sources: ...)." Today's question under discussion: "${question}"`
+    : `You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking and keep digging below the surface: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
+}
+async function philoReplyRoute(env, request) {
+  const account = await authAccount(env, request);
+  if (account?.unavailable) return account.response;
+  if (!account) return sharedJson({ error: "Sign in to get Philosophy replies.", code: "signin_required" }, 401);
+  if (!env.ANTHROPIC_API_KEY) return sharedJson({ error: "The daily server has no Claude key configured.", code: "server_unconfigured" }, 503);
+  const body = await request.json().catch(() => ({}));
+  const question = String(body.question || "").replace(/\s+/g, " ").trim().slice(0, 400);
+  const thinker = String(body.thinker || "").trim();
+  const philosopher = /^[\p{L} .'’-]{2,48}$/u.test(thinker) ? thinker : "";
+  const messages = (Array.isArray(body.history) ? body.history : []).slice(-30)
+    .map((m) => ({ role: m && m.role === "assistant" ? "assistant" : "user", content: String((m && m.text) || "").trim().slice(0, 4000) }))
+    .filter((m) => m.content);
+  const alternating = messages.every((m, i) => m.role === (i % 2 === 0 ? "user" : "assistant"));
+  if (!question || !messages.length || !alternating || messages[messages.length - 1].role !== "user")
+    return sharedJson({ error: "That conversation can't be sent.", code: "bad_request" }, 400);
+  const counterKey = "philo:count:" + String(account.email || "account") + ":" + sharedDayKey();
+  const used = Number(await env.SYNC.get(counterKey)) || 0;
+  if (used >= PHILO_DAILY_LIMIT) return sharedJson({ error: "Today's Philosophy replies are used up. They come back tomorrow.", code: "rate_limit" }, 429);
+  await env.SYNC.put(counterKey, String(used + 1), { expirationTtl: 3 * 86400 });
+  let last = 0;
+  for (const model of PHILO_MODELS) {
+    let res;
+    try {
+      res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+        body: JSON.stringify({ model, max_tokens: 420, system: philoSystem(question, philosopher), messages }), signal: AbortSignal.timeout(45000)
+      });
+    } catch { last = 504; break; }
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      const reply = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
+      if (reply) return sharedJson({ reply });
+      last = 502; break;
+    }
+    last = res.status;
+    if (res.status !== 400 && res.status !== 404) break;
+  }
+  const code = last === 401 || last === 403 ? "invalid_key" : last === 429 ? "rate_limit" : "service_error";
+  const error = code === "invalid_key" ? "The daily server's Claude key was rejected." : code === "rate_limit" ? "Claude is busy right now. Try again in a minute." : "Claude couldn't answer right now. Try again.";
+  return sharedJson({ error, code }, 502);
 }
 
 /* Brainflex formats the owner can choose from (dashboard ⚙ on the tile). Each day rotates
@@ -699,6 +762,7 @@ var index_default = {
       const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "").trim();
       return authService(env, url.pathname.slice(6), { password: body.password, token });
     }
+    if (url.pathname === "/philo/reply" && request.method === "POST") return philoReplyRoute(env, request);
     if (url.pathname === "/daily/personal" && request.method === "POST") {
       const account = await authAccount(env, request); if (account?.unavailable) return account.response; if (!account) return sharedJson({ error: "Not signed in" }, 401);
       const body = await request.json().catch(() => ({}));

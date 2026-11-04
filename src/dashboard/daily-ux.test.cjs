@@ -217,7 +217,7 @@ test('typed failures and safety prerequisites remain specific, including while o
   }
 });
 
-function philosophyHarness(chat = {initial: 'An existing reflection', messages: [], mode: 'standard'}, hasKey = true, failure = new Error('Error: private raw service trace sk-ant-secret')) {
+function philosophyHarness(chat = {initial: 'An existing reflection', messages: [], mode: 'standard'}, hasKey = true, failure = new Error('Error: private raw service trace sk-ant-secret'), reply = async () => {throw failure;}) {
   const start = html.indexOf('const setPhiloMode=mode=>');
   const end = html.indexOf('/* ---- drag engine', start);
   assert.ok(start >= 0 && end > start, 'Philosophy chat actions must be extractable');
@@ -235,7 +235,7 @@ function philosophyHarness(chat = {initial: 'An existing reflection', messages: 
     showLoadProblems: issues => popups.push(plain(issues)),
     dailyIssueInfo,
     dailyRequestFailure,
-    philoReply: async () => {throw failure;}
+    philoReply: reply
   });
   vm.runInContext(html.slice(start, end) + '\nthis.chatActions = {philoSubmitInitial, philoSend};', context);
   return {...context.chatActions, saved, errors, busy, popups};
@@ -270,15 +270,23 @@ test('failed Philosophy sends preserve the user message and retries never duplic
   assert.equal(retry.popups.length, 1);
 });
 
-test('a missing personal chat key saves the reflection and gives setup guidance without attempting a reply', async () => {
-  const chat = philosophyHarness(undefined, false);
+test('without a personal key Philosophy still asks for a reply (the daily server answers) and keeps the reflection', async () => {
+  const asked = [];
+  const chat = philosophyHarness(undefined, false, null, async (question, history) => {asked.push(plain(history)); return 'What would count as evidence?';});
   await chat.philoSubmitInitial('A reflection worth keeping');
   assert.equal(chat.saved[0].initial, 'A reflection worth keeping');
-  assert.deepEqual(chat.saved[0].messages, []);
-  assert.match(chat.errors.at(-1), /API key in Settings/);
-  assert.deepEqual(chat.busy, []);
-  assert.equal(chat.popups[0][0].state, 'personal_key');
-  assert.equal(chat.popups[0][0].actionType, 'key');
+  assert.deepEqual(asked, [[{role: 'user', text: 'A reflection worth keeping'}]]);
+  assert.deepEqual(chat.saved.at(-1).messages, [{role: 'assistant', text: 'What would count as evidence?'}]);
+  assert.deepEqual(chat.popups, []);
+  assert.deepEqual(chat.busy, [true, false]);
+});
+
+test('a daily server without the Philosophy route says so instead of a generic failure', async () => {
+  const failure = Object.assign(new Error('philosophy server: server_outdated'), {dailyState: 'server_outdated', viaServer: true, philoText: 'Your daily server doesn’t answer Philosophy yet.'});
+  const chat = philosophyHarness(undefined, false, failure);
+  await chat.philoSubmitInitial('A reflection worth keeping');
+  assert.match(chat.errors.at(-1), /doesn’t answer Philosophy yet/);
+  assert.equal(chat.popups[0][0].state, 'server_outdated');
 });
 
 test('a rejected Philosophy key opens personal-key recovery instead of shared-service setup', async () => {
