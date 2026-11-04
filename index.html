@@ -2976,8 +2976,8 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
    little ice in the header is picked up, then put on a missed day. */
 .tile[data-tileid="agenda"] .miniCalNum{position:relative}
 .miniCalRing{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
-.miniCalTrack{fill:none;stroke:rgba(255,255,255,.75);stroke-width:3.2}
-.miniCalArc{fill:none;stroke:var(--accent);stroke-width:3.2;stroke-linecap:round}
+.miniCalTrack{fill:none;stroke:rgba(255,255,255,.85);stroke-width:4.6}
+.miniCalArc{fill:none;stroke:var(--accent);stroke-width:4.6;stroke-linecap:round}
 .miniCalDay.today .miniCalTrack{stroke:var(--ink)}
 .tile[data-tileid="agenda"] .miniCalDay.today.ringed .miniCalNum{box-shadow:none!important}
 .tile[data-tileid="agenda"] .miniCalNum .insDayFlame{width:22px;height:22px}
@@ -3003,6 +3003,14 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile.completed[data-tileid="agenda"] .miniCalDay.today .miniCalTrack{stroke:var(--ink)}
 .tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack{stroke:color-mix(in srgb,var(--accent) 25%,#fff)}
 .tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalArc{stroke:var(--accent)}
+/* every day is one true circle: the number, its ring, the hover, the tint and the selection
+   share the same 24px disk (the row used to squash it into an oval) */
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay{min-height:30px!important;height:30px!important}
+.tile[data-tileid="agenda"] .miniCalGrid{row-gap:0!important}
+.tile[data-tileid="agenda"] .miniCalNum{flex:none!important;width:24px!important;height:24px!important}
+.tile[data-tileid="agenda"] .miniCalEvents{flex:none!important;height:5px!important;margin-top:1px!important}
+.tile[data-tileid="agenda"] .miniCalHead{padding-bottom:6px!important}
+.tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
 </style>
@@ -6502,7 +6510,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
     document.addEventListener("pointerdown",away); document.addEventListener("keydown",esc);
     return ()=>{ document.removeEventListener("pointerdown",away); document.removeEventListener("keydown",esc); }; },[placing]);
   useEffect(()=>{ if(!popped) return; const t=setTimeout(()=>setPopped(""),700); return ()=>clearTimeout(t); },[popped]);
-  const R=16, C=2*Math.PI*R;
+  const R=15.7, C=2*Math.PI*R;
   const chooseDay=key=>{
     if(placing){ setPlacing(false);
       if(monthOf(key)===monthKey&&(canIce(key)||iced(key))){ if(!iced(key)) setPopped(key); streak.onToggleIce(key); }
