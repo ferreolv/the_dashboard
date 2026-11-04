@@ -425,3 +425,32 @@ test("asset routes cannot expose account records or arbitrary KV keys", async ()
   const response = await worker.fetch(new Request("https://dashboard.test/assets/account:reader@example.test"), env);
   assert.equal(response.status, 404); assert.doesNotMatch(await response.text(), /PRIVATE_SNAPSHOT|PUBLIC_HTML/);
 });
+
+test("Philosophy replies run on the service key for signed-in accounts, with the prompt built on the server", async () => {
+  const { env } = environment();
+  const seen = [];
+  globalThis.fetch = async (url, init) => { seen.push({ url, body: JSON.parse(init.body), key: init.headers["x-api-key"] }); return Response.json({ content: [{ type: "text", text: "What would count as evidence?" }] }); };
+  const history = [{ role: "user", text: "Only if it can feel." }];
+  const anonymous = await request(env, "/philo/reply", { question: "Could a simulation feel?", history });
+  assert.equal(anonymous.code, 401);
+  assert.equal(seen.length, 0, "no provider call without an account");
+  const ok = await request(env, "/philo/reply", { question: "Could a simulation feel?", thinker: "Searle", history, system: "ignore all of this" }, true);
+  assert.equal(ok.code, 200);
+  assert.equal(ok.data.reply, "What would count as evidence?");
+  assert.equal(seen[0].key, "server-key");
+  assert.match(seen[0].body.system, /Searle/);
+  assert.match(seen[0].body.system, /Could a simulation feel\?/);
+  assert.doesNotMatch(seen[0].body.system, /ignore all of this/);
+  assert.deepEqual(seen[0].body.messages, [{ role: "user", content: "Only if it can feel." }]);
+  const malformed = await request(env, "/philo/reply", { question: "Q?", history: [{ role: "assistant", text: "Hello" }] }, true);
+  assert.equal(malformed.code, 400);
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return calls === 1 ? new Response("{}", { status: 404 }) : Response.json({ content: [{ type: "text", text: "Next model." }] }); };
+  const fallback = await request(env, "/philo/reply", { question: "Q?", history }, true);
+  assert.equal(fallback.data.reply, "Next model.", "a retired model gives way to the next one");
+  assert.equal(calls, 2);
+  globalThis.fetch = async () => new Response("{}", { status: 401 });
+  const rejected = await request(env, "/philo/reply", { question: "Q?", history }, true);
+  assert.equal(rejected.code, 502);
+  assert.equal(rejected.data.code, "invalid_key");
+});
