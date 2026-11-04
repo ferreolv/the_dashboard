@@ -2570,7 +2570,7 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 /* previews clamp long copy to whole lines; the pop-up (or the chat for Philosophy) has the rest */
 .grid>.tile[data-tileid="brainflex"] .brainPrompt{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:7;overflow:hidden;max-height:16em}
 .grid>.tile[data-tileid="brainflex"] .brainSolution{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:9;overflow:hidden;margin-top:8px;text-align:left;font-weight:650!important}
-.grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden;max-height:17em}
+.grid>.tile[data-tileid="worth"] .story p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:11;overflow:hidden}
 .grid>.tile[data-tileid="worth"] .lessonTitle{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;max-height:2.5em;font-size:17px}
 .grid>.tile[data-tileid="philo"] .philoQ{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-height:5.2em}
 .brainFlexCard .brainGearArt{position:absolute;z-index:0;bottom:-38px;right:-34px;width:116px;height:116px;color:var(--accentDark);opacity:.32;pointer-events:none;animation:gearTurn 80s linear infinite}
@@ -2661,24 +2661,34 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insRecord .insIcon{grid-column:2;grid-row:1;width:18px;height:18px}
 .insRecord span{grid-column:1/-1;margin-top:3px;font-size:9px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#6a7682}
 /* calendar + side */
-.insCalendar{background:linear-gradient(140deg,color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.5)),color-mix(in srgb,var(--c) 14%,rgba(255,255,255,.38)))}
-.insCalendar .insCardHead h2{color:color-mix(in srgb,var(--c) 70%,#1f1235)}
-.insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
-.insCalWd{text-align:center;font-size:9px;font-weight:850;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 55%,#3a3550);padding-bottom:4px}
-.insCalDay{position:relative;display:grid;place-items:center;height:28px}
-.insCalDay svg{position:absolute;width:25px;height:25px;transform:rotate(-90deg)}
-.insCalDay span{position:relative;font-size:10px;font-weight:800;color:#2a2440}
-.insCalDay.out{opacity:.35}
-.insCalTrack{fill:none;stroke:color-mix(in srgb,var(--c) 20%,transparent);stroke-width:3.5}
-.insCalArc{fill:none;stroke:var(--c);stroke-width:3.5;stroke-linecap:round}
-.insCalFill{fill:var(--c)}
-.insCalDay.full span{color:#fff}
-.insCalDay.joinL::before,.insCalDay.joinR::after{content:"";position:absolute;top:50%;height:4px;margin-top:-2px;background:var(--c);z-index:0}
-.insCalDay.joinL::before{left:0;right:50%}
-.insCalDay.joinR::after{left:50%;right:0}
-.insCalDay svg,.insCalDay span{z-index:1}
-.insCalDay.today span{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
-.insCalDay.full.today span{text-decoration:none}
+.insCalendar{background:linear-gradient(150deg,rgba(255,255,255,.9),color-mix(in srgb,var(--c) 8%,rgba(255,255,255,.8)))}
+.insCalendar .insCardHead h2{color:color-mix(in srgb,var(--c) 72%,#1f1235)}
+.insCalIceCount{display:inline-flex;align-items:center;gap:4px;margin-right:4px;padding:3px 9px 3px 5px;border-radius:999px;background:#E6F6FF;color:#0E6E9A;font:850 12px/1 'Nunito',sans-serif}
+.insCalIceCount .insDayGlyph{width:16px;height:16px}
+.insCalGrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
+.insCalWd{text-align:center;font-size:9.5px;font-weight:850;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 60%,#3a3550);padding-bottom:4px}
+.insCalDay{position:relative;display:grid;place-items:center;height:38px;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit}
+button.insCalDay{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.insCalDay>*{position:relative;z-index:1}
+.insCalRing{position:absolute;width:34px;height:34px;transform:rotate(-90deg)}
+.insCalTrack{fill:none;stroke:color-mix(in srgb,var(--c) 22%,#fff);stroke-width:3.4}
+.insCalArc{fill:none;stroke:var(--c);stroke-width:3.4;stroke-linecap:round}
+.insCalNum{font-size:12px;font-weight:850;color:#2a2440;line-height:1}
+.insCalDay.quiet .insCalNum{color:color-mix(in srgb,var(--c) 30%,#8a84a0);font-weight:750}
+.insCalDay.out{opacity:.38}
+.insDayGlyph{width:24px;height:24px;display:block}
+.insCalDay.iced .insDayGlyph{width:22px;height:22px}
+/* one band links the flames and ices of a run, within each week row */
+.insCalDay.link::before{content:"";position:absolute;z-index:0;top:50%;left:0;right:0;height:32px;transform:translateY(-50%);background:color-mix(in srgb,var(--c) 16%,#fff)}
+.insCalDay.linkStart::before{left:3px;border-top-left-radius:99px;border-bottom-left-radius:99px}
+.insCalDay.linkEnd::before{right:3px;border-top-right-radius:99px;border-bottom-right-radius:99px}
+/* today: a filled disk in the theme colour (its ring still shows the day's progress) */
+.insCalDay.today .insCalNum{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:var(--c);color:#fff}
+.insCalDay.today.flame::after,.insCalDay.today.iced::after{content:"";position:absolute;z-index:1;bottom:1px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--c)}
+/* a missed day can take an ice: its ring turns to a dashed ice-blue edge on hover/focus */
+button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible .insCalTrack{stroke:#7DD3FC;stroke-dasharray:3 3}
+button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;border-radius:12px}
+.insCalNote{min-height:16px;margin:8px 2px 0;font-size:11.5px;font-weight:700;color:color-mix(in srgb,var(--c) 55%,#4a4560)}
 /* ice */
 .insIce{background:linear-gradient(150deg,color-mix(in srgb,var(--c) 22%,rgba(255,255,255,.55)),rgba(255,255,255,.4))}
 .insIceBig{display:flex;align-items:center;gap:10px;margin:2px 0 6px}
@@ -2862,11 +2872,9 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .recallBar.done::before{background:var(--bar)}
 .recallBar.again::before{background:repeating-linear-gradient(-45deg,var(--bar) 0 2.5px,#fff 2.5px 5px);box-shadow:inset 0 0 0 1.5px var(--bar)}
 .recallBar.next::before{background:var(--barPale);box-shadow:inset 0 0 0 1.5px var(--bar)}
-.recallBar.here::before{height:10px;background:var(--bar);box-shadow:0 0 0 2px #fff}
-.recallBar.again.here::before{background:var(--bar);box-shadow:0 0 0 2px #fff}
+.recallBar.here::before{height:10px;background:var(--bar)}
+.recallBar.again.here::before{background:var(--bar);box-shadow:none}
 .recallBar:focus-visible{outline:2px solid var(--bar);outline-offset:1px;border-radius:4px}
-.tile.completed .recallBar::before{box-shadow:0 0 0 1px rgba(255,255,255,.7)}
-.tile.completed .recallBar.again::before{box-shadow:inset 0 0 0 1.5px var(--bar),0 0 0 1px rgba(255,255,255,.7)}
 .tile.completed .recallHeadword{color:#fff}
 .tile.completed .recallFr{color:rgba(255,255,255,.8)}
 .recallDeck.big .recallRows{gap:3px}
@@ -4076,8 +4084,8 @@ function LessonCard({lesson,busy,onLearned,onUnlearned,onGenerate}){
         {lesson.category && <span className="lessonField">{lesson.category}</span>}
         <div className="lessonTitle">{lesson.title}</div>
       </div>
-      <div className="story cardReadingCopy" style={{marginTop:8}}>{paragraphs.map((p,i)=><p key={i} hidden={!expanded&&i>0}>{p}</p>)}</div>
-      {lesson.insight && <div className="insight">💡 {lesson.insight}</div>}
+      <div className="story cardReadingCopy" style={{marginTop:8}}>{paragraphs.map((p,i)=><p key={i} hidden={!expanded&&i>0} data-fit-clamp={i===0?"":undefined}>{p}</p>)}</div>
+      {lesson.insight && <div className="insight" data-fit-drop="1">💡 {lesson.insight}</div>}
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark} onUndo={undo} />)}</div>
     </div>
   );
@@ -4503,6 +4511,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const [healthLog,setHealthLog]=useState(()=>load("healthLog",{}));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
+  const [dayIces,setDayIces]=useState(()=>load("dayIces",[]));
   const [ritualLog,setRitualLog]=useState(()=>load("ritualLog",{}));
   const [pushLog,setPushLog]=useState(()=>load("pushLog",{}));
   const [birthdays,setBirthdays]=useState(()=>load("birthdays",[]));
@@ -5375,7 +5384,15 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const countPerfect=()=>{ let n=0; for(let i=0;i<200;i++){ if(isPerfectDay(addDays(todayKey,-i))) n++; } return n; };
   const habitStreak=(id)=>{ const fr=freezes[id]||[]; const ok=k=> (habitLog[k]&&habitLog[k][id]) || fr.indexOf(k)>=0;
     let s=0, start=ok(todayKey)?0:1; for(let d=start; d<400; d++){ const k=addDays(todayKey,-d); if(ok(k)) s++; else break; } return s; };
-  const iceState=()=>{ const perfect=countPerfect(); return { perfect, available:Math.max(0,perfect-icesSpent) }; };
+  const iceState=()=>{ const perfect=countPerfect(), used=iceUsed(icesSpent,dayIces,isPerfectDay); return { perfect, used, available:Math.max(0,perfect-used) }; };
+  /* A streak runs through flames and the days kept by an ice. */
+  const streakDay=k=>isPerfectDay(k)||dayIces.includes(k);
+  const toggleDayIce=k=>{
+    const has=dayIces.includes(k);
+    if(!has&&(!canPlaceIce(k,{today:todayKey,firstDay,lit:isPerfectDay(k),iced:false})||iceState().available<=0)) return;
+    const next=has?dayIces.filter(x=>x!==k):[...dayIces,k].sort();
+    setDayIces(next); save("dayIces",next);
+  };
   const appDaysStreak=(()=>{ const set=new Set(appDays); let s=0; for(let d=0; d<400; d++){ const k=addDays(todayKey,-d); if(set.has(k)) s++; else break; } return s; })();
   const appDaysTotal=appDays.length;
   const coverGap=(id)=>{ const st=iceState(); if(st.available<=0){ alert("No ice yet. Each 100% day earns one 🧊."); return; }
@@ -5466,7 +5483,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   };
   const firstDay=[...appDays].sort()[0]||todayKey;
   /* strict streak: today may still be pending, but any earlier missed day resets to 0 */
-  const strictStreak=done=>{ let n=0; for(let d=done(todayKey)?0:1; d<400; d++){ if(done(addDays(todayKey,-d))) n++; else break; } return n; };
+  const strictStreak=done=>streakFrom(done,todayKey,addDays);
   const bestStreak=done=>{ let best=0,run=0; for(let d=365; d>=0; d--){ const k=addDays(todayKey,-d); if(k<firstDay){ continue; } if(done(k)){ run++; best=Math.max(best,run); } else run=0; } return best; };
   const insightSections=page!=="insights"?[]:(()=>{
     const defs=[
@@ -5483,7 +5500,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   })();
   const insightOverall=page!=="insights"?null:(()=>{
     let sum=0,n=0; for(let d=0; d<30; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; const c=dayCompletion(k); if(c!=null){ sum+=c; n++; } }
-    return { current:strictStreak(isPerfectDay), best:bestStreak(isPerfectDay), perfect:ice.perfect, rate:n?Math.round(sum/n*100):0 };
+    return { current:strictStreak(streakDay), best:bestStreak(streakDay), perfect:ice.perfect, rate:n?Math.round(sum/n*100):0 };
   })();
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
   const sz=id=>curatedTileSize(id,cols);
@@ -5671,7 +5688,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         <span className="dailyMeterText">{contentReady?"All in":`${readyGenCount} of ${expectedGenKeys.length} in`}</span>
       </div>}
 
-      {page==="insights"&&<InsightsPage overall={insightOverall} sections={insightSections} habits={habits} habitLog={habitLog} freezes={freezes} ice={ice} icesSpent={icesSpent} dayCompletion={dayCompletion} firstDay={firstDay} push14={push14} pushTotal14={pushTotal14} pushAvg14={pushAvg14} goalsHit7={goalsHit7} learned7={learned7} recallTotal={recallList.length} />}
+      {page==="insights"&&<InsightsPage overall={insightOverall} sections={insightSections} habits={habits} habitLog={habitLog} freezes={freezes} ice={ice} icesSpent={icesSpent} dayIces={dayIces} onToggleIce={toggleDayIce} isPerfectDay={isPerfectDay} dayCompletion={dayCompletion} firstDay={firstDay} push14={push14} pushTotal14={pushTotal14} pushAvg14={pushAvg14} goalsHit7={goalsHit7} learned7={learned7} recallTotal={recallList.length} />}
       {page==="settings"&&(
         <div className="settings">
           <div className="settingsGrid">
@@ -6391,33 +6408,70 @@ const weekdayIndex=key=>{ const [y,m,d]=key.split("-").map(Number); return (new 
 const mondayOf=key=>{ const [y,m,d]=key.split("-").map(Number); const dt=new Date(y,m-1,d); const off=(dt.getDay()+6)%7; return addDays(key,-off); };
 const shortDate=key=>{ const [y,m,d]=key.split("-").map(Number); return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric"}).format(new Date(y,m-1,d)); };
 
-function CompletionCalendar({dayCompletion,firstDay}){
+/* STREAK_CORE_START */
+/* Ice: every 100% day earns one; covering a habit gap or placing one on a missed day
+   spends it. An ice on a day that later reached 100% costs nothing (the flame wins). */
+const iceUsed=(habitSpent,dayIces,isPerfect)=>(Number(habitSpent)||0)+(Array.isArray(dayIces)?dayIces:[]).filter(k=>!isPerfect(k)).length;
+const canPlaceIce=(k,{today,firstDay,lit,iced})=>!lit&&!iced&&k<today&&k>=firstDay;
+/* Streak links in a month grid: a linked day (flame or ice) knows whether its run goes
+   on to the left/right within the same week row. */
+const calendarRuns=(days,linked)=>days.map((k,i)=>{ const col=i%7, on=!!linked(k); return {on,start:on&&!(col>0&&linked(days[i-1])),end:on&&!(col<6&&linked(days[i+1]))}; });
+/* strict streak: today may still be pending, but any earlier day outside the run ends it */
+const streakFrom=(done,today,step)=>{ let n=0; for(let d=done(today)?0:1; d<400; d++){ if(done(step(today,-d))) n++; else break; } return n; };
+/* STREAK_CORE_END */
+/* Flame for a 100% day, ice for a day kept by an ice: two-tone glyphs, no emoji. */
+const DayFlame=()=><svg className="insDayGlyph insDayFlame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6c3.3 3.9 5.6 6.7 5.6 10.4a5.6 5.6 0 0 1-11.2 0c0-2 .9-3.4 2-4.6.2 1.5 1.3 2.3 1.3 2.3 0-2.8 1.1-5.2 2.3-8.1Z" fill="#FF6B3D"/><path d="M12 20.4a3 3 0 0 1-3-3c0-1.5.9-2.4 1.8-3.3.2.9.8 1.5 1.4 1.7-.1-1.4.4-2.6 1.2-3.6 1 1.3 1.6 2.6 1.6 4.2a3 3 0 0 1-3 4Z" fill="#FFC44D"/></svg>;
+const DayIce=()=><svg className="insDayGlyph insDayIce" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="#BFE8FF" stroke="#38BDF8" strokeWidth="1.6"/><path d="M8.2 9.6 11 7.8M8.4 13.2l5.4-3.8" stroke="#fff" strokeWidth="1.7" strokeLinecap="round"/></svg>;
+/* The month as a streak calendar: each day's ring fills with its completion and a 100% day
+   becomes a flame. A missed past day takes an ice from the earned pool (tap again to take
+   it back); the flames and ices of a run are linked by one band and count as one streak.
+   Today is a filled disk in the theme colour, never an underline. */
+function CompletionCalendar({dayCompletion,firstDay,isPerfectDay,dayIces,iceAvailable,onToggleIce}){
   const [offset,setOffset]=useState(0);
+  const [note,setNote]=useState("");
   const [ty,tm]=todayKey.split("-").map(Number);
   const first=new Date(ty,tm-1+offset,1);
   const monthLabel=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(first);
   const start=mondayOf(dateKey(first));
   const days=Array.from({length:42},(_,i)=>addDays(start,i));
   const inMonth=k=>Number(k.split("-")[1])===first.getMonth()+1;
-  const pct=k=>k<firstDay?null:dayCompletion(k);
-  const full=k=>{ const p=pct(k); return p!=null&&p>=1; };
-  const R=13, C=2*Math.PI*R;
+  const tracked=k=>k>=firstDay&&k<=todayKey;
+  const lit=k=>tracked(k)&&isPerfectDay(k);
+  const iced=k=>!lit(k)&&(dayIces||[]).includes(k);
+  const runs=calendarRuns(days,k=>lit(k)||iced(k));
+  const eligible=k=>canPlaceIce(k,{today:todayKey,firstDay,lit:lit(k),iced:iced(k)});
+  const anyEligible=days.some(k=>inMonth(k)&&eligible(k));
+  const tap=k=>{
+    if(iced(k)){ onToggleIce(k); setNote("Ice taken back."); return; }
+    if(iceAvailable<=0){ setNote("No ice left. Every 100% day earns one."); return; }
+    onToggleIce(k); setNote("Ice placed: the streak holds through that day.");
+  };
+  const R=14.5, C=2*Math.PI*R;
   return <section className="insCard insCalendar" style={{"--c":"#8B5CF6"}}>
-    <header className="insCardHead"><h2>{monthLabel}</h2><div className="insNav"><button type="button" aria-label="Previous month" onClick={()=>setOffset(o=>o-1)}>‹</button><button type="button" aria-label="Next month" disabled={offset>=0} onClick={()=>setOffset(o=>Math.min(0,o+1))}>›</button></div></header>
+    <header className="insCardHead"><h2>{monthLabel}</h2>
+      <div className="insNav">
+        <span className="insCalIceCount" title={iceAvailable+" ice to place"} aria-label={iceAvailable+" ice to place"}><DayIce/>{iceAvailable}</span>
+        <button type="button" aria-label="Previous month" onClick={()=>{setOffset(o=>o-1);setNote("");}}>‹</button>
+        <button type="button" aria-label="Next month" disabled={offset>=0} onClick={()=>{setOffset(o=>Math.min(0,o+1));setNote("");}}>›</button>
+      </div>
+    </header>
     <div className="insCalGrid">
       {WEEKDAY_LETTERS.map((d,i)=><span key={"h"+i} className="insCalWd">{d}</span>)}
-      {days.map((k,i)=>{ const p=pct(k), f=full(k), col=i%7;
-        const joinL=f&&col>0&&full(days[i-1]), joinR=f&&col<6&&full(days[i+1]);
-        return <div key={k} className={"insCalDay"+(inMonth(k)?"":" out")+(k===todayKey?" today":"")+(f?" full":"")+(joinL?" joinL":"")+(joinR?" joinR":"")} title={p==null?shortDate(k):`${shortDate(k)} · ${Math.round(p*100)}%`}>
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            {f?<circle cx="16" cy="16" r={R+1.5} className="insCalFill"/>:<>
-              <circle cx="16" cy="16" r={R} className="insCalTrack"/>
-              {p>0&&<circle cx="16" cy="16" r={R} className="insCalArc" style={{strokeDasharray:`${C*p} ${C}`}}/>}
-            </>}
-          </svg>
-          <span>{Number(k.split("-")[2])}</span>
-        </div>; })}
+      {days.map((k,i)=>{
+        const p=tracked(k)?dayCompletion(k):null, f=lit(k), ic=iced(k), run=runs[i], can=eligible(k);
+        const state=f?"100%, a flame":ic?"kept by an ice":p==null?"":Math.round(p*100)+"%";
+        const label=shortDate(k)+(state?" · "+state:"")+(can&&iceAvailable>0?" · tap to place an ice":"")+(ic?" · tap to take the ice back":"");
+        const cls="insCalDay"+(inMonth(k)?"":" out")+(k===todayKey?" today":"")+(f?" flame":"")+(ic?" iced":"")+(run.on?" link":"")+(run.start?" linkStart":"")+(run.end?" linkEnd":"")+(can?" canIce":"")+(p==null&&!f&&!ic?" quiet":"");
+        const inner=<>
+          {!f&&!ic&&p!=null&&<svg className="insCalRing" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r={R} className="insCalTrack"/>{p>0&&<circle cx="18" cy="18" r={R} className="insCalArc" style={{strokeDasharray:`${C*p} ${C}`}}/>}</svg>}
+          {f?<DayFlame/>:ic?<DayIce/>:<span className="insCalNum">{Number(k.split("-")[2])}</span>}
+        </>;
+        return (can||ic)
+          ? <button type="button" key={k} className={cls} title={label} aria-label={label} onClick={()=>tap(k)}>{inner}</button>
+          : <div key={k} className={cls} title={label} role="img" aria-label={label}>{inner}</div>;
+      })}
     </div>
+    <p className="insCalNote" role="status">{note||(anyEligible&&iceAvailable>0?"Tap a missed day to place an ice.":"")}</p>
   </section>;
 }
 
@@ -6449,7 +6503,7 @@ function HistoryTable({rows}){
   </section>;
 }
 
-function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,dayCompletion,firstDay,push14,pushTotal14,pushAvg14,goalsHit7,learned7,recallTotal}){
+function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,dayIces,onToggleIce,isPerfectDay,dayCompletion,firstDay,push14,pushTotal14,pushAvg14,goalsHit7,learned7,recallTotal}){
   if(!overall) return null;
   const rows=[
     ...habits.map((h,i)=>{ const {icon,label}=splitHabit(h); return {key:"h"+h.id,group:i===0?"Habits":null,icon,label:label||h.name,color:HABIT_STREAK_COLORS[i%HABIT_STREAK_COLORS.length],done:k=>!!(habitLog[k]&&habitLog[k][h.id]),frozen:k=>(freezes[h.id]||[]).includes(k)}; }),
@@ -6459,13 +6513,13 @@ function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,da
   return <div className="insights">
     <section className="insRecords">{records.map(([icon,color,v,l])=><div key={l} className="insCard insRecord"><InsIcon name={icon} color={color}/><b>{v}</b><span>{l}</span></div>)}</section>
     <div className="insMain">
-      <CompletionCalendar dayCompletion={dayCompletion} firstDay={firstDay}/>
+      <CompletionCalendar dayCompletion={dayCompletion} firstDay={firstDay} isPerfectDay={isPerfectDay} dayIces={dayIces} iceAvailable={ice.available} onToggleIce={onToggleIce}/>
 <div className="insSide">
       <section className="insCard insIce" style={{"--c":"#38BDF8"}}>
         <header className="insCardHead"><h2>Ice</h2></header>
         <div className="insIceBig"><span className="insIceCube" aria-hidden="true"/><b>{ice.available}</b></div>
-        <p className="insMuted">{ice.perfect} earned · {icesSpent} used</p>
-        <p className="insSmall">Every 100% day earns one. Use it to cover a missed habit day without losing the streak.</p>
+        <p className="insMuted">{ice.perfect} earned · {ice.used} used</p>
+        <p className="insSmall">Every 100% day earns one. Place it on a missed day in the calendar and the streak runs through it.</p>
       </section>
         <section className="insCard insMini">
         <div><b style={{color:(COL.goals||{}).v}}>{goalsHit7}</b><span>goals done · 7 days</span></div>
