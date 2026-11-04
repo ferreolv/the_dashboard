@@ -2947,7 +2947,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .birthdayTodayEmoji{font-size:64px!important}
 .birthdayTodayName{font-size:19px!important}
 /* --- Reminders calendar: a tinted round number and one dot per item; round hover and selection --- */
-.tile[data-tileid="agenda"] .miniCalDay,.tile[data-tileid="agenda"] .miniCalDay:hover,.tile[data-tileid="agenda"] button.miniCalDay.selected{background:transparent!important;box-shadow:none!important;border-radius:0!important}
+.tile[data-tileid="agenda"] .miniCalDay,.tile[data-tileid="agenda"] button.miniCalDay:hover,.tile[data-tileid="agenda"] button.miniCalDay.selected{background:transparent!important;box-shadow:none!important;border-radius:0!important}
 .tile[data-tileid="agenda"] .miniCalNum{display:grid;place-items:center;width:28px;height:28px;margin:0 auto;border-radius:50%;font-weight:800;transition:background .15s,color .15s}
 .tile[data-tileid="agenda"] .miniCalDay:hover .miniCalNum{background:rgba(255,255,255,.6)!important}
 .tile[data-tileid="agenda"] .miniCalDay.has .miniCalNum{background:color-mix(in srgb,var(--accent) 24%,rgba(255,255,255,.55))!important;color:var(--ink)!important}
@@ -2971,6 +2971,40 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="agenda"] .agendaDayHead{position:absolute;top:0;left:0;right:40px;height:30px;margin:0}
 .tile[data-tileid="agenda"] .miniCalNum{width:25px!important;height:25px!important}
 .tile[data-tileid="agenda"] .miniCalEvents{margin-top:1px!important}
+/* Reminders calendar keeps each day's completion: a ring on every tracked past day (today's
+   ring is the today marker itself), a flame on a 100% day, the ice on a day kept by one. The
+   little ice in the header is picked up, then put on a missed day. */
+.tile[data-tileid="agenda"] .miniCalNum{position:relative}
+.miniCalRing{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
+.miniCalTrack{fill:none;stroke:rgba(255,255,255,.75);stroke-width:3.2}
+.miniCalArc{fill:none;stroke:var(--accent);stroke-width:3.2;stroke-linecap:round}
+.miniCalDay.today .miniCalTrack{stroke:var(--ink)}
+.tile[data-tileid="agenda"] .miniCalDay.today.ringed .miniCalNum{box-shadow:none!important}
+.tile[data-tileid="agenda"] .miniCalNum .insDayFlame{width:22px;height:22px}
+.tile[data-tileid="agenda"] .miniCalNum .insDayIce{width:20px;height:20px}
+.tile[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack{stroke:rgba(255,255,255,.4)}
+.tile[data-tileid="agenda"] button.miniCalDay.selected .miniCalArc{stroke:#fff}
+.tile[data-tileid="agenda"] button.miniCalDay.selected:is(.flame,.iced) .miniCalNum{background:#fff!important;box-shadow:inset 0 0 0 2px var(--accent)!important}
+.tile[data-tileid="agenda"] button.miniCalIce{position:relative;display:inline-flex!important;align-items:center;gap:3px;flex:none!important;width:auto!important;min-width:0!important;height:24px!important;min-height:24px!important;margin:0!important;padding:0 8px 0 4px!important;border:0!important;border-radius:999px!important;background:#E6F6FF!important;color:#0E6E9A!important;font:850 12px/1 'Nunito',sans-serif!important;letter-spacing:0!important;box-shadow:none!important;transform:none!important;opacity:1!important;cursor:pointer}
+.tile[data-tileid="agenda"] button.miniCalIce::after{content:"";position:absolute;inset:-10px -4px}
+.tile[data-tileid="agenda"] button.miniCalIce .insDayGlyph{width:16px;height:16px}
+.tile[data-tileid="agenda"] button.miniCalIce b{font-weight:900}
+.tile[data-tileid="agenda"] button.miniCalIce.on{background:#BFE8FF!important;box-shadow:inset 0 0 0 1.5px #38BDF8!important}
+.tile[data-tileid="agenda"] button.miniCalIce:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.tile[data-tileid="agenda"] .miniCalendar.placing button.miniCalDay:not(.target){opacity:.4}
+.miniCalDay.target .miniCalTrack{stroke:#38BDF8;stroke-dasharray:2.6 2.4}
+.miniCalDay.target .miniCalArc{opacity:.3}
+.tile[data-tileid="agenda"] .miniCalDay.target.iced .miniCalNum{outline:1.5px dashed #38BDF8;outline-offset:-1px}
+@keyframes miniIcePop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.miniCalDay.pop .insDayGlyph{animation:miniIcePop .32s ease-out}
+@media(prefers-reduced-motion:reduce){.miniCalDay.pop .insDayGlyph{animation:none}}
+.tile.completed[data-tileid="agenda"] .miniCalTrack{stroke:rgba(255,255,255,.35)}
+.tile.completed[data-tileid="agenda"] .miniCalArc{stroke:#fff}
+.tile.completed[data-tileid="agenda"] .miniCalDay.today .miniCalTrack{stroke:var(--ink)}
+.tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack{stroke:color-mix(in srgb,var(--accent) 25%,#fff)}
+.tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalArc{stroke:var(--accent)}
+/* stacked pop-up (phone): the calendar header leaves room for the close button */
+@container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
 </style>
 </head>
 <body>
@@ -5678,7 +5712,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <AgendaCard recurring={agendaRecurring} events={agendaEvents}
         noDueToday={agendaTodayStates.length===0} emptyDone={!!rToday.agenda} onToggleEmpty={()=>toggleRitual("agenda")}
         onMarkDone={markRecurringDone} onAddRecurring={addRecurring} onRemoveRecurring={removeRecurring}
-        onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone} />),
+        onAddEvent={addEvent} onRemoveEvent={removeEvent} onToggleEventDone={toggleEventDone}
+        streak={{dayCompletion,isPerfectDay,firstDay,dayIces,iceAvailable:ice.available,onToggleIce:toggleDayIce}} />),
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     movie: T("movie","Movies",movies.some(m=>m.watchedOn===todayKey),null,
@@ -6423,7 +6458,7 @@ function MusicCard({music,done}){
   </div>;
 }
 
-function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
+function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak}){
   const [baseY,baseM]=todayKey.split("-").map(Number);
   const [viewMonth,setViewMonth]=useState(()=>new Date(baseY,baseM-1,1));
   const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1;
@@ -6448,25 +6483,54 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate}){
   const days=Array.from({length:42},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
   const moveMonth=delta=>setViewMonth(current=>new Date(current.getFullYear(),current.getMonth()+delta,1));
   const returnToday=()=>setViewMonth(new Date(baseY,baseM-1,1));
+  /* The day's completion rides on the calendar: each tracked past day carries its ring
+     (today's ring is the today marker itself), a 100% day is a flame and a day kept by an
+     ice shows the ice. The little ice in the header is picked up, and the next tap puts it
+     on a missed day of the month (or takes a placed one back). */
+  const [placing,setPlacing]=useState(false);
+  const [popped,setPopped]=useState("");
+  const calRef=useRef(null);
+  const tracked=k=>!!streak&&k>=streak.firstDay&&k<=todayKey;
+  const lit=k=>tracked(k)&&streak.isPerfectDay(k);
+  const iced=k=>tracked(k)&&!lit(k)&&(streak.dayIces||[]).includes(k);
+  const iceLeft=streak?Math.max(0,Number(streak.iceAvailable)||0):0;
+  const canIce=k=>iceLeft>0&&!!streak&&canPlaceIce(k,{today:todayKey,firstDay:streak.firstDay,lit:lit(k),iced:iced(k)});
+  useEffect(()=>{ if(placing&&iceLeft<=0) setPlacing(false); },[placing,iceLeft]);
+  useEffect(()=>{ if(!placing) return;
+    const away=e=>{ if(calRef.current&&!calRef.current.contains(e.target)) setPlacing(false); };
+    const esc=e=>{ if(e.key==="Escape") setPlacing(false); };
+    document.addEventListener("pointerdown",away); document.addEventListener("keydown",esc);
+    return ()=>{ document.removeEventListener("pointerdown",away); document.removeEventListener("keydown",esc); }; },[placing]);
+  useEffect(()=>{ if(!popped) return; const t=setTimeout(()=>setPopped(""),700); return ()=>clearTimeout(t); },[popped]);
+  const R=16, C=2*Math.PI*R;
   const chooseDay=key=>{
+    if(placing){ setPlacing(false);
+      if(monthOf(key)===monthKey&&(canIce(key)||iced(key))){ if(!iced(key)) setPopped(key); streak.onToggleIce(key); }
+      return; }
     onSelectDate(key===selectedDate?"":key);
     if(monthOf(key)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
   };
   return (
-    <div className="miniCalendar" aria-label="Reminder calendar">
+    <div ref={calRef} className={"miniCalendar"+(placing?" placing":"")} aria-label="Reminder calendar">
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
           <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
           <span className="miniCalTitle" aria-live="polite">{monthLabel}</span>
           <button type="button" className="miniCalNav" aria-label="Next month" title="Next month" onClick={()=>moveMonth(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5" /></svg></button>
         </div>
+        {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
         <button type="button" className="miniCalToday widgetIconButton" aria-label="Return to the current month" title="Current month" onClick={returnToday}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="2.5" /><path d="M6.5 3v3M13.5 3v3M3.5 8.5h13" /><circle cx="10" cy="12.5" r="1.3" fill="currentColor" stroke="none" /></svg></button>
       </div>
       <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
-        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||""))); return (
-          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")+(items.length?" has":"")} aria-label={`${formatDateKey(key)}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}`} title={`${formatDateKey(key)}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}`} aria-current={key===todayKey?"date":undefined} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
-            <div className="miniCalNum">{day}</div>
+        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||"")));
+          const f=!out&&lit(key), ic=!out&&iced(key), p=!out&&!f&&!ic&&tracked(key)?streak.dayCompletion(key):null;
+          const target=placing&&!out&&(canIce(key)||ic), ring=!out&&!f&&!ic&&(p!=null||target);
+          const state=f?"100%, a flame":ic?"kept by an ice":p!=null?Math.round(p*100)+"% done":"";
+          const label=`${formatDateKey(key)}${state?" · "+state:""}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}${target?(ic?" · take the ice back":" · place the ice here"):""}`;
+          return (
+          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")+(items.length?" has":"")+(ring?" ringed":"")+(f?" flame":"")+(ic?" iced":"")+(target?" target":"")+(ic&&key===popped?" pop":"")} aria-label={label} title={label} aria-current={key===todayKey?"date":undefined} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
+            <div className="miniCalNum">{ring&&<svg className="miniCalRing" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r={R} className="miniCalTrack"/>{p>0&&<circle cx="18" cy="18" r={R} className="miniCalArc" style={{strokeDasharray:`${(C*p).toFixed(2)} ${C.toFixed(2)}`}}/>}</svg>}{f?<DayFlame/>:ic?<DayIce/>:day}</div>
             <div className="miniCalEvents" aria-hidden="true">
               {items.slice(0,4).map((item,i)=><span key={i} className={"miniCalDot"+(item.due?" due":"")+(item.done?" done":"")} />)}
               {items.length>4&&<span className="miniCalMore">+</span>}
@@ -6527,7 +6591,7 @@ function CompletionCalendar({dayCompletion,firstDay,isPerfectDay,dayIces,iceAvai
   const anyEligible=days.some(k=>inMonth(k)&&eligible(k));
   const tap=k=>{
     if(iced(k)){ onToggleIce(k); setNote("Ice taken back."); return; }
-    if(iceAvailable<=0){ setNote("No ice left. Every 100% day earns one."); return; }
+    if(iceAvailable<=0) return;
     onToggleIce(k); setNote("Ice placed: the streak holds through that day.");
   };
   const R=14.5, C=2*Math.PI*R;
@@ -6545,12 +6609,12 @@ function CompletionCalendar({dayCompletion,firstDay,isPerfectDay,dayIces,iceAvai
         const p=tracked(k)?dayCompletion(k):null, f=lit(k), ic=iced(k), run=runs[i], can=eligible(k);
         const state=f?"100%, a flame":ic?"kept by an ice":p==null?"":Math.round(p*100)+"%";
         const label=shortDate(k)+(state?" · "+state:"")+(can&&iceAvailable>0?" · tap to place an ice":"")+(ic?" · tap to take the ice back":"");
-        const cls="insCalDay"+(inMonth(k)?"":" out")+(k===todayKey?" today":"")+(f?" flame":"")+(ic?" iced":"")+(run.on?" link":"")+(run.start?" linkStart":"")+(run.end?" linkEnd":"")+(can?" canIce":"")+(p==null&&!f&&!ic?" quiet":"");
+        const cls="insCalDay"+(inMonth(k)?"":" out")+(k===todayKey?" today":"")+(f?" flame":"")+(ic?" iced":"")+(run.on?" link":"")+(run.start?" linkStart":"")+(run.end?" linkEnd":"")+(can&&iceAvailable>0?" canIce":"")+(p==null&&!f&&!ic?" quiet":"");
         const inner=<>
           {!f&&!ic&&p!=null&&<svg className="insCalRing" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r={R} className="insCalTrack"/>{p>0&&<circle cx="18" cy="18" r={R} className="insCalArc" style={{strokeDasharray:`${C*p} ${C}`}}/>}</svg>}
           {f?<DayFlame/>:ic?<DayIce/>:<span className="insCalNum">{Number(k.split("-")[2])}</span>}
         </>;
-        return (can||ic)
+        return ((can&&iceAvailable>0)||ic)
           ? <button type="button" key={k} className={cls} title={label} aria-label={label} onClick={()=>tap(k)}>{inner}</button>
           : <div key={k} className={cls} title={label} role="img" aria-label={label}>{inner}</div>;
       })}
@@ -6625,7 +6689,7 @@ function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,da
   </div>;
 }
 
-function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone}){
+function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,streak}){
   const [showAdd,setShowAdd]=useState(false);
   const [selectedDate,setSelectedDate]=useState("");
   const rows=[];
@@ -6645,7 +6709,7 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
   const shown=selectedDate?rows.filter(r=>r.calendarDate===selectedDate):rows;
   return (
     <div className="taskAgenda">
-      <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} streak={streak} />
       <div className="agendaItems">
       {selectedDate&&<div className="agendaDayHead"><span>{positiveEventDate(selectedDate)}</span><button type="button" className="agendaDayAll" onClick={()=>setSelectedDate("")}>Show upcoming</button></div>}
       {selectedDate&&shown.length===0&&<p className="agendaDayEmpty">Nothing planned this day.</p>}
