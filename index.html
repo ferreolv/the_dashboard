@@ -2551,12 +2551,8 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .tile[data-tileid="agenda"] .miniCalendar button.miniCalDay{min-height:26px!important;height:26px!important;padding:0!important;font-size:11.5px!important}
 .tile[data-tileid="agenda"] .miniCalendar .miniCalWeekday,.tile[data-tileid="agenda"] .miniCalendar [class*="Weekday"]{font-size:9.5px!important}
 .agendaForm{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.agendaSeg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:12px;background:color-mix(in srgb,var(--accent) 10%,rgba(255,255,255,.4))}
-.tile .agendaSeg button,.tile.completed .agendaSeg button{height:32px;min-height:32px!important;padding:0!important;border:none!important;border-radius:9px!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font-size:12.5px;font-weight:800}
-.tile .agendaSeg button.on{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .agendaFormRow{display:flex;align-items:center;gap:8px}
 .tile .agendaForm .agendaField,.tile .agendaForm input.agendaField{height:38px!important;min-height:38px!important;max-height:38px!important;box-sizing:border-box;flex:1;min-width:0;padding:0 11px!important;border-radius:11px!important;font-size:13px!important}
-.tile .agendaField.agendaN{flex:0 0 64px;text-align:center}
 .agendaEvery{font-size:12.5px;font-weight:750;color:var(--dim);flex:none}
 .tile button.agendaBtn,.tile.completed button.agendaBtn{flex:1;height:38px;min-height:38px!important;padding:0!important;border-radius:11px!important;border:none!important;background:var(--accent)!important;color:#fff!important;font-weight:800;font-size:13px;box-shadow:none!important}
 .tile button.agendaBtn.ghost{background:transparent!important;color:var(--accentDark)!important;border:1.5px solid color-mix(in srgb,var(--accent) 35%,transparent)!important}
@@ -2604,14 +2600,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .wxSnow circle{animation:wxFlake 2.6s ease-in-out infinite}
 @keyframes wxFlake{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}100%{opacity:0;transform:translate(3px,8px)}}
 @media(prefers-reduced-motion:reduce){.wxRays,.wxRain path,.wxSnow circle{animation:none}}
-/* --- Language tiles: the flag is woven in as a stripe bar beside the day's point --- */
+/* --- Language tiles: the day's lesson sits in one speech bubble; the flag is the round
+   avatar at the bubble's tail (Spain on the left, Germany on the right) --- */
 .langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;padding-right:34px}
 .langTitle{font-size:17px!important;font-weight:800!important;line-height:1.2!important;flex:1;min-width:0}
 .langLede{position:relative;margin:0 0 13px;font-size:13.5px;line-height:1.5;font-weight:650;color:#2a2e40}
-.langLede{padding-left:14px}
-.langLede::before{content:"";position:absolute;top:2px;bottom:2px;width:5px;border-radius:99px}
-.langEs .langLede::before{left:0;background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75% 100%)}
-.langDe .langLede::before{left:0;background:linear-gradient(180deg,#1d1d1f 0 33%,#DD0000 33% 66%,#FFCE00 66% 100%)}
 .langEs .langVocab{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:5px}
 .langEs .langWord{display:contents}
 .langEs .langTerm{font-weight:800;font-size:14px;color:var(--accentDark);padding:3px 0;border-bottom:1px solid var(--hair)}
@@ -2619,7 +2612,6 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .langEs .langWord[hidden]{display:none!important}
 .langEs .langWord[hidden] *{display:none}
 .tile.completed .langLede{color:#fff}
-.tile.completed .langLede::before{opacity:.9}
 /* --- Knowledge: a watering can spilling the day's field --- */
 .lessonHead{margin-bottom:6px}
 .lessonHead .lessonField{padding-right:40px}
@@ -3054,6 +3046,70 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .insSustainItem{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:12px;background:rgba(255,255,255,.55);font-size:18px;line-height:1}
 .insSustainItem b{font-size:12px;font-weight:900;color:var(--accentDark);font-variant-numeric:tabular-nums}
 .insSustainItem.zero{opacity:.45}
+
+/* ---- Reminders: booking a chosen day (words, time, how it repeats) ---- */
+.agendaRepeat{display:flex;flex-wrap:wrap;gap:5px}
+.tile button.agendaChip,.tile.completed button.agendaChip{flex:1 1 auto;min-height:30px!important;height:30px!important;padding:0 10px!important;border:0!important;border-radius:999px!important;background:color-mix(in srgb,var(--accent) 12%,rgba(255,255,255,.45))!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:0!important;transform:none!important;transition:background .15s,color .15s}
+.tile button.agendaChip.on,.tile.completed button.agendaChip.on{background:var(--accent)!important;color:#fff!important}
+.tile.completed button.agendaChip{background:rgba(255,255,255,.22)!important;color:#fff!important}
+.tile.completed button.agendaChip.on{background:#fff!important;color:var(--accentDark)!important}
+.agendaEveryRow{display:flex;align-items:center;gap:8px;min-height:30px}
+.tile button.agendaStep,.tile.completed button.agendaStep{width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.65)!important;box-shadow:none!important;color:var(--accentDark)!important;font:900 17px/1 'Nunito',sans-serif!important;transform:none!important}
+.tile button.agendaStep:disabled{opacity:.35}
+.agendaN{font:900 15px/1 'Nunito',sans-serif;min-width:18px;text-align:center;color:var(--ink);font-variant-numeric:tabular-nums}
+.tile .agendaForm .agendaField.agendaTime{flex:0 0 108px}
+.tile.completed .agendaEvery,.tile.completed .agendaN{color:#fff}
+/* ---- Brainflex: the day's board fills more of the tile ---- */
+.grid>.tile[data-tileid="brainflex"] .digitsPreview .digitsTarget{font-size:clamp(44px,15cqi,66px)}
+.grid>.tile[data-tileid="brainflex"] .digitsPreview .digitsChips{gap:8px}
+.grid>.tile[data-tileid="brainflex"] .digitsPreview .digitsChip{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;font-size:18px!important}
+.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveGrid,.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveRow{gap:5px}
+.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveCell{width:27px;height:27px;border-radius:7px}
+.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuGrid{width:min(206px,100%)}
+.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuCell{font-size:16px!important}
+/* ---- Movies: the film runs to the left; the title is printed on the frame and stays ---- */
+.movieStrip::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.07) 58px 60px);animation:filmRun 1.3s linear infinite}
+.movieStrip>*{position:relative;z-index:1}
+.movieSprockets{animation:filmRun 1.3s linear infinite}
+@keyframes filmRun{to{background-position:-60px 0}}
+@media(prefers-reduced-motion:reduce){.movieStrip::before,.movieSprockets{animation:none}}
+/* ---- Note: the pop-up is a page of the notebook ---- */
+.tileFocusSurface[data-tileid="note"] .content{display:block!important}
+.notebook{position:relative;max-height:min(64vh,680px);overflow:auto;border-radius:18px;padding:10px 20px 16px 0;scrollbar-width:thin;
+  background:linear-gradient(90deg,transparent 58px,color-mix(in srgb,var(--accentDark) 45%,transparent) 58px,color-mix(in srgb,var(--accentDark) 45%,transparent) 59.5px,transparent 59.5px),
+    repeating-linear-gradient(to bottom,transparent 0 25px,color-mix(in srgb,var(--accent) 36%,transparent) 25px 26px),rgba(255,255,255,.66);
+  background-position:0 0,0 8px,0 0;background-attachment:local,local,scroll}
+.nbDay{display:grid;grid-template-columns:58px minmax(0,1fr);gap:0 16px;align-items:start;padding:6px 0 10px}
+.nbDate{display:flex;flex-direction:column;align-items:flex-end;padding:0 10px 0 0;font:800 9.5px/13px 'Nunito',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.nbDate b{font-size:18px;line-height:22px;color:var(--ink);letter-spacing:0}
+.nbDate small{font-size:8.5px;line-height:12px;color:var(--accentDark);opacity:.9}
+.nbText{font-size:14.5px;line-height:26px;white-space:pre-wrap;color:var(--ink);overflow-wrap:anywhere}
+.nbDay.today{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:0 14px 14px 0;margin-right:-20px;padding-right:20px}
+.tile textarea.nbArea,.tile.completed textarea.nbArea{display:block;width:100%;min-height:78px;resize:none;margin:0;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;font-family:'Nunito',sans-serif;font-size:14.5px!important;line-height:26px!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
+.tile textarea.nbArea:focus{outline:none;transform:none!important;background:transparent!important}
+.tile textarea.nbArea::placeholder{color:var(--dim)}
+/* ---- Language tiles: the bubble, its tail and the flag avatar ---- */
+.langCard{display:flex;flex-direction:column;min-height:0}
+.langBubble{position:relative;flex:1 1 auto;min-height:0;padding:14px 16px 12px;margin:0 0 30px;border-radius:22px;background:rgba(255,255,255,.64);box-shadow:0 8px 22px -14px rgba(20,10,40,.35)}
+.langBubble::after{content:"";position:absolute;bottom:-12px;width:28px;height:24px;background:rgba(255,255,255,.64);clip-path:polygon(0 0,100% 0,16% 100%)}
+.langEs .langBubble::after{left:30px}
+.langDe .langBubble::after{right:30px;clip-path:polygon(0 0,100% 0,84% 100%)}
+.langFlag{position:absolute;bottom:-32px;width:36px;height:36px;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.18),0 0 0 3px rgba(255,255,255,.85)}
+.langEs .langFlag{left:-2px;background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75%)}
+.langDe .langFlag{right:-2px;background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
+.langBubble .langHead{margin-bottom:5px;padding-right:30px}
+.langBubble .langLede{margin:0 0 10px;padding-left:0}
+.tile.completed .langBubble,.tile.completed .langBubble::after{background:rgba(255,255,255,.17);box-shadow:none}
+.tile.completed .langFlag{box-shadow:0 0 0 3px rgba(255,255,255,.5)}
+.tile.completed .langTitle,.tile.completed .langEs .langTerm{color:#fff!important}
+.tile.completed .langEs .langGloss{color:rgba(255,255,255,.78)!important}
+.tile.completed .langEs .langTerm,.tile.completed .langEs .langGloss{border-bottom-color:rgba(255,255,255,.3)}
+.tileFocusSurface .langBubble{flex:none;margin-bottom:34px}
+/* the bubble fills the tile: the mount and content stretch like the Note paper does */
+.grid>.tile[data-tileid="spanish"]>.tbody,.grid>.tile[data-tileid="german"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="spanish"] .tileMount,.grid>.tile[data-tileid="german"] .tileMount{flex:1 1 auto!important;display:flex}
+.grid>.tile[data-tileid="spanish"] .tileMount>.content,.grid>.tile[data-tileid="german"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0}
+.grid>.tile[data-tileid="spanish"] .langCard,.grid>.tile[data-tileid="german"] .langCard{flex:1 1 auto;min-height:0}
 
 </style>
 </head>
@@ -4458,7 +4514,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -5362,7 +5418,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     }
     return {...r,previousLastDone:r.lastDone,lastDone:todayKey};
   })); };
-  const addRecurring=(label,n,unit="day")=>{ const every={n,unit}; persistRecurring([...agendaRecurring,{id:uid(),label,every,everyDays:recurApproxDays(every),lastDone:todayKey}]); };
+  /* A repeating reminder is first due on the day it was booked: its "last done" is one step before. */
+  const addRecurring=(label,n,unit="day",start=todayKey)=>{ const every={n,unit}; persistRecurring([...agendaRecurring,{id:uid(),label,every,everyDays:recurApproxDays(every),lastDone:addRecurStep(start,every,-1)}]); };
   const removeRecurring=id=>{ persistRecurring(agendaRecurring.filter(r=>r.id!==id)); };
   const addEvent=(label,date,time="")=>{ persistEvents([...agendaEvents,{id:uid(),label,date,time:time||""}]); };
   const removeEvent=id=>{ persistEvents(agendaEvents.filter(e=>e.id!==id)); };
@@ -5731,7 +5788,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <GermanCard de={view.german} busy={genBusy} done={!!rToday.german} onLearned={learnGerman} onUnlearned={()=>unsetRitual("german")} onGenerate={()=>regenerateOne("german")} />
       <RetryNote tileKey="german"/></>),
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
-      <NoteCard saved={notes[todayKey]||""} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
+      <NoteCard saved={notes[todayKey]||""} notes={notes} onSave={setTodayNote} onView={()=>setShowJournal(true)} />),
     word: T("word","Word",!!rToday.word, null,<>
       <WordCard word={view.word} busy={genBusy} onLearned={learnWord} onUnlearned={unlearnWord} onGenerate={()=>regenerateOne("word")} />
       <RetryNote tileKey="word"/></>),
@@ -6103,7 +6160,22 @@ function BirthdayInput({onAdd}){
   </form>;
 }
 
-function NoteCard({saved,onSave,onView}){
+/* Expanded, the note is a page of the notebook: earlier days' notes as sections above,
+   today's section ruled the same and editable, scrolled into view. */
+const nbDate=k=>{ const [y,m,d]=String(k).split("-").map(Number); const dt=new Date(y,m-1,d); return <>{WEEKDAY_NAMES[dt.getDay()].slice(0,3)}<b>{d}</b>{MONTH_ABBR[m-1]}</>; };
+function NoteCard({saved,notes,onSave,onView}){
+  const {expanded}=useTilePresentation();
+  const todayRef=useRef(null);
+  useEffect(()=>{ if(expanded&&todayRef.current) todayRef.current.scrollIntoView({block:"end"}); },[expanded]);
+  if(expanded){
+    const days=Object.keys(notes||{}).filter(k=>k<todayKey&&String(notes[k]||"").trim()).sort();
+    const lines=Math.max(3,String(saved||"").split("\n").length+1);
+    return <div className="notebook" aria-label="Notebook">
+      {days.map(k=><section key={k} className="nbDay"><div className="nbDate">{nbDate(k)}</div><div className="nbText">{notes[k]}</div></section>)}
+      <section className="nbDay today" ref={todayRef}><div className="nbDate">{nbDate(todayKey)}<small>Today</small></div>
+        <textarea className="nbArea" aria-label="Today’s note" placeholder="Something to remember…" rows={lines} value={saved} onChange={e=>onSave(e.target.value)} /></section>
+    </div>;
+  }
   // Persist each edit before navigation or Library filtering can unmount this card.
   return (
     <div className="noteCard">
@@ -6123,13 +6195,16 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const undo=index=>onUnlearned&&onUnlearned(sp);
   return (
     <div className="langCard langEs readingCard">
-      <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div></div>
-      {sp.punto && <div className="langLede">{sp.punto}</div>}
-      {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
-        {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord">
-          <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
-        </div>))}
-      </div>}
+      <div className="langBubble">
+        <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div></div>
+        {sp.punto && <div className="langLede">{sp.punto}</div>}
+        {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
+          {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord">
+            <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
+          </div>))}
+        </div>}
+        <span className="langFlag" role="img" aria-label="Spain"/>
+      </div>
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
@@ -6144,14 +6219,17 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const undo=index=>onUnlearned&&onUnlearned(de);
   return (
     <div className="langCard langDe readingCard">
-      <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
-      {de.punkt && <div className="langLede">{de.punkt}</div>}
-      {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
-        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow">
-          <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
-          {v.pron && <span className="dePron">{v.pron}</span>}
-        </div>))}
-      </div>}
+      <div className="langBubble">
+        <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
+        {de.punkt && <div className="langLede">{de.punkt}</div>}
+        {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
+          {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow">
+            <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
+            {v.pron && <span className="dePron">{v.pron}</span>}
+          </div>))}
+        </div>}
+        <span className="langFlag" role="img" aria-label="Germany"/>
+      </div>
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
@@ -6859,6 +6937,10 @@ function InsightsPage({sustain,overall,sections,habits,habitLog,freezes,ice,ices
 function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,streak}){
   const [showAdd,setShowAdd]=useState(false);
   const [selectedDate,setSelectedDate]=useState("");
+  const {expanded,open}=useTilePresentation();
+  useEffect(()=>{ setShowAdd(false); },[selectedDate]);
+  /* the form wants more room than the grid tile has under its calendar, so + opens the pop-up with it */
+  const startAdd=()=>{ setShowAdd(true); if(!expanded) open(); };
   const rows=[];
   recurring.forEach(r=>{
     const done=r.lastDone===todayKey, due=recurDue(r), d=daysBetween(todayKey,due);
@@ -6891,42 +6973,41 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
         </div>
       );})}
       {!selectedDate && noDueToday && shown.length===0 && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
-      {!showAdd ? (
-        <button type="button" className="widgetIconButton taskAddLink" aria-label="Add task" title="Add task" onClick={()=>setShowAdd(true)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg></button>
+      {/* booking happens on a chosen day: the + only appears once today or a later day is selected */}
+      {selectedDate&&selectedDate>=todayKey&&(!showAdd ? (
+        <button type="button" className="widgetIconButton taskAddLink" aria-label={"Add a reminder on "+positiveEventDate(selectedDate)} title="Add a reminder on this day" onClick={startAdd}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg></button>
       ) : (
-        <AgendaAddForm onAddRecurring={onAddRecurring} onAddEvent={onAddEvent} onClose={()=>setShowAdd(false)} />
-      )}
+        <AgendaAddForm date={selectedDate} onAddRecurring={onAddRecurring} onAddEvent={onAddEvent} onClose={()=>setShowAdd(false)} />
+      ))}
       </div>
     </div>
   );
 }
-function AgendaAddForm({onAddRecurring,onAddEvent,onClose}){
-  const [mode,setMode]=useState("oneoff");
-  const [label,setLabel]=useState(""); const [date,setDate]=useState(""); const [time,setTime]=useState(""); const [n,setN]=useState("1"); const [unit,setUnit]=useState("week");
-  const submit=()=>{ const t=label.trim(); if(!t) return;
-    if(mode==="oneoff"){ if(!date) return; onAddEvent(t,date,time); } else { const k=Math.round(Number(n)); if(!k||k<1) return; onAddRecurring(t,k,unit); }
+/* The day is already chosen in the calendar, so the form asks only for the words, an optional
+   time, and how it repeats: a row of chips, with an "every N" stepper once it repeats. A
+   repeating reminder starts on the chosen day. */
+const AGENDA_REPEATS=[["once","Once"],["day","Daily"],["week","Weekly"],["month","Monthly"],["year","Yearly"]];
+function AgendaAddForm({date,onAddRecurring,onAddEvent,onClose}){
+  const [label,setLabel]=useState(""); const [time,setTime]=useState(""); const [unit,setUnit]=useState("once"); const [n,setN]=useState(1);
+  const submit=()=>{ const t=label.trim(); if(!t||!date) return;
+    if(unit==="once") onAddEvent(t,date,time); else onAddRecurring(t,Math.max(1,Math.round(n)),unit,date);
     onClose(); };
   return (
     <div className="taskAddForm agendaForm">
-      <div className="agendaSeg" role="tablist">
-        <button type="button" role="tab" aria-selected={mode==="oneoff"} className={mode==="oneoff"?"on":""} onClick={()=>setMode("oneoff")}>Once</button>
-        <button type="button" role="tab" aria-selected={mode==="recurring"} className={mode==="recurring"?"on":""} onClick={()=>setMode("recurring")}>Repeats</button>
-      </div>
-      <input className="addinput agendaField" placeholder={mode==="oneoff"?"Renew passport":"Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} />
       <div className="agendaFormRow">
-        {mode==="oneoff"
-          ? <>
-              <input className="addinput agendaField" type="date" aria-label="Date" min={todayKey} value={date} onChange={e=>setDate(e.target.value)} />
-              <input className="addinput agendaField" type="time" aria-label="Time (optional)" value={time} onChange={e=>setTime(e.target.value)} />
-            </>
-          : <>
-              <span className="agendaEvery">every</span>
-              <input className="addinput agendaField agendaN" type="number" min="1" aria-label="How many" value={n} onChange={e=>setN(e.target.value)} />
-              <select className="addinput agendaField" aria-label="Unit" value={unit} onChange={e=>setUnit(e.target.value)}>
-                {RECUR_UNITS.map(u=><option key={u} value={u}>{Number(n)===1?u:u+"s"}</option>)}
-              </select>
-            </>}
+        <input className="addinput agendaField" placeholder={unit==="once"?"Renew passport":"Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} autoFocus />
+        {unit==="once"&&<input className="addinput agendaField agendaTime" type="time" aria-label="Time (optional)" value={time} onChange={e=>setTime(e.target.value)} />}
       </div>
+      <div className="agendaRepeat" role="radiogroup" aria-label="Repeats">
+        {AGENDA_REPEATS.map(([u,l])=><button type="button" key={u} role="radio" aria-checked={unit===u} className={"agendaChip"+(unit===u?" on":"")} onClick={()=>setUnit(u)}>{l}</button>)}
+      </div>
+      {unit!=="once"&&<div className="agendaEveryRow">
+        <span className="agendaEvery">every</span>
+        <button type="button" className="agendaStep" aria-label="Less often" disabled={n<=1} onClick={()=>setN(v=>Math.max(1,v-1))}>−</button>
+        <b className="agendaN" aria-live="polite">{n}</b>
+        <button type="button" className="agendaStep" aria-label="More often" onClick={()=>setN(v=>Math.min(99,v+1))}>+</button>
+        <span className="agendaEvery">{n===1?unit:unit+"s"} · from {shortDate(date)}</span>
+      </div>}
       <div className="agendaFormRow">
         <button type="button" className="agendaBtn ghost" onClick={onClose}>Cancel</button>
         <button type="button" className="agendaBtn" onClick={submit}>Add</button>
