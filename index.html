@@ -2634,10 +2634,11 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .insCalendar{grid-column:span 4}
 .insIce{grid-column:span 4}
 .insMini{grid-column:span 4}
+.insSustain{grid-column:span 4}
 .insHistory{grid-column:span 8}
 .insPush{grid-column:span 4;align-self:start}
 .insStreak{grid-column:span 2}
-@media(max-width:1100px){.insRecord{grid-column:span 3}.insCalendar{grid-column:span 6}.insIce{grid-column:span 3}.insMini{grid-column:span 3}.insHistory{grid-column:span 12}.insPush{grid-column:span 6}.insStreak{grid-column:span 3}}
+@media(max-width:1100px){.insRecord{grid-column:span 3}.insCalendar{grid-column:span 6}.insIce{grid-column:span 3}.insMini{grid-column:span 3}.insSustain{grid-column:span 3}.insHistory{grid-column:span 12}.insPush{grid-column:span 6}.insStreak{grid-column:span 3}}
 .insCard{position:relative;border-radius:18px;padding:12px 14px;color:#1f2a33;background:linear-gradient(140deg,rgba(255,255,255,.58),rgba(255,255,255,.38));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 14px 34px -22px rgba(30,40,60,.35);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
 .insCardHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .insCardHead h2{margin:0;font-size:13px;font-weight:850;letter-spacing:-.01em}
@@ -2732,7 +2733,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .insMini div{display:flex;align-items:baseline;gap:10px}
 .insMini b{font-size:19px;font-weight:900;letter-spacing:-.03em;min-width:32px}
 .insMini span{font-size:10.5px;font-weight:750;color:#6a7682}
-@media(max-width:760px){.insRecord{grid-column:span 6}.insCalendar{grid-column:span 12}.insIce{grid-column:span 6}.insMini{grid-column:span 6}.insHistory{grid-column:span 12}.insPush{grid-column:span 12}.insStreak{grid-column:span 6}.insStreakMeta span:last-child{display:none}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:10.5px}.insCard{padding:12px}}
+@media(max-width:760px){.insRecord{grid-column:span 6}.insCalendar{grid-column:span 12}.insIce{grid-column:span 6}.insMini{grid-column:span 6}.insSustain{grid-column:span 6}.insHistory{grid-column:span 12}.insPush{grid-column:span 12}.insStreak{grid-column:span 6}.insStreakMeta span:last-child{display:none}.insTable{grid-template-columns:minmax(84px,110px) repeat(var(--cols),minmax(0,1fr))}.insRowName{font-size:10.5px}.insCard{padding:12px}}
 
 /* Typing shows a caret, not a container: no focus rings or boxes anywhere in tiles. */
 .tile :is(input,textarea,select):focus,.tile :is(input,textarea,select):focus-visible{outline:none!important;box-shadow:none!important}
@@ -3013,6 +3014,47 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
+/* ---- Sustainability: a tray of emission bubbles; throw one out of the tile = avoided today.
+   No border, no text: the pile of bubbles is the tile. Empty tray = a white flower on the
+   full-colour tile. Bubble sizes are container units of the tray, so phone and pop-up scale. ---- */
+.tile[data-tileid="sustain"] .content{padding:0!important;min-height:0!important}
+.sustainCard{width:100%}
+.sustainTray{position:relative;width:100%;aspect-ratio:1;container-type:inline-size}
+.tileFocusSurface[data-tileid="sustain"] .sustainTray{max-width:280px;margin:0 auto}
+.tile[data-tileid="sustain"] .sustainBubble{position:absolute;display:grid;place-items:center;width:var(--d);height:var(--d);border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 4px 10px rgba(40,60,20,.16),inset 0 -2px 0 rgba(40,60,20,.06);font-size:calc(var(--d) * .46);line-height:1;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;will-change:transform}
+.sustainBubble>span{display:block;transform:translateY(2%)}
+.sustainBubble.dragging{cursor:grabbing;box-shadow:0 12px 24px rgba(40,60,20,.24);z-index:3}
+.sustainBubble.back{transition:transform .32s cubic-bezier(.2,1.4,.5,1)}
+.sustainBubble.out{transition:transform .36s cubic-bezier(.3,.7,.5,1),opacity .36s;opacity:0;pointer-events:none}
+.sustainBubble:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.sustainFlower{position:absolute;left:14%;top:14%;width:72%;height:72%;overflow:visible}
+.sustainPetal{fill:rgba(255,255,255,.97);transform-origin:60px 60px;transform-box:view-box;animation:sustainBloom .6s cubic-bezier(.2,1.25,.4,1) both}
+.sustainHeart{fill:#F6D35B;stroke:rgba(255,255,255,.92);stroke-width:3;transform-origin:60px 60px;transform-box:view-box;animation:sustainBloom .4s ease-out both;animation-delay:.5s}
+@keyframes sustainBloom{from{transform:scale(0)}to{transform:scale(1)}}
+.sustainList{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.sustainRow{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.42)}
+.sustainRow.gone{opacity:.75}
+.sustainRowEmoji{font-size:20px;line-height:1;text-align:center}
+.sustainRowName{font:800 14px/1.2 'Nunito',sans-serif;color:var(--ink);min-width:0}
+.sustainRowName small{display:block;font-family:inherit;font-weight:600;font-size:11.5px;line-height:1.3;color:var(--dim)}
+.tile button.sustainPill{display:inline-grid!important;place-items:center;width:88px!important;min-width:88px!important;height:32px!important;min-height:32px!important;margin:0!important;padding:0!important;border:1.5px solid color-mix(in srgb,var(--accent) 50%,transparent)!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 12px/1 'Nunito',sans-serif!important;letter-spacing:0!important;transform:none!important;opacity:1!important}
+.tile button.sustainPill.on{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.tile.completed .sustainRow{background:rgba(255,255,255,.16)}
+.tile.completed .sustainRowName,.tile.completed .sustainRowName small{color:#fff!important}
+.tile.completed button.sustainPill{border-color:rgba(255,255,255,.65)!important;color:#fff!important}
+.tile.completed button.sustainPill.on{background:#fff!important;border-color:#fff!important;color:var(--accentDark)!important}
+@media(prefers-reduced-motion:reduce){.sustainPetal,.sustainHeart{animation:none}.sustainBubble.back,.sustainBubble.out{transition:none}}
+/* Insights: low-carbon days this month and how long each item has stayed out of the tray */
+.insSustain{display:flex;flex-direction:column;gap:10px;background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 16%,rgba(255,255,255,.58)),rgba(255,255,255,.42))}
+.insSustainBig{display:flex;align-items:center;gap:10px}
+.insSustainBig b{font-size:34px;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--accentDark);font-variant-numeric:tabular-nums}
+.insSustainBig span{font-size:12.5px;font-weight:800;line-height:1.2}
+.insSustainBig small{display:block;font-size:10.5px;font-weight:700;color:#6a7682}
+.insSustainGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.insSustainItem{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:12px;background:rgba(255,255,255,.55);font-size:18px;line-height:1}
+.insSustainItem b{font-size:12px;font-weight:900;color:var(--accentDark);font-variant-numeric:tabular-nums}
+.insSustainItem.zero{opacity:.45}
+
 </style>
 </head>
 <body>
@@ -3035,6 +3077,7 @@ const COL = {
   spanish:  {p:"#FFE4EB", v:"#FF3D77", d:"#B01E4E"},
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
+  sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -4261,6 +4304,7 @@ const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360
 const CURATED_TILE_LAYOUT={
   goals:{desktop:[4,4],phone:[2,2],family:"large"},
   habits:{desktop:[4,2],phone:[2,2],family:"large"},
+  sustain:{desktop:[2,2],phone:[1,1],family:"small"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
   shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
@@ -4334,7 +4378,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["goals","habits","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["goals","habits","sustain","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -4343,12 +4387,14 @@ const SHOPPING_TILE_INTRODUCED=load("shoppingTileIntroduced",false);
 const HEALTH_TILE_INTRODUCED=load("healthTileIntroduced",false);
 const GERMAN_TILE_INTRODUCED=load("germanTileIntroduced",false);
 const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
+const SUSTAIN_TILE_INTRODUCED=load("sustainTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
 const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"health"); return next; };
 const placeGermanAfterSpanish=list=>{ const next=list.filter(id=>id!=="german"), at=next.indexOf("spanish"); next.splice(at<0?next.length:at+1,0,"german"); return next; };
 const placeMovieAfterEvents=list=>{ const next=list.filter(id=>id!=="movie"), at=next.indexOf("events"); next.splice(at<0?next.length:at+1,0,"movie"); return next; };
+const placeSustainAfterHabits=list=>{ const next=list.filter(id=>id!=="sustain"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"sustain"); return next; };
 
 // Dialogs share a stack so only the frontmost overlay handles focus and Escape.
 const dashboardDialogStack=[];
@@ -4412,7 +4458,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -4620,10 +4666,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); return next; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -4637,6 +4683,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
   const [movies,setMovies]=useState(()=>load("movies",[]));
+  const [sustainOut,setSustainOut]=useState(()=>{ const rec=load("sustain:"+todayKey,null); return rec&&Array.isArray(rec.out)?rec.out:[]; });
+  const sustainRef=useRef(sustainOut);
   const [healthLog,setHealthLog]=useState(()=>load("healthLog",{}));
   const [freezes,setFreezes]=useState(()=>load("freezes",{}));
   const [icesSpent,setIcesSpent]=useState(()=>load("icesSpent",0));
@@ -4936,6 +4984,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       if(event.key==="fefe_ritualLog")setRitualLog(load("ritualLog",{}));
       if(event.key==="fefe_manualTileDone:"+todayKey)setManualTileDone(load("manualTileDone:"+todayKey,{}));
       if(event.key==="fefe_recall")setRecallList(load("recall",[]));
+      if(event.key==="fefe_sustain:"+todayKey){ const rec=load("sustain:"+todayKey,null); const out=rec&&Array.isArray(rec.out)?rec.out:[]; sustainRef.current=out; setSustainOut(out); }
     };
     window.addEventListener("storage",onStorage);return()=>window.removeEventListener("storage",onStorage);
   },[]);
@@ -5090,6 +5139,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const setRitual=key=>updateRitual(key,true);
   const unsetRitual=key=>updateRitual(key,false);
   const toggleRitual=key=>updateRitual(key,"toggle");
+  /* A thrown-out bubble is saved at once (several can fly within a second, so the ref, not the
+     render, is the source); the empty tray is what completes the tile. */
+  const setSustainThrown=(id,on)=>{ const prev=sustainRef.current, next=sustainToggle(prev,id,on); if(next===prev) return;
+    sustainRef.current=next; setSustainOut(next); save("sustain:"+todayKey,{out:next});
+    const was=sustainIsDone(prev), is=sustainIsDone(next); if(is&&!was) setRitual("sustain"); else if(was&&!is) unsetRitual("sustain"); };
   const addPush=n=>{ const v=Math.max(0,pToday+n); const m={...pushLog,[todayKey]:v}; setPushLog(m); save("pushLog",m); };
   const setPushExact=n=>{ const v=Math.max(0,n|0); const m={...pushLog,[todayKey]:v}; setPushLog(m); save("pushLog",m); };
 
@@ -5501,7 +5555,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","note","recall","brainflex","philo"];
+  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","note","recall","brainflex","philo","sustain"];
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. a lesson done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
@@ -5623,7 +5677,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       ["goals","Goals",k=>(goalsLog[k]||[]).length>0&&(goalsLog[k]||[]).every(g=>g.done)],
       ["habits","Habits",k=>habits.length>0&&habits.every(h=>habitLog[k]&&habitLog[k][h.id])],
       ["pushups","Push-ups",k=>(pushLog[k]||0)>0],
-      ...ritualScoreIds.map(id=>[id,DAILY_TILE_LABELS[id]||({breathing:"Breathe",note:"Note",recall:"Recall"})[id]||id,id==="note"?(k=>!!String(notes[k]||"").trim()):(k=>ritualDoneOn(k,id))])
+      ...ritualScoreIds.map(id=>[id,DAILY_TILE_LABELS[id]||({breathing:"Breathe",note:"Note",recall:"Recall",sustain:"Sustainability"})[id]||id,id==="note"?(k=>!!String(notes[k]||"").trim()):(k=>ritualDoneOn(k,id))])
     ];
     return defs.map(([id,label,done])=>{
       let total=0,last30=0,span=0; for(let d=0; d<365; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; if(done(k)){ total++; if(d<30) last30++; } if(d<30) span++; }
@@ -5634,6 +5688,12 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const insightOverall=page!=="insights"?null:(()=>{
     let sum=0,n=0; for(let d=0; d<30; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; const c=dayCompletion(k); if(c!=null){ sum+=c; n++; } }
     return { current:strictStreak(streakDay), best:bestStreak(streakDay), perfect:ice.perfect, rate:n?Math.round(sum/n*100):0 };
+  })();
+  const insightSustain=page!=="insights"?null:(()=>{
+    const thrownOn=k=>{ if(k<firstDay||!activeForDay(k).has("sustain")) return null; const rec=k===todayKey?{out:sustainOut}:load("sustain:"+k,null); return rec&&Array.isArray(rec.out)?rec.out:[]; };
+    let clean=0,span=0; for(let d=0; d<30; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; if(!activeForDay(k).has("sustain")) continue; span++; if(ritualDoneOn(k,"sustain")) clean++; }
+    if(!span&&!activeNow.has("sustain")) return null;
+    return { clean, span, items:SUSTAIN_ITEMS.map(it=>({id:it.id,emoji:it.emoji,label:it.label,n:sustainStreak(it.id,thrownOn,todayKey,addDays)})) };
   })();
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
   const sz=id=>curatedTileSize(id,cols);
@@ -5751,6 +5811,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     movie: T("movie","Movies",movies.some(m=>m.watchedOn===todayKey),null,
       <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} />, ()=>toggleMovieWatched()),
+    sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
+      <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     brain: T("brain","Memory",false,null,
       <BrainBankCard bank={brainBank} busy={bankBusy} haveKey={haveKey} onSetup={()=>openDailySettings("claude-key")} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
@@ -5822,7 +5884,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         <span className="dailyMeterText">{contentReady?"All in":`${readyGenCount} of ${expectedGenKeys.length} in`}</span>
       </div>}
 
-      {page==="insights"&&<InsightsPage overall={insightOverall} sections={insightSections} habits={habits} habitLog={habitLog} freezes={freezes} ice={ice} icesSpent={icesSpent} dayIces={dayIces} onToggleIce={toggleDayIce} isPerfectDay={isPerfectDay} dayCompletion={dayCompletion} firstDay={firstDay} push14={push14} pushTotal14={pushTotal14} pushAvg14={pushAvg14} goalsHit7={goalsHit7} learned7={learned7} recallTotal={recallList.length} />}
+      {page==="insights"&&<InsightsPage sustain={insightSustain} overall={insightOverall} sections={insightSections} habits={habits} habitLog={habitLog} freezes={freezes} ice={ice} icesSpent={icesSpent} dayIces={dayIces} onToggleIce={toggleDayIce} isPerfectDay={isPerfectDay} dayCompletion={dayCompletion} firstDay={firstDay} push14={push14} pushTotal14={pushTotal14} pushAvg14={pushAvg14} goalsHit7={goalsHit7} learned7={learned7} recallTotal={recallList.length} />}
       {page==="settings"&&(
         <div className="settings">
           <div className="settingsGrid">
@@ -6310,6 +6372,73 @@ function MovieAdd({onAdd,autoFocus}){
 }
 /* Next movie to watch: a film-strip marquee showing only the next title. Tapping the
    tile marks it watched (tap again to undo); the expanded view manages the queue. */
+/* SUSTAIN_CORE_START */
+/* Sustainability: a tray of the things that weigh most on a day's footprint, as bubbles sized
+   by their emissions (rough CO2e per typical serving or trip; the ranking is what matters).
+   The list is fixed. Throwing a bubble out of the tray = avoided today; an empty tray makes
+   the day a low-carbon day. Positions are % of the tray; d is the diameter in % of its width. */
+const SUSTAIN_ITEMS=[
+  {id:"flight",emoji:"✈️",label:"Flight",kg:400,note:"short‑haul return",d:36,x:26,y:24},
+  {id:"beef",emoji:"🥩",label:"Beef",kg:12,note:"200 g",d:32,x:60,y:28},
+  {id:"clothes",emoji:"👕",label:"New clothes",kg:6,note:"a T‑shirt",d:27,x:82,y:58},
+  {id:"lamb",emoji:"🍖",label:"Lamb",kg:5,note:"200 g",d:26,x:18,y:66},
+  {id:"car",emoji:"🚗",label:"Car, driving alone",kg:4,note:"20 km",d:25,x:50,y:56},
+  {id:"waste",emoji:"🗑️",label:"Food thrown away",kg:2,note:"a meal",d:22,x:88,y:84},
+  {id:"cheese",emoji:"🧀",label:"Cheese",kg:1,note:"50 g",d:20,x:44,y:84},
+  {id:"parcel",emoji:"📦",label:"Parcel",kg:1,note:"a delivery",d:20,x:66,y:90}
+];
+const sustainIsDone=out=>SUSTAIN_ITEMS.every(it=>(out||[]).includes(it.id));
+const sustainToggle=(out,id,on)=>{ const list=Array.isArray(out)?out:[]; const has=list.includes(id); if(on===has) return list; return has?list.filter(x=>x!==id):[...list,id]; };
+/* A released bubble leaves when its centre is past the tile's edge, or when it was flicked. */
+const sustainRelease=({cx,cy,tile,vx,vy})=>{ const outside=cx<tile.left+8||cx>tile.right-8||cy<tile.top+8||cy>tile.bottom-8; return outside||Math.hypot(vx||0,vy||0)>0.9?"out":"back"; };
+/* Days in a row an item left the tray (today counts once it has; an untracked day ends it). */
+const sustainStreak=(id,thrownOn,today,step)=>{ const first=thrownOn(today); let n=0; for(let d=first&&first.includes(id)?0:1; d<400; d++){ const out=thrownOn(step(today,-d)); if(!out||!out.includes(id)) break; n++; } return n; };
+/* STREAK_CORE and the tests read everything above; the components below only draw it. */
+/* SUSTAIN_CORE_END */
+function SustainFlower(){
+  return <svg className="sustainFlower" viewBox="0 0 120 120" aria-hidden="true">
+    {Array.from({length:20},(_,i)=><g key={i} transform={`rotate(${i*18} 60 60)`}><ellipse className="sustainPetal" cx="60" cy="31" rx="9" ry="29" style={{animationDelay:(i*26)+"ms"}}/></g>)}
+    <circle className="sustainHeart" cx="60" cy="60" r="14"/>
+  </svg>;
+}
+function SustainCard({out,onToggle}){
+  const {expanded}=useTilePresentation();
+  const done=sustainIsDone(out);
+  const dragRef=useRef(null);
+  const start=(e,it)=>{ if(e.button!=null&&e.button!==0) return; const el=e.currentTarget; el.setPointerCapture(e.pointerId); el.classList.remove("back");
+    dragRef.current={id:it.id,el,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,lx:e.clientX,ly:e.clientY,t:performance.now(),vx:0,vy:0,moved:false}; el.classList.add("dragging"); };
+  const move=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
+    const now=performance.now(), dt=Math.max(1,now-d.t); d.vx=(e.clientX-d.lx)/dt; d.vy=(e.clientY-d.ly)/dt; d.lx=e.clientX; d.ly=e.clientY; d.t=now;
+    const dx=e.clientX-d.sx, dy=e.clientY-d.sy; if(Math.hypot(dx,dy)>4) d.moved=true;
+    d.el.style.transform=`translate(${dx}px,${dy}px) rotate(${Math.max(-20,Math.min(20,d.vx*25))}deg)`; };
+  const end=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return; dragRef.current=null; d.el.classList.remove("dragging");
+    const tile=d.el.closest(".tile"), r=d.el.getBoundingClientRect(), tr=tile?tile.getBoundingClientRect():r, cx=r.left+r.width/2, cy=r.top+r.height/2;
+    if(d.moved&&sustainRelease({cx,cy,tile:tr,vx:d.vx,vy:d.vy})==="out"){
+      const n=Math.hypot(d.vx,d.vy); let ux=n>0.2?d.vx/n:cx-(tr.left+tr.width/2), uy=n>0.2?d.vy/n:cy-(tr.top+tr.height/2); const nn=Math.hypot(ux,uy)||1; ux/=nn; uy/=nn;
+      const dx=e.clientX-d.sx, dy=e.clientY-d.sy; d.el.classList.add("out");
+      d.el.style.transform=`translate(${dx+ux*tr.width*1.2}px,${dy+uy*tr.height*1.2}px) rotate(${ux*40}deg)`;
+      setTimeout(()=>onToggle(d.id,true),360);
+    } else { d.el.classList.add("back"); d.el.style.transform=""; }
+  };
+  return <div className="sustainCard">
+    <div className={"sustainTray"+(done?" done":"")} role="group" aria-label={done?"Tray empty: a low‑carbon day":"Things to avoid today: drag one out of the tray when you have"}>
+      {done?<SustainFlower/>:SUSTAIN_ITEMS.filter(it=>!(out||[]).includes(it.id)).map(it=>
+        <div key={it.id} role="button" tabIndex={0} className="sustainBubble" title={it.label} aria-label={`${it.label}: drag it out of the tray if you avoided it today`}
+          style={{"--d":it.d+"cqw",left:`calc(${it.x}% - ${it.d/2}cqw)`,top:`calc(${it.y}% - ${it.d/2}cqw)`}}
+          onPointerDown={e=>start(e,it)} onPointerMove={move} onPointerUp={end} onPointerCancel={end}
+          onKeyDown={e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); onToggle(it.id,true); } }} onClick={e=>e.stopPropagation()}>
+          <span aria-hidden="true">{it.emoji}</span>
+        </div>)}
+    </div>
+    <div hidden={!expanded} className="cardExpandedDetails sustainList">
+      {SUSTAIN_ITEMS.map(it=>{ const gone=(out||[]).includes(it.id); return <div key={it.id} className={"sustainRow"+(gone?" gone":"")}>
+        <span className="sustainRowEmoji" aria-hidden="true">{it.emoji}</span>
+        <span className="sustainRowName">{it.label}<small>≈ {it.kg} kg CO₂e · {it.note}</small></span>
+        <button type="button" className={"sustainPill"+(gone?" on":"")} aria-pressed={gone} aria-label={(gone?"Avoided today: put ":"In the tray: mark ")+it.label+(gone?" back in the tray":" avoided")} onClick={e=>{e.stopPropagation();onToggle(it.id,!gone);}}>{gone?"Avoided":"In tray"}</button>
+      </div>; })}
+    </div>
+  </div>;
+}
 function MovieCard({movies,onAdd,onRemove,onBump}){
   const {expanded}=useTilePresentation();
   const queue=movies.filter(m=>!m.watchedOn);
@@ -6684,7 +6813,7 @@ function HistoryTable({rows}){
   </section>;
 }
 
-function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,dayIces,onToggleIce,isPerfectDay,dayCompletion,firstDay,push14,pushTotal14,pushAvg14,goalsHit7,learned7,recallTotal}){
+function InsightsPage({sustain,overall,sections,habits,habitLog,freezes,ice,icesSpent,dayIces,onToggleIce,isPerfectDay,dayCompletion,firstDay,push14,pushTotal14,pushAvg14,goalsHit7,learned7,recallTotal}){
   if(!overall) return null;
   const rows=[
     ...habits.map((h,i)=>{ const {icon,label}=splitHabit(h); return {key:"h"+h.id,group:i===0?"Habits":null,icon,label:label||h.name,color:HABIT_STREAK_COLORS[i%HABIT_STREAK_COLORS.length],done:k=>!!(habitLog[k]&&habitLog[k][h.id]),frozen:k=>(freezes[h.id]||[]).includes(k)}; }),
@@ -6707,6 +6836,11 @@ function InsightsPage({overall,sections,habits,habitLog,freezes,ice,icesSpent,da
         <div><b style={{color:(COL.recall||{}).v}}>{learned7}</b><span>cards learned · 7 days</span></div>
         <div><b style={{color:(COL.recall||{}).v}}>{recallTotal}</b><span>cards in recall</span></div>
       </section>
+      {sustain&&<section className="insCard insSustain" style={themeVars("sustain",false)}>
+        <header className="insCardHead"><h2>Sustainability</h2><span className="insMuted">30 days</span></header>
+        <div className="insSustainBig"><b>{sustain.clean}</b><span>low‑carbon days<small>of {sustain.span} tracked</small></span></div>
+        <div className="insSustainGrid" aria-label="Days in a row each item stayed out of the tray">{sustain.items.map(x=><div key={x.id} className={"insSustainItem"+(x.n?"":" zero")} title={x.label+": "+x.n+" days in a row"}><span aria-hidden="true">{x.emoji}</span><b>{x.n}d</b></div>)}</div>
+      </section>}
       </div>
     </div>
     <HistoryTable rows={rows}/>
