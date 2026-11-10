@@ -2596,6 +2596,53 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .wxSnow circle{animation:wxFlake 2.6s ease-in-out infinite}
 @keyframes wxFlake{0%{opacity:0;transform:translateY(-4px)}40%{opacity:1}100%{opacity:0;transform:translate(3px,8px)}}
 @media(prefers-reduced-motion:reduce){.wxRays,.wxRain path,.wxSnow circle{animation:none}}
+/* the forecast pop-up */
+.tileFocusSurface[data-tileid="weather"] .content{height:auto!important;overflow:visible!important;text-align:left}
+.wxFull{display:flex;flex-direction:column;gap:12px;color:var(--ink);text-align:left;container-type:inline-size}
+.wxFullHead{display:flex;align-items:center;gap:14px;padding-right:44px}
+.wxFull .wxFullArt{flex:none;width:96px;height:96px;filter:drop-shadow(0 8px 14px rgba(30,50,80,.12))}
+.wxFullNow{min-width:0}
+.wxFullPlace{font-size:15px;font-weight:800}
+.wxFullTemp{font-weight:900;font-size:60px;line-height:.95;letter-spacing:-.05em;color:var(--accentDark)}
+.wxFullLabel{margin-top:4px;font-size:15px;font-weight:800}
+.wxFullLabel span{margin-left:10px;font-weight:700;color:var(--dim)}
+.wxPanel{border-radius:18px;background:rgba(255,255,255,.55);padding:12px 12px}
+.wxHours{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+.wxHours::-webkit-scrollbar{display:none}
+.wxHour{flex:1 0 54px;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:54px}
+.wxHourT{font-size:12px;font-weight:800;color:var(--dim);white-space:nowrap}
+.wxHour:first-child .wxHourT{color:var(--ink)}
+.wxFull .wxHourArt{width:42px;height:42px;margin:-3px 0 0}
+.wxFull .wxSunEvent{width:30px;height:30px;margin:3px 0}
+.wxSunEvent{color:var(--accentDark)}
+.wxPop{height:12px;font-size:10.5px;line-height:12px;font-weight:800;color:#2F80D1}
+.wxHourV{font-size:15px;font-weight:800}
+.wxHour.sun .wxHourV{font-size:11px;line-height:20px;color:var(--dim)}
+.wxStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@container (max-width:560px){.wxStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wxStat{display:flex;flex-direction:column;gap:2px;min-width:0;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.55)}
+.wxStatK{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.wxStatV{font-size:20px;font-weight:900;letter-spacing:-.02em;color:var(--accentDark)}
+.wxStatS{font-size:11.5px;font-weight:700;color:var(--dim)}
+.wxWeek{display:flex;flex-direction:column;gap:2px;padding:6px 14px}
+.wxDay{display:grid;grid-template-columns:52px 44px 34px minmax(0,1fr) 34px;align-items:center;gap:8px;min-height:40px}
+.wxDay+.wxDay{border-top:1px solid color-mix(in srgb,var(--accent) 16%,transparent)}
+.wxDayName{font-size:14px;font-weight:800}
+.wxDayIcon{display:flex;flex-direction:column;align-items:center;line-height:1}
+.wxFull .wxDayArt{width:36px;height:36px;margin:-4px 0 0}
+.wxDayIcon i{font-style:normal;font-size:10px;font-weight:800;color:#2F80D1}
+.wxDayLo{font-size:14px;font-weight:800;color:var(--dim);text-align:right}
+.wxDayHi{font-size:14px;font-weight:800;text-align:right}
+.wxBar{position:relative;height:6px;border-radius:99px;background:color-mix(in srgb,var(--accent) 16%,rgba(20,40,70,.08))}
+.wxBarFill{position:absolute;top:0;bottom:0;border-radius:99px}
+.wxBarNow{position:absolute;top:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(20,40,70,.32);transform:translateY(-50%)}
+.wxFullNote{margin:0;font-size:12.5px;font-weight:700;color:var(--dim)}
+.tile.completed .wxFull,.tile.completed .wxFullTemp,.tile.completed .wxStatV,.tile.completed .wxSunEvent{color:#fff}
+.tile.completed .wxPanel,.tile.completed .wxStat{background:rgba(255,255,255,.18)}
+.tile.completed .wxFullLabel span,.tile.completed .wxHourT,.tile.completed .wxStatK,.tile.completed .wxStatS,.tile.completed .wxDayLo,.tile.completed .wxHour.sun .wxHourV,.tile.completed .wxFullNote{color:rgba(255,255,255,.78)}
+.tile.completed .wxPop,.tile.completed .wxDayIcon i{color:#fff}
+.tile.completed .wxDay+.wxDay{border-top-color:rgba(255,255,255,.22)}
+.tile.completed .wxBar{background:rgba(255,255,255,.25)}
 /* --- Language tiles: the day's lesson sits in one speech bubble; the flag is the round
    avatar at the bubble's tail (Spain on the left, Germany on the right) --- */
 .langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;padding-right:34px}
@@ -3229,7 +3276,7 @@ const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","ph
    whole-state snapshot. See worker/health-ingest.js. Set to "" to disable. */
 const HEALTH_URL="https://fefe-health.fefedashboard.workers.dev";
 const getHealthToken=()=> localStorage.getItem("fefe_healthToken")||"";
-const SYNC_EXCLUDE=new Set(["fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken","fefe_accountToken","fefe_accountEmail","fefe_deviceDisplay"]);
+const SYNC_EXCLUDE=new Set(["fefe_weatherLive","fefe_apiKey","fefe_garminKey","fefe_syncId","fefe_syncStamp","fefe_healthToken","fefe_accountToken","fefe_accountEmail","fefe_deviceDisplay"]);
 const getSyncId=()=> localStorage.getItem("fefe_syncId")||"";
 const ACCOUNT_TOKEN_KEY="fefe_accountToken";
 const ACCOUNT_EMAIL_KEY="fefe_accountEmail";
@@ -3936,10 +3983,53 @@ async function searchPlaces(query){
     timezone:item.timezone||"UTC"
   }));
 }
+/* WEATHER_DETAIL_START */
+/* The pop-up's forecast, all from Open-Meteo's free API (no key): current details, 48 hours
+   from today's midnight, and seven days. Everything is optional: a missing value just leaves
+   its line out. Times stay in the place's own local time, as the API returns them. */
+const WX_CURRENT="temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,is_day,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation,pressure_msl,visibility,uv_index";
+const WX_HOURLY="temperature_2m,weather_code,precipitation_probability,is_day";
+const WX_DAILY="weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,precipitation_sum,uv_index_max,wind_speed_10m_max";
+const wxNum=(v,round)=>typeof v==="number"&&Number.isFinite(v)?(round?Math.round(v):v):null;
+function weatherDetail(d){
+  const c=(d&&d.current)||{}, h=(d&&d.hourly)||{}, y=(d&&d.daily)||{}, at=(list,i)=>Array.isArray(list)?list[i]:undefined;
+  const now={time:String(c.time||""),feels:wxNum(c.apparent_temperature,true),humidity:wxNum(c.relative_humidity_2m,true),wind:wxNum(c.wind_speed_10m,true),windDir:wxNum(c.wind_direction_10m),gusts:wxNum(c.wind_gusts_10m,true),precip:wxNum(c.precipitation),pressure:wxNum(c.pressure_msl,true),visibility:wxNum(c.visibility),uv:wxNum(c.uv_index),day:c.is_day!==0};
+  const hours=(Array.isArray(h.time)?h.time:[]).slice(0,48).map((t,i)=>({t:String(t),temp:wxNum(at(h.temperature_2m,i),true),code:wxNum(at(h.weather_code,i)),pop:wxNum(at(h.precipitation_probability,i),true),day:at(h.is_day,i)!==0})).filter(x=>x.temp!==null&&x.code!==null);
+  const days=(Array.isArray(y.time)?y.time:[]).slice(0,7).map((date,i)=>({date:String(date),code:wxNum(at(y.weather_code,i)),hi:wxNum(at(y.temperature_2m_max,i),true),lo:wxNum(at(y.temperature_2m_min,i),true),pop:wxNum(at(y.precipitation_probability_max,i),true),rain:wxNum(at(y.precipitation_sum,i)),uv:wxNum(at(y.uv_index_max,i)),wind:wxNum(at(y.wind_speed_10m_max,i),true),sunrise:String(at(y.sunrise,i)||""),sunset:String(at(y.sunset,i)||"")})).filter(x=>x.hi!==null&&x.lo!==null&&x.code!==null);
+  return {now,hours,days};
+}
+const wxHourLabel=t=>{ const h=Number(String(t).slice(11,13)); return (h%12||12)+(h<12?"AM":"PM"); };
+const wxClock=t=>{ const h=Number(String(t).slice(11,13)); return (h%12||12)+":"+String(t).slice(14,16)+(h<12?"AM":"PM"); };
+const wxCompass=deg=>["N","NE","E","SE","S","SW","W","NW"][Math.round((((Number(deg)%360)+360)%360)/45)%8];
+const wxUvLabel=uv=>uv<3?"Low":uv<6?"Moderate":uv<8?"High":uv<11?"Very high":"Extreme";
+/* The next hours from now (local time "YYYY-MM-DDTHH:MM"), with the sunrise and sunset that
+   fall inside them as their own stops. The first stop is "Now", carrying the live reading
+   when the snapshot is from this hour. */
+function wxHourly(data,nowStamp,count=12){
+  const hours=Array.isArray(data&&data.hours)?data.hours:[], hourKey=String(nowStamp).slice(0,13)+":00";
+  let i=hours.findIndex(h=>h.t===hourKey); if(i<0) i=hours.findIndex(h=>h.t>hourKey); if(i<0) return [];
+  const span=hours.slice(i,i+count), liveNow=!!(data.now&&String(data.now.time||"").slice(0,13)===hourKey.slice(0,13));
+  const items=span.map((h,k)=>{ const live=k===0&&liveNow&&h.t===hourKey;
+    return {kind:"hour",t:h.t,label:k===0&&h.t===hourKey?"Now":wxHourLabel(h.t),temp:live?data.temp:h.temp,code:live?data.code:h.code,pop:h.pop,day:live?data.now.day!==false:h.day}; });
+  const last=span[span.length-1].t.slice(0,13);
+  (Array.isArray(data.days)?data.days:[]).forEach(d=>[["sunrise",d.sunrise],["sunset",d.sunset]].forEach(([kind,t])=>{
+    if(!t||t<=String(nowStamp)||t.slice(0,13)>last) return;
+    const hour=span.find(h=>h.t.slice(0,13)===t.slice(0,13));
+    items.push({kind,t,label:wxClock(t),temp:hour?hour.temp:null});
+  }));
+  return items.sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:(a.kind==="hour"?-1:1));
+}
+/* the bar colours of a temperature (°C): cold blue through green and yellow to hot red */
+const WX_TEMP_STOPS=[[-5,[110,139,255]],[5,[90,200,250]],[12,[99,214,155]],[18,[255,206,10]],[24,[255,159,10]],[30,[255,69,58]]];
+const wxTempColor=t=>{ const s=WX_TEMP_STOPS; if(!(t>s[0][0])) return `rgb(${s[0][1]})`; for(let i=1;i<s.length;i++){ if(t<=s[i][0]){ const [a,ca]=s[i-1],[b,cb]=s[i],k=(t-a)/(b-a); return `rgb(${ca.map((v,j)=>Math.round(v+(cb[j]-v)*k)).join(",")})`; } } return `rgb(${s[s.length-1][1]})`; };
+/* WEATHER_DETAIL_END */
 async function fetchWeather(profile=getLocationProfile()){
   const lat=Number(profile.latitude), lon=Number(profile.longitude);
   const tz=encodeURIComponent(profile.timezone||"auto");
-  const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=${tz}&forecast_days=2`,{signal:AbortSignal.timeout(25000)});
+  const base=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=${tz}`;
+  let r=await fetch(`${base}&current=${WX_CURRENT}&hourly=${WX_HOURLY}&daily=${WX_DAILY}&forecast_days=7`,{signal:AbortSignal.timeout(25000)});
+  // the detailed forecast is extra: if the service refuses it, the tile still gets its basics
+  if(!r.ok) r=await fetch(`${base}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=2`,{signal:AbortSignal.timeout(25000)});
   if(!r.ok)throw Error("weather_unavailable");
   const d=await r.json();
   const temp=Math.round(d.current.temperature_2m);
@@ -3948,7 +4038,7 @@ async function fetchWeather(profile=getLocationProfile()){
   const tHi=Math.round(d.daily.temperature_2m_max[1]);
   const tLo=Math.round(d.daily.temperature_2m_min[1]);
   const tCode=d.daily.weather_code[1];
-  return { temp, code:d.current.weather_code, hi, lo, tomorrow:{hi:tHi, lo:tLo, code:tCode}, place:profile.name, timezone:profile.timezone, at:Date.now() };
+  return { temp, code:d.current.weather_code, hi, lo, tomorrow:{hi:tHi, lo:tLo, code:tCode}, place:profile.name, timezone:profile.timezone, at:Date.now(), ...weatherDetail(d) };
 }
 
 /* iCloud / vCard (.vcf) birthday import — fully local, no network */
@@ -4337,22 +4427,25 @@ const weatherKind=code=>{ const c=Number(code);
   if(c===0) return "sun"; if(c===1) return "mostlySun"; if(c===2) return "partly"; if(c===3) return "cloud";
   if(c===45||c===48) return "fog"; if(c>=95) return "storm";
   if((c>=71&&c<=77)||c===85||c===86) return "snow"; if(c>=51) return "rain"; return "cloud"; };
-function WeatherArt({code,className}){
+function WeatherArt({code,className,night}){
   const id=React.useId().replace(/:/g,"");
   const kind=weatherKind(code);
   const sun=(cx,cy,r)=><g className="wxSun"><g className="wxRays" style={{transformOrigin:`${cx}px ${cy}px`}}>{Array.from({length:8},(_,i)=>{const a=i*Math.PI/4;return <line key={i} x1={cx+Math.cos(a)*(r+6)} y1={cy+Math.sin(a)*(r+6)} x2={cx+Math.cos(a)*(r+13)} y2={cy+Math.sin(a)*(r+13)} stroke="#FFB52E" strokeWidth="4.5" strokeLinecap="round"/>;})}</g><circle cx={cx} cy={cy} r={r} fill={`url(#${id}s)`}/></g>;
+  const moon=(cx,cy,r)=><g className="wxMoon"><mask id={id+"mk"}><rect x="0" y="0" width="100" height="100" fill="#fff"/><circle cx={cx+r*.55} cy={cy-r*.42} r={r*.86} fill="#000"/></mask><circle cx={cx} cy={cy} r={r} fill={`url(#${id}m)`} mask={`url(#${id}mk)`}/></g>;
+  const orb=(cx,cy,r)=>night?moon(cx,cy,r):sun(cx,cy,r);
   const cloud=(x,y,k,dark)=><g transform={`translate(${x} ${y}) scale(${k})`} filter={`url(#${id}sh)`}><g fill={`url(#${id}${dark?"d":"c"})`}><circle cx="34" cy="50" r="15"/><circle cx="52" cy="42" r="20"/><circle cx="70" cy="52" r="13"/><rect x="20" y="50" width="64" height="17" rx="8.5"/></g></g>;
   const drops=(cls)=><g className={cls}>{[[36,78],[50,82],[64,78]].map(([x,y],i)=><path key={i} d={`M${x} ${y} l-4 9`} stroke="#4C9BE8" strokeWidth="4" strokeLinecap="round" style={{animationDelay:`${i*.25}s`}}/>)}</g>;
   return <svg className={"wxArt "+(className||"")} viewBox="0 0 100 100" aria-hidden="true">
     <defs>
       <radialGradient id={id+"s"} cx="40%" cy="38%" r="70%"><stop offset="0" stopColor="#FFE38A"/><stop offset=".65" stopColor="#FFBE3B"/><stop offset="1" stopColor="#FF9F1C"/></radialGradient>
       <linearGradient id={id+"c"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFFFFF"/><stop offset="1" stopColor="#DCE6F2"/></linearGradient>
+      <radialGradient id={id+"m"} cx="38%" cy="40%" r="70%"><stop offset="0" stopColor="#FFF7D6"/><stop offset="1" stopColor="#E9CF7E"/></radialGradient>
       <linearGradient id={id+"d"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#A9B6C8"/><stop offset="1" stopColor="#6F7D92"/></linearGradient>
       <filter id={id+"sh"} x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#24334a" floodOpacity=".18"/></filter>
     </defs>
-    {kind==="sun"&&sun(50,50,20)}
-    {kind==="mostlySun"&&<>{sun(46,44,19)}{cloud(30,22,.62)}</>}
-    {kind==="partly"&&<>{sun(40,38,17)}{cloud(8,12,.95)}</>}
+    {kind==="sun"&&orb(50,50,night?24:20)}
+    {kind==="mostlySun"&&<>{orb(46,44,19)}{cloud(30,22,.62)}</>}
+    {kind==="partly"&&<>{orb(40,38,17)}{cloud(8,12,.95)}</>}
     {kind==="cloud"&&<>{cloud(-6,-4,1.12)}</>}
     {kind==="rain"&&<>{cloud(-2,-12,1.05)}{drops("wxRain")}</>}
     {kind==="snow"&&<>{cloud(-2,-12,1.05)}<g className="wxSnow" fill="#fff" stroke="#BCD3EC" strokeWidth="1">{[[36,80],[52,86],[66,79]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="3.6" style={{animationDelay:`${i*.4}s`}}/>)}</g></>}
@@ -4360,9 +4453,82 @@ function WeatherArt({code,className}){
     {kind==="fog"&&<g className="wxFog" stroke="#C9D5E3" strokeWidth="6" strokeLinecap="round">{[[22,42,78],[14,56,66],[28,70,86]].map(([x1,y,x2],i)=><line key={i} x1={x1} y1={y} x2={x2} y2={y} opacity={.95-i*.15}/>)}</g>}
   </svg>;
 }
-function WeatherCard({data,busy,onGenerate}){
+/* sunrise and sunset get their own stop in the hourly strip */
+function SunEventGlyph({rise}){
+  return <svg className="wxSunEvent" viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M7 23a9 9 0 0 1 18 0Z" fill="#FFBE3B"/><path d="M3.5 24h25" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+    <path d={rise?"M16 3.5v8m-3.2-4.8L16 3.5l3.2 3.2":"M16 3.5v8m-3.2-3.2 3.2 3.2 3.2-3.2"} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>;
+}
+/* Expanded, the weather reads like a forecast app: now, the coming hours (with sunrise and
+   sunset), today's details, and the week with each day's range on one shared scale. */
+function WeatherFull({data,refreshing}){
+  const tz=data.timezone||getLocationProfile().timezone;
+  const p=zonedParts(new Date(),tz), today=`${p.year}-${pad(p.month)}-${pad(p.day)}`, nowStamp=`${today}T${pad(p.hour)}:${pad(p.minute)}`;
+  const [label]=WMO[data.code]||["—"];
+  const n=data.now||{}, hours=wxHourly(data,nowStamp,12);
+  const week=(Array.isArray(data.days)?data.days:[]).filter(d=>d.date>=today).slice(0,7);
+  const day0=week[0]&&week[0].date===today?week[0]:null;
+  const lo=week.length?Math.min(...week.map(d=>d.lo),data.temp):data.lo, hi=week.length?Math.max(...week.map(d=>d.hi),data.temp):data.hi, span=Math.max(1,hi-lo);
+  const pct=t=>Math.max(0,Math.min(100,(t-lo)/span*100));
+  const dayName=k=>{ if(k===today) return "Today"; const [y,m,d]=k.split("-").map(Number); return WEEKDAY_NAMES[new Date(y,m-1,d).getDay()].slice(0,3); };
+  const nightNow=n.day===false;
+  const stats=[
+    n.feels!=null&&{k:"Feels like",v:`${n.feels}°`},
+    day0&&day0.pop!=null&&{k:"Rain",v:`${day0.pop}%`,s:day0.rain>0?`${Math.round(day0.rain*10)/10} mm today`:"None expected"},
+    n.wind!=null&&{k:"Wind",v:`${n.wind} km/h`,s:[n.windDir!=null?wxCompass(n.windDir):"",n.gusts!=null?`gusts ${n.gusts}`:""].filter(Boolean).join(" · ")},
+    n.humidity!=null&&{k:"Humidity",v:`${n.humidity}%`},
+    day0&&day0.uv!=null&&{k:"UV index",v:String(Math.round(day0.uv)),s:wxUvLabel(day0.uv)},
+    day0&&day0.sunrise&&{k:"Sunrise",v:wxClock(day0.sunrise)},
+    day0&&day0.sunset&&{k:"Sunset",v:wxClock(day0.sunset)},
+    n.visibility!=null&&{k:"Visibility",v:`${Math.round(n.visibility/1000)} km`}
+  ].filter(Boolean);
+  return <div className="wxFull">
+    <div className="wxFullHead">
+      <WeatherArt code={data.code} night={nightNow} className="wxFullArt"/>
+      <div className="wxFullNow">
+        <div className="wxFullPlace">{data.place||"Local"}</div>
+        <div className="wxFullTemp">{data.temp}°</div>
+        <div className="wxFullLabel">{label}<span>H {day0?day0.hi:data.hi}° · L {day0?day0.lo:data.lo}°</span></div>
+      </div>
+    </div>
+    {hours.length>0&&<div className="wxPanel wxHours" role="list" aria-label="Next hours">
+      {hours.map(h=><div key={h.kind+h.t} className={"wxHour"+(h.kind!=="hour"?" sun":"")} role="listitem" aria-label={h.kind==="hour"?`${h.label}: ${h.temp}°, ${(WMO[h.code]||[""])[0]}${h.pop>=20?`, ${h.pop}% rain`:""}`:`${h.kind==="sunrise"?"Sunrise":"Sunset"} ${h.label}`}>
+        <span className="wxHourT">{h.label}</span>
+        {h.kind==="hour"?<WeatherArt code={h.code} night={!h.day} className="wxHourArt"/>:<SunEventGlyph rise={h.kind==="sunrise"}/>}
+        <span className="wxPop">{h.kind==="hour"&&h.pop>=20?`${h.pop}%`:""}</span>
+        <span className="wxHourV">{h.kind==="hour"?`${h.temp}°`:h.kind==="sunrise"?"Sunrise":"Sunset"}</span>
+      </div>)}
+    </div>}
+    {stats.length>0&&<div className="wxStats">
+      {stats.map(x=><div key={x.k} className="wxStat"><span className="wxStatK">{x.k}</span><span className="wxStatV">{x.v}</span>{x.s&&<span className="wxStatS">{x.s}</span>}</div>)}
+    </div>}
+    {week.length>0&&<div className="wxPanel wxWeek" role="list" aria-label="This week">
+      {week.map(d=><div key={d.date} className="wxDay" role="listitem" aria-label={`${dayName(d.date)}: ${(WMO[d.code]||[""])[0]}, low ${d.lo}°, high ${d.hi}°${d.pop>=20?`, ${d.pop}% rain`:""}`}>
+        <span className="wxDayName">{dayName(d.date)}</span>
+        <span className="wxDayIcon"><WeatherArt code={d.code} className="wxDayArt"/>{d.pop>=20&&<i>{d.pop}%</i>}</span>
+        <span className="wxDayLo">{d.lo}°</span>
+        <span className="wxBar"><span className="wxBarFill" style={{left:pct(d.lo)+"%",width:Math.max(4,pct(d.hi)-pct(d.lo))+"%",background:`linear-gradient(90deg,${wxTempColor(d.lo)},${wxTempColor(d.hi)})`}}/>{d.date===today&&<span className="wxBarNow" style={{left:pct(data.temp)+"%"}}/>}</span>
+        <span className="wxDayHi">{d.hi}°</span>
+      </div>)}
+    </div>}
+    {!hours.length&&!week.length&&<p className="wxFullNote">{refreshing?"Getting the forecast…":"The detailed forecast needs a connection. It loads the next time this opens online."}</p>}
+  </div>;
+}
+function WeatherCard({data,busy,onGenerate,onRefresh}){
+  const {expanded}=useTilePresentation();
+  const [refreshing,setRefreshing]=useState(false);
+  // opening the forecast refreshes a reading older than half an hour (the API is free)
+  useEffect(()=>{
+    if(!expanded||!data||!onRefresh) return;
+    if(Date.now()-(Number(data.at)||0)<30*60*1000&&Array.isArray(data.hours)&&data.hours.length) return;
+    let live=true; setRefreshing(true);
+    Promise.resolve(onRefresh()).finally(()=>{ if(live) setRefreshing(false); });
+    return()=>{ live=false; };
+  },[expanded]);
   if(busy && !data) return <Note>Checking local skies…</Note>;
   if(!data) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
+  if(expanded) return <WeatherFull data={data} refreshing={refreshing}/>;
   const [label]=WMO[data.code]||["—"];
   const t=data.tomorrow;
   const [tlab]=t?(WMO[t.code]||["—"]):[""];
@@ -4538,7 +4704,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -5055,6 +5221,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const haveKey=!!getKey();
   const view=Object.fromEntries(Object.entries(daily||{}).filter(([key,value])=>validDailyTile(key,value)));
   const weather=view.weather||null;
+  /* A fresher reading taken when the forecast opens: kept on this device only, never in the
+     day's saved content (which is never replaced), and shown wherever it is newer. */
+  const [weatherLive,setWeatherLive]=useState(()=>{ const w=load("weatherLive",null); return w&&Number.isFinite(w.at)&&validDailyTile("weather",w)&&logicalDateKeyInZone(new Date(w.at),w.timezone||getLocationProfile().timezone)===todayKey?w:null; });
+  const refreshWeather=async()=>{ try{ const v=await fetchWeather(); if(validDailyTile("weather",v)){ save("weatherLive",v); setWeatherLive(v); } }catch(e){} };
+  const weatherShown=weatherLive&&(!weather||weatherLive.at>(Number(weather.at)||0))?weatherLive:weather;
   // Another tab may have finished a tile or a completion while this tab was open.
   useEffect(()=>{
     const onStorage=event=>{
@@ -5824,7 +5995,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       {view.music ? <MusicCard music={view.music} done={!!rToday.music} /> : <GenerateEmpty busy={genBusy} onGenerate={()=>regenerateOne("music")} />}
       <RetryNote tileKey="music"/></>, ()=>toggleRitual("music")),
     weather: T("weather","Weather",!!rToday.weather, null,<>
-      <WeatherCard data={weather} busy={genBusy} onGenerate={()=>regenerateOne("weather")} />
+      <WeatherCard data={weatherShown} busy={genBusy} onGenerate={()=>regenerateOne("weather")} onRefresh={refreshWeather} />
       <RetryNote tileKey="weather"/></>, ()=>toggleRitual("weather")),
     pushups: T("pushups","Push-ups",pToday>0,null,
       /* A loose pile of weight plates, each sized by what it adds; the day's count sits
