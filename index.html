@@ -3069,11 +3069,15 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .nbDate{display:flex;flex-direction:column;align-items:flex-end;padding:0 10px 0 0;font:800 9.5px/13px 'Nunito',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 .nbDate b{font-size:18px;line-height:22px;color:var(--ink);letter-spacing:0}
 .nbDate small{font-size:8.5px;line-height:12px;color:var(--accentDark);opacity:.9}
-.nbText{font-size:14.5px;line-height:26px;white-space:pre-wrap;color:var(--ink);overflow-wrap:anywhere}
 .nbDay.today{background:color-mix(in srgb,var(--accent) 12%,transparent);border-radius:0 14px 14px 0;margin-right:-20px;padding-right:20px}
 .tile textarea.nbArea,.tile.completed textarea.nbArea{display:block;width:100%;min-height:78px;resize:none;margin:0;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;font-family:'Nunito',sans-serif;font-size:14.5px!important;line-height:26px!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
 .tile textarea.nbArea:focus{outline:none;transform:none!important;background:transparent!important}
 .tile textarea.nbArea::placeholder{color:var(--dim)}
+.nbGrow{display:grid;min-width:0}
+.nbGrow::after{content:attr(data-value) " ";visibility:hidden;white-space:pre-wrap;overflow-wrap:break-word;font-family:'Nunito',sans-serif;font-size:14.5px;line-height:26px}
+.nbGrow::after,.nbGrow>textarea{grid-area:1/1/2/2;min-width:0}
+.tile textarea.nbArea.nbPast{min-height:26px;height:auto;overflow:hidden;white-space:pre-wrap;overflow-wrap:break-word}
+.nbDay:not(.today):focus-within{background:color-mix(in srgb,var(--accent) 7%,transparent);border-radius:0 14px 14px 0;margin-right:-20px;padding-right:20px}
 /* ---- Language tiles: the bubble, its tail and the flag avatar ---- */
 .langCard{display:flex;flex-direction:column;justify-content:center;min-height:0}
 /* the conversation: their lines on the left with the flag as the speaker, yours on the right */
@@ -5185,6 +5189,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const moveGoal=(from,to,id)=>{ if(!from||!to||from===to) return; const item=(goalsLog[from]||[]).find(g=>g.id===id); if(!item)return;
     const m={...goalsLog,[from]:(goalsLog[from]||[]).filter(g=>g.id!==id),[to]:[...(goalsLog[to]||[]),{...item,carried:false}]}; setGoalsLog(m); save("goalsLog",m); };
   const setTodayNote=t=>{ const m={...notes,[todayKey]:t}; setNotes(m); save("notes",m); };
+  /* An earlier day's note edited in the notebook; cleared text removes that day's note. */
+  const setDayNote=(k,t)=>{ if(k>=todayKey) return; const m={...notes}; if(String(t).trim()) m[k]=t; else delete m[k]; setNotes(m); save("notes",m); };
   const persistHabits=v=>{ setHabits(v); save("habits",v); };
   const persistBirthdays=v=>{ setBirthdays(v); save("birthdays",v); };
   const persistPeople=v=>{ setPeople(v); save("peopleMet",v); };
@@ -5797,7 +5803,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <GermanCard de={view.german} busy={genBusy} done={!!rToday.german} onLearned={learnGerman} onUnlearned={()=>unsetRitual("german")} onGenerate={()=>regenerateOne("german")} />
       <RetryNote tileKey="german"/></>),
     note: T("note","Note",(notes[todayKey]||"").trim()!=="",null,
-      <NoteCard saved={notes[todayKey]||""} notes={notes} onSave={setTodayNote} />),
+      <NoteCard saved={notes[todayKey]||""} notes={notes} onSave={setTodayNote} onEditDay={setDayNote} />),
     word: T("word","Word",!!rToday.word, null,<>
       <WordCard word={view.word} busy={genBusy} onLearned={learnWord} onUnlearned={unlearnWord} onGenerate={()=>regenerateOne("word")} />
       <RetryNote tileKey="word"/></>),
@@ -6159,17 +6165,27 @@ function BirthdayInput({onAdd}){
 }
 
 /* Expanded, the note is a page of the notebook: earlier days' notes as sections above,
-   today's section ruled the same and editable, scrolled into view. */
+   today's section ruled the same and editable, scrolled into view. Earlier days can be
+   edited in place too; a day whose text is cleared leaves the notebook once it is closed. */
 const nbDate=k=>{ const [y,m,d]=String(k).split("-").map(Number); const dt=new Date(y,m-1,d); return <>{WEEKDAY_NAMES[dt.getDay()].slice(0,3)}<b>{d}</b>{MONTH_ABBR[m-1]}</>; };
-function NoteCard({saved,notes,onSave}){
+const nbLabel=k=>{ const [y,m,d]=String(k).split("-").map(Number); return `Note for ${WEEKDAY_NAMES[new Date(y,m-1,d).getDay()]}, ${MONTH_ABBR[m-1]} ${d}`; };
+const nbWritten=notes=>Object.keys(notes||{}).filter(k=>k<todayKey&&String(notes[k]||"").trim());
+/* An earlier day's page grows with its text at any width: a hidden copy of the text sits in
+   the same grid cell and sets the height. */
+function NbPage({value,label,onChange}){
+  return <div className="nbGrow" data-value={value}><textarea className="nbArea nbPast" rows={1} aria-label={label} value={value} onChange={e=>onChange(e.target.value)} /></div>;
+}
+function NoteCard({saved,notes,onSave,onEditDay}){
   const {expanded}=useTilePresentation();
-  const todayRef=useRef(null);
+  const todayRef=useRef(null), openDays=useRef(null);
   useEffect(()=>{ if(expanded&&todayRef.current) todayRef.current.scrollIntoView({block:"end"}); },[expanded]);
+  if(!expanded) openDays.current=null;
+  else if(!openDays.current) openDays.current=nbWritten(notes);
   if(expanded){
-    const days=Object.keys(notes||{}).filter(k=>k<todayKey&&String(notes[k]||"").trim()).sort();
+    const days=[...new Set([...openDays.current,...nbWritten(notes)])].sort();
     const lines=Math.max(3,String(saved||"").split("\n").length+1);
     return <div className="notebook" aria-label="Notebook">
-      {days.map(k=><section key={k} className="nbDay"><div className="nbDate">{nbDate(k)}</div><div className="nbText">{notes[k]}</div></section>)}
+      {days.map(k=><section key={k} className="nbDay"><div className="nbDate">{nbDate(k)}</div><NbPage value={notes[k]||""} label={nbLabel(k)} onChange={t=>onEditDay(k,t)}/></section>)}
       <section className="nbDay today" ref={todayRef}><div className="nbDate">{nbDate(todayKey)}<small>Today</small></div>
         <textarea className="nbArea" aria-label="Today’s note" placeholder="Something to remember…" rows={lines} value={saved} onChange={e=>onSave(e.target.value)} /></section>
     </div>;
