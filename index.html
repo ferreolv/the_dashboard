@@ -2216,8 +2216,8 @@ a.musicDisc,.tile a.musicDisc{display:block;flex:none;width:clamp(104px,52cqi,16
 a.musicDisc:hover{transform:scale(1.04)}
 a.musicDisc:active{transform:scale(.97)}
 .vinyl{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 10px 18px rgba(10,8,6,.3))}
-.vinyl .vinylSpin{transform-origin:50px 50px;transform-box:view-box;animation:vinylSpin 6.5s linear infinite}
-a.musicDisc.matching .vinylSpin{animation-duration:2.6s}
+.vinyl .vinylSpin{transform-origin:50px 50px;transform-box:view-box;animation:vinylSpin 11s linear infinite}
+a.musicDisc.matching .vinylSpin{animation-duration:5s}
 @keyframes vinylSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.vinyl .vinylSpin{animation:none}}
 .musicMeta{min-width:0;padding-right:34px;align-self:center;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}
@@ -2943,15 +2943,11 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalMore{font:900 8px/1 'Nunito',sans-serif;color:var(--accent)}
 .tile.completed[data-tileid="agenda"] .miniCalDot,.tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalNum{background:#fff!important}
 .tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalNum{color:var(--accentDark)!important}
-.agendaDayHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 4px;font-size:12px;font-weight:850;color:var(--ink)}
-.tile button.agendaDayAll{min-height:0!important;height:auto!important;padding:5px 10px!important;border:0!important;border-radius:999px!important;background:color-mix(in srgb,var(--accent) 14%,transparent)!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 11px/1 'Nunito',sans-serif!important;transform:none!important}
-.agendaDayEmpty{margin:6px 0;font-size:12.5px;color:var(--dim)}
 /* shopping: a bought item keeps its emoji crisp; only the name is struck and dimmed */
 .grid>.tile[data-tileid="shopping"] .shopChip.done{text-decoration:none!important}
 .grid>.tile[data-tileid="shopping"] .shopChip.done .shopItemToggle{opacity:1!important}
 .grid>.tile[data-tileid="shopping"] .shopChip.done .shopItemToggle>span:last-child{color:var(--dim)!important}
 /* reminders: a day's heading sits level with the add control, so the day's items get the room */
-.grid>.tile[data-tileid="agenda"] .agendaDayHead{position:absolute;top:0;left:0;right:40px;height:30px;margin:0}
 .tile[data-tileid="agenda"] .miniCalNum{width:25px!important;height:25px!important}
 .tile[data-tileid="agenda"] .miniCalEvents{margin-top:1px!important}
 /* Reminders calendar keeps each day's completion: a ring on every tracked past day (today's
@@ -3058,9 +3054,9 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuGrid{width:min(206px,100%)}
 .grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuCell{font-size:16px!important}
 /* ---- Movies: the film runs to the left; the title is printed on the frame and stays ---- */
-.movieStrip::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.07) 58px 60px);animation:filmRun 1.3s linear infinite}
+.movieStrip::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.07) 58px 60px);animation:filmRun 2.4s linear infinite}
 .movieStrip>*{position:relative;z-index:1}
-.movieSprockets{animation:filmRun 1.3s linear infinite}
+.movieSprockets{animation:filmRun 2.4s linear infinite}
 @keyframes filmRun{to{background-position:-60px 0}}
 @media(prefers-reduced-motion:reduce){.movieStrip::before,.movieSprockets{animation:none}}
 /* ---- Note: the pop-up is a page of the notebook ---- */
@@ -3080,32 +3076,36 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile textarea.nbArea::placeholder{color:var(--dim)}
 /* ---- Language tiles: the bubble, its tail and the flag avatar ---- */
 .langCard{display:flex;flex-direction:column;justify-content:center;min-height:0}
-/* a chat bubble: big corners, a small one beside the curved tail, the flag avatar under the tail */
-.langBubble{position:relative;flex:0 0 auto;min-height:0;padding:16px 18px 15px;margin:0 0 36px;border-radius:30px;background:rgba(255,255,255,.68);box-shadow:0 10px 26px -16px rgba(20,10,40,.4)}
-.langEs .langBubble{border-radius:30px 30px 30px 8px}
-.langDe .langBubble{border-radius:30px 30px 8px 30px}
-.langTail{position:absolute;bottom:-14px;width:24px;height:20px;fill:rgba(255,255,255,.68)}
-.langEs .langTail{left:4px}
-.langDe .langTail{right:4px;transform:scaleX(-1)}
-.langFlag{position:absolute;bottom:-40px;width:38px;height:38px;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.18),0 0 0 3px rgba(255,255,255,.9)}
-.langEs .langFlag{left:-6px;background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75%)}
-.langDe .langFlag{right:-6px;background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
-.langBubble .langHead{margin-bottom:4px;padding-right:28px}
-.langBubble .langLede{margin:0 0 12px;padding-left:0;font-weight:600}
-/* vocabulary as small cards: the word, its meaning under it (and, for German, how to say it) */
+/* the conversation: their lines on the left with the flag as the speaker, yours on the right */
+.langChat{display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:0}
+.langMsg{display:flex;align-items:flex-end;gap:8px;max-width:88%}
+.langMsg.me{align-self:flex-end;flex-direction:row-reverse}
+.langMsgBubble{min-width:0;padding:9px 13px;border-radius:18px;background:rgba(255,255,255,.74);box-shadow:0 5px 14px -9px rgba(20,10,40,.4)}
+.langMsg.them .langMsgBubble{border-bottom-left-radius:5px}
+.langMsg.me .langMsgBubble{background:color-mix(in srgb,var(--accent) 26%,rgba(255,255,255,.42));border-bottom-right-radius:5px}
+.langLine{font-weight:800;font-size:14.5px;line-height:1.3;color:var(--ink);overflow-wrap:anywhere}
+.langTrans{margin-top:2px;font-size:11.5px;line-height:1.3;font-weight:600;color:var(--dim);overflow-wrap:anywhere}
+.langFlag{flex:none;width:26px;height:26px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.18),0 0 0 2px rgba(255,255,255,.85)}
+.langEs .langFlag{background:linear-gradient(180deg,#AA151B 0 25%,#F1BF00 25% 75%,#AA151B 75%)}
+.langDe .langFlag{background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
+/* the pop-up adds the lesson under the conversation: its title, the point, the words, the quiz */
+.langMore{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.langMore .langTitle{flex:none}
+.langMore .langLede{margin:0;padding:0;font-weight:600}
 .langVocab{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .langWord{display:flex;flex-direction:column;gap:1px;min-width:0;padding:8px 11px;border-radius:14px;background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.55))}
-.langWord[hidden]{display:none!important}
 .langTerm{font-weight:800;font-size:14px;line-height:1.25;color:var(--accentDark);overflow-wrap:anywhere}
 .langGloss{font-size:12.5px;line-height:1.3;color:var(--dim);overflow-wrap:anywhere}
-.tile.completed .langBubble{background:rgba(255,255,255,.17);box-shadow:none}
-.tile.completed .langTail{fill:rgba(255,255,255,.17)}
+.tile.completed .langMsgBubble{background:rgba(255,255,255,.18);box-shadow:none}
+.tile.completed .langMsg.me .langMsgBubble{background:rgba(255,255,255,.32)}
+.tile.completed .langLine{color:#fff}
+.tile.completed .langTrans{color:rgba(255,255,255,.76)}
 .tile.completed .langWord{background:rgba(255,255,255,.14)}
-.tile.completed .langFlag{box-shadow:0 0 0 3px rgba(255,255,255,.5)}
+.tile.completed .langFlag{box-shadow:0 0 0 2px rgba(255,255,255,.5)}
 .tile.completed .langTitle,.tile.completed .langTerm{color:#fff!important}
 .tile.completed .langGloss{color:rgba(255,255,255,.78)!important}
-.tileFocusSurface .langBubble{flex:none;margin:0 0 44px}
 .tileFocusSurface .langCard{justify-content:flex-start}
+.tileFocusSurface .langChat{flex:none}
 /* the bubble fills the tile: the mount and content stretch like the Note paper does */
 .grid>.tile[data-tileid="spanish"]>.tbody,.grid>.tile[data-tileid="german"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="spanish"] .tileMount,.grid>.tile[data-tileid="german"] .tileMount{flex:1 1 auto!important;display:flex}
@@ -3462,13 +3462,13 @@ const genMusic=(avoid)=>callClaude("You output ONLY valid minified JSON, no mark
 const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. Select intrinsically useful material whose importance follows naturally from accurate explanation, never from a forced analogy or post-hoc connection. Quiz questions should require a small inference using only material taught in the lesson; do not introduce a new fact or concept.",
   `Write a short daily LESSON in story format. Goal: over many days, make the reader knowledgeable about EVERYTHING — rotate freely across ALL domains (hard sciences, mathematics, medicine, economics, finance, geopolitics, geography, world history, philosophy, psychology, art, architecture, music theory, literature, linguistics, law, technology, engineering, astronomy, ecology, anthropology…). CALIBRATE DIFFICULTY: assume a smart, curious 24-year-old business student who reads the news — skip what such a person already knows (no famous facts everyone learned at school), but stay broadly useful, never niche trivia. The sweet spot: important mechanisms, events, and concepts an educated adult plausibly hasn't mastered. Choose a domain clearly different from these recent lessons: ${(avoid||[]).join(" | ")||"none"}. Exactly 2 short paragraphs (~110 words total) separated by \\n\\n, vivid and concrete. Then a one-line memorable insight and a 2-question quiz. Shape:{"title":"","category":"","story":"","insight":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]},{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]}]}. Quiz rules: make each question genuinely difficult through close conceptual distinctions or a small inference using only the lesson. Every prompt is at most 18 words. Every option is a parallel phrase of 2–5 words and at most 28 characters. Wrong options must be plausible and closely related, never absurd or off-topic. Each "explain" one sentence; "answer" is the correct option index. "alt_prompts" are 2 alternative rewordings of the same question, used later for spaced recall.`, {max:1050}).then(extractJSON);
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:650}).then(extractJSON);
+  `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), un "dialogo" de 4 réplicas cortas entre dos personas (A, B, A, B; 5–12 palabras cada una, español natural y hablado) que use NATURALMENTE las 3 palabras del "vocab" y el "punto", cada réplica con su traducción al inglés "en", y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"dialogo":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:820}).then(extractJSON);
 
 /* German mirrors the Spanish principle one level down (A2–B1): a French native
    can't guess German the way they guess Spanish, so everything is taught explicitly —
    articles included, pronunciation respelled the French way, explanations in French. */
 const genGerman=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif FAUX-DÉBUTANT SOLIDE (A2–B1) : il connaît déjà les bases absolues, ne les lui réexplique pas. Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A2–B1 (cas accusatif/datif en situation, verbes à particule, subordonnées, prépositions mixtes, passé composé…) expliqué en 2–3 phrases précises en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" utiles et PAS évidents (pas de vocabulaire touristique ultra-basique) — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "quiz" de 2 questions de vraie difficulté A2–B1 dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:700}).then(extractJSON);
+  `Crée UN exercice quotidien ÉCRIT d'allemand pour un francophone natif FAUX-DÉBUTANT SOLIDE (A2–B1) : il connaît déjà les bases absolues, ne les lui réexplique pas. Contrairement à l'espagnol, l'allemand se devine mal depuis le français : chaque mot doit donc être enseigné explicitement, jamais supposé transparent. Les explications et les questions sont EN FRANÇAIS ; les exemples et le vocabulaire sont en allemand. Varie le thème chaque jour ; évite ces thèmes récents : ${(avoid||[]).join(" | ")||"none"}. Contenu : un "punkt" de grammaire ou d'usage de niveau A2–B1 (cas accusatif/datif en situation, verbes à particule, subordonnées, prépositions mixtes, passé composé…) expliqué en 2–3 phrases précises en français avec UN exemple allemand traduit ; 4 mots/expressions "vocab" utiles et PAS évidents (pas de vocabulaire touristique ultra-basique) — chaque nom commun AVEC son article (der/die/das) — avec traduction française courte "fr" et une prononciation "pron" approximée en graphie française (ex. "ich möchte" → "ich meuchteu") ; un "dialog" de 4 répliques courtes entre deux personnes (A, B, A, B ; 5–12 mots chacune, allemand naturel et parlé) qui réutilise naturellement les mots du "vocab" et le "punkt", chaque réplique avec sa traduction française "fr" ; un "quiz" de 2 questions de vraie difficulté A2–B1 dont la consigne est en français et les options en allemand, chacune réutilisant naturellement un mot du "vocab" du jour. Shape:{"thema":"","punkt":"","vocab":[{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""},{"de":"","fr":"","pron":""}],"dialog":[{"de":"","fr":""},{"de":"","fr":""},{"de":"","fr":""},{"de":"","fr":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Chaque "explain" est une phrase simple en français.`, {max:900}).then(extractJSON);
 
 /* Built-in A2–B1 German lessons for a French speaker: the Deutsch tile always has a
    lesson, even with no Claude key and a daily server that predates the tile. Each
@@ -6172,26 +6172,38 @@ function NoteCard({saved,notes,onSave}){
     </div>
   );
 }
+/* The language tiles are a conversation: someone talks to you in the language, with the
+   meaning under each line, and the flag is the speaker. Today's dialogue when the lesson has
+   one; otherwise the day's point and words arrive as messages. */
+const langChatLines=(dialogue,point,words)=>{
+  const lines=(Array.isArray(dialogue)?dialogue:[]).filter(l=>l&&l.text);
+  if(lines.length>=2) return lines.slice(0,4).map((l,i)=>({side:i%2?"me":"them",text:l.text,sub:l.sub||""}));
+  return [point?{side:"them",text:point,sub:""}:null,...(words||[]).map(v=>({side:"them",text:v.text,sub:v.sub||""}))].filter(Boolean);
+};
+function LangChat({lines,country}){
+  return <div className="langChat" data-fit-shrink="">
+    {lines.map((l,i)=><div key={i} className={"langMsg "+l.side} data-fit-drop={String(10+i)}>
+      {l.side==="them"&&<span className="langFlag" role="img" aria-label={country}/>}
+      <div className="langMsgBubble"><div className="langLine">{l.text}</div>{l.sub&&<div className="langTrans">{l.sub}</div>}</div>
+    </div>)}
+  </div>;
+}
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!sp)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
   const qs=sp.quiz||[];
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(sp);};
   const undo=index=>onUnlearned&&onUnlearned(sp);
+  const lines=langChatLines((sp.dialogo||[]).map(l=>l&&{text:l.es,sub:l.en}),sp.punto,(sp.vocab||[]).map(v=>({text:v.es,sub:v.en})));
   return (
     <div className="langCard langEs readingCard">
-      <div className="langBubble">
-        <div className="langHead"><div className="cardContentTitle langTitle">{sp.tema}</div></div>
+      <LangChat lines={lines} country="Spain"/>
+      <div hidden={!expanded} className="cardExpandedDetails langMore">
+        <div className="langTitle">{sp.tema}</div>
         {sp.punto && <div className="langLede">{sp.punto}</div>}
-        {(sp.vocab||[]).length>0 && <div className="langVocab spanishVocabulary">
-          {(sp.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord">
-            <span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span>
-          </div>))}
-        </div>}
-        <svg className="langTail" viewBox="0 0 24 20" aria-hidden="true"><path d="M1 0c1.5 8.5 7 15.5 22 19.5C13.5 17.5 8.5 12 7.5 0Z"/></svg>
-        <span className="langFlag" role="img" aria-label="Spain"/>
+        {(sp.vocab||[]).length>0 && <div className="langVocab">{(sp.vocab||[]).map((v,i)=><div key={i} className="langWord"><span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span></div>)}</div>}
+        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
       </div>
-      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
 }
@@ -6203,21 +6215,16 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const qs=de.quiz||[];
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
+  const lines=langChatLines((de.dialog||[]).map(l=>l&&{text:l.de,sub:l.fr}),de.punkt,(de.vocab||[]).map(v=>({text:v.de,sub:v.pron?`${v.fr} · ${v.pron}`:v.fr})));
   return (
     <div className="langCard langDe readingCard">
-      <div className="langBubble">
-        <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
+      <LangChat lines={lines} country="Germany"/>
+      <div hidden={!expanded} className="cardExpandedDetails langMore">
+        <div className="langTitle">{de.thema}</div>
         {de.punkt && <div className="langLede">{de.punkt}</div>}
-        {(de.vocab||[]).length>0 && <div className="langVocab germanVocabulary">
-          {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow">
-            <div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>
-            {v.pron && <span className="dePron">{v.pron}</span>}
-          </div>))}
-        </div>}
-        <svg className="langTail" viewBox="0 0 24 20" aria-hidden="true"><path d="M1 0c1.5 8.5 7 15.5 22 19.5C13.5 17.5 8.5 12 7.5 0Z"/></svg>
-        <span className="langFlag" role="img" aria-label="Germany"/>
+        {(de.vocab||[]).length>0 && <div className="langVocab">{(de.vocab||[]).map((v,i)=><div key={i} className="langWord deRow"><div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>{v.pron && <span className="dePron">{v.pron}</span>}</div>)}</div>}
+        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
       </div>
-      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
 }
@@ -6639,15 +6646,13 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
   );
 }
 
-/* A vinyl record: grooved black disc, light sheen, tile-coloured label. It spins
+/* A vinyl record: grooved black disc, tile-coloured label. It spins
    slowly, faster while the exact recording is still being matched. */
 function VinylDisc({matching}){
   return <svg className="vinyl" viewBox="0 0 100 100" aria-hidden="true">
     <circle cx="50" cy="50" r="49" fill="#1b1713"/>
     <g className="vinylSpin">
       {[45,41,37,33,29].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.09)" strokeWidth=".9"/>)}
-      <path d="M50 3.5 a46.5 46.5 0 0 1 32.9 13.6" stroke="rgba(255,255,255,.28)" strokeWidth="3" fill="none" strokeLinecap="round"/>
-      <path d="M50 96.5 a46.5 46.5 0 0 1 -32.9 -13.6" stroke="rgba(255,255,255,.14)" strokeWidth="3" fill="none" strokeLinecap="round"/>
       <circle className="vinylLabel" cx="50" cy="50" r="25" fill="var(--accent)"/>
       <circle cx="50" cy="50" r="25" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
       <circle cx="50" cy="29.5" r="1.9" fill="rgba(255,255,255,.55)"/>
@@ -6947,8 +6952,6 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
     <div className="taskAgenda">
       <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} streak={streak} />
       <div className="agendaItems">
-      {selectedDate&&<div className="agendaDayHead"><span>{positiveEventDate(selectedDate)}</span><button type="button" className="agendaDayAll" onClick={()=>setSelectedDate("")}>Show upcoming</button></div>}
-      {selectedDate&&shown.length===0&&<p className="agendaDayEmpty">Nothing planned this day.</p>}
       {!selectedDate && shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
       {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
         <div key={r.id} data-fit-drop="1" className={"agRow taskRow"+state}>
