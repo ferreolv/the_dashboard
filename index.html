@@ -2779,9 +2779,10 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="philo"] .philoQ{margin-bottom:0;padding-right:36px}
 .grid>.tile[data-tileid="philo"] .philoCard{gap:8px!important}
 .grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:2;max-height:3.6em}
-.grid>.tile[data-tileid="philo"] .philoLast{-webkit-line-clamp:1}
 .tileFocusSurface[data-tileid="philo"] .philoQ{font-size:19px;padding-right:48px}
-.philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;cursor:pointer}
+.philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;cursor:pointer}
+.philoLast strong,.philoMsg strong{font-weight:850}
+.philoLast em,.philoMsg em{font-style:italic}
 .philoHint{margin:0;font-size:11.5px;line-height:1.4;font-weight:650;color:var(--dim)}
 .tile[data-tileid="philo"] .philoHint button.link{display:inline!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0 0 0 2px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--accentDark)!important;font-family:inherit!important;font-size:inherit!important;font-weight:800!important;line-height:inherit!important;text-decoration:underline;text-underline-offset:2px;transform:none!important;cursor:pointer}
 .philoComposer{display:flex;align-items:flex-end;gap:8px;margin-top:auto;padding:5px 5px 5px 16px;border-radius:22px;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 24%,transparent)}
@@ -2792,6 +2793,10 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="philo"] button.philoSend svg{width:17px;height:17px}
 .philoThinkers{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -28px;padding:2px 28px 4px;scroll-padding-inline:28px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 24px,#000 calc(100% - 56px),transparent)}
 .philoThinkers::-webkit-scrollbar{display:none}
+/* "No philosopher" stays put at the start; the thinkers scroll beside it */
+.philoWho{display:flex;align-items:flex-start;gap:6px;min-width:0;margin-right:-28px}
+.philoWho .philoThinkers{flex:1 1 auto;min-width:0;margin:0;padding:2px 28px 4px 6px;scroll-padding-inline:6px 28px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 56px),transparent)}
+.tile[data-tileid="philo"] button.philoThinker.philoNone{flex:none;margin-top:2px}
 .tile[data-tileid="philo"] button.philoThinker{flex:none;height:30px!important;min-height:30px!important;padding:0 13px!important;border:0!important;border-radius:99px!important;background:rgba(255,255,255,.45)!important;box-shadow:none!important;color:var(--accentDark)!important;font:800 12px/1 'Nunito',sans-serif!important;white-space:nowrap;transform:none!important;cursor:pointer}
 .tile[data-tileid="philo"] button.philoThinker.on{background:var(--accentDark)!important;color:#fff!important}
 .tile[data-tileid="philo"] button.philoThinker:disabled{opacity:.5;cursor:default}
@@ -2806,6 +2811,11 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 @keyframes philoDot{30%{opacity:1;transform:translateY(-2px)}}
 @media(prefers-reduced-motion:reduce){.philoTyping i{animation:none;opacity:.7}}
 .tileFocusSurface[data-tileid="philo"] .philoComposer{position:sticky;bottom:0;z-index:3;margin-top:8px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.tile[data-tileid="philo"] textarea.philoInput{max-height:none}
+.tileFocusSurface[data-tileid="philo"] textarea.philoInput{max-height:40vh}
+/* a long answer in the tile: the composer tightens and takes the room under the question */
+.grid>.tile[data-tileid="philo"] .philoCard.tall .philoComposer{padding-top:7px;padding-bottom:7px}
+.grid>.tile[data-tileid="philo"] .philoCard.tall textarea.philoInput{padding:0!important}
 .tile[data-tileid="philo"] button.philoRestart{align-self:center;min-height:30px!important;height:auto!important;padding:4px 6px!important;border:0!important;background:none!important;box-shadow:none!important;color:var(--dim)!important;font:750 12px/1 'Nunito',sans-serif!important;cursor:pointer;transform:none!important}
 .tile[data-tileid="philo"] button.philoRestart:hover{color:var(--accentDark)!important}
 .tile.completed[data-tileid="philo"] .philoLast,.tile.completed[data-tileid="philo"] .philoHint{color:#fff}
@@ -3677,7 +3687,7 @@ const genPhiloPrompt=(avoid)=>callClaude("You output ONLY valid minified JSON, n
   `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid||[]).join(" | ")||"none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 12 words, no preamble or setup — depth comes from the idea, not the length"}.`, {max:220}).then(extractJSON);
 
 const PHILO_MODES=[
-  {id:"standard",label:"Socratic"},
+  {id:"standard",label:"No philosopher"},
   {id:"plato",label:"Plato"},
   {id:"aristotle",label:"Aristotle"},
   {id:"epicurus",label:"Epicurus"},
@@ -3730,8 +3740,8 @@ async function genBankReorg(bank){ const existing=[]; Object.entries((bank&&bank
 const PHILO_CHAT_MODELS=["claude-sonnet-5-5","claude-haiku-5-5","claude-haiku-4-5-20251001"];
 function philoSystemPrompt(question,philosopher){
   return philosopher
-    ? `You are reconstructing ${philosopher}'s philosophical response to a live conversation. Do not roleplay theatrically or invent views. Use only claims, arguments, distinctions, and likely extensions that are well grounded in ${philosopher}'s primary texts or widely accepted scholarship. If ${philosopher} has no clear basis for answering the user's exact claim, say that the textual basis is unclear, then offer only a careful nearby distinction if one is genuinely grounded. Defend ${philosopher}'s opposition as ${philosopher} plausibly would, but never fabricate a counterargument. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." You may imitate the philosopher's argumentative style at a high level, but do not invent quotations. End every answer with a short parenthetical source note naming the relevant work(s), e.g. "(Sources: ...)." Today's question under discussion: "${question}"`
-    : `You are a Socratic philosophical interlocutor of exceptional range — able to argue from inside almost any tradition (analytic, continental, ancient, Buddhist, pragmatist, existentialist, etc.) without personally championing one school. Your job is not to lecture or hand over a tidy theory. It is to sharpen the other person's OWN thinking and keep digging below the surface: press on unexamined assumptions, raise a real objection or counterexample to what they just said, occasionally steelman a view they haven't considered, and — when it genuinely fits — name a specific real philosopher (and their actual position) who agrees or disagrees with what they've said, briefly and correctly. Never let them settle too comfortably into an answer that merely feels obvious to them; that comfort is usually an unexamined bias, and surfacing it gently is part of the point. Keep replies tight: 3-6 sentences, conversational, no bullet lists, no headers, no "in conclusion." Ask at most one sharp follow-up per reply. Today's question under discussion: "${question}"`;
+    ? `You are ${philosopher}, questioning a person who is thinking through today's question: "${question}". Your only job is to help them think for themselves. Reply with exactly ONE open question and nothing else. Never answer the question yourself, never state ${philosopher}'s doctrine, an argument, an explanation, an example answer or a summary of what they said, and never reason out loud. No praise, agreement or reassurance, no hedging, no lists, no markdown, no bold, no quotations, no source notes. Ask the kind of question ${philosopher} would ask: drawn from the concerns, distinctions and method found in ${philosopher}'s own texts, never invented. The question must be open (not answerable by yes, no or a fact), at most 30 words, plain and direct, and aimed at what their last message examined least. Do not steer them toward ${philosopher}'s conclusions or any other position, including moderate, consensus or "balanced" ones; never imply which answer is right or that one exists. If they ask you a question or ask what you think, do not answer: turn it into an open question for them.`
+    : `You are a Socratic partner whose only job is to help the other person think for themselves about today's question: "${question}". Reply with exactly ONE open question and nothing else. Never answer the question yourself, never give an opinion, argument, explanation, example answer or summary of what they said, and never reason out loud. No praise, agreement or reassurance ("good point", "interesting", "you're right"), no hedging, no lists, no markdown, no bold. The question must be open (not answerable by yes, no or a fact), at most 30 words, plain and direct, and aimed at what their last message examined least: an assumption it rests on, a word it leaves undefined, a case that would test it, or a consequence they have not followed. Do not steer them toward any position, including moderate, consensus, conventional, fashionable or "balanced" ones; favour no school, culture or era; never imply which answer is right or that one exists. If they ask you a question or ask what you think, do not answer: turn it into an open question for them.`;
 }
 async function philoReply(question,history,mode="standard"){
   const philosopher=mode&&mode!=="standard"?philoModeLabel(mode):"";
@@ -3756,7 +3766,7 @@ async function philoReplyWithKey(key,question,history,philosopher){
   const fail=(state,text)=>Object.assign(new Error("philosophy key: "+state),{dailyState:state,philoText:text});
   let lastErr=null;
   for(const model of PHILO_CHAT_MODELS){
-    const body={ model, max_tokens:420, system, messages:history.map(h=>({role:h.role,content:h.text})) };
+    const body={ model, max_tokens:200, system, messages:history.map(h=>({role:h.role,content:h.text})) };
     let res;
     try{ res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
       headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
@@ -7421,11 +7431,18 @@ function BrainGameCard({done,onFinish}){
   </div>;
 }
 
+/* Replies are asked to carry no markdown; any **bold** or *italic* that still comes back
+   renders as emphasis instead of showing its asterisks. */
+const philoInline=text=>String(text||"").split(/(\*\*[^*\n]+\*\*|\*[^*\s][^*\n]*\*)/g).map((part,i)=>
+  /^\*\*[^*\n]+\*\*$/.test(part)?<strong key={i}>{part.slice(2,-2)}</strong>
+  :/^\*[^*\s][^*\n]*\*$/.test(part)?<em key={i}>{part.slice(1,-1)}</em>:part);
 /* Philosophy: the day's question as a quotation, answered straight from the tile. The
-   pop-up holds the conversation, with the thinker you argue with as a row of names. */
+   pop-up holds the conversation, with "No philosopher" always in view and the thinkers you
+   can argue with as a row of names beside it. In the tile, a long answer grows only into the
+   room under the question (the peek steps aside) and scrolls inside after that. */
 function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,onModeChange,onSubmitInitial,onSend,onReset,onGenerate}){
   const {expanded,open}=useTilePresentation();
-  const [msg,setMsg]=useState("");
+  const [msg,setMsg]=useState(""),[tall,setTall]=useState(false);
   const inputRef=useRef(null),endRef=useRef(null),thinkersRef=useRef(null);
   const messages=chat.messages||[];
   useEffect(()=>{ if(expanded&&endRef.current)endRef.current.scrollIntoView({block:"nearest"}); },[expanded,messages.length,sending]);
@@ -7436,6 +7453,24 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
     row.addEventListener("wheel",onWheel,{passive:false});
     return()=>row.removeEventListener("wheel",onWheel);
   },[expanded]);
+  const grow=el=>{
+    if(!el)return; el.style.height="auto";
+    const cs=getComputedStyle(el), lh=parseFloat(cs.lineHeight)||20;
+    const multi=el.scrollHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0)>lh*1.5;
+    let cap=Math.round(window.innerHeight*.4);
+    const tile=el.closest(".grid>.tile"), q=tile&&tile.querySelector(".philoQ"), comp=el.closest(".philoComposer");
+    if(tile&&q&&comp){
+      // in the tile: never past the padding edge, never over the question; whole lines only
+      const limit=tile.getBoundingClientRect().bottom-(parseFloat(getComputedStyle(tile).paddingBottom)||0);
+      const chrome=multi?14:comp.getBoundingClientRect().height-el.getBoundingClientRect().height, pad=multi?0:14;
+      const room=limit-q.getBoundingClientRect().bottom-8-chrome;
+      cap=pad+Math.max(1,Math.floor((room-pad)/lh))*lh;
+    }
+    el.style.height=Math.min(el.scrollHeight,cap)+"px";
+    setTall(multi);
+  };
+  // the room changes with the tile's padding, the pop-up and the text: size it again then
+  useLayoutEffect(()=>{ if(philo) grow(inputRef.current); },[tall,expanded,!!philo]);
   if(!philo) return <GenerateEmpty busy={busy} onGenerate={onGenerate} />;
   const started=!!chat.initial;
   /* a conversation keeps the question it began on; a new one gets today's short question */
@@ -7443,7 +7478,6 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
   const mode=chat.mode||"standard";
   const thread=started?[{role:"user",text:chat.initial},...messages]:[];
   const lastReply=[...thread].reverse().find(m=>m.role==="assistant");
-  const grow=el=>{ if(!el)return; el.style.height="auto"; el.style.height=Math.min(el.scrollHeight,140)+"px"; };
   const submit=()=>{
     const text=msg.trim(); if(!text||sending)return;
     if(!expanded)open();
@@ -7451,17 +7485,20 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
     setMsg(""); requestAnimationFrame(()=>grow(inputRef.current));
   };
   return (
-    <div className={"philoCard"+(lastReply?" hasReply":"")}>
+    <div className={"philoCard"+(lastReply?" hasReply":"")+(tall&&!expanded?" tall":"")}>
       <p className="philoQ">{question}</p>
-      {expanded&&<div className="philoThinkers" ref={thinkersRef} role="group" aria-label="Who answers">
-        {PHILO_MODES.map(m=><button type="button" key={m.id} className={"philoThinker"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
+      {expanded&&<div className="philoWho" role="group" aria-label="Who answers">
+        {PHILO_MODES.slice(0,1).map(m=><button type="button" key={m.id} className={"philoThinker philoNone"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
+        <div className="philoThinkers" ref={thinkersRef}>
+          {PHILO_MODES.slice(1).map(m=><button type="button" key={m.id} className={"philoThinker"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
+        </div>
       </div>}
       {expanded&&started&&<div className="philoThread">
-        {thread.map((m,i)=><div key={i} className={"philoMsg "+(m.role==="user"?"me":"them")}>{m.text}</div>)}
+        {thread.map((m,i)=><div key={i} className={"philoMsg "+(m.role==="user"?"me":"them")}>{m.role==="user"?m.text:philoInline(m.text)}</div>)}
         {sending&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
         <div ref={endRef}/>
       </div>}
-      {!expanded&&lastReply&&<p className="philoLast" onClick={open}>{lastReply.text}</p>}
+      {!expanded&&lastReply&&!tall&&<p className="philoLast" data-fit-drop="5" onClick={open}>{philoInline(lastReply.text)}</p>}
       {!expanded&&sending&&!lastReply&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
       {expanded&&error&&<p className="philoHint" role="alert">{error} <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></p>}
       <div className="philoComposer">
