@@ -3100,6 +3100,15 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile.completed .langMsg.me .langMsgBubble{background:rgba(255,255,255,.32)}
 .tile.completed .langLine{color:#fff}
 .tile.completed .langTrans{color:rgba(255,255,255,.76)}
+/* your lines are the bubble itself as a button: masked words are soft pills of their own
+   length until tapped, then the words appear in place (no layout shift) */
+.tile button.langMsgBubble,button.langMsgBubble{display:block;min-height:0;margin:0;padding:9px 13px;border:none!important;border-radius:18px 18px 5px 18px!important;background:color-mix(in srgb,var(--accent) 26%,rgba(255,255,255,.42))!important;box-shadow:0 5px 14px -9px rgba(20,10,40,.4)!important;color:inherit!important;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tile button.langMsgBubble:hover,button.langMsgBubble:hover{background:color-mix(in srgb,var(--accent) 34%,rgba(255,255,255,.42))!important;border:none!important;transform:none}
+.langMask{border-radius:5px;transition:color .22s ease,background-color .22s ease}
+.langMsg.masked .langMask{color:transparent;background-color:color-mix(in srgb,var(--accentDark) 26%,transparent);user-select:none}
+.tile.completed button.langMsgBubble{background:rgba(255,255,255,.32)!important;box-shadow:none!important}
+.tile.completed button.langMsgBubble:hover{background:rgba(255,255,255,.4)!important}
+.tile.completed .langMsg.masked .langMask{background-color:rgba(255,255,255,.42)}
 .tile.completed .langWord{background:rgba(255,255,255,.14)}
 .tile.completed .langFlag{box-shadow:0 0 0 2px rgba(255,255,255,.5)}
 .tile.completed .langTitle,.tile.completed .langTerm{color:#fff!important}
@@ -6173,19 +6182,29 @@ function NoteCard({saved,notes,onSave}){
   );
 }
 /* The language tiles are a conversation: someone talks to you in the language, with the
-   meaning under each line, and the flag is the speaker. Today's dialogue when the lesson has
-   one; otherwise the day's point and words arrive as messages. */
+   meaning under each line, and the flag is the speaker. Your own lines are said before they
+   are seen: each shows only its meaning, its words masked, until you tap it. Today's dialogue
+   when the lesson has one; otherwise the flag gives the day's point and the words are yours. */
 const langChatLines=(dialogue,point,words)=>{
   const lines=(Array.isArray(dialogue)?dialogue:[]).filter(l=>l&&l.text);
   if(lines.length>=2) return lines.slice(0,4).map((l,i)=>({side:i%2?"me":"them",text:l.text,sub:l.sub||""}));
-  return [point?{side:"them",text:point,sub:""}:null,...(words||[]).map(v=>({side:"them",text:v.text,sub:v.sub||""}))].filter(Boolean);
+  return [point?{side:"them",text:point,sub:""}:null,...(words||[]).map(v=>({side:"me",text:v.text,sub:v.sub||"",after:v.after||""}))].filter(Boolean);
 };
 function LangChat({lines,country}){
+  const [shown,setShown]=useState(()=>new Set());
+  const flip=i=>setShown(prev=>{const next=new Set(prev); if(next.has(i))next.delete(i); else next.add(i); return next;});
   return <div className="langChat" data-fit-shrink="">
-    {lines.map((l,i)=><div key={i} className={"langMsg "+l.side} data-fit-drop={String(10+i)}>
-      {l.side==="them"&&<span className="langFlag" role="img" aria-label={country}/>}
-      <div className="langMsgBubble"><div className="langLine">{l.text}</div>{l.sub&&<div className="langTrans">{l.sub}</div>}</div>
-    </div>)}
+    {lines.map((l,i)=>{
+      const hideable=l.side==="me"&&!!l.sub, open=!hideable||shown.has(i);
+      const sub=open&&l.after?`${l.sub} · ${l.after}`:l.sub;
+      const body=<><div className="langLine" aria-hidden={open?undefined:"true"}>{hideable?l.text.split(/(\s+)/).map((w,j)=>/\S/.test(w)?<span key={j} className="langMask">{w}</span>:w):l.text}</div>{sub&&<div className="langTrans">{sub}</div>}</>;
+      return <div key={i} className={"langMsg "+l.side+(open?"":" masked")} data-fit-drop={String(10+i)}>
+        {l.side==="them"&&<span className="langFlag" role="img" aria-label={country}/>}
+        {hideable
+          ?<button type="button" className="langMsgBubble" aria-pressed={open} aria-label={open?undefined:"Say it, then tap to check: "+l.sub} onClick={()=>flip(i)}>{body}</button>
+          :<div className="langMsgBubble">{body}</div>}
+      </div>;
+    })}
   </div>;
 }
 function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
@@ -6197,7 +6216,7 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const lines=langChatLines((sp.dialogo||[]).map(l=>l&&{text:l.es,sub:l.en}),sp.punto,(sp.vocab||[]).map(v=>({text:v.es,sub:v.en})));
   return (
     <div className="langCard langEs readingCard">
-      <LangChat lines={lines} country="Spain"/>
+      <LangChat key={lines.map(l=>l.text).join("|")} lines={lines} country="Spain"/>
       <div hidden={!expanded} className="cardExpandedDetails langMore">
         <div className="langTitle">{sp.tema}</div>
         {sp.punto && <div className="langLede">{sp.punto}</div>}
@@ -6215,10 +6234,10 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const qs=de.quiz||[];
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
-  const lines=langChatLines((de.dialog||[]).map(l=>l&&{text:l.de,sub:l.fr}),de.punkt,(de.vocab||[]).map(v=>({text:v.de,sub:v.pron?`${v.fr} · ${v.pron}`:v.fr})));
+  const lines=langChatLines((de.dialog||[]).map(l=>l&&{text:l.de,sub:l.fr}),de.punkt,(de.vocab||[]).map(v=>({text:v.de,sub:v.fr,after:v.pron||""})));
   return (
     <div className="langCard langDe readingCard">
-      <LangChat lines={lines} country="Germany"/>
+      <LangChat key={lines.map(l=>l.text).join("|")} lines={lines} country="Germany"/>
       <div hidden={!expanded} className="cardExpandedDetails langMore">
         <div className="langTitle">{de.thema}</div>
         {de.punkt && <div className="langLede">{de.punkt}</div>}
