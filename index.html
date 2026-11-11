@@ -26,7 +26,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
 <title>TheDashboard</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body { font-family:'Nunito',system-ui,sans-serif; color:#17182c;
@@ -3049,6 +3049,60 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
+/* ---- Priorities: an enamel fridge door with an Eisenhower matrix and magnet-held post-its ---- */
+.grid>.tile[data-tileid="matrix"],.tile.tileFocusSurface[data-tileid="matrix"]{background:linear-gradient(104deg,#FBFCFD 0%,#EDF1F5 36%,#F8FAFC 49%,#FFFFFF 53%,#E8EDF2 100%)!important}
+.grid>.tile[data-tileid="matrix"]::before,.tile.tileFocusSurface[data-tileid="matrix"]::before{opacity:.28!important}
+.grid>.tile[data-tileid="matrix"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="matrix"] .tileMount{flex:1 1 auto!important;display:flex}
+.grid>.tile[data-tileid="matrix"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid="matrix"] .content{padding:0!important}
+.fridge{--nw:clamp(70px,21cqmin,150px);--ink:#2C3A4D;position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none}
+.tileFocusSurface[data-tileid="matrix"] .fridge{height:min(72vh,680px)}
+.fridgeSize{position:absolute;width:var(--nw);height:0;visibility:hidden;pointer-events:none}
+.fridgeHandle{position:absolute;left:-4px;top:30%;height:40%;width:7px;border-radius:6px;background:linear-gradient(90deg,#C5CDD6,#F4F6F9 45%,#AEB8C3);box-shadow:2px 2px 6px rgba(40,55,75,.18);pointer-events:none}
+.fridgeAxis{position:absolute;background:rgba(44,58,77,.5);border-radius:2px;pointer-events:none}
+.fridgeAxis.v{left:calc(50% - 1px);top:5%;bottom:5%;width:2px}
+.fridgeAxis.h{top:calc(50% - 1px);left:5%;right:5%;height:2px}
+.fridgeAxis::before,.fridgeAxis::after{content:"";position:absolute;width:9px;height:9px;border:solid rgba(44,58,77,.5);border-width:2px 0 0 2px;border-radius:1px}
+.fridgeAxis.v::before{top:0;left:50%;transform:translate(-50%,1px) rotate(45deg)}
+.fridgeAxis.v::after{bottom:0;left:50%;transform:translate(-50%,-1px) rotate(225deg)}
+.fridgeAxis.h::before{left:0;top:50%;transform:translate(1px,-50%) rotate(-45deg)}
+.fridgeAxis.h::after{right:0;top:50%;transform:translate(-1px,-50%) rotate(135deg)}
+.fridgeLbl{position:absolute;font:700 clamp(15px,5.4cqmin,26px)/1 'Caveat',cursive;color:rgba(44,58,77,.62);pointer-events:none;white-space:nowrap}
+.fridgeLbl.imp{top:5%;right:calc(50% + 12px)}
+.fridgeLbl.urg{right:5%;top:calc(50% + 9px)}
+.fridgeNote{position:absolute;left:calc(var(--x) * (100% - var(--nw)));top:calc(var(--y) * (100% - var(--nw)));width:var(--nw);height:var(--nw);box-sizing:border-box;padding:calc(var(--nw) * .2) calc(var(--nw) * .1) calc(var(--nw) * .08);display:flex;align-items:center;justify-content:center;
+  border-radius:2px 2px 4px 3px;transform:rotate(var(--r));transform-origin:50% 8%;background:var(--paper);box-shadow:0 1px 1px rgba(30,30,30,.08),0 9px 14px -9px rgba(30,30,30,.45);
+  color:#2A2A2A;cursor:grab;touch-action:none;outline:none;transition:transform .18s ease,box-shadow .18s ease}
+.fridgeNote::after{content:"";position:absolute;right:0;bottom:0;width:30%;height:30%;background:linear-gradient(135deg,transparent 50%,rgba(0,0,0,.06) 50%,rgba(255,255,255,.35));border-radius:0 0 4px 0;pointer-events:none}
+.fridgeNote.c0{--paper:linear-gradient(180deg,#FFEB7A,#FFE15A)}
+.fridgeNote.c1{--paper:linear-gradient(180deg,#FFC4D6,#FFB0C8)}
+.fridgeNote.c2{--paper:linear-gradient(180deg,#C9F0AE,#B6E898)}
+.fridgeNote.c3{--paper:linear-gradient(180deg,#BEE0FF,#A7D4FF)}
+.fridgeNote.c4{--paper:linear-gradient(180deg,#FFD49E,#FFC47F)}
+.tile .fridgeNote:focus-visible{outline:2px solid #5C7FA3;outline-offset:3px}
+.fridgeNote.dragging{z-index:5;cursor:grabbing;transform:rotate(calc(var(--r) - 3deg)) scale(1.06);box-shadow:0 2px 3px rgba(30,30,30,.1),0 22px 28px -14px rgba(30,30,30,.5);transition:none}
+.fridgeNote.pressing{animation:fridgePeel var(--hold,520ms) linear forwards}
+@keyframes fridgePeel{0%,22%{transform:rotate(var(--r))}100%{transform:rotate(calc(var(--r) + 9deg)) scale(1.07) translateY(-4%);box-shadow:0 2px 3px rgba(30,30,30,.1),0 22px 26px -14px rgba(30,30,30,.5)}}
+.fridgeNote.pressing .fridgeMagnet{animation:fridgeMagnetPull var(--hold,520ms) linear forwards}
+@keyframes fridgeMagnetPull{0%,22%{transform:translateX(-50%)}100%{transform:translateX(-50%) translateY(-30%) scale(1.15)}}
+.fridgeNote.falling{z-index:6;animation:fridgeFall .28s ease-in forwards}
+@keyframes fridgeFall{to{transform:rotate(calc(var(--r) + 24deg)) translateY(60%);opacity:0}}
+.fridgeNote.editing{z-index:6;cursor:text;transform:rotate(0deg) scale(1.08)}
+.fridgeMagnet{position:absolute;top:-8%;left:50%;width:24%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 34% 30%,#FF9EA2 0,#E5484D 42%,#A91F27 100%);box-shadow:0 3px 5px rgba(40,10,10,.32),inset 0 -2px 3px rgba(0,0,0,.18)}
+.fridgeText,.fridgeInput{width:100%;font:700 calc(var(--nw) * .165)/1.08 'Caveat',cursive;text-align:center;color:#2A2A2A;overflow-wrap:anywhere}
+.fridgeText{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.fridgeNote.long .fridgeText,.fridgeNote.long .fridgeInput{font-size:calc(var(--nw) * .135);-webkit-line-clamp:5}
+.tile textarea.fridgeInput{height:100%;min-height:0!important;margin:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;-webkit-text-fill-color:#2A2A2A;font-size:calc(var(--nw) * .165)!important}
+.tile .fridgeNote.long textarea.fridgeInput{font-size:calc(var(--nw) * .135)!important}
+.tile button.fridgePad{position:absolute;left:2.5%;bottom:2.5%;z-index:4;width:calc(var(--nw) * .56);height:calc(var(--nw) * .56);min-height:0!important;padding:0!important;border:0!important;border-radius:3px!important;background:none!important;box-shadow:none!important;cursor:grab;touch-action:none;transform:none!important}
+.fridgePad>span{position:absolute;inset:0;border-radius:3px;background:linear-gradient(180deg,#FFEB7A,#FFE15A);box-shadow:0 1px 2px rgba(30,30,30,.18)}
+.fridgePad>span:nth-child(1){transform:translate(4px,4px) rotate(4deg);filter:brightness(.94)}
+.fridgePad>span:nth-child(2){transform:translate(2px,2px) rotate(2deg);filter:brightness(.97)}
+.fridgePad>span:nth-child(3){display:grid;place-items:center;font:700 calc(var(--nw) * .34)/1 'Caveat',cursive;color:rgba(42,42,42,.7)}
+.tile button.fridgePad:hover>span:nth-child(3){transform:translateY(-2px)}
+.tile button.fridgePad:focus-visible{box-shadow:0 0 0 3px #fff,0 0 0 5px #5C7FA3!important}
+@media(prefers-reduced-motion:reduce){.fridgeNote,.fridgeNote.dragging{transition:none}.fridgeNote.pressing,.fridgeNote.pressing .fridgeMagnet{animation-duration:var(--hold,520ms)}.fridgeNote.falling{animation:none;opacity:0}}
 /* ---- Sustainability: a tray of emission bubbles; throw one out of the tile = avoided today.
    No border, no text: the pile of bubbles is the tile. Empty tray = a white flower on the
    full-colour tile. Bubble sizes are container units of the tray, so phone and pop-up scale. ---- */
@@ -3205,6 +3259,7 @@ const COL = {
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
+  matrix:   {p:"#EEF2F6", v:"#5C7FA3", d:"#2D4A69"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -4555,6 +4610,7 @@ const CURATED_TILE_LAYOUT={
   health:{desktop:[4,2],phone:[2,2],family:"large"},
   shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
+  matrix:{desktop:[4,4],phone:[2,2],family:"large"},
   events:{desktop:[4,3],phone:[2,2],family:"large"},
   note:{desktop:[4,1],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
@@ -4614,6 +4670,7 @@ const LIBRARY_META={
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
   movie:["life","movies films watch-list cinema next movie"],
+  matrix:["plan","priorities eisenhower matrix urgent important post-it sticky notes fridge to-do"],
   weekly:["life","stats statistics weekly history progress review"],
 };
 const normaliseLibrarySearch=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
@@ -4624,7 +4681,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["goals","habits","sustain","breathing","health","shopping","agenda","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -4634,6 +4691,7 @@ const HEALTH_TILE_INTRODUCED=load("healthTileIntroduced",false);
 const GERMAN_TILE_INTRODUCED=load("germanTileIntroduced",false);
 const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
 const SUSTAIN_TILE_INTRODUCED=load("sustainTileIntroduced",false);
+const MATRIX_TILE_INTRODUCED=load("matrixTileIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
@@ -4641,6 +4699,7 @@ const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"
 const placeGermanAfterSpanish=list=>{ const next=list.filter(id=>id!=="german"), at=next.indexOf("spanish"); next.splice(at<0?next.length:at+1,0,"german"); return next; };
 const placeMovieAfterEvents=list=>{ const next=list.filter(id=>id!=="movie"), at=next.indexOf("events"); next.splice(at<0?next.length:at+1,0,"movie"); return next; };
 const placeSustainAfterHabits=list=>{ const next=list.filter(id=>id!=="sustain"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"sustain"); return next; };
+const placeMatrixAfterReminders=list=>{ const next=list.filter(id=>id!=="matrix"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"matrix"); return next; };
 
 // Dialogs share a stack so only the frontmost overlay handles focus and Escape.
 const dashboardDialogStack=[];
@@ -4704,7 +4763,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -4912,10 +4971,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); if(!MATRIX_TILE_INTRODUCED) placed=placeMatrixAfterReminders(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); return next; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(!MATRIX_TILE_INTRODUCED&&!next.includes("matrix")) next=[...next,"matrix"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); if(!MATRIX_TILE_INTRODUCED) save("matrixTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -4927,6 +4986,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
+  // Priorities: the notes on the fridge (a note left empty never survives a reload)
+  const [matrixNotes,setMatrixNotes]=useState(()=>matrixClean(load("matrix",[])).filter(m=>m.text));
+  const saveMatrix=next=>{ const clean=matrixClean(next); setMatrixNotes(clean); save("matrix",clean); };
   const [movies,setMovies]=useState(()=>load("movies",[]));
   const [sustainOut,setSustainOut]=useState(()=>{ const rec=load("sustain:"+todayKey,null); return rec&&Array.isArray(rec.out)?rec.out:[]; });
   const sustainRef=useRef(sustainOut);
@@ -5234,6 +5296,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       if(event.key==="fefe_ritualLog")setRitualLog(load("ritualLog",{}));
       if(event.key==="fefe_manualTileDone:"+todayKey)setManualTileDone(load("manualTileDone:"+todayKey,{}));
       if(event.key==="fefe_recall")setRecallList(load("recall",[]));
+      if(event.key==="fefe_matrix")setMatrixNotes(matrixClean(load("matrix",[])).filter(m=>m.text));
       if(event.key==="fefe_sustain:"+todayKey){ const rec=load("sustain:"+todayKey,null); const out=rec&&Array.isArray(rec.out)?rec.out:[]; sustainRef.current=out; setSustainOut(out); }
     };
     window.addEventListener("storage",onStorage);return()=>window.removeEventListener("storage",onStorage);
@@ -6066,6 +6129,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} />, ()=>toggleMovieWatched()),
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
+    matrix: T("matrix","Priorities",false,null,
+      <MatrixCard notes={matrixNotes} onChange={saveMatrix} />),
     brain: T("brain","Memory",false,null,
       <BrainBankCard bank={brainBank} busy={bankBusy} haveKey={haveKey} onSetup={()=>openDailySettings("claude-key")} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
@@ -6688,6 +6753,102 @@ function SustainFlower(){
     {Array.from({length:20},(_,i)=><g key={i} transform={`rotate(${i*18} 60 60)`}><ellipse className="sustainPetal" cx="60" cy="31" rx="9" ry="29" style={{animationDelay:(i*26)+"ms"}}/></g>)}
     <circle className="sustainHeart" cx="60" cy="60" r="14"/>
   </svg>;
+}
+/* ---- Priorities: an Eisenhower matrix on a fridge door. Post-its held by a magnet sit
+   anywhere on two axes (up = more important, right = more urgent). Drag a note to move it,
+   tap it to write, press and hold to take it off the fridge; the pad in the corner gives a
+   new one (tap it, or tear one off by dragging). Positions are fractions of the free travel
+   (0..1 across, 0..1 down), so the tile and the pop-up show the same arrangement. ---- */
+/* MATRIX_CORE_START */
+const MATRIX_MAX=60, MATRIX_COLORS=5, MATRIX_HOLD_MS=520;
+const matrixClamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,Number(v)||0));
+const matrixQuadrant=(x,y)=>y<.5?(x>=.5?"Important and urgent":"Important, not urgent"):(x>=.5?"Urgent, not important":"Neither urgent nor important");
+const matrixNextColor=notes=>{ const used=(notes||[]).map(m=>m.c); for(let k=0;k<MATRIX_COLORS;k++){ const c=((used.length?used[used.length-1]+1:0)+k)%MATRIX_COLORS; if(!used.slice(-2).includes(c)) return c; } return 0; };
+const matrixNewId=()=>"m"+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36);
+function matrixAdd(notes,{x=.5,y=.5,id,r}={}){ const list=notes||[]; return [...list,{id:id||matrixNewId(),text:"",x:matrixClamp(x,0,1),y:matrixClamp(y,0,1),c:matrixNextColor(list),r:r!=null?r:Math.round((Math.random()*8-4)*10)/10}]; }
+/* a note that moves comes to the front, unless it is nudged from the keyboard */
+function matrixMove(notes,id,x,y,toFront=true){ const list=notes||[], n=list.find(m=>m.id===id); if(!n) return list; const moved={...n,x:matrixClamp(x,0,1),y:matrixClamp(y,0,1)}; return toFront?[...list.filter(m=>m.id!==id),moved]:list.map(m=>m.id===id?moved:m); }
+/* writing nothing takes the note off */
+function matrixText(notes,id,text){ const t=String(text||"").replace(/\s+/g," ").trim().slice(0,MATRIX_MAX); return t?(notes||[]).map(m=>m.id===id?{...m,text:t}:m):(notes||[]).filter(m=>m.id!==id); }
+const matrixRemove=(notes,id)=>(notes||[]).filter(m=>m.id!==id);
+const matrixClean=list=>(Array.isArray(list)?list:[]).filter(m=>m&&typeof m.id==="string"&&Number.isFinite(Number(m.x))&&Number.isFinite(Number(m.y)))
+  .map(m=>({id:m.id,text:String(m.text||"").slice(0,MATRIX_MAX),x:matrixClamp(m.x,0,1),y:matrixClamp(m.y,0,1),c:((Math.round(Number(m.c))||0)%MATRIX_COLORS+MATRIX_COLORS)%MATRIX_COLORS,r:matrixClamp(m.r,-6,6)}));
+/* MATRIX_CORE_END */
+function MatrixCard({notes,onChange}){
+  const {expanded}=useTilePresentation();
+  const boardRef=useRef(null), sizeRef=useRef(null), dragRef=useRef(null), latest=useRef(notes||[]);
+  latest.current=notes||[];
+  const [drag,setDrag]=useState(null), [pressing,setPressing]=useState(null), [falling,setFalling]=useState(null), [editing,setEditing]=useState(null);
+  useEffect(()=>()=>{ if(dragRef.current) clearTimeout(dragRef.current.timer); },[]);
+  const list=notes||[];
+  // pointer position → fraction of the free travel, keeping where the note was grabbed
+  const toFrac=(cx,cy,offX,offY)=>{ const b=boardRef.current.getBoundingClientRect(), nw=sizeRef.current.offsetWidth;
+    return {x:matrixClamp((cx-offX-b.left)/Math.max(1,b.width-nw),0,1),y:matrixClamp((cy-offY-b.top)/Math.max(1,b.height-nw),0,1)}; };
+  // pressing elsewhere on the fridge keeps focus where it was, so save a note being written first
+  const finishWriting=()=>{ const a=document.activeElement; if(a&&a.classList&&a.classList.contains("fridgeInput")) a.blur(); };
+  const addAtCentre=()=>{ const id=matrixNewId(); onChange(matrixAdd(latest.current,{id,x:.5+(Math.random()-.5)*.1,y:.5+(Math.random()-.5)*.1})); setEditing(id); };
+  const down=(e,n)=>{
+    if(editing===n.id||(e.button!=null&&e.button!==0)) return;
+    finishWriting(); e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
+    const b=boardRef.current.getBoundingClientRect(), nw=sizeRef.current.offsetWidth;
+    const d={id:n.id,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,offX:e.clientX-(b.left+n.x*(b.width-nw)),offY:e.clientY-(b.top+n.y*(b.height-nw)),moved:false,timer:0};
+    // held still long enough: the note comes off the fridge
+    d.timer=setTimeout(()=>{ if(dragRef.current!==d||d.moved) return; dragRef.current=null; setPressing(null); setFalling(n.id);
+      setTimeout(()=>{ setFalling(null); onChange(matrixRemove(latest.current,n.id)); },280); },MATRIX_HOLD_MS);
+    dragRef.current=d; setPressing(n.id);
+  };
+  const padDown=e=>{
+    if(e.button!=null&&e.button!==0) return;
+    finishWriting(); e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
+    const nw=sizeRef.current.offsetWidth;
+    dragRef.current={id:matrixNewId(),isNew:true,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,offX:nw/2,offY:nw*.2,moved:false,timer:0};
+  };
+  const move=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
+    if(!d.moved&&Math.hypot(e.clientX-d.sx,e.clientY-d.sy)<6) return;
+    if(!d.moved){ d.moved=true; clearTimeout(d.timer); setPressing(null); }
+    setDrag({id:d.id,isNew:!!d.isNew,...toFrac(e.clientX,e.clientY,d.offX,d.offY)}); };
+  const up=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
+    dragRef.current=null; clearTimeout(d.timer); setPressing(null);
+    if(d.moved){ const p=toFrac(e.clientX,e.clientY,d.offX,d.offY); setDrag(null);
+      if(d.isNew){ onChange(matrixAdd(latest.current,{...p,id:d.id})); setEditing(d.id); }
+      else onChange(matrixMove(latest.current,d.id,p.x,p.y));
+      return; }
+    if(d.isNew) addAtCentre(); else setEditing(d.id);
+  };
+  const cancel=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return; dragRef.current=null; clearTimeout(d.timer); setPressing(null); setDrag(null); };
+  const keys=(e,n)=>{ if(editing===n.id) return; const k=e.key, step=e.shiftKey?.12:.04;
+    if(k==="Enter"||k===" "){ e.preventDefault(); setEditing(n.id); }
+    else if(k==="Delete"||k==="Backspace"){ e.preventDefault(); onChange(matrixRemove(latest.current,n.id)); }
+    else if(k.startsWith("Arrow")){ e.preventDefault(); const dx=k==="ArrowLeft"?-step:k==="ArrowRight"?step:0, dy=k==="ArrowUp"?-step:k==="ArrowDown"?step:0; onChange(matrixMove(latest.current,n.id,n.x+dx,n.y+dy,false)); } };
+  const commit=(id,text)=>{ setEditing(null); onChange(matrixText(latest.current,id,text)); };
+  const note=(n,live)=>{ const x=live?drag.x:n.x, y=live?drag.y:n.y, long=n.text.length>30;
+    return <div key={n.id} className={"fridgeNote c"+n.c+(live?" dragging":"")+(pressing===n.id?" pressing":"")+(falling===n.id?" falling":"")+(editing===n.id?" editing":"")+(long?" long":"")}
+      style={{"--x":x,"--y":y,"--r":n.r+"deg"}} role="button" tabIndex={0}
+      aria-label={`${n.text||"Empty note"}. ${matrixQuadrant(x,y)}. Drag to move, tap to write, hold to remove.`}
+      onPointerDown={e=>down(e,n)} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel} onKeyDown={e=>keys(e,n)} onClick={e=>e.stopPropagation()}>
+      <span className="fridgeMagnet" aria-hidden="true"/>
+      {editing===n.id
+        ?<textarea className="fridgeInput" autoFocus rows={3} maxLength={MATRIX_MAX} defaultValue={n.text} aria-label="Write on the note"
+            onPointerDown={e=>e.stopPropagation()} onClick={e=>e.stopPropagation()}
+            onFocus={e=>{ const t=e.currentTarget; t.setSelectionRange(t.value.length,t.value.length); }}
+            onKeyDown={e=>{ e.stopPropagation(); if((e.key==="Enter"&&!e.shiftKey)||e.key==="Escape"){ e.preventDefault(); e.currentTarget.blur(); } }}
+            onBlur={e=>commit(n.id,e.currentTarget.value)}/>
+        :<span className="fridgeText">{n.text}</span>}
+    </div>; };
+  const pending=drag&&drag.isNew&&!list.some(m=>m.id===drag.id);
+  return <div className={"fridge"+(expanded?" big":"")} ref={boardRef} role="group" aria-label="Priorities: notes on an urgent and important matrix">
+    <span className="fridgeSize" ref={sizeRef} aria-hidden="true"/>
+    <span className="fridgeHandle" aria-hidden="true"/>
+    <span className="fridgeAxis v" aria-hidden="true"/><span className="fridgeAxis h" aria-hidden="true"/>
+    <span className="fridgeLbl imp" aria-hidden="true">Important</span><span className="fridgeLbl urg" aria-hidden="true">Urgent</span>
+    {list.map(n=>note(n,!!(drag&&drag.id===n.id)))}
+    {pending&&<div className={"fridgeNote dragging c"+matrixNextColor(list)} style={{"--x":drag.x,"--y":drag.y,"--r":"-2deg"}} aria-hidden="true"><span className="fridgeMagnet"/></div>}
+    <button type="button" className="fridgePad" aria-label="Add a note"
+      onPointerDown={padDown} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel}
+      onClick={e=>{ e.stopPropagation(); if(e.detail===0) addAtCentre(); }}>
+      <span/><span/><span>+</span>
+    </button>
+  </div>;
 }
 function SustainCard({out,onToggle}){
   const {expanded}=useTilePresentation();
