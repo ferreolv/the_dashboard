@@ -26,7 +26,7 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
 <title>TheDashboard</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Permanent+Marker&display=swap');
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body { font-family:'Nunito',system-ui,sans-serif; color:#17182c;
@@ -3049,60 +3049,54 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
-/* ---- Priorities: an enamel fridge door with an Eisenhower matrix and magnet-held post-its ---- */
-.grid>.tile[data-tileid="matrix"],.tile.tileFocusSurface[data-tileid="matrix"]{background:linear-gradient(104deg,#FBFCFD 0%,#EDF1F5 36%,#F8FAFC 49%,#FFFFFF 53%,#E8EDF2 100%)!important}
-.grid>.tile[data-tileid="matrix"]::before,.tile.tileFocusSurface[data-tileid="matrix"]::before{opacity:.28!important}
+/* ---- Priorities: a board of pinned post-its on an Eisenhower matrix, all in the tile's one colour:
+   the tile's own glass is the board, the post-its are its pale paper, the pins and the marker
+   writing are its ink. ---- */
 .grid>.tile[data-tileid="matrix"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="matrix"] .tileMount{flex:1 1 auto!important;display:flex}
 .grid>.tile[data-tileid="matrix"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
 .tile[data-tileid="matrix"] .content{padding:0!important}
-.fridge{--nw:clamp(70px,21cqmin,150px);--ink:#2C3A4D;position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none}
-.tileFocusSurface[data-tileid="matrix"] .fridge{height:min(72vh,680px)}
-.fridgeSize{position:absolute;width:var(--nw);height:0;visibility:hidden;pointer-events:none}
-.fridgeHandle{position:absolute;left:-4px;top:30%;height:40%;width:7px;border-radius:6px;background:linear-gradient(90deg,#C5CDD6,#F4F6F9 45%,#AEB8C3);box-shadow:2px 2px 6px rgba(40,55,75,.18);pointer-events:none}
-.fridgeAxis{position:absolute;background:rgba(44,58,77,.5);border-radius:2px;pointer-events:none}
-.fridgeAxis.v{left:calc(50% - 1px);top:5%;bottom:5%;width:2px}
-.fridgeAxis.h{top:calc(50% - 1px);left:5%;right:5%;height:2px}
-.fridgeAxis::before,.fridgeAxis::after{content:"";position:absolute;width:9px;height:9px;border:solid rgba(44,58,77,.5);border-width:2px 0 0 2px;border-radius:1px}
-.fridgeAxis.v::before{top:0;left:50%;transform:translate(-50%,1px) rotate(45deg)}
-.fridgeAxis.v::after{bottom:0;left:50%;transform:translate(-50%,-1px) rotate(225deg)}
-.fridgeAxis.h::before{left:0;top:50%;transform:translate(1px,-50%) rotate(-45deg)}
-.fridgeAxis.h::after{right:0;top:50%;transform:translate(-1px,-50%) rotate(135deg)}
-.fridgeLbl{position:absolute;font:700 clamp(15px,5.4cqmin,26px)/1 'Caveat',cursive;color:rgba(44,58,77,.62);pointer-events:none;white-space:nowrap}
-.fridgeLbl.imp{top:5%;right:calc(50% + 12px)}
-.fridgeLbl.urg{right:5%;top:calc(50% + 9px)}
-.fridgeNote{position:absolute;left:calc(var(--x) * (100% - var(--nw)));top:calc(var(--y) * (100% - var(--nw)));width:var(--nw);height:var(--nw);box-sizing:border-box;padding:calc(var(--nw) * .2) calc(var(--nw) * .1) calc(var(--nw) * .08);display:flex;align-items:center;justify-content:center;
-  border-radius:2px 2px 4px 3px;transform:rotate(var(--r));transform-origin:50% 8%;background:var(--paper);box-shadow:0 1px 1px rgba(30,30,30,.08),0 9px 14px -9px rgba(30,30,30,.45);
-  color:#2A2A2A;cursor:grab;touch-action:none;outline:none;transition:transform .18s ease,box-shadow .18s ease}
-.fridgeNote::after{content:"";position:absolute;right:0;bottom:0;width:30%;height:30%;background:linear-gradient(135deg,transparent 50%,rgba(0,0,0,.06) 50%,rgba(255,255,255,.35));border-radius:0 0 4px 0;pointer-events:none}
-.fridgeNote.c0{--paper:linear-gradient(180deg,#FFEB7A,#FFE15A)}
-.fridgeNote.c1{--paper:linear-gradient(180deg,#FFC4D6,#FFB0C8)}
-.fridgeNote.c2{--paper:linear-gradient(180deg,#C9F0AE,#B6E898)}
-.fridgeNote.c3{--paper:linear-gradient(180deg,#BEE0FF,#A7D4FF)}
-.fridgeNote.c4{--paper:linear-gradient(180deg,#FFD49E,#FFC47F)}
-.tile .fridgeNote:focus-visible{outline:2px solid #5C7FA3;outline-offset:3px}
-.fridgeNote.dragging{z-index:5;cursor:grabbing;transform:rotate(calc(var(--r) - 3deg)) scale(1.06);box-shadow:0 2px 3px rgba(30,30,30,.1),0 22px 28px -14px rgba(30,30,30,.5);transition:none}
-.fridgeNote.pressing{animation:fridgePeel var(--hold,520ms) linear forwards}
-@keyframes fridgePeel{0%,22%{transform:rotate(var(--r))}100%{transform:rotate(calc(var(--r) + 9deg)) scale(1.07) translateY(-4%);box-shadow:0 2px 3px rgba(30,30,30,.1),0 22px 26px -14px rgba(30,30,30,.5)}}
-.fridgeNote.pressing .fridgeMagnet{animation:fridgeMagnetPull var(--hold,520ms) linear forwards}
-@keyframes fridgeMagnetPull{0%,22%{transform:translateX(-50%)}100%{transform:translateX(-50%) translateY(-30%) scale(1.15)}}
-.fridgeNote.falling{z-index:6;animation:fridgeFall .28s ease-in forwards}
-@keyframes fridgeFall{to{transform:rotate(calc(var(--r) + 24deg)) translateY(60%);opacity:0}}
-.fridgeNote.editing{z-index:6;cursor:text;transform:rotate(0deg) scale(1.08)}
-.fridgeMagnet{position:absolute;top:-8%;left:50%;width:24%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 34% 30%,#FF9EA2 0,#E5484D 42%,#A91F27 100%);box-shadow:0 3px 5px rgba(40,10,10,.32),inset 0 -2px 3px rgba(0,0,0,.18)}
-.fridgeText,.fridgeInput{width:100%;font:700 calc(var(--nw) * .165)/1.08 'Caveat',cursive;text-align:center;color:#2A2A2A;overflow-wrap:anywhere}
-.fridgeText{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
-.fridgeNote.long .fridgeText,.fridgeNote.long .fridgeInput{font-size:calc(var(--nw) * .135);-webkit-line-clamp:5}
-.tile textarea.fridgeInput{height:100%;min-height:0!important;margin:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;-webkit-text-fill-color:#2A2A2A;font-size:calc(var(--nw) * .165)!important}
-.tile .fridgeNote.long textarea.fridgeInput{font-size:calc(var(--nw) * .135)!important}
-.tile button.fridgePad{position:absolute;left:2.5%;bottom:2.5%;z-index:4;width:calc(var(--nw) * .56);height:calc(var(--nw) * .56);min-height:0!important;padding:0!important;border:0!important;border-radius:3px!important;background:none!important;box-shadow:none!important;cursor:grab;touch-action:none;transform:none!important}
-.fridgePad>span{position:absolute;inset:0;border-radius:3px;background:linear-gradient(180deg,#FFEB7A,#FFE15A);box-shadow:0 1px 2px rgba(30,30,30,.18)}
-.fridgePad>span:nth-child(1){transform:translate(4px,4px) rotate(4deg);filter:brightness(.94)}
-.fridgePad>span:nth-child(2){transform:translate(2px,2px) rotate(2deg);filter:brightness(.97)}
-.fridgePad>span:nth-child(3){display:grid;place-items:center;font:700 calc(var(--nw) * .34)/1 'Caveat',cursive;color:rgba(42,42,42,.7)}
-.tile button.fridgePad:hover>span:nth-child(3){transform:translateY(-2px)}
-.tile button.fridgePad:focus-visible{box-shadow:0 0 0 3px #fff,0 0 0 5px #5C7FA3!important}
-@media(prefers-reduced-motion:reduce){.fridgeNote,.fridgeNote.dragging{transition:none}.fridgeNote.pressing,.fridgeNote.pressing .fridgeMagnet{animation-duration:var(--hold,520ms)}.fridgeNote.falling{animation:none;opacity:0}}
+.pinBoard{--nw:clamp(62px,18cqmin,132px);--line:color-mix(in srgb,var(--ink) 40%,transparent);position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.tileFocusSurface[data-tileid="matrix"] .pinBoard{height:min(72vh,680px)}
+.pbSize{position:absolute;width:var(--nw);height:0;visibility:hidden;pointer-events:none}
+.pbAxis{position:absolute;background:var(--line);border-radius:2px;pointer-events:none}
+.pbAxis.v{left:calc(50% - 1px);top:4%;bottom:4%;width:2px}
+.pbAxis.h{top:calc(50% - 1px);left:4%;right:4%;height:2px}
+.pbAxis::before,.pbAxis::after{content:"";position:absolute;width:9px;height:9px;border:solid var(--line);border-width:2px 0 0 2px;border-radius:1px}
+.pbAxis.v::before{top:0;left:50%;transform:translate(-50%,1px) rotate(45deg)}
+.pbAxis.v::after{bottom:0;left:50%;transform:translate(-50%,-1px) rotate(225deg)}
+.pbAxis.h::before{left:0;top:50%;transform:translate(1px,-50%) rotate(-45deg)}
+.pbAxis.h::after{right:0;top:50%;transform:translate(-1px,-50%) rotate(135deg)}
+.pbLbl{position:absolute;font:400 clamp(12px,4.2cqmin,20px)/1 'Permanent Marker',cursive;color:color-mix(in srgb,var(--ink) 66%,transparent);pointer-events:none;white-space:nowrap}
+.pbLbl.imp{top:4%;right:calc(50% + 12px)}
+.pbLbl.urg{right:4%;top:calc(50% + 9px)}
+.pbNote{position:absolute;left:calc(var(--x) * (100% - var(--nw)));top:calc(var(--y) * (100% - var(--nw)));width:var(--nw);height:var(--nw);box-sizing:border-box;padding:calc(var(--nw) * .24) calc(var(--nw) * .09) calc(var(--nw) * .08);display:flex;align-items:center;justify-content:center;
+  border-radius:2px 2px 7px 3px;transform:rotate(var(--r));transform-origin:50% 10%;background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.22) 55%,rgba(255,255,255,.12)),var(--bg);box-shadow:0 1px 1px rgba(0,0,0,.06),0 10px 14px -10px rgba(0,0,0,.42);
+  color:var(--ink);cursor:grab;touch-action:none;outline:none;transition:transform .22s cubic-bezier(.2,1.25,.5,1),box-shadow .22s ease}
+.pbNote::after{content:"";position:absolute;right:0;bottom:0;width:26%;height:26%;border-radius:0 0 7px 0;background:linear-gradient(135deg,transparent 50%,color-mix(in srgb,var(--accent) 30%,transparent) 50%,rgba(255,255,255,.6));pointer-events:none}
+.tile .pbNote:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.pbNote.dragging{z-index:5;cursor:grabbing;transform:rotate(calc(var(--r) - 2deg)) scale(1.07);box-shadow:0 2px 3px rgba(0,0,0,.08),0 22px 26px -14px rgba(0,0,0,.42);transition:transform .14s ease,box-shadow .14s ease}
+.pbNote.editing{z-index:6;cursor:text;transform:rotate(0deg) scale(1.1)}
+.pbNote.falling{z-index:6;pointer-events:none;animation:pbFall .32s cubic-bezier(.5,0,.9,.6) .1s forwards}
+.pbNote.falling .pbPinHead{animation:pbPull .18s ease-out forwards}
+@keyframes pbPull{to{transform:translate(-25%,-160%) rotate(-30deg) scale(1.15);opacity:0}}
+@keyframes pbFall{to{transform:rotate(calc(var(--r) + 20deg)) translateY(70%);opacity:0}}
+.pbText{max-height:100%;overflow:hidden;font:400 calc(var(--nw) * .15)/1.12 'Permanent Marker',cursive;text-align:center;overflow-wrap:anywhere;color:var(--ink)}
+.tile textarea.pbInput{width:100%;height:100%;min-height:0!important;margin:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;font:400 max(10px,calc(var(--nw) * .13))/1.12 'Permanent Marker',cursive!important;text-align:center;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
+/* the pushpin: a glossy ink-coloured head, its needle slanting into the paper and the shadow they cast */
+.tile .pbPin{position:absolute;top:calc(var(--nw) * -.18);left:50%;width:calc(var(--nw) * .5);height:calc(var(--nw) * .5);min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:none!important;box-shadow:none!important;transform:translateX(-50%)!important;cursor:pointer;touch-action:manipulation;z-index:2}
+.pbPin::before{content:"";position:absolute;left:51%;top:55%;width:22%;height:5%;border-radius:2px;background:rgba(0,0,0,.2);transform:rotate(55deg);transform-origin:0 50%;filter:blur(.5px)}
+.pbPinHead{position:absolute;inset:28.5%;border-radius:50%;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.95) 0 8%,rgba(255,255,255,.28) 16%,rgba(255,255,255,0) 34%),var(--ink);box-shadow:inset -2px -3px 4px rgba(0,0,0,.28),1px 3px 3px rgba(0,0,0,.26),3px 6px 8px -3px rgba(0,0,0,.22);transition:transform .15s ease}
+.tile .pbPin:hover .pbPinHead{transform:translateY(-2px) scale(1.06)}
+.tile .pbPin:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.tile button.pbPad{position:absolute;left:2%;bottom:2%;z-index:4;width:calc(var(--nw) * .54);height:calc(var(--nw) * .54);min-height:0!important;padding:0!important;border:0!important;border-radius:3px!important;background:none!important;box-shadow:none!important;cursor:grab;touch-action:none;transform:none!important}
+.pbPad>span{position:absolute;inset:0;border-radius:3px;background:var(--bg);box-shadow:0 1px 2px rgba(0,0,0,.16)}
+.pbPad>span:nth-child(1){transform:translate(4px,4px) rotate(4deg)}
+.pbPad>span:nth-child(2){transform:translate(2px,2px) rotate(2deg)}
+.pbPad>span:nth-child(3){display:grid;place-items:center;font:400 calc(var(--nw) * .3)/1 'Permanent Marker',cursive;color:var(--ink);transition:transform .15s ease}
+.tile button.pbPad:hover>span:nth-child(3){transform:translateY(-2px)}
+.tile button.pbPad:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.pbNote,.pbNote.dragging,.pbPinHead{transition:none}.pbNote.falling{animation:none;opacity:0}.pbNote.falling .pbPinHead{animation:none}}
 /* ---- Sustainability: a tray of emission bubbles; throw one out of the tile = avoided today.
    No border, no text: the pile of bubbles is the tile. Empty tray = a white flower on the
    full-colour tile. Bubble sizes are container units of the tray, so phone and pop-up scale. ---- */
@@ -3259,7 +3253,7 @@ const COL = {
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
-  matrix:   {p:"#EEF2F6", v:"#5C7FA3", d:"#2D4A69"},
+  matrix:   {p:"#FFF5C2", v:"#FFCC00", d:"#8A6A00"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -4670,7 +4664,7 @@ const LIBRARY_META={
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
   movie:["life","movies films watch-list cinema next movie"],
-  matrix:["plan","priorities eisenhower matrix urgent important post-it sticky notes fridge to-do"],
+  matrix:["plan","priorities eisenhower matrix urgent important post-it sticky notes board pin to-do"],
   weekly:["life","stats statistics weekly history progress review"],
 };
 const normaliseLibrarySearch=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
@@ -4986,7 +4980,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     return v; });
   const [habitLog,setHabitLog]=useState(()=>load("habitLog",{}));
   const [shoppingList,setShoppingList]=useState(()=>load("shoppingList",[]));
-  // Priorities: the notes on the fridge (a note left empty never survives a reload)
+  // Priorities: the post-its on the board (a note left empty never survives a reload)
   const [matrixNotes,setMatrixNotes]=useState(()=>matrixClean(load("matrix",[])).filter(m=>m.text));
   const saveMatrix=next=>{ const clean=matrixClean(next); setMatrixNotes(clean); save("matrix",clean); };
   const [movies,setMovies]=useState(()=>load("movies",[]));
@@ -6754,13 +6748,13 @@ function SustainFlower(){
     <circle className="sustainHeart" cx="60" cy="60" r="14"/>
   </svg>;
 }
-/* ---- Priorities: an Eisenhower matrix on a fridge door. Post-its held by a magnet sit
-   anywhere on two axes (up = more important, right = more urgent). Drag a note to move it,
-   tap it to write, press and hold to take it off the fridge; the pad in the corner gives a
-   new one (tap it, or tear one off by dragging). Positions are fractions of the free travel
-   (0..1 across, 0..1 down), so the tile and the pop-up show the same arrangement. ---- */
+/* ---- Priorities: an Eisenhower matrix as a board of pinned post-its. Notes sit anywhere on
+   two axes (up = more important, right = more urgent). Drag a note to move it, tap it to write,
+   pull its pin to take it off the board; the pad in the corner gives a new one (tap it, or tear
+   one off by dragging). Positions are fractions of the free travel (0..1 across, 0..1 down), so
+   the tile and the pop-up show the same arrangement. ---- */
 /* MATRIX_CORE_START */
-const MATRIX_MAX=60, MATRIX_COLORS=5, MATRIX_HOLD_MS=520;
+const MATRIX_MAX=60, MATRIX_COLORS=5;
 const matrixClamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,Number(v)||0));
 const matrixQuadrant=(x,y)=>y<.5?(x>=.5?"Important and urgent":"Important, not urgent"):(x>=.5?"Urgent, not important":"Neither urgent nor important");
 const matrixNextColor=notes=>{ const used=(notes||[]).map(m=>m.c); for(let k=0;k<MATRIX_COLORS;k++){ const c=((used.length?used[used.length-1]+1:0)+k)%MATRIX_COLORS; if(!used.slice(-2).includes(c)) return c; } return 0; };
@@ -6776,74 +6770,74 @@ const matrixClean=list=>(Array.isArray(list)?list:[]).filter(m=>m&&typeof m.id==
 /* MATRIX_CORE_END */
 function MatrixCard({notes,onChange}){
   const {expanded}=useTilePresentation();
-  const boardRef=useRef(null), sizeRef=useRef(null), dragRef=useRef(null), latest=useRef(notes||[]);
+  const boardRef=useRef(null), sizeRef=useRef(null), pendingRef=useRef(null), dragRef=useRef(null), latest=useRef(notes||[]);
   latest.current=notes||[];
-  const [drag,setDrag]=useState(null), [pressing,setPressing]=useState(null), [falling,setFalling]=useState(null), [editing,setEditing]=useState(null);
-  useEffect(()=>()=>{ if(dragRef.current) clearTimeout(dragRef.current.timer); },[]);
+  const [pending,setPending]=useState(null), [falling,setFalling]=useState(null), [editing,setEditing]=useState(null);
   const list=notes||[];
-  // pointer position → fraction of the free travel, keeping where the note was grabbed
-  const toFrac=(cx,cy,offX,offY)=>{ const b=boardRef.current.getBoundingClientRect(), nw=sizeRef.current.offsetWidth;
-    return {x:matrixClamp((cx-offX-b.left)/Math.max(1,b.width-nw),0,1),y:matrixClamp((cy-offY-b.top)/Math.max(1,b.height-nw),0,1)}; };
-  // pressing elsewhere on the fridge keeps focus where it was, so save a note being written first
-  const finishWriting=()=>{ const a=document.activeElement; if(a&&a.classList&&a.classList.contains("fridgeInput")) a.blur(); };
+  /* marker text fits its note: it steps down from the note's own size until every word shows */
+  const fitText=()=>{ const board=boardRef.current; if(!board||!board.isConnected||!sizeRef.current) return; const base=Math.max(10,sizeRef.current.offsetWidth*.15);
+    board.querySelectorAll(".pbText").forEach(t=>{ let s=base; t.style.fontSize=s.toFixed(1)+"px"; while(t.scrollHeight>t.clientHeight+1&&s>7){ s*=.9; t.style.fontSize=s.toFixed(1)+"px"; } }); };
+  useLayoutEffect(()=>{ fitText(); });
+  useEffect(()=>{ const b=boardRef.current; if(!b||typeof ResizeObserver==="undefined") return; const ro=new ResizeObserver(()=>fitText()); ro.observe(b); return()=>ro.disconnect(); },[]);
+  // pressing elsewhere on the board keeps focus where it was, so a note being written is saved first
+  const finishWriting=()=>{ const a=document.activeElement; if(a&&a.classList&&a.classList.contains("pbInput")) a.blur(); };
+  const geom=()=>({b:boardRef.current.getBoundingClientRect(),nw:sizeRef.current.offsetWidth});
+  // pointer → fraction of the free travel, keeping the spot where the note was grabbed
+  const frac=(cx,cy,d)=>({x:matrixClamp((cx-d.offX-d.b.left)/Math.max(1,d.b.width-d.nw),0,1),y:matrixClamp((cy-d.offY-d.b.top)/Math.max(1,d.b.height-d.nw),0,1)});
   const addAtCentre=()=>{ const id=matrixNewId(); onChange(matrixAdd(latest.current,{id,x:.5+(Math.random()-.5)*.1,y:.5+(Math.random()-.5)*.1})); setEditing(id); };
   const down=(e,n)=>{
     if(editing===n.id||(e.button!=null&&e.button!==0)) return;
-    finishWriting(); e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
-    const b=boardRef.current.getBoundingClientRect(), nw=sizeRef.current.offsetWidth;
-    const d={id:n.id,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,offX:e.clientX-(b.left+n.x*(b.width-nw)),offY:e.clientY-(b.top+n.y*(b.height-nw)),moved:false,timer:0};
-    // held still long enough: the note comes off the fridge
-    d.timer=setTimeout(()=>{ if(dragRef.current!==d||d.moved) return; dragRef.current=null; setPressing(null); setFalling(n.id);
-      setTimeout(()=>{ setFalling(null); onChange(matrixRemove(latest.current,n.id)); },280); },MATRIX_HOLD_MS);
-    dragRef.current=d; setPressing(n.id);
+    finishWriting(); e.preventDefault(); const el=e.currentTarget; el.setPointerCapture(e.pointerId);
+    const {b,nw}=geom();
+    dragRef.current={id:n.id,el,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,b,nw,ox:n.x,oy:n.y,x:n.x,y:n.y,offX:e.clientX-(b.left+n.x*(b.width-nw)),offY:e.clientY-(b.top+n.y*(b.height-nw)),moved:false,raf:0};
   };
   const padDown=e=>{
     if(e.button!=null&&e.button!==0) return;
     finishWriting(); e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
-    const nw=sizeRef.current.offsetWidth;
-    dragRef.current={id:matrixNewId(),isNew:true,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,offX:nw/2,offY:nw*.2,moved:false,timer:0};
+    const {b,nw}=geom();
+    dragRef.current={id:matrixNewId(),isNew:true,el:null,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,b,nw,offX:nw/2,offY:nw*.25,moved:false,raf:0};
   };
+  // the note follows the finger frame by frame, straight on the element: nothing re-renders while it moves
   const move=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
-    if(!d.moved&&Math.hypot(e.clientX-d.sx,e.clientY-d.sy)<6) return;
-    if(!d.moved){ d.moved=true; clearTimeout(d.timer); setPressing(null); }
-    setDrag({id:d.id,isNew:!!d.isNew,...toFrac(e.clientX,e.clientY,d.offX,d.offY)}); };
+    if(!d.moved){ if(Math.hypot(e.clientX-d.sx,e.clientY-d.sy)<4) return; d.moved=true; if(d.el) d.el.classList.add("dragging"); }
+    Object.assign(d,frac(e.clientX,e.clientY,d));
+    if(d.isNew&&!d.el){ if(pendingRef.current) d.el=pendingRef.current; else { setPending({x:d.x,y:d.y}); return; } }
+    if(!d.raf) d.raf=requestAnimationFrame(()=>{ d.raf=0; if(d.el){ d.el.style.setProperty("--x",d.x); d.el.style.setProperty("--y",d.y); } }); };
   const up=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
-    dragRef.current=null; clearTimeout(d.timer); setPressing(null);
-    if(d.moved){ const p=toFrac(e.clientX,e.clientY,d.offX,d.offY); setDrag(null);
-      if(d.isNew){ onChange(matrixAdd(latest.current,{...p,id:d.id})); setEditing(d.id); }
-      else onChange(matrixMove(latest.current,d.id,p.x,p.y));
-      return; }
+    dragRef.current=null; if(d.raf) cancelAnimationFrame(d.raf);
+    if(d.moved){ Object.assign(d,frac(e.clientX,e.clientY,d));
+      if(d.isNew){ setPending(null); onChange(matrixAdd(latest.current,{x:d.x,y:d.y,id:d.id})); setEditing(d.id); return; }
+      d.el.style.setProperty("--x",d.x); d.el.style.setProperty("--y",d.y); d.el.classList.remove("dragging");
+      onChange(matrixMove(latest.current,d.id,d.x,d.y)); return; }
     if(d.isNew) addAtCentre(); else setEditing(d.id);
   };
-  const cancel=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return; dragRef.current=null; clearTimeout(d.timer); setPressing(null); setDrag(null); };
-  const keys=(e,n)=>{ if(editing===n.id) return; const k=e.key, step=e.shiftKey?.12:.04;
+  const cancel=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return; dragRef.current=null; if(d.raf) cancelAnimationFrame(d.raf);
+    if(d.isNew) setPending(null); else if(d.el){ d.el.classList.remove("dragging"); d.el.style.setProperty("--x",d.ox); d.el.style.setProperty("--y",d.oy); } };
+  // pulling the pin: it comes out, then the note falls off the board
+  const unpin=n=>{ finishWriting(); setFalling(n.id); setTimeout(()=>{ setFalling(null); onChange(matrixRemove(latest.current,n.id)); },440); };
+  const keys=(e,n)=>{ if(editing===n.id||e.target!==e.currentTarget) return; const k=e.key, step=e.shiftKey?.12:.04;
     if(k==="Enter"||k===" "){ e.preventDefault(); setEditing(n.id); }
     else if(k==="Delete"||k==="Backspace"){ e.preventDefault(); onChange(matrixRemove(latest.current,n.id)); }
     else if(k.startsWith("Arrow")){ e.preventDefault(); const dx=k==="ArrowLeft"?-step:k==="ArrowRight"?step:0, dy=k==="ArrowUp"?-step:k==="ArrowDown"?step:0; onChange(matrixMove(latest.current,n.id,n.x+dx,n.y+dy,false)); } };
   const commit=(id,text)=>{ setEditing(null); onChange(matrixText(latest.current,id,text)); };
-  const note=(n,live)=>{ const x=live?drag.x:n.x, y=live?drag.y:n.y, long=n.text.length>30;
-    return <div key={n.id} className={"fridgeNote c"+n.c+(live?" dragging":"")+(pressing===n.id?" pressing":"")+(falling===n.id?" falling":"")+(editing===n.id?" editing":"")+(long?" long":"")}
-      style={{"--x":x,"--y":y,"--r":n.r+"deg"}} role="button" tabIndex={0}
-      aria-label={`${n.text||"Empty note"}. ${matrixQuadrant(x,y)}. Drag to move, tap to write, hold to remove.`}
-      onPointerDown={e=>down(e,n)} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel} onKeyDown={e=>keys(e,n)} onClick={e=>e.stopPropagation()}>
-      <span className="fridgeMagnet" aria-hidden="true"/>
+  return <div className={"pinBoard"+(expanded?" big":"")} ref={boardRef} role="group" aria-label="Priorities: post-its on an urgent and important matrix">
+    <span className="pbSize" ref={sizeRef} aria-hidden="true"/>
+    <span className="pbAxis v" aria-hidden="true"/><span className="pbAxis h" aria-hidden="true"/>
+    <span className="pbLbl imp" aria-hidden="true">Important</span><span className="pbLbl urg" aria-hidden="true">Urgent</span>
+    {list.map(n=><div key={n.id} className={"pbNote"+(falling===n.id?" falling":"")+(editing===n.id?" editing":"")} style={{"--x":n.x,"--y":n.y,"--r":n.r+"deg"}}
+        tabIndex={0} aria-roledescription="post-it" aria-label={`${n.text||"Empty note"}. ${matrixQuadrant(n.x,n.y)}. Drag to move, tap to write, pull the pin to remove.`}
+        onPointerDown={e=>down(e,n)} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel} onKeyDown={e=>keys(e,n)} onClick={e=>e.stopPropagation()}>
+      <button type="button" className="pbPin" aria-label={`Unpin “${n.text||"note"}”`} onPointerDown={e=>e.stopPropagation()} onClick={e=>{ e.stopPropagation(); unpin(n); }}><span className="pbPinHead"/></button>
       {editing===n.id
-        ?<textarea className="fridgeInput" autoFocus rows={3} maxLength={MATRIX_MAX} defaultValue={n.text} aria-label="Write on the note"
+        ?<textarea className="pbInput" autoFocus rows={3} maxLength={MATRIX_MAX} defaultValue={n.text} aria-label="Write on the post-it"
             onPointerDown={e=>e.stopPropagation()} onClick={e=>e.stopPropagation()}
             onFocus={e=>{ const t=e.currentTarget; t.setSelectionRange(t.value.length,t.value.length); }}
             onKeyDown={e=>{ e.stopPropagation(); if((e.key==="Enter"&&!e.shiftKey)||e.key==="Escape"){ e.preventDefault(); e.currentTarget.blur(); } }}
             onBlur={e=>commit(n.id,e.currentTarget.value)}/>
-        :<span className="fridgeText">{n.text}</span>}
-    </div>; };
-  const pending=drag&&drag.isNew&&!list.some(m=>m.id===drag.id);
-  return <div className={"fridge"+(expanded?" big":"")} ref={boardRef} role="group" aria-label="Priorities: notes on an urgent and important matrix">
-    <span className="fridgeSize" ref={sizeRef} aria-hidden="true"/>
-    <span className="fridgeHandle" aria-hidden="true"/>
-    <span className="fridgeAxis v" aria-hidden="true"/><span className="fridgeAxis h" aria-hidden="true"/>
-    <span className="fridgeLbl imp" aria-hidden="true">Important</span><span className="fridgeLbl urg" aria-hidden="true">Urgent</span>
-    {list.map(n=>note(n,!!(drag&&drag.id===n.id)))}
-    {pending&&<div className={"fridgeNote dragging c"+matrixNextColor(list)} style={{"--x":drag.x,"--y":drag.y,"--r":"-2deg"}} aria-hidden="true"><span className="fridgeMagnet"/></div>}
-    <button type="button" className="fridgePad" aria-label="Add a note"
+        :<span className="pbText">{n.text}</span>}
+    </div>)}
+    {pending&&<div ref={pendingRef} className="pbNote dragging" style={{"--x":pending.x,"--y":pending.y,"--r":"-2deg"}} aria-hidden="true"><span className="pbPin"><span className="pbPinHead"/></span></div>}
+    <button type="button" className="pbPad" aria-label="Add a post-it"
       onPointerDown={padDown} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel}
       onClick={e=>{ e.stopPropagation(); if(e.detail===0) addAtCentre(); }}>
       <span/><span/><span>+</span>
@@ -7786,7 +7780,8 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
     return()=>row.removeEventListener("wheel",onWheel);
   },[expanded]);
   const grow=el=>{
-    if(!el)return; el.style.height="auto";
+    // before the tile is on the page there is nothing to measure: leave the bar its natural height
+    if(!el||!el.isConnected||!el.getClientRects().length)return; el.style.height="auto";
     const cs=getComputedStyle(el), lh=parseFloat(cs.lineHeight)||20;
     const multi=el.scrollHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0)>lh*1.5;
     let cap=Math.round(window.innerHeight*.4);
