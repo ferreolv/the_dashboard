@@ -2371,6 +2371,15 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed .ticketStub{background:rgba(255,255,255,.16);border-right-color:rgba(255,255,255,.6)}
 .tile.completed .ticketStub strong{color:#fff}
 .tile.completed .ticketStub span{color:rgba(255,255,255,.75)}
+/* In the tall Events tile (one square wide, two high) a ticket stands upright: the day count on
+   a stub across the top, the perforation under it, the plan below. */
+.grid>.tile[data-tileid="events"] .eventHero.eventTicket{flex-direction:column;
+  -webkit-mask:radial-gradient(circle 7px at 0 54px,transparent 96%,#000 100%),radial-gradient(circle 7px at 100% 54px,transparent 96%,#000 100%);
+  -webkit-mask-composite:source-in;mask:radial-gradient(circle 7px at 0 54px,transparent 96%,#000 100%),radial-gradient(circle 7px at 100% 54px,transparent 96%,#000 100%);mask-composite:intersect}
+.grid>.tile[data-tileid="events"] .ticketStub{width:auto;height:54px;box-sizing:border-box;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:6px;padding:10px 30px 8px 12px;border-right:0;border-bottom:2px dashed color-mix(in srgb,var(--accent) 45%,#fff)}
+.grid>.tile[data-tileid="events"] .ticketStub strong{font-size:30px}
+.grid>.tile[data-tileid="events"] .ticketBody{padding:9px 12px 11px}
+.grid>.tile.completed[data-tileid="events"] .ticketStub{border-bottom-color:rgba(255,255,255,.6)}
 
 /* --- Note as ruled paper: faint lines, a red margin, writing straight on it. --- */
 .tile[data-tileid="note"] .notearea{
@@ -2956,7 +2965,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="music"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile[data-tileid="music"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0;padding-bottom:0!important}
 .grid>.tile[data-tileid="music"] .musicCard{flex:1 1 auto;height:100%;grid-template-rows:minmax(0,1fr)}
-.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(150px,54cqi,218px);max-width:none!important;margin:0 4px 0 calc(-12cqi - var(--dashboard-pad,18px));align-self:center}
+.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(172px,60cqi,246px);max-width:none!important;margin:0 4px 0 calc(-12cqi - var(--dashboard-pad,18px));align-self:center}
 /* --- Library: the +/x corner sits outside the tile, so the tile can't clip; its body is a
    full-bleed clipping layer instead (rounded like the tile), so film strips, records, cogs
    and any long content stop at the tile's edge there too --- */
@@ -2997,15 +3006,30 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tileFocusSurface[data-tileid="shopping"] button.shopPick:hover{background:#fff!important}
 .tileFocusSurface[data-tileid="shopping"] button.shopPick.on{background:var(--accent)!important;box-shadow:none!important;color:#fff!important}
 .tileFocusSurface[data-tileid="shopping"] button.shopPick.custom{background:transparent!important;box-shadow:inset 0 0 0 1.5px var(--accent)!important;color:var(--accentDark)!important}
-/* --- Knowledge: a magazine page; the whole lesson shows, the type steps down to fit --- */
-.grid>.tile[data-tileid="worth"] .lessonField{display:block;margin:0 0 6px;padding:0!important;background:none!important;font:850 10px/1.2 'Nunito',sans-serif!important;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)!important}
-.grid>.tile[data-tileid="worth"] .lessonTitle{font-family:Georgia,'Iowan Old Style','Times New Roman',serif!important;font-size:20px!important;font-weight:700!important;line-height:1.16!important;letter-spacing:-.01em;max-height:2.4em!important}
-.grid>.tile[data-tileid="worth"] .story{margin-top:10px!important}
-.grid>.tile[data-tileid="worth"] .story p{font-size:inherit!important;line-height:1.5;margin:0 0 .5em}
-.grid>.tile[data-tileid="worth"] .story p:first-child::first-letter{float:left;font-family:Georgia,'Iowan Old Style',serif;font-weight:700;font-size:3.1em;line-height:.82;margin:.07em .09em 0 0;color:var(--accent)}
-.grid>.tile[data-tileid="worth"] .insight{margin-top:8px!important;padding:1px 0 1px 12px!important;border:0!important;border-left:3px solid var(--accent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-style:italic;font-weight:650;line-height:1.45;color:var(--ink)}
-.tile.completed[data-tileid="worth"] .lessonField,.tile.completed[data-tileid="worth"] .story p:first-child::first-letter{color:#fff!important}
-.tile.completed[data-tileid="worth"] .insight{border-left-color:rgba(255,255,255,.75)!important}
+/* --- Knowledge: a magazine page, the same in the tile and the pop-up: the field as a kicker, a
+   serif headline, a big drop cap, and the takeaway as a pull quote between two hairlines with an
+   oversized quotation mark. In the tile the type steps down to fit; the pop-up sets the story in
+   two columns when there is room. --- */
+.tile[data-tileid="worth"] .lessonField{display:flex;align-items:center;gap:8px;margin:0 0 6px;padding:0!important;background:none!important;font:850 10px/1.2 'Nunito',sans-serif!important;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)!important}
+.tile[data-tileid="worth"] .lessonField::after{content:"";flex:0 0 28px;height:1.5px;background:currentColor;opacity:.5}
+.tile[data-tileid="worth"] .lessonTitle{font-family:Georgia,'Iowan Old Style','Times New Roman',serif!important;font-size:20px!important;font-weight:700!important;line-height:1.16!important;letter-spacing:-.01em}
+.grid>.tile[data-tileid="worth"] .lessonTitle{max-height:2.4em!important}
+.tile[data-tileid="worth"] .story{margin-top:10px!important}
+.tile[data-tileid="worth"] .story p{font-size:inherit!important;line-height:1.5;margin:0 0 .5em}
+.tile[data-tileid="worth"] .story p:first-child::first-letter{float:left;font-family:Georgia,'Iowan Old Style',serif;font-weight:700;font-size:3.1em;line-height:.82;margin:.07em .09em 0 0;color:var(--accent)}
+.tile[data-tileid="worth"] .insight{position:relative;margin:10px 0 0!important;padding:8px 2px 6px 30px!important;border:0!important;border-top:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent)!important;border-bottom:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font:italic 600 15px/1.4 Georgia,'Iowan Old Style',serif!important;color:var(--ink)}
+.tile[data-tileid="worth"] .insight::before{content:"\201C";position:absolute;left:0;top:2px;font:700 42px/1 Georgia,serif;color:var(--accent)}
+.tile.completed[data-tileid="worth"] .lessonField,.tile.completed[data-tileid="worth"] .story p:first-child::first-letter,.tile.completed[data-tileid="worth"] .insight::before{color:#fff!important}
+.tile.completed[data-tileid="worth"] .insight{border-color:rgba(255,255,255,.6)!important}
+/* the pop-up: a larger page */
+.tileFocusSurface[data-tileid="worth"] .lessonCard{max-width:760px}
+.tileFocusSurface[data-tileid="worth"] .lessonField{font-size:11px!important;margin-bottom:8px}
+.tileFocusSurface[data-tileid="worth"] .lessonTitle{font-size:clamp(24px,4.2cqi,32px)!important;padding-right:44px}
+.tileFocusSurface[data-tileid="worth"] .story{margin-top:14px!important;font-size:16px}
+.tileFocusSurface[data-tileid="worth"] .story p:first-child::first-letter{font-size:3.4em}
+@container (min-width:640px){.tileFocusSurface[data-tileid="worth"] .story{column-count:2;column-gap:28px}.tileFocusSurface[data-tileid="worth"] .story p{break-inside:avoid-column}}
+.tileFocusSurface[data-tileid="worth"] .insight{margin:16px 0 18px!important;padding:12px 4px 10px 40px!important;font-size:18px!important}
+.tileFocusSurface[data-tileid="worth"] .insight::before{font-size:54px;top:4px}
 /* --- Birthdays: the next one as a wrapped present; a bigger cake on the day --- */
 .bdayGift{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0;width:100%}
 .bdayGiftArt{width:min(112px,62%);height:auto;display:block;filter:drop-shadow(0 8px 12px color-mix(in srgb,var(--accent) 30%,transparent));animation:bdayGiftBob 4.5s ease-in-out infinite;transform-origin:50% 100%}
@@ -3121,13 +3145,13 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
    dark yellow: the tile's own liquid glass is the board, the post-its are its pale paper, the
    axes, pins and marker writing are its ink. Tap an empty spot to add a note there; drag a note
    anywhere (by its pin too); let it go off the board to take it off. ---- */
-.tile[data-tileid="matrix"],.tile.completed[data-tileid="matrix"]{--glass-surface:linear-gradient(140deg,rgba(var(--glass-rgb),.6),rgba(var(--glass-rgb),.46))}
-.tileFocusSurface[data-tileid="matrix"]{background:linear-gradient(160deg,rgba(var(--glass-rgb),.5),rgba(var(--glass-rgb),.36))!important}
+.tile[data-tileid="matrix"],.tile.completed[data-tileid="matrix"]{--glass-surface:linear-gradient(140deg,rgba(var(--glass-rgb),.5),rgba(var(--glass-rgb),.38))}
+.tileFocusSurface[data-tileid="matrix"]{background:linear-gradient(160deg,rgba(var(--glass-rgb),.38),rgba(var(--glass-rgb),.26))!important}
 .grid>.tile[data-tileid="matrix"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="matrix"] .tileMount{flex:1 1 auto!important;display:flex}
 .grid>.tile[data-tileid="matrix"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
 .tile[data-tileid="matrix"] .content{padding:0!important}
-.pinBoard{--nw:clamp(72px,22cqmin,140px);--line:color-mix(in srgb,var(--ink) 40%,transparent);position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pinBoard{--nw:clamp(66px,20cqmin,128px);--line:color-mix(in srgb,var(--ink) 40%,transparent);position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .tileFocusSurface[data-tileid="matrix"] .pinBoard{height:min(72vh,680px)}
 .pbSize{position:absolute;width:var(--nw);height:0;visibility:hidden;pointer-events:none}
 .pbAxis{position:absolute;background:var(--line);border-radius:2px;pointer-events:none}
@@ -3141,7 +3165,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .pbLbl{position:absolute;font:400 clamp(12px,4.2cqmin,20px)/1 'Permanent Marker',cursive;color:color-mix(in srgb,var(--ink) 66%,transparent);pointer-events:none;white-space:nowrap}
 .pbLbl.imp{top:4%;right:calc(50% + 12px)}
 .pbLbl.urg{right:4%;top:calc(50% + 9px)}
-.pbNote{position:absolute;left:calc(var(--x) * (100% - var(--nw)));top:calc(var(--y) * (100% - var(--nw)));width:var(--nw);height:var(--nw);box-sizing:border-box;padding:calc(var(--nw) * .24) calc(var(--nw) * .09) calc(var(--nw) * .08);display:flex;align-items:center;justify-content:center;
+.pbNote{position:absolute;left:calc(var(--x) * (100% - var(--nw)));top:calc(var(--y) * (100% - var(--nw)));width:var(--nw);height:var(--nw);box-sizing:border-box;padding:calc(var(--nw) * .15) calc(var(--nw) * .09) calc(var(--nw) * .08);display:flex;align-items:center;justify-content:center;
   border-radius:2px 2px 7px 3px;transform:rotate(var(--r));transform-origin:50% 10%;background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.22) 55%,rgba(255,255,255,.12)),var(--bg);box-shadow:0 1px 1px rgba(0,0,0,.06),0 10px 14px -10px rgba(0,0,0,.42);
   color:var(--ink);cursor:grab;touch-action:none;outline:none;transition:transform .22s cubic-bezier(.2,1.25,.5,1),box-shadow .22s ease}
 .pbNote::after{content:"";position:absolute;right:0;bottom:0;width:26%;height:26%;border-radius:0 0 7px 0;background:linear-gradient(135deg,transparent 50%,color-mix(in srgb,var(--accent) 30%,transparent) 50%,rgba(255,255,255,.6));pointer-events:none}
@@ -3324,7 +3348,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"])>.tbody{display:flex!important;flex-direction:column;height:100%}
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0;padding:0!important}
-.watchCard{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;cursor:default}
+.watchCard{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;cursor:pointer}
 .watchArt{width:100%;height:100%;overflow:visible}
 .watchStrap{fill:rgba(var(--glass-rgb),.32)}
 .watchCrown{fill:rgba(255,255,255,.8)}
@@ -3335,27 +3359,73 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .watchSecond{stroke:var(--accent);stroke-width:.8;stroke-linecap:round}
 .watchPin{fill:var(--accent)}
 /* ---- Stats (1×1): today's ring in the middle, a flame at 100%; streak, best and perfect days under it. ---- */
-.statsCard{position:relative;width:100%;height:100%;box-sizing:border-box;padding:9cqmin 6cqmin 8cqmin;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
-.statsCore{position:relative;flex:none;width:58cqmin;height:58cqmin;display:grid;place-items:center}
-.statsRing{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.statsTrack{fill:none;stroke:color-mix(in srgb,var(--accent) 20%,transparent);stroke-width:10}
-.statsArc{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dasharray .6s cubic-bezier(.2,.8,.2,1)}
-.statsPct{position:relative;font:900 17cqmin/1 'Nunito',sans-serif;letter-spacing:-.04em;color:var(--ink)}
-.statsPct small{font-size:.46em;font-weight:850;margin-left:.04em}
-.statsFlame{width:86%;height:100%;overflow:visible;transform-origin:50% 92%;animation:statsFlicker 2.8s ease-in-out infinite}
-.statsFlame .sfOuter{fill:var(--accent)}
-.statsFlame .sfMid{fill:color-mix(in srgb,var(--accent) 45%,#FFD27A)}
-.statsFlame .sfCore{fill:#FFF6E6}
-.tile.completed .statsFlame .sfOuter{fill:#fff}
-.tile.completed .statsFlame .sfMid{fill:color-mix(in srgb,var(--accent) 30%,#FFE2B0)}
+.statsCard{position:relative;width:100%;height:100%;box-sizing:border-box;padding:6cqmin 6cqmin 7cqmin;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
+.statsCore{position:relative;flex:none;width:60cqmin;height:68cqmin;display:grid;place-items:center}
+.statsFlame{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.statsFlame .sfShape{fill:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.5))}
+.statsFlame .sfLiquid{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.statsFlame .sfWave{fill:var(--accent);animation:statsWave 3.2s linear infinite}
+.statsFlame .sfCore{fill:color-mix(in srgb,var(--accent) 35%,#FFE3A8)}
+@keyframes statsWave{to{transform:translateX(50px)}}
+.statsCard.lit .statsFlame{transform-origin:50% 92%;animation:statsFlicker 2.6s ease-in-out infinite}
+.tile.completed .statsFlame .sfShape{fill:rgba(255,255,255,.3)}
+.tile.completed .statsFlame .sfWave{fill:#fff}
 .tile.completed .statsFlame .sfCore{fill:var(--accent)}
+.statsPct{position:relative;margin-top:18%;font:900 13cqmin/1 'Nunito',sans-serif;letter-spacing:-.04em;color:var(--ink);text-shadow:0 0 6px rgba(255,255,255,.75),0 0 2px rgba(255,255,255,.9)}
+.statsPct small{font-size:.5em;font-weight:850;margin-left:.04em}
 @keyframes statsFlicker{0%,100%{transform:scale(1,1) skewX(0deg)}30%{transform:scale(.97,1.04) skewX(-1.5deg)}60%{transform:scale(1.02,.97) skewX(1deg)}}
-@media(prefers-reduced-motion:reduce){.statsFlame{animation:none}}
+@media(prefers-reduced-motion:reduce){.statsFlame .sfWave,.statsCard.lit .statsFlame{animation:none}}
 .statsRow{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;text-align:center}
 .statsItem{min-width:0}
 .statsItem b{display:block;font:900 11cqmin/1 'Nunito',sans-serif;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
 .statsItem b i{font-style:normal;font-size:.56em;font-weight:850;opacity:.6}
 .statsItem small{display:block;margin-top:1.5cqmin;font:850 max(8.5px,5.4cqmin)/1 'Nunito',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);opacity:.62}
+/* Today's tiles sit on the cell they were given (see packTiles), never wherever the flow drops them. */
+.grid>.tile[data-tileid][data-placed]{grid-column:var(--place-col)!important;grid-row:var(--place-row)!important}
+.edithint{margin-bottom:14px}
+/* Smaller controls: the arrange grip and the menu dock. */
+.tile[data-tileid] .tileArrangeHandle{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important}
+.tile[data-tileid] .tileArrangeHandle svg{width:15px!important;height:15px!important}
+.wrap .topbar.dock{padding:4px!important;gap:4px!important;border-radius:20px!important}
+.wrap .topbar.dock .navbtn{min-height:36px!important;padding:7px 12px!important;border-radius:16px!important;font-size:12.5px!important}
+.wrap .topbar.dock .actionBtn{width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important;border-radius:16px!important}
+.wrap .topbar.dock .actionBtn svg{width:15px!important;height:15px!important}
+.dockHandle.open{bottom:calc(62px + env(safe-area-inset-bottom))}
+/* Brainflex digits: each number is a light disc with no outline, a size smaller; once the day's
+   puzzle is done every disc turns solid dark. Light or dark, nothing in between. */
+.tile[data-tileid="brainflex"] .digitsChip,.tile[data-tileid="brainflex"] button.digitsChip{border:0!important;background:rgba(255,255,255,.74)!important;box-shadow:0 2px 6px -3px rgba(var(--glass-depth),.35)!important}
+.grid>.tile[data-tileid="brainflex"] .digitsPreview .digitsChip{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;font-size:15px!important}
+.tile[data-tileid="brainflex"] .brainPlay button.digitsChip{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;font-size:17px!important}
+.tile.completed[data-tileid="brainflex"] .digitsChip,.tile.completed[data-tileid="brainflex"] button.digitsChip{background:var(--accentDark)!important;color:#fff!important;box-shadow:none!important}
+/* ---- Deutsch: the speech bubble from the flag (the earlier design): theme, point, and the words
+   as small cards, each German word over its French translation. ---- */
+.deBubbleCard{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.deBubbleCard .langBubble{position:relative;flex:0 0 auto;min-height:0;padding:16px 18px 15px;margin:0 0 36px;border-radius:30px 30px 8px 30px;background:rgba(255,255,255,.68);box-shadow:0 10px 26px -16px rgba(20,10,40,.4)}
+.deBubbleCard .langTail{position:absolute;bottom:-14px;right:4px;width:24px;height:20px;fill:rgba(255,255,255,.68);transform:scaleX(-1)}
+.deBubbleCard .langBubble>.langFlag{position:absolute;bottom:-40px;right:-6px;left:auto;top:auto;width:38px;height:38px;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.18),0 0 0 3px rgba(255,255,255,.9);background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
+.deBubbleCard .langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:4px;padding-right:28px}
+.deBubbleCard .langLede{margin:0 0 12px;padding-left:0;font-weight:600;text-align:left!important;hyphens:manual!important}
+.deBubbleCard .langVocab{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.deBubbleCard .langWord{display:flex;flex-direction:column;gap:1px;min-width:0;padding:8px 11px;border-radius:14px;background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.55))}
+.deBubbleCard .langWord[hidden]{display:none!important}
+.deBubbleCard .deWords{display:flex;flex-direction:column;gap:1px;min-width:0}
+.deBubbleCard .langTerm{font-weight:800;font-size:14px;line-height:1.25;color:var(--accentDark);overflow-wrap:anywhere}
+.deBubbleCard .langGloss{font-size:12.5px;line-height:1.3;color:var(--dim);overflow-wrap:anywhere}
+.deBubbleCard .dePron{font-size:11px;font-style:italic;opacity:.7}
+.tile.completed .deBubbleCard .langBubble{background:rgba(255,255,255,.17);box-shadow:none}
+.tile.completed .deBubbleCard .langTail{fill:rgba(255,255,255,.17)}
+.tile.completed .deBubbleCard .langWord{background:rgba(255,255,255,.14)}
+.tile.completed .deBubbleCard .langTitle,.tile.completed .deBubbleCard .langTerm{color:#fff!important}
+.tile.completed .deBubbleCard .langGloss{color:rgba(255,255,255,.78)!important}
+.tileFocusSurface .deBubbleCard{justify-content:flex-start}
+.tileFocusSurface .deBubbleCard .langBubble{flex:none;margin:0 0 44px}
+/* Completion circles show only what is done: no white track under the arc (calendar and Insights).
+   Today's dark ring and the ice target keep theirs. */
+.miniCalTrack,.tile[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack,.tile.completed[data-tileid="agenda"] .miniCalTrack,.tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack{stroke:transparent}
+.tile[data-tileid="agenda"] .miniCalDay.today .miniCalTrack,.tile.completed[data-tileid="agenda"] .miniCalDay.today .miniCalTrack{stroke:var(--ink)}
+.tile[data-tileid="agenda"] .miniCalDay.target .miniCalTrack{stroke:#38BDF8}
+.insCalTrack{stroke:transparent}
+button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible .insCalTrack{stroke:#7DD3FC}
 </style>
 </head>
 <body>
@@ -3379,7 +3449,7 @@ const COL = {
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
-  matrix:   {p:"#FFF4CF", v:"#D9A10F", d:"#5E3F00"},
+  matrix:   {p:"#FFF6D8", v:"#D8A72E", d:"#5E4306"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -4782,7 +4852,7 @@ const CURATED_TILE_LAYOUT={
   shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
   matrix:{desktop:[4,4],phone:[2,2],family:"large"},
-  events:{desktop:[4,3],phone:[2,2],family:"large"},
+  events:{desktop:[2,4],phone:[1,2],family:"tall"},
   note:{desktop:[2,4],phone:[2,2],family:"tall"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -4793,13 +4863,13 @@ const CURATED_TILE_LAYOUT={
   german:{desktop:[4,4],phone:[2,2],family:"large"},
   movie:{desktop:[2,2],phone:[1,1],family:"small"},
   world:{desktop:[4,4],phone:[2,2],family:"large"},
-  recall:{desktop:[4,3],phone:[2,2],family:"large"},
+  recall:{desktop:[4,4],phone:[2,2],family:"large"},
   pushups:{desktop:[2,2],phone:[1,1],family:"small"},
-  weekly:{desktop:[4,3],phone:[2,2],family:"large"},
+  weekly:{desktop:[4,4],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
-  brainflex:{desktop:[4,3],phone:[2,2],family:"wide"},
-  academic:{desktop:[4,3],phone:[2,2],family:"large"},
+  brainflex:{desktop:[2,4],phone:[1,2],family:"tall"},
+  academic:{desktop:[4,4],phone:[2,2],family:"large"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"},
   clock:{desktop:[2,2],phone:[1,1],family:"small"},
@@ -4957,6 +5027,25 @@ function previewHidesContent(root){
   return false;
 }
 const shoppingDisplayItems=items=>[...items.filter(item=>!item.checked),...items.filter(item=>item.checked)];
+/* TILE_PACK_START */
+/* Where each Today tile sits on a grid of `cols` columns. A tile the user put somewhere (a pin,
+   {x,y,t}) keeps that cell while it is free; pins are settled newest first, then top to bottom,
+   and a pin whose cell is taken moves straight down its own column to the first free place, so a
+   dropped tile pushes the ones it lands on downwards and nothing else moves. Every unpinned tile,
+   in order, then takes the first free spot scanning rows top to bottom, left to right. */
+const packTiles=(items,cols,pins={})=>{
+  const taken=new Set(),out={},W=Math.max(1,cols|0);
+  const fits=(x,y,c,r)=>{ if(x<0||y<0||x+c>W) return false; for(let j=0;j<r;j++) for(let i=0;i<c;i++) if(taken.has((y+j)*W+x+i)) return false; return true; };
+  const take=(id,x,y,c,r)=>{ for(let j=0;j<r;j++) for(let i=0;i<c;i++) taken.add((y+j)*W+x+i); out[id]={x,y}; };
+  const sized=items.map(it=>({id:it.id,c:Math.max(1,Math.min(W,it.c|0)),r:Math.max(1,it.r|0)}));
+  const pinOf=id=>{ const p=pins[id]; return p&&Number.isFinite(p.x)&&Number.isFinite(p.y)?p:null; };
+  sized.filter(it=>pinOf(it.id))
+    .sort((a,b)=>{ const p=pinOf(a.id),q=pinOf(b.id); return (Number(q.t)||0)-(Number(p.t)||0)||p.y-q.y||p.x-q.x; })
+    .forEach(it=>{ const p=pinOf(it.id), x=Math.max(0,Math.min(W-it.c,Math.round(p.x))); for(let y=Math.max(0,Math.round(p.y));y<2000;y++) if(fits(x,y,it.c,it.r)){ take(it.id,x,y,it.c,it.r); return; } });
+  sized.forEach(it=>{ if(out[it.id]) return; for(let y=0;y<2000;y++) for(let x=0;x+it.c<=W;x++) if(fits(x,y,it.c,it.r)){ take(it.id,x,y,it.c,it.r); return; } });
+  return out;
+};
+/* TILE_PACK_END */
 const moveVisibleTile=(order,id,delta,active)=>{
   const visible=order.filter(item=>active.has(item)),at=visible.indexOf(id),neighbor=visible[at+Math.sign(delta)];
   if(at<0||!delta||!neighbor)return order;
@@ -5015,7 +5104,7 @@ function WidgetGlyph({name}){
   const paths={expand:<><path d="M14 4h6v6M20 4l-8 8M10 20H4v-6M4 20l8-8"/></>,play:<path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/>,stop:<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/>,send:<path d="M12 20V4m-6 6 6-6 6 6"/>,folder:<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z"/>,pause:<><path d="M8 5v14M16 5v14" strokeWidth="3"/></>,reset:<><path d="M4 10a8 8 0 1 1 2 8M4 4v6h6"/></>,plus:<path d="M12 5v14M5 12h14"/>,history:<><path d="M4 10a8 8 0 1 1 2 8M4 4v6h6M12 8v5l3 2"/></>,chat:<path d="M20 11a8 8 0 0 1-8 8H4l1.5-4A8 8 0 1 1 20 11Z"/>,saved:<><path d="m8 12 3 3 5-6"/><circle cx="12" cy="12" r="9"/></>,eye:<><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></>};
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{paths[name]||paths.expand}</svg>;
 }
-function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onMoveBy,children}){
+function Tile({id,label,done,size,cols,edit,lifted,place,topright,cornerOutside,status,statusHelp,contentState,onTap,onMoveStart,onMoveBy,children}){
   const t=themeVars(id,done),tileCols=Math.min(size.c,cols);
   const [expanded,setExpanded]=useState(false),[closing,setClosing]=useState(false);
   const [contentHost]=useState(()=>{const node=document.createElement("div");node.className="content";return node;});
@@ -5034,7 +5123,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   useEffect(()=>()=>clearTimeout(closeTimer.current),[]);
   /* cornerOutside = Library: tiles there never show a name, even while loading,
      so every card keeps the exact same silhouette. */
-  const showLabel=edit||(!cornerOutside&&contentState&&contentState!=="ready");
+  const showLabel=!edit&&!cornerOutside&&!!contentState&&contentState!=="ready";
   /* ⤢ only appears when it earns its place: Recall's focused session always, otherwise
      only while this tile's preview — at the current size and zoom — is actually hiding
      something (expanded-only blocks, clamped text, collapsed rows). Birthdays opens
@@ -5065,9 +5154,9 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
   },[expanded,size.r,size.c,cols,showLabel]);
 
   const renderedRows=size.r;
-  const span={"--tile-span-rows":renderedRows,"--tile-base-rows":size.r,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
+  const span={"--tile-span-rows":renderedRows,"--tile-base-rows":size.r,gridColumn:"span "+tileCols,gridRow:"span "+renderedRows,...(place?{"--place-col":`${place.x+1} / span ${tileCols}`,"--place-row":`${place.y+1} / span ${renderedRows}`}:null),...(expanded&&previewHeight?{minHeight:previewHeight}:null)};
   return <TilePresentationContext.Provider value={{expanded,open}}>
-    <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expandable={canExpand||undefined} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
+    <section ref={tileRef} aria-label={label} data-tileid={id} data-family={size.family} data-expandable={canExpand||undefined} data-expanded={expanded||undefined} data-content-state={contentState} data-cols={tileCols} data-rows={size.r} data-placed={place?"":undefined} data-span-rows={renderedRows} className={"tile curatedTile enter"+(done?" completed":"")+(edit?" editing":"")+(lifted?" lift":"")+(cornerOutside?" cornerOutside":"")} style={{...t,...span}}>
       {topright&&!edit&&(cornerOutside?topright:<div className="topright">{topright}</div>)}
       <div className="tbody" onClick={!edit&&!expanded&&onTap?event=>{if(event.target.closest("button,a,input,textarea,select,label,[role=button]"))return;onTap(event);}:undefined}>
         <div className={"tilehead"+(showLabel?"":" quietTileLabel")}><span className="lbl">{label}</span></div>
@@ -5077,7 +5166,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
       <div className={"tileFoot"+(!canExpand&&!edit?" tileFootMinimal":"")}>
         <span/>
         {!edit&&canExpand&&<button type="button" className="tileExpand" ref={openButtonRef} title={"Open "+label} aria-label={"Open "+label} aria-haspopup="dialog" onClick={event=>{event.stopPropagation();open();}}><WidgetGlyph name="expand"/></button>}
-        {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Use arrow keys to reorder."} title="Drag to move · arrow keys to reorder" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const delta=event.key==="ArrowUp"||event.key==="ArrowLeft"?-1:event.key==="ArrowDown"||event.key==="ArrowRight"?1:0;if(delta){event.preventDefault();onMoveBy?.(delta);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
+        {edit&&<button type="button" className="tileArrangeHandle" aria-label={"Move "+label+". Drag it anywhere, or use the arrow keys."} title="Drag anywhere · arrow keys move it one step" onPointerDown={event=>onMoveStart(event,id)} onKeyDown={event=>{const dx=event.key==="ArrowLeft"?-1:event.key==="ArrowRight"?1:0,dy=event.key==="ArrowUp"?-1:event.key==="ArrowDown"?1:0;if(dx||dy){event.preventDefault();onMoveBy?.(dx,dy);}}}><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7" cy="5" r="1.3"/><circle cx="13" cy="5" r="1.3"/><circle cx="7" cy="10" r="1.3"/><circle cx="13" cy="10" r="1.3"/><circle cx="7" cy="15" r="1.3"/><circle cx="13" cy="15" r="1.3"/></svg></button>}
       </div>
       {expanded&&<DashboardModal label={label} onClose={close} overlayClassName={"tileFocusOverlay"+(closing?" isClosing":"")} className={"tileFocus"+(done?" completed":"")}>
         <div className={"tile tileFocusSurface"+(done?" completed":"")} data-tileid={id} style={t}><button type="button" className="tileFocusClose" aria-label={"Close "+label} onClick={close}>×</button><div ref={focusRef} className="tileFocusBody"/></div>
@@ -5948,6 +6037,13 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   };
 
   /* ---- drag engine (move + resize), pointer-based, touch+mouse ---- */
+  /* Today's tiles sit where they are put: pins are kept per column count (a phone and a wide
+     screen each keep their own arrangement); unpinned tiles flow in order into the free spots. */
+  const [tilePins,setTilePins]=useState(()=>{ const v=load("tilePins",{}); return v&&typeof v==="object"&&!Array.isArray(v)?v:{}; });
+  const pinsRef=useRef(tilePins); pinsRef.current=tilePins;
+  const placeTile=(id,x,y)=>setTilePins(prev=>{ const next={...prev,[cols]:{...(prev[cols]||{}),[id]:{x,y,t:Date.now()}}}; pinsRef.current=next; return next; });
+  // a move starts from the arrangement as it is on screen: every tile is held where it stands
+  const freezeTiles=placed=>setTilePins(prev=>{ const held={}; Object.entries(placed||{}).forEach(([tid,pos])=>{ held[tid]={x:pos.x,y:pos.y,t:1}; }); const next={...prev,[cols]:held}; pinsRef.current=next; return next; });
   const gridRef=useRef(null);
   const orderRef=useRef(order); useEffect(()=>{orderRef.current=order;},[order]);
   const sizesRef=useRef(sizes); useEffect(()=>{sizesRef.current=sizes;},[sizes]);
@@ -5980,12 +6076,16 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       }
     });
     prevRects.current=nextRects;
-  },[order,sizes,cols]);
+  },[order,sizes,cols,tilePins]);
 
   const onMoveStart=(e,id)=>{
     e.preventDefault();
     try{ e.currentTarget.setPointerCapture&&e.currentTarget.setPointerCapture(e.pointerId); }catch(x){}
-    drag.current={ type:"move", id, x:e.clientX, y:e.clientY };
+    const g=gridRef.current, node=g&&g.querySelector(`[data-tileid="${id}"]`); if(!g||!node) return;
+    const gr=g.getBoundingClientRect(), nr=node.getBoundingClientRect(), cs=getComputedStyle(g);
+    const colGap=parseFloat(cs.columnGap)||0, rowGap=parseFloat(cs.rowGap)||0, unitH=parseFloat(cs.gridAutoRows)||nr.height/Math.max(1,sz(id).r);
+    drag.current={ type:"move", id, offX:e.clientX-nr.left, offY:e.clientY-nr.top, colW:(gr.width-colGap*(cols-1))/cols, colGap, unitH, rowGap, last:null, moved:false };
+    freezeTiles(packed);
     setLifted(id); document.body.classList.add("dragging");
     window.addEventListener("pointermove",onPointerMove,{passive:false});
     window.addEventListener("pointerup",onPointerUp,{once:true});
@@ -5994,25 +6094,20 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const onResizeStart=e=>{e.preventDefault();e.stopPropagation();};
   const onPointerMove=(e)=>{
     if(!drag.current) return; e.preventDefault();
-    const d=drag.current;
-    if(d.type==="move"){
-      if(rafPending.current) return; rafPending.current=true;
-      const cx=e.clientX, cy=e.clientY;
-      requestAnimationFrame(()=>{
-        rafPending.current=false;
-        const el=document.elementFromPoint(cx,cy);
-        const t=el&&el.closest&&el.closest("[data-tileid]");
-        if(!t) return;
-        const over=t.getAttribute("data-tileid");
-        if(!over || over===d.id) return;
-        const r=t.getBoundingClientRect();
-        const inBand = cx>r.left+r.width*0.08 && cx<r.right-r.width*0.08 && cy>r.top+r.height*0.08 && cy<r.bottom-r.height*0.08;
-        if(!inBand) return;
-        if(over===d.lastOver && Date.now()-(d.lastSwap||0)<120) return;
-        const cur=[...orderRef.current]; const from=cur.indexOf(d.id); const to=cur.indexOf(over);
-        if(from>-1&&to>-1){ cur.splice(from,1); cur.splice(to,0,d.id); orderRef.current=cur; setOrder(cur); d.lastOver=over; d.lastSwap=Date.now(); }
-      });
-    }
+    const cx=e.clientX, cy=e.clientY;
+    // near the top or bottom edge the page scrolls, so a tile can travel the whole dashboard
+    if(cy>window.innerHeight-56) window.scrollBy(0,14); else if(cy<56) window.scrollBy(0,-14);
+    if(rafPending.current) return; rafPending.current=true;
+    requestAnimationFrame(()=>{
+      rafPending.current=false;
+      const d=drag.current, g=gridRef.current; if(!d||!g) return;
+      const gr=g.getBoundingClientRect(), w=Math.min(sz(d.id).c,cols);
+      const x=Math.max(0,Math.min(cols-w,Math.round((cx-d.offX-gr.left)/(d.colW+d.colGap))));
+      const y=Math.max(0,Math.round((cy-d.offY-gr.top)/(d.unitH+d.rowGap)));
+      if(d.last&&d.last.x===x&&d.last.y===y) return;
+      const at=packed[d.id]; if(!d.last&&at&&at.x===x&&at.y===y){ d.last={x,y}; return; }
+      d.last={x,y}; d.moved=true; placeTile(d.id,x,y);
+    });
   };
   const onPointerUp=()=>{
     window.removeEventListener("pointermove",onPointerMove);
@@ -6020,7 +6115,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     if(drag.current){
       const node=gridRef.current&&gridRef.current.querySelector(`[data-tileid="${drag.current.id}"]`);
       if(node){ node.style.transition="transform .22s ease"; node.style.transform=""; }
-      if(drag.current.type==="move") save("widgetOrder",orderRef.current);
+      if(drag.current.moved) save("tilePins",pinsRef.current);
     }
     setLifted(null);
     drag.current=null;
@@ -6226,6 +6321,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   })();
   const planDl=k=>{ if(k===todayKey) return "Today"; const [y,m,d]=String(k).split("-").map(Number); return y&&m&&d ? WEEKDAY_NAMES[new Date(y,m-1,d).getDay()] : ""; };
   const sz=id=>curatedTileSize(id,cols);
+  const packed=page==="dashboard"?packTiles(order.filter(id=>activeNow.has(id)&&CURATED_TILE_LAYOUT[id]).map(id=>{ const z=sz(id); return {id,c:z.c,r:z.r}; }),cols,tilePins[cols]||{}):{};
   const T=(id,label,done,topright,children,onTap)=>{
     const onDaily=activeNow.has(id);
     const libraryCorner=page==="library"?(onDaily
@@ -6234,7 +6330,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const generated=DAILY_CONTENT_KEYS.includes(id), ready=!generated||validDailyTile(id,view[id]);
     const state=generated&&!ready?dailyStateFor(id):null;
     const visualDone=ready&&(!!done||!!manualTileDone[id]);
-    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onMoveBy={delta=>{const next=moveVisibleTile(orderRef.current,id,delta,activeNow);if(next===orderRef.current)return;orderRef.current=next;setOrder(next);save("widgetOrder",next);}}>{state?<DailyLoadState {...state}/>:children}</Tile>;
+    return <Tile key={id} id={id} label={label} done={visualDone} size={sz(id)} cols={cols} edit={page==="dashboard"&&edit} lifted={lifted===id} place={page==="dashboard"?packed[id]:undefined} topright={page==="library"?libraryCorner:topright} cornerOutside={!!libraryCorner} status={page==="library"&&!onDaily?"Not on Today · use +":generated&&ready?"Saved today":null} statusHelp={page==="library"&&!onDaily?"Use the + button to make this tile visible on Today.":undefined} contentState={generated?(ready?"ready":state.state):undefined} onTap={ready?(onTap||(()=>toggleManualTile(id))):undefined} onMoveStart={onMoveStart} onMoveBy={(dx,dy)=>{const at=packed[id];if(!at)return;const w=Math.min(sz(id).c,cols);const x=Math.max(0,Math.min(cols-w,at.x+dx)),y=Math.max(0,at.y+dy);freezeTiles(packed);placeTile(id,x,y);requestAnimationFrame(()=>save("tilePins",pinsRef.current));}}>{state?<DailyLoadState {...state}/>:children}</Tile>;
   };
   const RetryNote=()=>null;
 
@@ -6342,8 +6438,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} onRename={renameMovie} />, ()=>toggleMovieWatched()),
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
-    clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>,()=>{}),
-    stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>,()=>openPage("insights")),
+    clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
+    stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary} onOpen={()=>openPage("insights")}/>,()=>openPage("insights")),
     matrix: T("matrix","Priorities",false,null,
       <MatrixCard notes={matrixNotes} onChange={saveMatrix} />,()=>{}),
     brain: T("brain","Memory",false,null,
@@ -6494,7 +6590,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         </div>
       )}
 
-      {page==="dashboard" && edit && <div className="edithint">Drag the handle to move a tile, or use its arrow keys. Sizes are fitted to the content.</div>}
+      {page==="dashboard" && edit && <div className="edithint">Drag a tile by its handle and drop it where you want it; the others make room.</div>}
 
       {page==="settings"||page==="insights" ? null : page==="library" ? (
         <div className="libraryShelves">
@@ -6708,23 +6804,30 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
 }
 /* German mirrors the Spanish tile one level down (A2–B1): article + word, French gloss,
    and a French-respelled pronunciation under each entry, since German can't be guessed. */
+/* Deutsch, as it was before the conversation: one speech bubble from the flag holding the day's
+   theme, the point (in French) and the words, each German word with its French translation (and
+   how to say it). The pop-up adds every word and the quiz. */
 function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!de)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
   const qs=de.quiz||[];
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
-  const lines=langChatLines((de.dialog||[]).map(l=>l&&{text:l.de,sub:l.fr}),de.punkt,(de.vocab||[]).map(v=>({text:v.de,sub:v.fr,after:v.pron||""})));
-  const told=!lines.dialogue;
   return (
-    <div className="langCard langDe readingCard">
-      <LangChat key={lines.map(l=>l.text).join("|")} lines={lines} country="Germany"/>
-      <div hidden={!expanded} className="cardExpandedDetails langMore">
-        <div className="langTitle">{de.thema}</div>
-        {de.punkt && !told && <div className="langLede" lang="fr">{de.punkt}</div>}
-        {(de.vocab||[]).length>0 && !told && <div className="langVocab">{(de.vocab||[]).map((v,i)=><div key={i} className="langWord deRow"><div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>{v.pron && <span className="dePron">{v.pron}</span>}</div>)}</div>}
-        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
+    <div className="langCard langDe readingCard deBubbleCard">
+      <div className="langBubble">
+        <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
+        {de.punkt && <div className="langLede" lang="fr" data-fit-drop="9">{de.punkt}</div>}
+        {(de.vocab||[]).length>0 && <div className="langVocab">
+          {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow" data-fit-drop={!expanded&&i>0?"2":undefined}>
+            <div className="deWords"><span className="langTerm deTerm" lang="de">{v.de}</span><span className="langGloss deFr" lang="fr">{v.fr}</span></div>
+            {v.pron && <span className="dePron">{v.pron}</span>}
+          </div>))}
+        </div>}
+        <svg className="langTail" viewBox="0 0 24 20" aria-hidden="true"><path d="M1 0c1.5 8.5 7 15.5 22 19.5C13.5 17.5 8.5 12 7.5 0Z"/></svg>
+        <span className="langFlag" role="img" aria-label="Germany"/>
       </div>
+      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
 }
@@ -6882,21 +6985,29 @@ function nextBirthday(list){
 const MONTH_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 /* The next birthday as a wrapped present: the tile's own pink box, a gold ribbon and bow, and a
    paper gift tag on a string from the bow, counting the days. */
-/* Stats: today's completion is the ring in the middle, and on a 100% day the ring becomes a
-   flame. Under it, the current streak, the best one and the perfect days of the last 30.
-   Tapping the tile opens Insights. */
-function StatsCard({pct,current,best,perfect,span}){
-  const p=Math.max(0,Math.min(100,Math.round(Number(pct)||0))), full=p>=100, R=42, C=2*Math.PI*R;
-  return <div className="statsCard" role="img" aria-label={`Today ${p}%${full?", a perfect day":""}. Streak ${current} ${current===1?"day":"days"}, best ${best}, ${perfect} perfect ${perfect===1?"day":"days"} in the last ${span||30}.`}>
-    <div className={"statsCore"+(full?" lit":"")}>
-      {full
-        ?<svg className="statsFlame" viewBox="0 0 100 124" aria-hidden="true">
-          <path className="sfOuter" d="M50 3c15 22 36 39 36 72a36 36 0 0 1-72 0c0-16 7-27 16-36 1 12 9 19 9 19C38 39 43 23 50 3Z"/>
-          <path className="sfMid" d="M50 38c10 14 23 25 23 44a23 23 0 0 1-46 0c0-10 5-17 11-23 1 8 6 12 6 12C44 59 46 49 50 38Z"/>
-          <path className="sfCore" d="M50 72c5 7 11 12 11 21a11 11 0 0 1-22 0c0-5 2-8 5-11 .6 4 3 6 3 6 0-6 1-10 3-16Z"/>
-        </svg>
-        :<><svg className="statsRing" viewBox="0 0 100 100" aria-hidden="true"><circle className="statsTrack" cx="50" cy="50" r={R}/>{p>0&&<circle className="statsArc" cx="50" cy="50" r={R} style={{strokeDasharray:`${(C*p/100).toFixed(2)} ${C.toFixed(2)}`}}/>}</svg>
-          <span className="statsPct">{p}<small>%</small></span></>}
+/* Streak: the flame is the gauge. Its silhouette fills from the bottom like a liquid as today's
+   tiles get done, the percentage riding on it; at 100% the flame is full, the number gives way
+   and it flickers. Under it: the current streak, the best one and the perfect days of the last
+   30. Tapping the tile opens Insights. */
+const STATS_FLAME="M50 4c14 20 34 37 34 68a34 34 0 0 1-68 0c0-15 7-26 15-34 1 11 9 18 9 18C37 37 42 22 50 4Z";
+function StatsCard({pct,current,best,perfect,span,onOpen}){
+  const id=React.useId().replace(/:/g,"");
+  const p=Math.max(0,Math.min(100,Math.round(Number(pct)||0))), full=p>=100;
+  const level=103-(p/100)*99; // the liquid's surface, from the flame's foot (106) to its tip (4)
+  const go=e=>{ e.stopPropagation(); if(onOpen) onOpen(); };
+  return <div className={"statsCard"+(full?" lit":"")} role="link" tabIndex={0} onClick={go} onKeyDown={e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(e); } }} aria-label={`Today ${p}%${full?", a perfect day":""}. Streak ${current} ${current===1?"day":"days"}, best ${best}, ${perfect} perfect ${perfect===1?"day":"days"} in the last ${span||30}. Open Insights.`}>
+    <div className="statsCore">
+      <svg className="statsFlame" viewBox="0 0 100 124" aria-hidden="true">
+        <defs><clipPath id={id+"f"}><path d={STATS_FLAME}/></clipPath></defs>
+        <path className="sfShape" d={STATS_FLAME}/>
+        <g clipPath={`url(#${id}f)`}>
+          <g className="sfLiquid" style={{transform:`translateY(${full?-8:level}px)`}}>
+            <path className="sfWave" d="M-100 6q12.5-6 25 0t25 0t25 0t25 0t25 0t25 0t25 0t25 0V140h-200Z"/>
+          </g>
+          {full&&<path className="sfCore" d="M50 64c7 10 15 17 15 30a15 15 0 0 1-30 0c0-7 3-12 7-16 .8 5 4 8 4 8 0-8 1.5-14 4-22Z"/>}
+        </g>
+      </svg>
+      {!full&&<span className="statsPct">{p}<small>%</small></span>}
     </div>
     <div className="statsRow">
       <span className="statsItem"><b>{current}</b><small>streak</small></span>
@@ -7658,11 +7769,19 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
 const AGENDA_REPEATS=[["once","Once"],["day","Daily"],["week","Weekly"],["month","Monthly"],["year","Yearly"]];
 function AgendaAddForm({date,onAddRecurring,onAddEvent,onClose}){
   const [label,setLabel]=useState(""); const [time,setTime]=useState(""); const [unit,setUnit]=useState("once"); const [n,setN]=useState(1);
+  /* a form left empty goes away: a press anywhere outside it, or Escape, closes it */
+  const formRef=useRef(null), emptyRef=useRef(true); emptyRef.current=!label.trim();
+  useEffect(()=>{
+    const away=e=>{ if(formRef.current&&!formRef.current.contains(e.target)&&emptyRef.current) onClose(); };
+    const esc=e=>{ if(e.key==="Escape"&&emptyRef.current){ e.stopPropagation(); onClose(); } };
+    const t=setTimeout(()=>{ document.addEventListener("pointerdown",away,true); document.addEventListener("keydown",esc,true); },0);
+    return()=>{ clearTimeout(t); document.removeEventListener("pointerdown",away,true); document.removeEventListener("keydown",esc,true); };
+  },[]);
   const submit=()=>{ const t=label.trim(); if(!t||!date) return;
     if(unit==="once") onAddEvent(t,date,time); else onAddRecurring(t,Math.max(1,Math.round(n)),unit,date);
     onClose(); };
   return (
-    <div className="taskAddForm agendaForm">
+    <div className="taskAddForm agendaForm" ref={formRef}>
       <div className="agendaFormRow">
         <input className="addinput agendaField" placeholder={unit==="once"?"Renew passport":"Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} autoFocus />
         {unit==="once"&&<input className="addinput agendaField agendaTime" type="time" aria-label="Time (optional)" value={time} onChange={e=>setTime(e.target.value)} />}
@@ -7723,7 +7842,7 @@ function PositiveEventsCard({events,onAdd,onRemove}){
   return (
     <div className="positiveEvents">
       {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b><span>Add a plan to count down to.</span></div>}
-      {shown.length>0 && <div className="eventList eventComposition">{shown.map((event,i)=><div className={"eventHero eventTicket"+(i%2?" tiltB":" tiltA")} key={event.id}>
+      {shown.length>0 && <div className="eventList eventComposition">{shown.map((event,i)=><div className={"eventHero eventTicket"+(i%2?" tiltB":" tiltA")} key={event.id} data-fit-drop={i>0?"1":undefined}>
         <div className="ticketStub" aria-hidden="true"><strong>{event.days===0?"NOW":event.days}</strong><span>{event.days===0?"it’s here":event.days===1?"day":"days"}</span></div>
         <div className="ticketBody">
           <div className="eventTitle">{event.label}</div>
