@@ -48,21 +48,23 @@ test('a reply without the extra blocks gives empty details, never an error', () 
   assert.equal(d.now.feels, null);
 });
 
-test('the hourly strip starts now, carries the live reading and slots the sunset in', () => {
+test('the strip covers the coming day in two-hour steps, with both the sunset and the next sunrise', () => {
   const data = { temp: 13, code: 3, ...plain(ctx.weatherDetail(full)) };
-  const items = plain(ctx.wxHourly(data, `${day}T14:40`, 12));
+  const items = plain(ctx.wxHourly(data, `${day}T14:40`));
+  const hours = items.filter(i => i.kind === 'hour');
   assert.equal(items[0].label, 'Now');
   assert.equal(items[0].temp, 13, 'the live reading is from this hour');
-  assert.equal(items.filter(i => i.kind === 'hour').length, 12);
-  const sunset = items.find(i => i.kind === 'sunset');
-  assert.ok(sunset, 'sunset at 4:14PM falls inside the next 12 hours');
+  assert.equal(hours.length, 12, 'twelve stops: 24 hours');
+  assert.deepEqual(hours.slice(0, 4).map(h => h.t.slice(11, 13)), ['14', '16', '18', '20'], 'every two hours');
+  const sunset = items.find(i => i.kind === 'sunset'), sunrise = items.find(i => i.kind === 'sunrise');
+  assert.ok(sunset && sunrise, 'both sun events are in a 24-hour strip');
   assert.equal(sunset.label, '4:14PM');
-  const at = items.indexOf(items.find(i => i.kind === 'sunset'));
-  assert.equal(items[at - 1].t, `${day}T16:00`, 'it sits right after the 4PM stop');
-  assert.ok(!items.some(i => i.kind === 'sunrise' && i.t <= `${day}T14:40`), 'a sunrise already passed is left out');
-  assert.equal(items.find(i => i.kind === 'sunrise'), undefined, "tomorrow's sunrise is past the 12 hours shown");
-  const late = plain(ctx.wxHourly(data, `${day}T22:10`, 12));
-  assert.equal(late.find(i => i.kind === 'sunrise').label, '7:14AM', 'late at night the strip reaches the next sunrise');
+  assert.equal(sunrise.label, '7:14AM');
+  assert.equal(items[items.indexOf(sunset) - 1].t, `${day}T16:00`, 'the sunset sits right after the 4PM stop');
+  assert.equal(items[items.indexOf(sunrise) - 1].t, `${next}T06:00`, 'the sunrise sits right after the 6AM stop');
+  assert.ok(!items.some(i => i.kind === 'sunrise' && i.t <= `${day}T14:40`), "today's sunrise, already passed, is left out");
+  const late = plain(ctx.wxHourly(data, `${day}T22:10`));
+  assert.ok(late.find(i => i.kind === 'sunrise') && late.find(i => i.kind === 'sunset'), 'late at night both are still there');
 });
 
 test('an older snapshot uses the forecast for now, not the stale reading', () => {
