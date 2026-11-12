@@ -32,3 +32,8 @@ test('a one-line or empty dialogue falls back to the point and words', () => {
   assert.deepEqual(plain(langChatLines([{ text: 'solo', sub: 's' }], 'p', [])).map(l => l.text), ['p']);
   assert.deepEqual(plain(langChatLines([], '', [{ text: 'w', sub: 'm' }])).map(l => l.side), ['me']);
 });
+
+test('the chat says whether it is a dialogue, so the pop-up repeats nothing it already showed', () => {
+  assert.equal(langChatLines([{ text: 'a', sub: 'x' }, { text: 'b', sub: 'y' }], 'p', []).dialogue, true);
+  assert.equal(langChatLines([], 'p', [{ text: 'w', sub: 'm' }]).dialogue, undefined);
+});

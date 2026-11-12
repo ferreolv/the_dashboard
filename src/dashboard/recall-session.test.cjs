@@ -18,7 +18,7 @@ vm.runInContext([
   'function daysBetween(fromKey,toKey){ const [ay,am,ad]=fromKey.split("-").map(Number); const [by,bm,bd]=toKey.split("-").map(Number); return Math.round((new Date(by,bm-1,bd)-new Date(ay,am-1,ad))/86400000); }',
   `const todayKey=${JSON.stringify(DAY)};`,
   html.slice(start, end),
-  'this.api = {addDays, scheduleRecall, validCloze, clozeSentences, clozeParts, clozeFor, wordCardOf, upgradeWordCard, recallSourceOf, buildRecallSession, recallRowOrder, recallFrontier, recallSessionDone, recallSessionSize, recallOpenRow, recallStateBefore, gradeRecallEntry, recallEntryKey};'
+  'this.api = {recallPickRow, addDays, scheduleRecall, validCloze, clozeSentences, clozeParts, clozeFor, wordCardOf, upgradeWordCard, recallSourceOf, buildRecallSession, recallRowOrder, recallFrontier, recallSessionDone, recallSessionSize, recallOpenRow, recallStateBefore, gradeRecallEntry, recallEntryKey};'
 ].join('\n'), context);
 const api = context.api;
 const plain = value => JSON.parse(JSON.stringify(value));
@@ -120,4 +120,38 @@ test('the day\'s session resumes after a reload and starts fresh the next day', 
   const tomorrow = api.buildRecallSession(survivors, api.addDays(DAY, 1), stored);
   assert.deepEqual(plain(tomorrow.grades), {});
   assert.equal(tomorrow.rows.word.every(e => e.n === 1), true);
+});
+
+test('the next card mixes sources: most overdue first, never the same source twice running', () => {
+  const day = DAY;
+  const items = [
+    { id: 'w1', type: 'word', nextReview: api.addDays(day, -5) }, { id: 'w2', type: 'word', nextReview: api.addDays(day, -4) }, { id: 'w3', type: 'word', nextReview: api.addDays(day, -3) },
+    { id: 's1', type: 'spanish', nextReview: api.addDays(day, -2) }, { id: 's2', type: 'spanish', nextReview: api.addDays(day, -1) },
+    { id: 'l1', type: 'lesson', nextReview: api.addDays(day, -6) }
+  ];
+  const byId = new Map(items.map(x => [x.id, x]));
+  let session = api.buildRecallSession(items, day, null);
+  const keys = api.recallRowOrder(session, ['word', 'worth', 'spanish']);
+  const seen = []; let last = null;
+  for (let step = 0; step < 6; step++) {
+    const key = api.recallPickRow(session, keys, last, byId);
+    const index = api.recallFrontier(session, key), entry = session.rows[key][index];
+    seen.push(entry.id);
+    session = api.gradeRecallEntry(session, key, index, 3, byId.get(entry.id)).session; last = key;
+  }
+  assert.deepEqual(seen, ['l1', 'w1', 's1', 'w2', 's2', 'w3'], 'the most overdue leads, then sources alternate while more than one has cards');
+  assert.equal(api.recallPickRow(session, keys, last, byId), null, 'nothing left');
+});
+
+test('an Again pass waits behind the others\' first passes', () => {
+  const day = DAY;
+  const items = [{ id: 'a', type: 'word', nextReview: api.addDays(day, -3) }, { id: 'b', type: 'spanish', nextReview: api.addDays(day, -1) }, { id: 'c', type: 'german', nextReview: api.addDays(day, -1) }];
+  const byId = new Map(items.map(x => [x.id, x]));
+  let session = api.buildRecallSession(items, day, null);
+  const keys = api.recallRowOrder(session, ['word', 'spanish', 'german']);
+  let key = api.recallPickRow(session, keys, null, byId); assert.equal(key, 'word');
+  session = api.gradeRecallEntry(session, key, 0, 1, byId.get('a')).session;
+  const next = api.recallPickRow(session, keys, key, byId); assert.notEqual(next, 'word');
+  session = api.gradeRecallEntry(session, next, 0, 3, byId.get(next === 'spanish' ? 'b' : 'c')).session;
+  assert.notEqual(api.recallPickRow(session, keys, next, byId), 'word', 'the missed word comes back after the remaining first pass');
 });

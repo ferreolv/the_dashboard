@@ -1019,8 +1019,8 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
     padding:2px 4px;font-size:10.5px;line-height:1;white-space:nowrap!important
   }
   .tile[data-tileid="pushups"][data-rows="1"] .pushBtns .puReset{width:100%!important}
-  /* Birthdays stay glanceable; the full list lives in a separate manager overlay. */
-  .tile button.birthdaysSummary{
+  /* Birthdays stay glanceable; the full list lives in the tile's pop-up. */
+  .tile .birthdaysSummary{
     display:flex;width:100%;height:100%;min-height:72px;align-items:center;justify-content:center;
     padding:0!important;border:0!important;border-radius:0!important;appearance:none;
     background:transparent!important;color:var(--ink)!important;box-shadow:none!important;
@@ -2123,6 +2123,19 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .curatedTile.cornerOutside .tilehead,.curatedTile.editing .tilehead{padding-right:64px}
 .tile[data-tileid] :is(.tileExpand,.tileArrangeHandle){display:inline-flex!important;align-items:center;justify-content:center;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--ink)!important;opacity:.58;transform:none!important;transition:opacity .18s,background .18s}
 .tile[data-tileid] :is(.tileExpand,.tileArrangeHandle):hover{opacity:1;background:rgba(255,255,255,.3)!important;border:0!important;transform:none!important}
+/* ⤢ waits for the pointer: with a mouse or trackpad it shows only while the tile is hovered (or
+   holds keyboard focus); touch screens cannot hover, so there it stays */
+@media (hover:hover) and (pointer:fine){
+  .grid>.tile[data-tileid] .tileExpand{opacity:0!important;pointer-events:none}
+  .grid>.tile[data-tileid]:hover .tileExpand,.grid>.tile[data-tileid]:focus-within .tileExpand{opacity:.58!important;pointer-events:auto}
+  .grid>.tile[data-tileid] .tileExpand:hover,.grid>.tile[data-tileid] .tileExpand:focus-visible{opacity:1!important}
+}
+/* Paragraphs read evenly: lines wrap so no word is left alone on the last line, titles balance,
+   and multi-line reading paragraphs (Knowledge, World, Study, explanations) are justified with
+   hyphenation. */
+.tile{text-wrap-style:pretty}
+.tile :is(h1,h2,h3,h4,.newsHeadline,.lessonTitle,.langTitle,.movieNowTitle,.philoQ,.wxFullLabel,.langLine,.recallQ,.dictWord){text-wrap-style:balance}
+.tile :is(.cardReadingCopy p,.newsBody,.langLede,.qexplain){text-align:justify;hyphens:auto;-webkit-hyphens:auto}
 .tile[data-tileid] .tileExpand svg{width:18px;height:18px}.tile[data-tileid] .tileSaveState{display:flex;align-items:center;opacity:.42}.tileSaveState svg{width:15px;height:15px}
 .tile[data-tileid] :is(button,a).widgetIconButton{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 44px!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:44px!important;margin:0;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.22)!important;box-shadow:none!important;color:var(--ink)!important;cursor:pointer;text-decoration:none!important;transform:none!important;transition:background .18s,opacity .18s,scale .18s}
 .tile[data-tileid] :is(button,a).widgetIconButton svg{width:21px;height:21px;flex:none}
@@ -2148,6 +2161,11 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid="agenda"] .taskAgenda{display:grid!important;grid-template-columns:minmax(0,1fr);gap:10px!important;align-items:start}
 .tile[data-tileid="agenda"] .miniCalendar{display:block!important;border:0!important;border-radius:0!important;overflow:visible!important}
 .tile[data-tileid="agenda"] .miniCalHead{padding:0 0 8px!important;gap:4px;font-weight:800;font-size:15px!important}
+/* a wall calendar: a spiral binding along the top and the month in big capitals */
+.miniCalSpiral{height:20px;margin:-6px 4px 4px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cellipse cx='11' cy='16.5' rx='2.8' ry='2.4' fill='rgba(0,0,0,.26)'/%3E%3Cpath d='M9.2 16.6C8 10 8.6 3.6 11 2.6c2.4 1 3 7.4 1.8 14' fill='none' stroke='%23727c88' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M9.9 15.8C9.1 10 9.6 4.6 11 3.7' fill='none' stroke='%23e9edf2' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") center top/22px 20px repeat-x;pointer-events:none}
+.tile .miniCalTitle{display:flex;align-items:baseline;justify-content:center;gap:6px;min-width:0;white-space:nowrap}
+.tile .miniCalTitle b{font-size:clamp(17px,6.2cqi,24px);font-weight:950;letter-spacing:.1em;line-height:1;color:var(--ink)}
+.tile .miniCalTitle small{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--dim)}
 .tile[data-tileid="agenda"] .miniCalNavGroup{grid-template-columns:32px minmax(0,1fr) 32px!important;gap:0!important}
 .tile[data-tileid="agenda"] .miniCalTitle{font-size:14px!important;text-align:center;letter-spacing:-.02em;white-space:nowrap}
 .tile[data-tileid="agenda"] button.miniCalNav{display:grid;place-items:center;width:32px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important}
@@ -2306,14 +2324,27 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .movieSprockets{display:block;height:7px;flex:none;background-image:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.75) 6px 14px,transparent 14px 20px);border-radius:2px}
 .movieFrame{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;min-height:0;padding:3px 6px}
 .movieNowTitle,.tile .movieNowTitle{font-weight:900;font-size:clamp(15px,7cqi,19px);line-height:1.15;color:#fff!important;letter-spacing:.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile button.movieNowTitle{min-height:0!important;max-width:100%;padding:2px 6px!important;border:0!important;border-radius:8px!important;background:transparent!important;box-shadow:none!important;font-family:inherit;text-align:center;cursor:text;transform:none!important}
+.tile button.movieNowTitle:hover{background:rgba(255,255,255,.12)!important}
+.tile input.movieTitleInput{width:100%;min-height:0!important;padding:3px 8px!important;border:0!important;border-radius:8px!important;background:rgba(255,255,255,.16)!important;box-shadow:none!important;font:900 clamp(15px,7cqi,19px)/1.15 'Nunito',sans-serif!important;color:#fff!important;-webkit-text-fill-color:#fff;text-align:center;outline:none!important}
 .movieUpNext,.tile .movieUpNext{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.58)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tile .movieStrip .movieAddInput{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.25)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-align:center}
 .tile .movieStrip .movieAddInput::placeholder{color:rgba(255,255,255,.6)!important;-webkit-text-fill-color:rgba(255,255,255,.6)!important}
 .movieQueueN{font:800 11px/1 'Nunito',sans-serif;color:var(--accent,#D62839);width:16px;flex:none;text-align:right}
-.movieList{display:flex;flex-direction:column;gap:2px}
-.movieManager .movieAddInput{margin-bottom:8px}
+.movieManager{display:flex;flex-direction:column;gap:10px}
+.movieQueue{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.movieRow{display:flex;align-items:center;gap:10px;padding:7px 8px 7px 10px;border-radius:14px;background:rgba(255,255,255,.5)}
+.movieRow .movieQueueN{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;flex:none;background:color-mix(in srgb,var(--accent) 16%,#fff);color:var(--accent);font:900 12px/1 'Nunito',sans-serif;text-align:center}
+.movieRow.next .movieQueueN{background:var(--accent);color:#fff}
+.movieRowTitle{flex:1;min-width:0;font-size:14.5px;font-weight:800;color:var(--ink);overflow-wrap:anywhere}
+.movieQueue.seen .movieRow{background:rgba(255,255,255,.28)}
+.movieQueue.seen .movieRowTitle{font-weight:650;color:var(--dim)}
+.movieRowWhen{font-size:12px;font-weight:750;color:var(--dim);white-space:nowrap}
+.movieSeenHead{margin-top:4px;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.tile button.movieRowBtn{flex:none;width:28px!important;height:28px!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:16px;line-height:1;opacity:.6;transform:none!important}
+.tile button.movieRowBtn:hover{opacity:1;background:rgba(255,255,255,.6)!important}
 .tile.completed .movieStrip{background:rgba(20,8,10,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
-.tileFocusSurface .movieStrip{margin:0 -28px 12px;border-radius:0}
+.tileFocusSurface .movieStrip{margin:40px -28px 12px;border-radius:0}
 
 /* ================= tile identity pass, round 2 ================= */
 .tile[data-tileid="movie"] .content{display:flex;flex-direction:column}
@@ -2828,7 +2859,11 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:2;max-height:3.6em}
 .tileFocusSurface[data-tileid="philo"] .philoQ{font-size:19px;padding-right:48px}
 .philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;cursor:pointer}
-.philoLast strong,.philoMsg strong{font-weight:850}
+.philoLast strong,.philoMsg strong,.philoBubble strong{font-weight:850}
+/* the tile's reply bubble: the interlocutor's latest question, as in the pop-up's thread */
+.philoBubble{align-self:flex-start;max-width:92%;margin-top:6px;padding:10px 14px;border-radius:18px 18px 18px 6px;background:rgba(255,255,255,.72);box-shadow:0 6px 16px -12px rgba(20,40,70,.45);font-size:14px;line-height:1.42;font-weight:650;color:#20283a;cursor:pointer}
+.philoBubbleText{display:block;overflow-wrap:anywhere}
+.tile.completed .philoBubble{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
 .philoLast em,.philoMsg em{font-style:italic}
 .philoHint{margin:0;font-size:11.5px;line-height:1.4;font-weight:650;color:var(--dim)}
 .tile[data-tileid="philo"] .philoHint button.link{display:inline!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0 0 0 2px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--accentDark)!important;font-family:inherit!important;font-size:inherit!important;font-weight:800!important;line-height:inherit!important;text-decoration:underline;text-underline-offset:2px;transform:none!important;cursor:pointer}
@@ -2896,13 +2931,17 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="recall"] .recallCard3d,.grid>.tile[data-tileid="recall"] button.recallCard3d{min-height:96px}
 .recallRows.many button.recallBar{height:9px!important}
 .recallRows.many .recallBar::before{height:5px}
-.recallRows.many .recallBar.here::before{height:7px}
+.recallRows.many .recallBar.here::before{height:5px}
 .tile button.recallBar,.tile.completed button.recallBar,button.recallBar{position:relative;flex:1 1 0;min-width:3px;width:auto!important;height:12px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;filter:none!important;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .recallBar::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;transform:translateY(-50%);border-radius:99px;background:var(--barPale);transition:height .15s ease,background .15s ease,box-shadow .15s ease}
 .recallBar.done::before{background:var(--bar)}
 .recallBar.again::before{background:repeating-linear-gradient(-45deg,var(--bar) 0 2.5px,#fff 2.5px 5px);box-shadow:inset 0 0 0 1.5px var(--bar)}
 .recallBar.next::before{background:var(--barPale);box-shadow:inset 0 0 0 1.5px var(--bar)}
-.recallBar.here::before{height:10px;background:var(--bar)}
+.recallBar.here::before{background:var(--bar);animation:recallHere 1.6s ease-in-out infinite}
+@keyframes recallHere{50%{opacity:.45}}
+@media(prefers-reduced-motion:reduce){.recallBar.here::before{animation:none}}
+.recallDeck .recallRatings{animation:recallRise .2s ease-out}
+@keyframes recallRise{from{opacity:0;transform:translateY(6px)}}
 .recallBar.again.here::before{background:var(--bar);box-shadow:none}
 .recallBar:focus-visible{outline:2px solid var(--bar);outline-offset:1px;border-radius:4px}
 .tile.completed .recallHeadword{color:#fff}
@@ -2910,7 +2949,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .recallDeck.big .recallRows{gap:3px}
 .recallDeck.big button.recallBar{height:18px!important}
 .recallDeck.big .recallBar::before{height:7px}
-.recallDeck.big .recallBar.here::before{height:11px}
+.recallDeck.big .recallBar.here::before{height:7px}
 .recallDeck.big .recallCloze{font-size:19px}
 .recallDeck.big .recallHeadword{font-size:30px}
 .recallDeck.big .recallFr{font-size:14.5px}
@@ -2983,6 +3022,25 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .birthdayTodayText{max-width:100%;min-width:0}
 .birthdayTodayName,.bdayGiftName{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:normal}
 .bdayGiftWhen{margin-top:3px;font-size:11.5px;font-weight:750;color:var(--dim);white-space:nowrap}
+.bdayTag{filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}
+/* the pop-up list: a small date leaf, the name, how far away, and a quiet remove */
+.bdayCard{width:100%}
+.tileFocusSurface[data-tileid="birthdays"] .birthdaysSummary{min-height:0;height:auto;padding:4px 0 10px}
+.tileFocusSurface[data-tileid="birthdays"] .bdayGiftArt{width:110px}
+.bdayManager{display:flex;flex-direction:column;gap:12px;margin-top:6px;text-align:left}
+.bdayList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.bdayRow{display:grid;grid-template-columns:42px minmax(0,1fr) auto 28px;align-items:center;gap:10px;padding:6px 8px 6px 6px;border-radius:14px;background:rgba(255,255,255,.5)}
+.bdayRow.today{background:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.6))}
+.bdayDate{display:flex;flex-direction:column;align-items:center;justify-content:center;width:42px;height:42px;border-radius:11px;background:var(--accent);color:#fff;line-height:1}
+.bdayDate b{font-size:17px;font-weight:900}
+.bdayDate small{font-size:9.5px;font-weight:850;letter-spacing:.06em;text-transform:uppercase;opacity:.9}
+.bdayName{min-width:0;font-size:14.5px;font-weight:800;color:var(--ink);overflow-wrap:anywhere;display:flex;align-items:center;gap:6px}
+.bdayIn{font-size:12px;font-weight:750;color:var(--dim);white-space:nowrap}
+.tile button.bdayDel{width:28px!important;height:28px!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:18px;line-height:1;opacity:.55;transform:none!important}
+.tile button.bdayDel:hover{opacity:1;background:rgba(255,255,255,.6)!important}
+.bdayEmpty{margin:0;font-size:13px;color:var(--dim)}
+.tile .bdayManager .birthdayAddRow{grid-template-columns:minmax(0,1fr) 58px 58px auto!important;gap:8px}
+.tile .bdayManager .birthdayAddRow input[inputmode="numeric"]{width:100%!important;padding-left:4px!important;padding-right:4px!important;text-align:center}
 .tile.completed .bdayGiftWhen{color:rgba(255,255,255,.85)}
 .birthdayTodayEmoji{font-size:64px!important}
 .birthdayTodayName{font-size:19px!important}
@@ -3081,13 +3139,12 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .pbNote.falling .pbPinHead{animation:pbPull .18s ease-out forwards}
 @keyframes pbPull{to{transform:translate(-25%,-160%) rotate(-30deg) scale(1.15);opacity:0}}
 @keyframes pbFall{to{transform:rotate(calc(var(--r) + 20deg)) translateY(70%);opacity:0}}
-.pbText{max-height:100%;overflow:hidden;font:400 calc(var(--nw) * .15)/1.12 'Permanent Marker',cursive;text-align:center;overflow-wrap:anywhere;color:var(--ink)}
-.tile textarea.pbInput{width:100%;height:100%;min-height:0!important;margin:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;font:400 max(10px,calc(var(--nw) * .13))/1.12 'Permanent Marker',cursive!important;text-align:center;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
-/* the pushpin: a glossy ink-coloured head, its needle slanting into the paper and the shadow they cast */
+.pbText{max-height:100%;overflow:hidden;font:400 calc(var(--nw) * .165)/1.12 'Permanent Marker',cursive;text-align:center;overflow-wrap:anywhere;color:var(--ink)}
+.tile textarea.pbInput{width:100%;height:100%;min-height:0!important;margin:0;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;resize:none;font:400 max(11px,calc(var(--nw) * .145))/1.12 'Permanent Marker',cursive!important;text-align:center;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)}
+/* the pin: a small flat thumbtack in the tile's ink, a lighter cap inside its rim, a crisp shadow */
 .tile .pbPin{position:absolute;top:calc(var(--nw) * -.18);left:50%;width:calc(var(--nw) * .5);height:calc(var(--nw) * .5);min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:none!important;box-shadow:none!important;transform:translateX(-50%)!important;cursor:pointer;touch-action:manipulation;z-index:2}
-.pbPin::before{content:"";position:absolute;left:51%;top:55%;width:22%;height:5%;border-radius:2px;background:rgba(0,0,0,.2);transform:rotate(55deg);transform-origin:0 50%;filter:blur(.5px)}
-.pbPinHead{position:absolute;inset:28.5%;border-radius:50%;background:radial-gradient(circle at 34% 30%,rgba(255,255,255,.95) 0 8%,rgba(255,255,255,.28) 16%,rgba(255,255,255,0) 34%),var(--ink);box-shadow:inset -2px -3px 4px rgba(0,0,0,.28),1px 3px 3px rgba(0,0,0,.26),3px 6px 8px -3px rgba(0,0,0,.22);transition:transform .15s ease}
-.tile .pbPin:hover .pbPinHead{transform:translateY(-2px) scale(1.06)}
+.pbPinHead{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--ink) 74%,#fff) 0 46%,var(--ink) 52%);box-shadow:0 1.5px 2px rgba(0,0,0,.32),0 4px 6px -2px rgba(0,0,0,.24);transition:transform .15s ease}
+.tile .pbPin:hover .pbPinHead{transform:translateY(-1px) scale(1.1)}
 .tile .pbPin:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
 .tile button.pbPad{position:absolute;left:2%;bottom:2%;z-index:4;width:calc(var(--nw) * .54);height:calc(var(--nw) * .54);min-height:0!important;padding:0!important;border:0!important;border-radius:3px!important;background:none!important;box-shadow:none!important;cursor:grab;touch-action:none;transform:none!important}
 .pbPad>span{position:absolute;inset:0;border-radius:3px;background:var(--bg);box-shadow:0 1px 2px rgba(0,0,0,.16)}
@@ -3933,7 +3990,14 @@ const musicOverlap=(a,b)=>{
   let hit=0; aa.forEach(w=>{ if(bb.has(w)) hit++; });
   return hit/Math.max(aa.size,bb.size);
 };
-const appleMusicSearchUrl=m=>`https://music.apple.com/fr/search?term=${encodeURIComponent([m.title,m.artist,m.composer].filter(Boolean).join(" "))}`;
+/* Without an exact catalog match, search for the main artist only: a long "title + every credit"
+   query rarely matches anything, while the artist always lands on a real page. */
+const musicPrimaryArtist=a=>String(a||"").split(/\s+(?:with|feat\.?|featuring|ft\.?)\s+|\s*\/\s*/i)[0].trim();
+const appleMusicSearchUrl=m=>`https://music.apple.com/fr/search?term=${encodeURIComponent(musicPrimaryArtist(m.artist)||m.composer||m.title||"")}`;
+/* On a Mac the music:// scheme opens the Music app instead of the web player (iPhone and iPad
+   already hand music.apple.com links to the app). */
+const IS_MAC_DESKTOP=typeof navigator!=="undefined"&&/Mac/.test(navigator.platform||navigator.userAgent||"")&&!(navigator.maxTouchPoints>1);
+const musicAppHref=url=>IS_MAC_DESKTOP?String(url).replace(/^https:\/\/(?:geo\.)?music\.apple\.com\//,"music://music.apple.com/"):url;
 /* geo.music.apple.com redirects to the listener's own storefront, so a matched track
    opens the exact song in-app instead of dead-ending on a foreign-country page. */
 const appleGeoUrl=url=>String(url||"").replace(/^https:\/\/music\.apple\.com\//,"https://geo.music.apple.com/");
@@ -4051,19 +4115,22 @@ const wxHourLabel=t=>{ const h=Number(String(t).slice(11,13)); return (h%12||12)
 const wxClock=t=>{ const h=Number(String(t).slice(11,13)); return (h%12||12)+":"+String(t).slice(14,16)+(h<12?"AM":"PM"); };
 const wxCompass=deg=>["N","NE","E","SE","S","SW","W","NW"][Math.round((((Number(deg)%360)+360)%360)/45)%8];
 const wxUvLabel=uv=>uv<3?"Low":uv<6?"Moderate":uv<8?"High":uv<11?"Very high":"Extreme";
-/* The next hours from now (local time "YYYY-MM-DDTHH:MM"), with the sunrise and sunset that
-   fall inside them as their own stops. The first stop is "Now", carrying the live reading
-   when the snapshot is from this hour. */
-function wxHourly(data,nowStamp,count=12){
+/* The coming day from now (local time "YYYY-MM-DDTHH:MM") in steps of two hours: twelve stops
+   cover 24 hours, so the next sunrise and the next sunset are always both there, each as its own
+   stop at its exact time. The first stop is "Now", carrying the live reading when the snapshot
+   is from this hour. */
+function wxHourly(data,nowStamp,count=12,step=2){
   const hours=Array.isArray(data&&data.hours)?data.hours:[], hourKey=String(nowStamp).slice(0,13)+":00";
   let i=hours.findIndex(h=>h.t===hourKey); if(i<0) i=hours.findIndex(h=>h.t>hourKey); if(i<0) return [];
-  const span=hours.slice(i,i+count), liveNow=!!(data.now&&String(data.now.time||"").slice(0,13)===hourKey.slice(0,13));
+  const span=[]; for(let k=i;k<hours.length&&span.length<count;k+=step) span.push(hours[k]);
+  const liveNow=!!(data.now&&String(data.now.time||"").slice(0,13)===hourKey.slice(0,13));
   const items=span.map((h,k)=>{ const live=k===0&&liveNow&&h.t===hourKey;
     return {kind:"hour",t:h.t,label:k===0&&h.t===hourKey?"Now":wxHourLabel(h.t),temp:live?data.temp:h.temp,code:live?data.code:h.code,pop:h.pop,day:live?data.now.day!==false:h.day}; });
-  const last=span[span.length-1].t.slice(0,13);
+  // a sun event belongs to the strip until the stop after the last one shown
+  const lastAt=i+(span.length-1)*step, until=hours[lastAt+step]?hours[lastAt+step].t:span[span.length-1].t.slice(0,13)+":59";
   (Array.isArray(data.days)?data.days:[]).forEach(d=>[["sunrise",d.sunrise],["sunset",d.sunset]].forEach(([kind,t])=>{
-    if(!t||t<=String(nowStamp)||t.slice(0,13)>last) return;
-    const hour=span.find(h=>h.t.slice(0,13)===t.slice(0,13));
+    if(!t||t<=String(nowStamp)||t>=until) return;
+    const hour=hours.find(h=>h.t.slice(0,13)===t.slice(0,13));
     items.push({kind,t,label:wxClock(t),temp:hour?hour.temp:null});
   }));
   return items.sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:(a.kind==="hour"?-1:1));
@@ -4355,6 +4422,17 @@ function gradeRecallEntry(session,key,index,rating,live){
   const replayed=recallReplay(next,entry.id,{...live,...next.base[entry.id]});
   return {session:next,item:{...live,...recallSchedule(replayed)}};
 }
+/* The next card mixes the sources: across every row, the card most overdue goes first (the one
+   most at risk of being forgotten), never the same source twice running while another still has
+   cards, and a card's extra "Again" pass waits behind everyone's first passes. */
+function recallPickRow(session,keys,last,byId){
+  const open=(keys||[]).filter(k=>recallFrontier(session,k)>=0); if(!open.length) return null;
+  const pool=open.length>1&&last?open.filter(k=>k!==last):open;
+  const urgency=k=>{ const e=session.rows[k][recallFrontier(session,k)], item=byId&&byId.get?byId.get(e.id):null;
+    const overdue=item&&typeof item.nextReview==="string"?daysBetween(item.nextReview,session.day):0;
+    return (e.n>1?-1000:0)+overdue; };
+  return pool.slice().sort((a,b)=>urgency(b)-urgency(a)||keys.indexOf(a)-keys.indexOf(b))[0];
+}
 /* RECALL_CORE_END */
 
 
@@ -4606,7 +4684,7 @@ const CURATED_TILE_LAYOUT={
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
   matrix:{desktop:[4,4],phone:[2,2],family:"large"},
   events:{desktop:[4,3],phone:[2,2],family:"large"},
-  note:{desktop:[4,1],phone:[2,1],family:"wide"},
+  note:{desktop:[4,2],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,4],phone:[2,2],family:"large"},
@@ -4757,7 +4835,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -4856,7 +4934,7 @@ function Tile({id,label,done,size,cols,edit,lifted,topright,cornerOutside,status
      only while this tile's preview — at the current size and zoom — is actually hiding
      something (expanded-only blocks, clamped text, collapsed rows). Birthdays opens
      through its own control instead. */
-  const expandable=id!=="birthdays";
+  const expandable=true;
   const [hasMore,setHasMore]=useState(false);
   const canExpand=expandable&&(TILE_ALWAYS_EXPAND.has(id)||hasMore);
   useLayoutEffect(()=>{
@@ -5654,6 +5732,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const persistMovies=v=>{ setMovies(v); save("movies",v); };
   const addMovie=title=>{ const t=String(title||"").trim(); if(!t) return; persistMovies([...movies,{id:uid(),title:t,addedOn:todayKey}]); };
   const removeMovie=id=>persistMovies(movies.filter(m=>m.id!==id));
+  // a film retitled in the tile; an empty title takes it off the list
+  const renameMovie=(id,title)=>{ const t=String(title||"").trim(); persistMovies(t?movies.map(m=>m.id===id?{...m,title:t}:m):movies.filter(m=>m.id!==id)); };
   const bumpMovie=id=>{ const target=movies.find(m=>m.id===id); if(!target) return; persistMovies([target,...movies.filter(m=>m.id!==id)]); };
   const toggleMovieWatched=()=>{
     const watchedToday=movies.find(m=>m.watchedOn===todayKey);
@@ -5869,7 +5949,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. a lesson done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
-  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; return (k!==todayKey||!DAILY_CONTENT_KEYS.includes(id)||validDailyTile(id,view[id]))&&(!!r[id]||!!manualDoneFor(k)[id]); };
+  /* A written note is a done Note, exactly as the tile shows it (writing never logs a ritual). */
+  const ritualDoneOn=(k,id)=>{ const r=ritualLog[k]||{}; if(id==="note") return !!String(notes[k]||"").trim()||!!manualDoneFor(k).note; return (k!==todayKey||!DAILY_CONTENT_KEYS.includes(id)||validDailyTile(id,view[id]))&&(!!r[id]||!!manualDoneFor(k)[id]); };
   const ritualOK=k=>{ const active=activeForDay(k); return ritualScoreIds.filter(id=>active.has(id)).every(id=>id==="spanish"&&k<spanishSince?true:ritualDoneOn(k,id)); };
   const habitsOK=k=> habits.length===0 ? false : habits.every(h=> habitLog[k] && habitLog[k][h.id]);
   const goalsOK=k=> (goalsLog[k]||[]).every(g=>g.done);
@@ -6120,7 +6201,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     movie: T("movie","Movies",movies.some(m=>m.watchedOn===todayKey),null,
-      <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} />, ()=>toggleMovieWatched()),
+      <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} onRename={renameMovie} />, ()=>toggleMovieWatched()),
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     matrix: T("matrix","Priorities",false,null,
@@ -6443,7 +6524,7 @@ function NoteCard({saved,notes,onSave,onEditDay}){
    when the lesson has one; otherwise the flag gives the day's point and the words are yours. */
 const langChatLines=(dialogue,point,words)=>{
   const lines=(Array.isArray(dialogue)?dialogue:[]).filter(l=>l&&l.text);
-  if(lines.length>=2) return lines.slice(0,4).map((l,i)=>({side:i%2?"me":"them",text:l.text,sub:l.sub||""}));
+  if(lines.length>=2) return Object.assign(lines.slice(0,4).map((l,i)=>({side:i%2?"me":"them",text:l.text,sub:l.sub||""})),{dialogue:true});
   return [point?{side:"them",text:point,sub:""}:null,...(words||[]).map(v=>({side:"me",text:v.text,sub:v.sub||"",after:v.after||""}))].filter(Boolean);
 };
 function LangChat({lines,country}){
@@ -6470,13 +6551,15 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(sp);};
   const undo=index=>onUnlearned&&onUnlearned(sp);
   const lines=langChatLines((sp.dialogo||[]).map(l=>l&&{text:l.es,sub:l.en}),sp.punto,(sp.vocab||[]).map(v=>({text:v.es,sub:v.en})));
+  // without a dialogue the conversation already carries the point and the words: the pop-up does not repeat them
+  const told=!lines.dialogue;
   return (
     <div className="langCard langEs readingCard">
       <LangChat key={lines.map(l=>l.text).join("|")} lines={lines} country="Spain"/>
       <div hidden={!expanded} className="cardExpandedDetails langMore">
         <div className="langTitle">{sp.tema}</div>
-        {sp.punto && <div className="langLede">{sp.punto}</div>}
-        {(sp.vocab||[]).length>0 && <div className="langVocab">{(sp.vocab||[]).map((v,i)=><div key={i} className="langWord"><span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span></div>)}</div>}
+        {sp.punto && !told && <div className="langLede" lang="es">{sp.punto}</div>}
+        {(sp.vocab||[]).length>0 && !told && <div className="langVocab">{(sp.vocab||[]).map((v,i)=><div key={i} className="langWord"><span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span></div>)}</div>}
         {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
       </div>
     </div>
@@ -6491,13 +6574,14 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
   const lines=langChatLines((de.dialog||[]).map(l=>l&&{text:l.de,sub:l.fr}),de.punkt,(de.vocab||[]).map(v=>({text:v.de,sub:v.fr,after:v.pron||""})));
+  const told=!lines.dialogue;
   return (
     <div className="langCard langDe readingCard">
       <LangChat key={lines.map(l=>l.text).join("|")} lines={lines} country="Germany"/>
       <div hidden={!expanded} className="cardExpandedDetails langMore">
         <div className="langTitle">{de.thema}</div>
-        {de.punkt && <div className="langLede">{de.punkt}</div>}
-        {(de.vocab||[]).length>0 && <div className="langVocab">{(de.vocab||[]).map((v,i)=><div key={i} className="langWord deRow"><div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>{v.pron && <span className="dePron">{v.pron}</span>}</div>)}</div>}
+        {de.punkt && !told && <div className="langLede" lang="fr">{de.punkt}</div>}
+        {(de.vocab||[]).length>0 && !told && <div className="langVocab">{(de.vocab||[]).map((v,i)=><div key={i} className="langWord deRow"><div className="deWords"><span className="langTerm deTerm">{v.de}</span><span className="langGloss deFr">{v.fr}</span></div>{v.pron && <span className="dePron">{v.pron}</span>}</div>)}</div>}
         {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
       </div>
     </div>
@@ -6514,7 +6598,7 @@ const recallAnswerFor=item=>{
   if(detail) return {short:"Answer", detail};
   return {short:item.term||item.title||"Answer", detail:""};
 };
-const RECALL_TYPE_TAG={word:"Word",lesson:"Lesson",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
+const RECALL_TYPE_TAG={word:"Word",lesson:"Knowledge",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
 const isClozeCard=item=>!!(item&&item.type==="word"&&item.word&&item.word.term);
 /* Front: only the cue, never the title or meta (they can give the answer away).
    Word cards show a sentence with a blank; without a sentence yet, the definition. */
@@ -6566,7 +6650,9 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
   const doneRef=useRef(null);
   useEffect(()=>{ const complete=total===0||finished; if(doneRef.current===complete) return; if(complete) onComplete(); else if(doneRef.current!==null) onIncomplete(); doneRef.current=complete; /* eslint-disable-next-line */ },[total,finished]);
   if(total===0) return <div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">Nothing due</span></div>;
-  const rowKey=view?view.key:recallOpenRow(session,keys,active||session.active);
+  // the open row: the one picked after the last grade while it has cards, else the next pick
+  const autoRow=()=>active&&recallFrontier(session,active)>=0?active:(recallPickRow(session,keys,active||session.active,byId)||recallOpenRow(session,keys,active||session.active));
+  const rowKey=view?view.key:autoRow();
   const row=rowKey?session.rows[rowKey]||[]:[];
   const index=view?view.index:recallFrontier(session,rowKey);
   const entry=index>=0?row[index]:null;
@@ -6581,11 +6667,8 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
     if(!flipped){ setFlipped(true); return; }
     const result=gradeRecallEntry(session,rowKey,index,rating,live);
     setSession(result.session); onSave(result.item);
-    // a missed card that would come straight back waits while another row goes first
-    const nextUp=(result.session.rows[rowKey]||[])[recallFrontier(result.session,rowKey)];
-    const at=keys.indexOf(rowKey), others=[...keys.slice(at+1),...keys.slice(0,Math.max(0,at))];
-    const elsewhere=nextUp&&nextUp.id===entry.id?others.find(k=>recallFrontier(result.session,k)>=0):null;
-    setActive(elsewhere||rowKey); setView(null); setFlipped(false);
+    // the next card comes from another source when one has cards left (interleaved, most overdue first)
+    setActive(recallPickRow(result.session,keys,rowKey,byId)||rowKey); setView(null); setFlipped(false);
   };
   const openBar=(key,i)=>{
     const e=(session.rows[key]||[])[i]; if(!e) return;
@@ -6599,7 +6682,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
           <span className="recallFace recallFront" aria-hidden={flipped}><RecallFront item={shown} tag={tag}/></span>
           <span className="recallFace recallBackface" aria-hidden={!flipped}><RecallBack item={shown} tag={tag}/></span>
         </button>
-        <div className={"recallRatings"+(flipped?"":" waiting")} role="group" aria-label="Rate this memory">
+        {flipped&&<div className="recallRatings" role="group" aria-label="Rate this memory">
           {FSRS_RATINGS.map(c=>{ const days=scheduleRecall(before,c.value).fsrs.scheduledDays; const again=c.value===1; return (
             <button type="button" key={c.value} className={"recallRating"+(given===c.value?" given":"")} aria-pressed={given?given===c.value:undefined}
               title={again?"Again · comes back this session":`${c.name} · ${humanInterval(days)}`}
@@ -6607,7 +6690,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
               <span className="recallWhen">{again?"soon":shortInterval(days)}</span>
               {expanded&&<span className="recallGradeName">{c.name}</span>}
             </button>); })}
-        </div>
+        </div>}
       </>:<div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">{total} reviewed</span></div>}
       <div className={"recallRows"+(keys.length>4?" many":"")}>
         {keys.map(key=>{ const source=recallSourceByKey(key), c=COL[source.tile]||COL.recall, entries=session.rows[key], next=recallFrontier(session,key); return (
@@ -6656,8 +6739,8 @@ function nextBirthday(list){
   return best;
 }
 const MONTH_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-/* The next birthday as a wrapped present: the tile's own pink box, a gold ribbon and bow,
-   and a round tag counting the days. */
+/* The next birthday as a wrapped present: the tile's own pink box, a gold ribbon and bow, and a
+   paper gift tag on a string from the bow, counting the days. */
 function BirthdayGift({days}){
   return <svg className="bdayGiftArt" viewBox="0 0 120 112" aria-hidden="true">
     <path d="M60 31C50 14 33 13 34 24c1 8 15 9 26 7Z" fill="#FFC94A"/><path d="M60 31c10-17 27-18 26-7-1 8-15 9-26 7Z" fill="#FFC94A"/>
@@ -6667,38 +6750,46 @@ function BirthdayGift({days}){
     <rect x="18" y="50" width="84" height="8" fill="#000" opacity=".1"/>
     <rect x="53" y="33" width="14" height="73" fill="#FFC94A"/>
     <circle cx="60" cy="31" r="5.5" fill="#F4B532"/>
-    <circle cx="60" cy="80" r="19" fill="#fff"/>
-    <text x="60" y={days>99?"82":"84"} textAnchor="middle" fontFamily="'Nunito',sans-serif" fontWeight="900" fontSize={days>99?"15":"20"} fill="var(--accentDark)">{days}</text>
-    <text x="60" y="94" textAnchor="middle" fontFamily="'Nunito',sans-serif" fontWeight="850" fontSize="6.5" letterSpacing=".12em" fill="var(--accentDark)">{days===1?"DAY":"DAYS"}</text>
+    <path className="bdayTagString" d="M62 33c9 6 14 16 14.5 27" fill="none" stroke="#E8A520" strokeWidth="1.4" strokeLinecap="round"/>
+    <g className="bdayTag" transform="translate(76 58) rotate(-10)">
+      <path d="M0 9 8 1h29a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H8L0 25Z" fill="#FFFDF7" stroke="rgba(0,0,0,.08)" strokeWidth=".8"/>
+      <circle cx="7.5" cy="17" r="2.2" fill="var(--accent)" opacity=".9"/>
+      <text x="25" y={days>99?"20":"21"} textAnchor="middle" fontFamily="'Nunito',sans-serif" fontWeight="900" fontSize={days>99?"11":"14"} fill="var(--accentDark)">{days}</text>
+      <text x="25" y="29" textAnchor="middle" fontFamily="'Nunito',sans-serif" fontWeight="850" fontSize="5" letterSpacing=".1em" fill="var(--accentDark)">{days===1?"DAY":"DAYS"}</text>
+    </g>
   </svg>;
 }
+/* Birthdays: the next birthday (a gift with its tag) or today's cake. Tapping the tile marks it done
+   like any other tile; the ⤢ pop-up holds the list: add someone, then everyone in date order. */
 function BirthdaysCard({birthdays,today,onAdd,onRemove}){
-  const [open,setOpen]=useState(false);
-  const has=today.length>0; const next=nextBirthday(birthdays);
-  return (
-    <>
-      <button className="birthdaysSummary" aria-label="Open birthday list" title="Open birthday list" onClick={e=>{e.stopPropagation();setOpen(true);}}>
-        {has ? <div className="birthdayTodaySummary">
-          <div className="birthdayTodayEmoji">🎂</div>
-          <div className="birthdayTodayText"><div className="birthdayTodayName" data-fit-shrink=".7">{today.map(b=>b.name).join(", ")}</div><div className="muted birthdayTodayMessage" data-fit-drop="10">Birthday today</div></div>
-        </div> : <div className="birthdayNextWrap">
-          {next ? <div className="bdayGift">
-            <BirthdayGift days={next.days}/>
-            <div className="bdayGiftName" data-fit-shrink=".7">{next.name}</div>
-            <div className="bdayGiftWhen">{next.days===1?"Tomorrow":`in ${next.days} days`} · {MONTH_ABBR[Number(next.month)-1]||""} {Number(next.day)}</div>
-          </div> : <div className="birthdayStatus">No birthdays yet</div>}
-        </div>}
-      </button>
-      {open&&<DashboardModal label="Birthdays" onClose={()=>setOpen(false)} className="ovlcard birthdayManager">
-          <div className="ovlhead"><h3 style={{margin:0,fontSize:16}}>Birthdays</h3><div style={{display:"flex",gap:7,flexWrap:"wrap",justifyContent:"flex-end"}}><button className="ghostbtn" onClick={()=>setOpen(false)}>Close</button></div></div>
-          <BirthdayInput onAdd={onAdd} />
-          <div className="birthdayManagerList">
-            {birthdays.length===0 && <div className="birthdayEmpty"><span>🎈</span><div>Add someone by hand here, or import your contacts from Settings.</div></div>}
-            {[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||""))).map(b=><div key={b.id} className="trow"><span style={{flex:1,fontSize:13.5,display:"flex",alignItems:"center",gap:6}}>{b.name}{b.source && <span className="gbadge">sync</span>}</span><span className="muted" style={{fontSize:11.5}}>{pad(b.month)}/{pad(b.day)}</span><button className="del" onClick={()=>onRemove(b.id)}>×</button></div>)}
-          </div>
-      </DashboardModal>}
-    </>
-  );
+  const {expanded}=useTilePresentation();
+  const has=today.length>0, next=nextBirthday(birthdays);
+  const sorted=[...birthdays].sort((a,b)=>birthdayDaysUntil(a)-birthdayDaysUntil(b)||String(a.name||"").localeCompare(String(b.name||"")));
+  return <div className="bdayCard">
+    <div className="birthdaysSummary">
+      {has ? <div className="birthdayTodaySummary">
+        <div className="birthdayTodayEmoji">🎂</div>
+        <div className="birthdayTodayText"><div className="birthdayTodayName" data-fit-shrink=".7">{today.map(b=>b.name).join(", ")}</div><div className="muted birthdayTodayMessage" data-fit-drop="10">Birthday today</div></div>
+      </div> : <div className="birthdayNextWrap">
+        {next ? <div className="bdayGift">
+          <BirthdayGift days={next.days}/>
+          <div className="bdayGiftName" data-fit-shrink=".7">{next.name}</div>
+          <div className="bdayGiftWhen">{next.days===1?"Tomorrow · ":""}{MONTH_ABBR[Number(next.month)-1]||""} {Number(next.day)}</div>
+        </div> : <div className="birthdayStatus">No birthdays yet</div>}
+      </div>}
+    </div>
+    <div hidden={!expanded} className="cardExpandedDetails bdayManager">
+      <BirthdayInput onAdd={onAdd}/>
+      {sorted.length===0
+        ?<p className="bdayEmpty">Add someone here, or import your contacts from Settings.</p>
+        :<ul className="bdayList">{sorted.map(b=>{ const d=birthdayDaysUntil(b); return <li key={b.id} className={"bdayRow"+(d===0?" today":"")}>
+          <span className="bdayDate" aria-hidden="true"><b>{Number(b.day)}</b><small>{MONTH_ABBR[Number(b.month)-1]}</small></span>
+          <span className="bdayName">{b.name}{b.source&&<span className="gbadge">sync</span>}</span>
+          <span className="bdayIn">{d===0?"Today":d===1?"Tomorrow":`in ${d} days`}</span>
+          <button type="button" className="bdayDel" aria-label={`Remove ${b.name}`} onClick={e=>{e.stopPropagation();onRemove(b.id);}}>×</button>
+        </li>; })}</ul>}
+    </div>
+  </div>;
 }
 
 /* World news set as a small newspaper page: masthead between double rules, a dateline,
@@ -6775,7 +6866,7 @@ function MatrixCard({notes,onChange}){
   const [pending,setPending]=useState(null), [falling,setFalling]=useState(null), [editing,setEditing]=useState(null);
   const list=notes||[];
   /* marker text fits its note: it steps down from the note's own size until every word shows */
-  const fitText=()=>{ const board=boardRef.current; if(!board||!board.isConnected||!sizeRef.current) return; const base=Math.max(10,sizeRef.current.offsetWidth*.15);
+  const fitText=()=>{ const board=boardRef.current; if(!board||!board.isConnected||!sizeRef.current) return; const base=Math.max(11,sizeRef.current.offsetWidth*.165);
     board.querySelectorAll(".pbText").forEach(t=>{ let s=base; t.style.fontSize=s.toFixed(1)+"px"; while(t.scrollHeight>t.clientHeight+1&&s>7){ s*=.9; t.style.fontSize=s.toFixed(1)+"px"; } }); };
   useLayoutEffect(()=>{ fitText(); });
   useEffect(()=>{ const b=boardRef.current; if(!b||typeof ResizeObserver==="undefined") return; const ro=new ResizeObserver(()=>fitText()); ro.observe(b); return()=>ro.disconnect(); },[]);
@@ -6882,40 +6973,45 @@ function SustainCard({out,onToggle}){
     </div>
   </div>;
 }
-function MovieCard({movies,onAdd,onRemove,onBump}){
+/* The film's title is written on the strip: tap it to change the film in place (an empty title
+   takes it off the list); tap anywhere else on the tile to mark it watched. The pop-up holds the
+   queue (add, move to the top, remove) and what was seen. */
+function MovieTitle({movie,onRename}){
+  const [editing,setEditing]=useState(false);
+  if(editing) return <input className="movieTitleInput" autoFocus defaultValue={movie.title} aria-label="Change the film" maxLength={80}
+    onClick={e=>e.stopPropagation()} onFocus={e=>e.currentTarget.select()}
+    onKeyDown={e=>{ e.stopPropagation(); if(e.key==="Enter"||e.key==="Escape"){ e.preventDefault(); if(e.key==="Escape") e.currentTarget.value=movie.title; e.currentTarget.blur(); } }}
+    onBlur={e=>{ setEditing(false); const t=e.currentTarget.value.trim(); if(t!==movie.title) onRename(movie.id,t); }}/>;
+  return <button type="button" className="movieNowTitle" title="Change the film" aria-label={`${movie.title}: change the film`} onClick={e=>{ e.stopPropagation(); setEditing(true); }}>{movie.title}</button>;
+}
+function MovieCard({movies,onAdd,onRemove,onBump,onRename}){
   const {expanded}=useTilePresentation();
   const queue=movies.filter(m=>!m.watchedOn);
   const seen=movies.filter(m=>m.watchedOn).sort((a,b)=>String(b.watchedOn).localeCompare(String(a.watchedOn)));
   const watchedToday=movies.find(m=>m.watchedOn===todayKey);
   const feature=watchedToday||queue[0];
-  const upNext=watchedToday?queue[0]:queue[1];
   return (<div className="movieCard">
     <div className="movieStrip">
       <span className="movieSprockets" aria-hidden="true"/>
       <div className="movieFrame">
-        {feature ? (<>
-          <span className="movieNowTitle">{feature.title}</span>
-          {upNext && <span className="movieUpNext">then · {upNext.title}</span>}
-        </>) : <MovieAdd onAdd={onAdd}/>}
+        {feature ? <MovieTitle key={feature.id} movie={feature} onRename={onRename}/> : <MovieAdd onAdd={onAdd}/>}
       </div>
       <span className="movieSprockets" aria-hidden="true"/>
     </div>
     <div hidden={!expanded} className="cardExpandedDetails movieManager">
       <MovieAdd onAdd={onAdd}/>
-      <div className="movieList">
-        {queue.map((m,i)=>(<div key={m.id} className="trow">
-          <span className="movieQueueN">{i+1}</span>
-          <span style={{flex:1,fontSize:13.5,fontWeight:i===0?750:600}}>{m.title}</span>
-          {i>0&&<button className="iconbtn" title="Watch next" aria-label={`Move ${m.title} to the top`} onClick={e=>{e.stopPropagation();onBump(m.id);}}>↑</button>}
-          <button className="del" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
-        </div>))}
-        {seen.length>0&&<div className="lbl" style={{margin:"10px 0 2px"}}>Seen</div>}
-        {seen.map(m=>(<div key={m.id} className="trow" style={{opacity:.62}}>
-          <span style={{flex:1,fontSize:13}}>{m.title}</span>
-          <span className="muted" style={{fontSize:11}}>{formatDateKey(m.watchedOn)}</span>
-          <button className="del" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
-        </div>))}
-      </div>
+      {queue.length>0&&<ol className="movieQueue">{queue.map((m,i)=><li key={m.id} className={"movieRow"+(i===0?" next":"")}>
+        <span className="movieQueueN" aria-hidden="true">{i+1}</span>
+        <span className="movieRowTitle">{m.title}</span>
+        {i>0&&<button type="button" className="movieRowBtn" title="Watch next" aria-label={`Watch ${m.title} next`} onClick={e=>{e.stopPropagation();onBump(m.id);}}>↑</button>}
+        <button type="button" className="movieRowBtn" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
+      </li>)}</ol>}
+      {seen.length>0&&<><div className="movieSeenHead">Seen</div>
+        <ul className="movieQueue seen">{seen.map(m=><li key={m.id} className="movieRow">
+          <span className="movieRowTitle">{m.title}</span>
+          <span className="movieRowWhen">{shortDate(m.watchedOn)}</span>
+          <button type="button" className="movieRowBtn" aria-label={`Remove ${m.title}`} onClick={e=>{e.stopPropagation();onRemove(m.id);}}>×</button>
+        </li>)}</ul></>}
     </div>
   </div>);
 }
@@ -7046,17 +7142,17 @@ function MusicCard({music,done}){
     resolveMusicTrack(music).then(found=>{ if(live){ setMatch(found); setMatching(false); } }).catch(()=>{ if(live){ setMatch(null); setMatching(false); } });
     return ()=>{ live=false; };
   },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
-  const href=match&&match.url?appleGeoUrl(match.url):appleMusicSearchUrl(music);
+  const href=musicAppHref(match&&match.url?appleGeoUrl(match.url):appleMusicSearchUrl(music));
   /* The record IS the tile's identity and its only control: tapping it opens the exact
      song in Apple Music. Tapping anywhere else on the tile marks the song heard. */
   return <div className="musicCard">
-    <a className={"musicDisc"+(matching?" matching":"")} href={href} target="_blank" rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
+    <a className={"musicDisc"+(matching?" matching":"")} href={href} target={IS_MAC_DESKTOP?undefined:"_blank"} rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
     <div className="musicMeta">
-      {music.genre&&<span className="musicGenre" data-fit-drop="1">{music.genre}</span>}
+      {music.genre&&<span className="musicGenre">{music.genre}</span>}
       <div className="musicTitle">{music.title}</div>
       <div className="musicArtist">{music.artist}{music.year?<span className="musicYear"> · {music.year}</span>:null}</div>
       {music.composer&&musicNorm(music.composer)!==musicNorm(music.artist)&&<div className="musicComposer" data-fit-drop="2">{music.composer}</div>}
-      {music.why&&<p className="musicWhy" data-fit-clamp="">{music.why}</p>}
+      {music.why&&<p className="musicWhy" data-fit-shrink=".8" data-fit-drop="3">{music.why}</p>}
     </div>
   </div>;
 }
@@ -7067,6 +7163,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
   const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1;
   const first=new Date(y,m-1,1);
   const monthLabel=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(first);
+  const monthName=new Intl.DateTimeFormat("en-US",{month:"long"}).format(first).toUpperCase();
   const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
   const monthKey=`${y}-${pad(m)}`;
   const monthOf=key=>String(key||"").slice(0,7);
@@ -7115,10 +7212,11 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
   };
   return (
     <div ref={calRef} className={"miniCalendar"+(placing?" placing":"")} aria-label="Reminder calendar">
+      <div className="miniCalSpiral" aria-hidden="true"/>
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
           <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
-          <span className="miniCalTitle" aria-live="polite">{monthLabel}</span>
+          <span className="miniCalTitle" aria-live="polite" aria-label={monthLabel}><b>{monthName}</b><small>{y}</small></span>
           <button type="button" className="miniCalNav" aria-label="Next month" title="Next month" onClick={()=>moveMonth(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5" /></svg></button>
         </div>
         {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
@@ -7785,7 +7883,7 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
     const cs=getComputedStyle(el), lh=parseFloat(cs.lineHeight)||20;
     const multi=el.scrollHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0)>lh*1.5;
     let cap=Math.round(window.innerHeight*.4);
-    const tile=el.closest(".grid>.tile"), q=tile&&tile.querySelector(".philoQ"), comp=el.closest(".philoComposer");
+    const tile=el.closest(".grid>.tile"), q=tile&&tile.querySelector(".philoQ,.philoBubble"), comp=el.closest(".philoComposer");
     if(tile&&q&&comp){
       // in the tile: never past the padding edge, never over the question; whole lines only
       const limit=tile.getBoundingClientRect().bottom-(parseFloat(getComputedStyle(tile).paddingBottom)||0);
@@ -7813,7 +7911,11 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
   };
   return (
     <div className={"philoCard"+(lastReply?" hasReply":"")+(tall&&!expanded?" tall":"")}>
-      <p className="philoQ">{question}</p>
+      {/* in the tile, once someone has answered, their open question is what you reply to: it shows
+          as their chat bubble; the day's question stays at the top of the pop-up */}
+      {!expanded&&lastReply
+        ?<div className="philoBubble" data-fit-shrink=".8" role="button" tabIndex={0} aria-label="Open the conversation" onClick={e=>{ e.stopPropagation(); open(); }} onKeyDown={e=>{ if(e.key==="Enter"){ e.preventDefault(); open(); } }}><span className="philoBubbleText" data-fit-clamp="">{philoInline(lastReply.text)}</span></div>
+        :<p className="philoQ">{question}</p>}
       {expanded&&<div className="philoWho" role="group" aria-label="Who answers">
         {PHILO_MODES.slice(0,1).map(m=><button type="button" key={m.id} className={"philoThinker philoNone"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
         <div className="philoThinkers" ref={thinkersRef}>
@@ -7825,7 +7927,6 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
         {sending&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
         <div ref={endRef}/>
       </div>}
-      {!expanded&&lastReply&&!tall&&<p className="philoLast" data-fit-drop="5" onClick={open}>{philoInline(lastReply.text)}</p>}
       {!expanded&&sending&&!lastReply&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
       {expanded&&error&&<p className="philoHint" role="alert">{error} <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></p>}
       <div className="philoComposer">
