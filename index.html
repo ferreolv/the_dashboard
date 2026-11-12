@@ -3397,28 +3397,23 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="brainflex"] .digitsPreview .digitsChip{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;font-size:15px!important}
 .tile[data-tileid="brainflex"] .brainPlay button.digitsChip{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;font-size:17px!important}
 .tile.completed[data-tileid="brainflex"] .digitsChip,.tile.completed[data-tileid="brainflex"] button.digitsChip{background:var(--accentDark)!important;color:#fff!important;box-shadow:none!important}
-/* ---- Deutsch: the speech bubble from the flag (the earlier design): theme, point, and the words
-   as small cards, each German word over its French translation. ---- */
-.deBubbleCard{display:flex;flex-direction:column;justify-content:center;min-height:0}
-.deBubbleCard .langBubble{position:relative;flex:0 0 auto;min-height:0;padding:16px 18px 15px;margin:0 0 36px;border-radius:30px 30px 8px 30px;background:rgba(255,255,255,.68);box-shadow:0 10px 26px -16px rgba(20,10,40,.4)}
-.deBubbleCard .langTail{position:absolute;bottom:-14px;right:4px;width:24px;height:20px;fill:rgba(255,255,255,.68);transform:scaleX(-1)}
-.deBubbleCard .langBubble>.langFlag{position:absolute;bottom:-40px;right:-6px;left:auto;top:auto;width:38px;height:38px;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.18),0 0 0 3px rgba(255,255,255,.9);background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
-.deBubbleCard .langHead{display:flex;align-items:flex-start;gap:10px;margin-bottom:4px;padding-right:28px}
-.deBubbleCard .langLede{margin:0 0 12px;padding-left:0;font-weight:600;text-align:left!important;hyphens:manual!important}
-.deBubbleCard .langVocab{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.deBubbleCard .langWord{display:flex;flex-direction:column;gap:1px;min-width:0;padding:8px 11px;border-radius:14px;background:color-mix(in srgb,var(--accent) 11%,rgba(255,255,255,.55))}
-.deBubbleCard .langWord[hidden]{display:none!important}
-.deBubbleCard .deWords{display:flex;flex-direction:column;gap:1px;min-width:0}
-.deBubbleCard .langTerm{font-weight:800;font-size:14px;line-height:1.25;color:var(--accentDark);overflow-wrap:anywhere}
-.deBubbleCard .langGloss{font-size:12.5px;line-height:1.3;color:var(--dim);overflow-wrap:anywhere}
-.deBubbleCard .dePron{font-size:11px;font-style:italic;opacity:.7}
-.tile.completed .deBubbleCard .langBubble{background:rgba(255,255,255,.17);box-shadow:none}
-.tile.completed .deBubbleCard .langTail{fill:rgba(255,255,255,.17)}
-.tile.completed .deBubbleCard .langWord{background:rgba(255,255,255,.14)}
-.tile.completed .deBubbleCard .langTitle,.tile.completed .deBubbleCard .langTerm{color:#fff!important}
-.tile.completed .deBubbleCard .langGloss{color:rgba(255,255,255,.78)!important}
-.tileFocusSurface .deBubbleCard{justify-content:flex-start}
-.tileFocusSurface .deBubbleCard .langBubble{flex:none;margin:0 0 44px}
+/* ---- Deutsch: theme beside the flag, the point, the words as a clean list ---- */
+.deList{display:flex;flex-direction:column;justify-content:flex-start;min-height:0;gap:8px}
+.deList .deHead{display:flex;align-items:center;gap:10px;padding-right:28px}
+.deList .deFlag{position:static!important;flex:none;width:26px;height:26px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 2px 5px rgba(0,0,0,.16);background:linear-gradient(180deg,#1d1d1f 0 33.4%,#DD0000 33.4% 66.7%,#FFCE00 66.7%)}
+.deList .deTheme{margin:0!important;font-size:18px!important;font-weight:850!important;line-height:1.2!important;color:var(--ink)}
+.deList .dePoint{margin:0;font-size:13.5px;line-height:1.45;font-weight:600;color:var(--dim);text-align:left!important;hyphens:manual!important}
+.deList .deWordsList{margin:4px 0 0;padding:0}
+.deList .deWordRow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0}
+.deList .deWordRow[hidden]{display:none!important}
+.deList .deWordRow~.deWordRow{border-top:1px solid var(--hair)}
+.deList dt{display:flex;flex-direction:column;min-width:0;margin:0}
+.deList .deTerm{font-size:15px;font-weight:800;line-height:1.25;color:var(--accentDark);overflow-wrap:anywhere}
+.deList .dePron{font-size:11px;font-style:italic;line-height:1.3;color:var(--dim)}
+.deList dd.deFr{margin:0;text-align:right;font-size:13.5px;font-weight:650;line-height:1.3;color:var(--ink);overflow-wrap:anywhere}
+.tile.completed .deList .deTerm,.tile.completed .deList .deTheme,.tile.completed .deList dd.deFr{color:#fff!important}
+.tile.completed .deList .dePoint,.tile.completed .deList .dePron{color:rgba(255,255,255,.8)!important}
+.tileFocusSurface .deList .deTheme{font-size:22px!important}
 /* Completion circles show only what is done: no white track under the arc (calendar and Insights).
    Today's dark ring and the ice target keep theirs. */
 .miniCalTrack,.tile[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack,.tile.completed[data-tileid="agenda"] .miniCalTrack,.tile.completed[data-tileid="agenda"] button.miniCalDay.selected .miniCalTrack{stroke:transparent}
@@ -3426,6 +3421,71 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalDay.target .miniCalTrack{stroke:#38BDF8}
 .insCalTrack{stroke:transparent}
 button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible .insCalTrack{stroke:#7DD3FC}
+/* Brainflex is two squares wide and one high: the gear sits further into its corner, never
+   under a piece. */
+.grid>.tile[data-tileid="brainflex"] .brainFlexCard .brainGearArt{bottom:-58px;right:-52px;width:110px;height:110px;opacity:.26}
+/* Streak: the flame and the three numbers sit together in the middle of the tile, the
+   percentage in the flame's body. */
+.statsCard{justify-content:center!important;gap:3cqmin;padding:4cqmin 6cqmin 6cqmin!important}
+.statsPct{margin-top:30%!important}
+/* In the wide, one-square-high Brainflex tile the boards are sized to its height. */
+.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveGrid,.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveRow{gap:3px!important}
+.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveCell{width:18px!important;height:18px!important;border-radius:5px!important}
+.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuGrid{width:132px!important;border-radius:7px}
+.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuCell{font-size:12px!important}
+/* ---- Reminders: a wall calendar of squares. Each day of the month is a soft square, today a
+   filled square with a bigger number; the weeks shown are only the month's own (4 to 6 rows), so
+   the list sits right under it. No "this month" button: tapping the month name of another month
+   comes back. Each reminder is one line: name · date · in 3 days, then the ×. ---- */
+.tile[data-tileid="agenda"] .miniCalGrid{gap:2px 3px!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay{height:29px!important;min-height:29px!important;border-radius:7px!important;background:rgba(255,255,255,.34)!important;box-shadow:none!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay.out{background:transparent!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay:hover{background:rgba(255,255,255,.6)!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay.today{background:var(--accent)!important}
+.tile[data-tileid="agenda"] .miniCalendar .miniCalDay.today .miniCalNum{font-size:17px!important;font-weight:950!important;color:#fff!important;box-shadow:none!important;background:transparent!important}
+.tile[data-tileid="agenda"] .miniCalendar .miniCalDay.today .miniCalTrack{stroke:transparent!important}
+.tile[data-tileid="agenda"] .miniCalendar .miniCalDay.today .miniCalArc{stroke:#fff!important}
+.tile[data-tileid="agenda"] .miniCalendar .miniCalDay.today .miniCalDot{background:#fff!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay.selected:not(.today){background:rgba(255,255,255,.75)!important;box-shadow:inset 0 0 0 1.5px var(--accent)!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay.selected .miniCalNum{background:transparent!important;color:var(--ink)!important}
+.tile[data-tileid="agenda"] .miniCalendar button.miniCalDay.today.selected .miniCalNum{color:#fff!important}
+.tile.completed[data-tileid="agenda"] .miniCalendar button.miniCalDay{background:rgba(255,255,255,.16)!important}
+.tile.completed[data-tileid="agenda"] .miniCalendar button.miniCalDay.today{background:#fff!important}
+.tile.completed[data-tileid="agenda"] .miniCalendar .miniCalDay.today .miniCalNum{color:var(--accentDark)!important}
+.tile[data-tileid="agenda"] .miniCalTitle.miniCalBack{border:0;background:transparent;padding:0;cursor:pointer;color:inherit}
+.grid>.tile[data-tileid="agenda"] .miniCalHead{padding-right:30px!important}
+.grid>.tile[data-tileid="agenda"] .agendaItems{padding-top:0!important}
+.grid>.tile[data-tileid="agenda"] .agendaItems:has(>.taskAddLink){padding-top:30px!important}
+.grid>.tile[data-tileid="agenda"] .agendaItems .taskRow:nth-of-type(n+4){display:flex}
+.tile[data-tileid="agenda"] .taskRow.agLine:not([data-fit-dropped]){display:flex!important}
+.tile[data-tileid="agenda"] .taskRow.agLine{flex-wrap:nowrap!important;align-items:baseline!important;gap:6px!important;padding:7px 2px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;opacity:1}
+.tile[data-tileid="agenda"] .taskRow.agLine~.taskRow.agLine{border-top:1px solid var(--hair)!important}
+.tile[data-tileid="agenda"] .taskRow.agLine .taskMain{flex:0 1 auto!important;min-width:0;width:auto!important;padding:0!important;text-align:left}
+.tile[data-tileid="agenda"] .taskRow.agLine .agName{font-size:14px!important;font-weight:750!important;line-height:1.3!important}
+.tile[data-tileid="agenda"] .taskRow.agLine .agRepeat{font-weight:700;opacity:.55}
+.tile[data-tileid="agenda"] .agMeta{flex:none;display:flex;align-items:baseline;gap:6px;white-space:nowrap;font-size:12px;font-weight:700;color:var(--dim)}
+.tile[data-tileid="agenda"] .agMeta .agWhen{margin-left:0!important;padding:0!important;border:0!important;background:none!important;font-size:12px!important;font-weight:800!important;color:var(--dim)!important}
+.tile[data-tileid="agenda"] .agMeta .agWhen::before,.tile[data-tileid="agenda"] .agMeta .agWhen::after{content:none!important;display:none!important}
+.tile[data-tileid="agenda"] .agSep{opacity:.6}
+.tile[data-tileid="agenda"] .taskRow.agLine.dueNow .agMeta .agWhen{color:var(--accent)!important}
+.tile[data-tileid="agenda"] .taskRow.agLine.done .agName{text-decoration:line-through;opacity:.55}
+.tile[data-tileid="agenda"] .taskRow.agLine .del{margin-left:auto;flex:none}
+/* Menu dock: refresh and arrange read like the page buttons beside them (no dark or purple fill);
+   arranging shows as the same soft highlight as the current page. */
+.wrap .topbar.dock .actionBtn,.wrap .topbar.dock .actionBtn.primary{border:0!important;background:transparent!important;color:var(--shell-muted,#6f7485)!important;box-shadow:none!important}
+.wrap .topbar.dock .actionBtn:hover{background:rgba(255,255,255,.7)!important;color:var(--shell-ink,#202334)!important}
+.wrap .topbar.dock .actionBtn.active{background:rgba(255,255,255,.85)!important;color:var(--shell-ink,#202334)!important;box-shadow:0 1px 4px rgba(30,38,32,.08)!important}
+.wrap .topbar.dock .actionBtn:disabled{opacity:.35}
+.wrap .topbar.dock .topActions{padding-left:4px;margin-left:2px!important;border-left:1px solid rgba(30,38,50,.1)}
+/* Recall: the grade buttons are small (the interval is the point), and their row keeps its place
+   on the front too, hidden, so the card is the same size on both sides. */
+.tile .recallDeck .recallRatings{gap:5px!important}
+.tile .recallDeck .recallRating,.tile .recallDeck button.recallRating{min-height:30px!important;height:30px!important;padding:3px 4px!important;border-radius:11px!important}
+.tile .recallDeck.big .recallRating,.tile .recallDeck.big button.recallRating{min-height:40px!important;height:40px!important}
+.tile .recallDeck .recallRating .recallWhen{font-size:12px!important}
+.tile .recallDeck .recallGradeName{font-size:8.5px!important}
+.recallDeck .recallRatings.idle{visibility:hidden;animation:none!important}
+.tileFocusSurface .deList{max-width:640px}
 </style>
 </head>
 <body>
@@ -4868,7 +4928,7 @@ const CURATED_TILE_LAYOUT={
   weekly:{desktop:[4,4],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
-  brainflex:{desktop:[2,4],phone:[1,2],family:"tall"},
+  brainflex:{desktop:[4,2],phone:[2,1],family:"wide"},
   academic:{desktop:[4,4],phone:[2,2],family:"large"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"},
@@ -6804,9 +6864,9 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
 }
 /* German mirrors the Spanish tile one level down (A2–B1): article + word, French gloss,
    and a French-respelled pronunciation under each entry, since German can't be guessed. */
-/* Deutsch, as it was before the conversation: one speech bubble from the flag holding the day's
-   theme, the point (in French) and the words, each German word with its French translation (and
-   how to say it). The pop-up adds every word and the quiz. */
+/* Deutsch: the day's theme beside the round flag, the point (in French) under it, then the words
+   as a plain two-column list: each German word with its pronunciation under it, its French
+   translation across. No bubble, no boxes. The pop-up shows every word and adds the quiz. */
 function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const {expanded}=useTilePresentation();
   if(!de)return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
@@ -6814,19 +6874,15 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
   const mark=index=>correct=>{if(Object.keys(savedDailyQuizAnswers(qs)).length>=qs.length)onLearned(de);};
   const undo=index=>onUnlearned&&onUnlearned(de);
   return (
-    <div className="langCard langDe readingCard deBubbleCard">
-      <div className="langBubble">
-        <div className="langHead"><div className="cardContentTitle langTitle">{de.thema}</div></div>
-        {de.punkt && <div className="langLede" lang="fr" data-fit-drop="9">{de.punkt}</div>}
-        {(de.vocab||[]).length>0 && <div className="langVocab">
-          {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="langWord deRow" data-fit-drop={!expanded&&i>0?"2":undefined}>
-            <div className="deWords"><span className="langTerm deTerm" lang="de">{v.de}</span><span className="langGloss deFr" lang="fr">{v.fr}</span></div>
-            {v.pron && <span className="dePron">{v.pron}</span>}
-          </div>))}
-        </div>}
-        <svg className="langTail" viewBox="0 0 24 20" aria-hidden="true"><path d="M1 0c1.5 8.5 7 15.5 22 19.5C13.5 17.5 8.5 12 7.5 0Z"/></svg>
-        <span className="langFlag" role="img" aria-label="Germany"/>
-      </div>
+    <div className="langCard langDe readingCard deList">
+      <div className="deHead"><span className="langFlag deFlag" role="img" aria-label="Germany"/><div className="cardContentTitle langTitle deTheme">{de.thema}</div></div>
+      {de.punkt && <p className="dePoint" lang="fr" data-fit-drop="9">{de.punkt}</p>}
+      {(de.vocab||[]).length>0 && <dl className="deWordsList">
+        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="deWordRow" data-fit-drop={!expanded&&i>0?"2":undefined}>
+          <dt><span className="deTerm" lang="de">{v.de}</span>{v.pron&&<span className="dePron">{v.pron}</span>}</dt>
+          <dd className="deFr" lang="fr">{v.fr}</dd>
+        </div>))}
+      </dl>}
       <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
@@ -6926,7 +6982,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
           <span className="recallFace recallFront" aria-hidden={flipped}><RecallFront item={shown} tag={tag}/></span>
           <span className="recallFace recallBackface" aria-hidden={!flipped}><RecallBack item={shown} tag={tag}/></span>
         </button>
-        {flipped&&<div className="recallRatings" role="group" aria-label="Rate this memory">
+        <div className={"recallRatings"+(flipped?"":" idle")} role="group" aria-label="Rate this memory" aria-hidden={!flipped} inert={flipped?undefined:""}>
           {FSRS_RATINGS.map(c=>{ const days=scheduleRecall(before,c.value).fsrs.scheduledDays; const again=c.value===1; return (
             <button type="button" key={c.value} className={"recallRating"+(given===c.value?" given":"")} aria-pressed={given?given===c.value:undefined}
               title={again?"Again · comes back this session":`${c.name} · ${humanInterval(days)}`}
@@ -6934,7 +6990,7 @@ function RecallCard({items,order,onSave,onComplete,onIncomplete}){
               <span className="recallWhen">{again?"soon":shortInterval(days)}</span>
               {expanded&&<span className="recallGradeName">{c.name}</span>}
             </button>); })}
-        </div>}
+        </div>
       </>:<div className="recallDone"><span className="recallDoneGlyph" aria-hidden="true">✦</span><span className="recallDoneText">{total} reviewed</span></div>}
       <div className={"recallRows"+(keys.length>4?" many":"")}>
         {keys.map(key=>{ const source=recallSourceByKey(key), c=COL[source.tile]||COL.recall, entries=session.rows[key], next=recallFrontier(session,key); return (
@@ -7502,7 +7558,8 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
     const d=daysBetween(todayKey,due);
     addItem(due,{label:r.label,time:"",due:d<=0&&r.lastDone!==todayKey,done:r.lastDone===todayKey});
   });
-  const days=Array.from({length:42},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
+  const daysInMonth=new Date(y,m,0).getDate(), lead=(first.getDay()+6)%7, weeks=Math.ceil((lead+daysInMonth)/7);
+  const days=Array.from({length:weeks*7},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
   const moveMonth=delta=>setViewMonth(current=>new Date(current.getFullYear(),current.getMonth()+delta,1));
   const returnToday=()=>setViewMonth(new Date(baseY,baseM-1,1));
   /* The day's completion rides on the calendar: each tracked past day carries its ring
@@ -7537,11 +7594,12 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
           <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
-          <span className="miniCalTitle" aria-live="polite" aria-label={monthLabel}><b>{monthName}</b><small>{y}</small></span>
+          {monthKey===todayKey.slice(0,7)
+            ?<span className="miniCalTitle" aria-live="polite" aria-label={monthLabel}><b>{monthName}</b><small>{y}</small></span>
+            :<button type="button" className="miniCalTitle miniCalBack" aria-live="polite" aria-label={monthLabel+". Back to this month"} title="Back to this month" onClick={returnToday}><b>{monthName}</b><small>{y}</small></button>}
           <button type="button" className="miniCalNav" aria-label="Next month" title="Next month" onClick={()=>moveMonth(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5" /></svg></button>
         </div>
         {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
-        <button type="button" className="miniCalToday widgetIconButton" aria-label="Return to the current month" title="Current month" onClick={returnToday}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="2.5" /><path d="M6.5 3v3M13.5 3v3M3.5 8.5h13" /><circle cx="10" cy="12.5" r="1.3" fill="currentColor" stroke="none" /></svg></button>
       </div>
       <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
@@ -7726,13 +7784,13 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
   const rows=[];
   recurring.forEach(r=>{
     const done=r.lastDone===todayKey, due=recurDue(r), d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, sub:done?"Completed today":recurLabel(r), canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
+    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, repeat:recurLabel(r), dateLabel:shortDate(done?todayKey:(due<todayKey?todayKey:due)), sub:done?"Completed today":recurLabel(r), canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
   });
   events.forEach(e=>{
     if(e.doneDate&&e.doneDate<todayKey) return;
     const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
     const time=String(e.time||"").trim();
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, calendarDate:e.date, time, timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":selectedDate?(time||"All day"):shortDate(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
+    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, calendarDate:e.date, time, dateLabel:shortDate(e.date)+(time&&d!==0?" "+time:""), timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":selectedDate?(time||"All day"):shortDate(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
   });
   const rowRank=r=>r.done?1:r.days<=0?0:2;
   rows.sort((a,b)=>rowRank(a)-rowRank(b)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
@@ -7743,12 +7801,14 @@ function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkD
       <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} streak={streak} />
       <div className="agendaItems">
       {!selectedDate && shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
-      {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later"; return (
-        <div key={r.id} data-fit-drop="1" className={"agRow taskRow"+state}>
+      {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later";
+        const rel=r.done?"done":r.days<-1?`${-r.days} days late`:r.days===-1?"a day late":r.days===0?(r.time||"today"):r.days===1?"tomorrow":`in ${r.days} days`;
+        return (
+        <div key={r.id} data-fit-drop="1" className={"agRow taskRow agLine"+state}>
           <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
-            <span className="agName">{r.label}</span><span className="agSub">{r.sub}</span>
+            <span className="agName">{r.label}{r.repeat&&<span className="agRepeat" title={r.repeat} aria-label={r.repeat}> ↻</span>}</span>
           </button>
-          <span className="agWhen">{r.done?"done":r.days<0?`${-r.days}d late`:r.days===0?(r.time||"due today"):`in ${r.days}d`}</span>
+          <span className="agMeta"><span className="agSep" aria-hidden="true">·</span><span className="agDate">{r.dateLabel}</span><span className="agSep" aria-hidden="true">·</span><span className="agWhen">{rel}</span></span>
           {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
         </div>
       );})}
