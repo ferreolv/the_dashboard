@@ -2161,8 +2161,6 @@ let dashboardRecoveryLink=captureDashboardRecoveryLink();
 .tile[data-tileid="agenda"] .taskAgenda{display:grid!important;grid-template-columns:minmax(0,1fr);gap:10px!important;align-items:start}
 .tile[data-tileid="agenda"] .miniCalendar{display:block!important;border:0!important;border-radius:0!important;overflow:visible!important}
 .tile[data-tileid="agenda"] .miniCalHead{padding:0 0 8px!important;gap:4px;font-weight:800;font-size:15px!important}
-/* a wall calendar: a spiral binding along the top and the month in big capitals */
-.miniCalSpiral{height:20px;margin:-6px 4px 4px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cellipse cx='11' cy='16.5' rx='2.8' ry='2.4' fill='rgba(0,0,0,.26)'/%3E%3Cpath d='M9.2 16.6C8 10 8.6 3.6 11 2.6c2.4 1 3 7.4 1.8 14' fill='none' stroke='%23727c88' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M9.9 15.8C9.1 10 9.6 4.6 11 3.7' fill='none' stroke='%23e9edf2' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") center top/22px 20px repeat-x;pointer-events:none}
 .tile .miniCalTitle{display:flex;align-items:baseline;justify-content:center;gap:6px;min-width:0;white-space:nowrap}
 .tile .miniCalTitle b{font-size:clamp(17px,6.2cqi,24px);font-weight:950;letter-spacing:.1em;line-height:1;color:var(--ink)}
 .tile .miniCalTitle small{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--dim)}
@@ -2377,10 +2375,10 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 /* --- Note as ruled paper: faint lines, a red margin, writing straight on it. --- */
 .tile[data-tileid="note"] .notearea{
   background:
-    linear-gradient(90deg,transparent 29px,color-mix(in srgb,var(--accentDark) 50%,transparent) 29px,color-mix(in srgb,var(--accentDark) 50%,transparent) 30.5px,transparent 30.5px),
+    linear-gradient(90deg,transparent 21px,color-mix(in srgb,var(--accentDark) 50%,transparent) 21px,color-mix(in srgb,var(--accentDark) 50%,transparent) 22.5px,transparent 22.5px),
     repeating-linear-gradient(to bottom,transparent 0 22.5px,color-mix(in srgb,var(--accent) 42%,transparent) 22.5px 23.5px,transparent 23.5px 24px)!important;
   background-position:0 0,0 6px!important;
-  line-height:24px!important;padding:6px 46px 6px 40px!important;
+  line-height:24px!important;padding:6px 14px 6px 31px!important;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word;
   border:none!important;border-radius:0!important;box-shadow:none!important;font-size:14.5px;flex:1 1 auto;min-height:0}
 /* the paper runs the whole tile: stretch mount and content, park the archive button on the sheet */
 .grid>.tile[data-tileid="note"]>.tbody{display:flex!important;flex-direction:column}
@@ -2388,7 +2386,7 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .grid>.tile[data-tileid="note"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
 .tile[data-tileid="note"] .noteCard{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
 .tile.completed[data-tileid="note"] .notearea{background:
-    linear-gradient(90deg,transparent 29px,rgba(255,255,255,.65) 29px,rgba(255,255,255,.65) 30.5px,transparent 30.5px),
+    linear-gradient(90deg,transparent 21px,rgba(255,255,255,.65) 21px,rgba(255,255,255,.65) 22.5px,transparent 22.5px),
     repeating-linear-gradient(to bottom,transparent 0 22.5px,rgba(255,255,255,.4) 22.5px 23.5px,transparent 23.5px 24px)!important;
   background-position:0 0,0 6px!important}
 
@@ -2856,14 +2854,10 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="philo"] .philoCard{flex:1 1 auto;display:flex;flex-direction:column;gap:10px!important;min-height:0}
 .tile[data-tileid="philo"] .philoQ{margin-bottom:0;padding-right:36px}
 .grid>.tile[data-tileid="philo"] .philoCard{gap:8px!important}
-.grid>.tile[data-tileid="philo"] .philoCard.hasReply .philoQ{-webkit-line-clamp:2;max-height:3.6em}
 .tileFocusSurface[data-tileid="philo"] .philoQ{font-size:19px;padding-right:48px}
 .philoLast{margin:0;padding-left:12px;border-left:2px solid color-mix(in srgb,var(--accent) 50%,transparent);font-size:13px;line-height:1.45;font-weight:600;color:var(--ink);opacity:.85;cursor:pointer}
-.philoLast strong,.philoMsg strong,.philoBubble strong{font-weight:850}
+.philoLast strong,.philoMsg strong{font-weight:850}
 /* the tile's reply bubble: the interlocutor's latest question, as in the pop-up's thread */
-.philoBubble{align-self:flex-start;max-width:92%;margin-top:6px;padding:10px 14px;border-radius:18px 18px 18px 6px;background:rgba(255,255,255,.72);box-shadow:0 6px 16px -12px rgba(20,40,70,.45);font-size:14px;line-height:1.42;font-weight:650;color:#20283a;cursor:pointer}
-.philoBubbleText{display:block;overflow-wrap:anywhere}
-.tile.completed .philoBubble{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
 .philoLast em,.philoMsg em{font-style:italic}
 .philoHint{margin:0;font-size:11.5px;line-height:1.4;font-weight:650;color:var(--dim)}
 .tile[data-tileid="philo"] .philoHint button.link{display:inline!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0 0 0 2px!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;color:var(--accentDark)!important;font-family:inherit!important;font-size:inherit!important;font-weight:800!important;line-height:inherit!important;text-decoration:underline;text-underline-offset:2px;transform:none!important;cursor:pointer}
@@ -3023,6 +3017,16 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .birthdayTodayName,.bdayGiftName{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:normal}
 .bdayGiftWhen{margin-top:3px;font-size:11.5px;font-weight:750;color:var(--dim);white-space:nowrap}
 .bdayTag{filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}
+/* tapped done: the lid flips open, confetti pops out */
+.bdayGiftArt{overflow:visible}
+.bdayLid{transform-box:fill-box;transform-origin:0% 100%;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.bdayInside{opacity:0;transition:opacity .2s}
+.bdayConfetti>*{opacity:0;transform-box:fill-box;transform-origin:center;translate:0 14px;scale:.3;transition:opacity .2s,translate .55s cubic-bezier(.34,1.56,.64,1),scale .55s cubic-bezier(.34,1.56,.64,1)}
+.tile.completed .bdayLid{transform:translate(-6px,-12px) rotate(-18deg)}
+.tile.completed .bdayInside{opacity:.28}
+.tile.completed .bdayConfetti>*{opacity:1;translate:0 0;scale:1}
+.tile.completed .bdayConfetti>:nth-child(2n){transition-delay:.06s}.tile.completed .bdayConfetti>:nth-child(3n){transition-delay:.12s}
+@media(prefers-reduced-motion:reduce){.bdayLid,.bdayConfetti>*{transition:none}}
 /* the pop-up list: a small date leaf, the name, how far away, and a quiet remove */
 .bdayCard{width:100%}
 .tileFocusSurface[data-tileid="birthdays"] .birthdaysSummary{min-height:0;height:auto;padding:4px 0 10px}
@@ -3107,9 +3111,49 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
-/* ---- Priorities: a board of pinned post-its on an Eisenhower matrix, all in the tile's one colour:
-   the tile's own glass is the board, the post-its are its pale paper, the pins and the marker
-   writing are its ink. ---- */
+/* ---- Reminders: an old printed wall calendar. A cream paper sheet hangs from a crimped tin strip
+   with a nail hole; the month is printed big in a serif in the tile's red, the days sit in a ruled
+   table and Sundays are printed red, like the post-office calendars of the old days. The paper
+   stays paper when the tile is done, so its marks keep their colours. ---- */
+.tile[data-tileid="agenda"] .miniCalendar.miniCalSheet{--paper:color-mix(in srgb,#FFFDF7 90%,var(--accent));--print:#3A2A22;--rule:rgba(58,42,34,.16);position:relative;margin-top:6px;padding:12px 8px 6px!important;background:var(--paper)!important;border-radius:3px 3px 5px 5px!important;box-shadow:0 1px 0 rgba(0,0,0,.05),0 12px 18px -14px rgba(70,35,10,.55),inset 0 -14px 18px -16px rgba(70,35,10,.18)!important;color:var(--print)!important}
+.miniCalBind{position:absolute;left:-2px;right:-2px;top:-5px;height:11px;border-radius:2px;background:linear-gradient(180deg,color-mix(in srgb,var(--print,#3A2A22) 55%,#fff) 0,var(--print,#3A2A22) 45%,color-mix(in srgb,var(--print,#3A2A22) 80%,#000) 100%);box-shadow:0 2px 3px -1px rgba(0,0,0,.35)}
+.miniCalBind::after{content:"";position:absolute;left:50%;top:2.5px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#d9d3cc 0 35%,#8d8379 70%);box-shadow:inset 0 1px 1px rgba(0,0,0,.6)}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalHead{padding:2px 0 4px!important;color:var(--print)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle{display:flex;align-items:baseline;justify-content:center;gap:7px}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle b{font:700 clamp(17px,5.4cqi,26px)/1 Georgia,'Times New Roman',serif!important;letter-spacing:.09em;color:var(--accent)!important;text-shadow:.4px .4px 0 color-mix(in srgb,var(--accent) 60%,#000)}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle small{font:italic 600 12px/1 Georgia,'Times New Roman',serif!important;letter-spacing:.02em;color:var(--print)!important;opacity:.8}
+.tile[data-tileid="agenda"] .miniCalSheet button:is(.miniCalNav,.miniCalToday){color:var(--print)!important;opacity:.7}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek{border-top:1.5px solid var(--print);border-bottom:3px double var(--print)}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek span{padding:3px 0 2px!important;font:700 9px/1.2 Georgia,'Times New Roman',serif!important;letter-spacing:.12em;text-transform:uppercase;color:var(--print)!important;opacity:.85!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek span:last-child,.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:nth-child(7n):not(.out) .miniCalNum{color:var(--accent)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalGrid{gap:0!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay{border-radius:0!important;border-bottom:1px solid var(--rule)!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:not(:nth-child(7n+1)){border-left:1px solid var(--rule)!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:hover{background:rgba(58,42,34,.05)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalNum{font:600 13px/1 Georgia,'Times New Roman',serif!important;color:var(--print)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.out{background:transparent!important;opacity:.32}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay:hover .miniCalNum{background:transparent!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.has .miniCalNum{background:color-mix(in srgb,var(--accent) 16%,transparent)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.today .miniCalNum{background:transparent!important;box-shadow:inset 0 0 0 2px var(--print)!important;color:var(--print)!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected{background:color-mix(in srgb,var(--accent) 10%,transparent)!important;box-shadow:none!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalNum{background:var(--accent)!important;color:#fff!important;box-shadow:none!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalTrack{stroke:color-mix(in srgb,var(--accent) 20%,transparent)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalArc{stroke:var(--accent)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.today .miniCalTrack{stroke:var(--print)!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalTrack{stroke:rgba(255,255,255,.45)!important}
+.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalArc{stroke:#fff!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalDot{background:var(--accent)!important}
+.tile[data-tileid="agenda"] .miniCalSheet .miniCalMore{color:var(--accent)!important}
+/* ---- Priorities: an old classroom chalkboard, dark green with eraser smudges; the matrix is
+   drawn on it in chalk, and the post-its pinned to it are the tile's pale green paper with its
+   dark green marker writing and pins. ---- */
+.tile[data-tileid="matrix"],.tile.completed[data-tileid="matrix"]{--board:radial-gradient(ellipse 55% 40% at 28% 30%,rgba(255,255,255,.075),transparent 70%),radial-gradient(ellipse 45% 35% at 78% 72%,rgba(255,255,255,.055),transparent 70%),radial-gradient(ellipse 70% 20% at 50% 96%,rgba(255,255,255,.06),transparent 75%),linear-gradient(165deg,#36604B,#2C5040 55%,#25463A);--glass-surface:var(--board);--chalk:rgba(246,244,234,.9)}
+.tile[data-tileid="matrix"]::after{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 30%)!important}
+.tileFocusSurface[data-tileid="matrix"]{background:var(--board)!important}
+.tile[data-tileid="matrix"] .tileExpand{color:var(--chalk)!important}
+.tile[data-tileid="matrix"] .pinBoard{--line:rgba(246,244,234,.62)}
+.tile[data-tileid="matrix"] .pbAxis{filter:drop-shadow(0 0 .6px rgba(255,255,255,.6))}
+.tile[data-tileid="matrix"] .pbLbl{color:var(--chalk)!important;text-shadow:0 0 1px rgba(255,255,255,.55),.5px .5px 0 rgba(255,255,255,.2);opacity:.9}
 .grid>.tile[data-tileid="matrix"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="matrix"] .tileMount{flex:1 1 auto!important;display:flex}
 .grid>.tile[data-tileid="matrix"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
@@ -3287,6 +3331,71 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .grid>.tile[data-tileid="spanish"] .tileMount>.content,.grid>.tile[data-tileid="german"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0}
 .grid>.tile[data-tileid="spanish"] .langCard,.grid>.tile[data-tileid="german"] .langCard{flex:1 1 auto;min-height:0}
 
+/* ---- The menu is a dock hidden under the bottom edge on every screen; the small arrow (or a
+   push past the end of the page) brings it up. No title header on Today. ---- */
+.wrap .topbar.dock{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;z-index:130;width:max-content!important;max-width:calc(100vw - 24px)!important;min-height:0!important;margin:0!important;display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:6px!important;padding:6px!important;border:1px solid rgba(255,255,255,.78)!important;border-radius:24px!important;background:rgba(245,247,250,.86)!important;-webkit-backdrop-filter:blur(24px) saturate(1.3);backdrop-filter:blur(24px) saturate(1.3);box-shadow:0 12px 36px rgba(24,34,48,.18)!important;box-sizing:border-box;
+  transform:translate(-50%,calc(100% + 48px));opacity:0;visibility:hidden;transition:transform .34s cubic-bezier(.2,.9,.25,1),opacity .2s ease,visibility 0s linear .34s}
+.wrap .topbar.dock.open{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .34s cubic-bezier(.2,.9,.25,1),opacity .2s ease}
+.wrap .topbar.dock .topnav{position:static!important;left:auto!important;bottom:auto!important;transform:none!important;width:auto!important;max-width:none!important;display:flex!important;flex:none!important;gap:2px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.wrap .topbar.dock .navbtn{flex:none!important;min-height:44px!important;padding:10px 14px!important;border-radius:18px!important;font-size:13.5px!important}
+.wrap .topbar.dock .topActions{width:auto!important;flex:none!important;margin:0!important;gap:4px!important;justify-content:flex-start!important}
+.wrap .topbar.dock .actionBtn{display:inline-flex!important;align-items:center;justify-content:center;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border-radius:18px!important}
+.wrap .topbar.dock .actionBtn span{display:none!important}
+@media(max-width:420px){.wrap .topbar.dock .navbtn{padding:10px 9px!important;font-size:12.5px!important}.wrap .topbar.dock .actionBtn{width:40px!important;min-width:40px!important}}
+.dockHandle{position:fixed;left:50%;bottom:calc(4px + env(safe-area-inset-bottom));z-index:131;display:grid;place-items:center;width:64px;height:30px;margin:0;padding:0;border:0;border-radius:15px;background:transparent;color:rgba(28,36,48,.42);cursor:pointer;transform:translateX(-50%);transition:bottom .34s cubic-bezier(.2,.9,.25,1),color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.dockHandle svg{width:26px;height:13px}
+.dockHandle:hover{color:rgba(28,36,48,.75);background:rgba(255,255,255,.45)}
+.dockHandle:focus-visible{outline:2px solid rgba(28,36,48,.6);outline-offset:2px}
+.dockHandle.open{bottom:calc(76px + env(safe-area-inset-bottom))}
+@media(prefers-reduced-motion:reduce){.wrap .topbar.dock,.wrap .topbar.dock.open,.dockHandle{transition:none}}
+.wrap{padding-top:clamp(12px,2vw,24px)!important;padding-bottom:calc(56px + env(safe-area-inset-bottom))!important}
+/* ---- Watch (1×1): a rectangular dress watch; the strap runs off the tile's top and bottom. ---- */
+.grid>.tile[data-tileid="clock"],.grid>.tile[data-tileid="stats"]{padding:0!important}
+.grid>.tile:is([data-tileid="clock"],[data-tileid="stats"])>.tbody{display:flex!important;flex-direction:column;height:100%}
+.grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0;padding:0!important}
+.watchCard{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;cursor:default}
+.watchArt{width:100%;height:100%;overflow:visible}
+.watchStrap{fill:color-mix(in srgb,var(--accent) 55%,#0b1020)}
+.watchStitch{fill:none;stroke:color-mix(in srgb,var(--accent) 35%,#fff);stroke-width:.55;stroke-dasharray:1.6 1.2;opacity:.75}
+.watchHole{fill:rgba(0,0,0,.45)}
+.watchCase{fill:color-mix(in srgb,var(--accent) 10%,#eef0f4);stroke:color-mix(in srgb,var(--accent) 30%,#9aa1ad);stroke-width:.6;filter:drop-shadow(0 3px 3px rgba(20,30,60,.28))}
+.watchBezel{fill:none;stroke:rgba(255,255,255,.85);stroke-width:1}
+.watchCrown{fill:color-mix(in srgb,var(--accent) 12%,#dfe2e8);stroke:color-mix(in srgb,var(--accent) 30%,#9aa1ad);stroke-width:.5}
+.watchCrownGrip{stroke:rgba(0,0,0,.22);stroke-width:.5}
+.watchDial{fill:color-mix(in srgb,#FFFDF7 94%,var(--accent));stroke:rgba(0,0,0,.12);stroke-width:.4}
+.watchTrack{fill:none;stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:.35}
+.watchTick{stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:.35}
+.watchTick.major{stroke:var(--ink);stroke-width:.7}
+.watchNumeral{font:700 5.6px Georgia,'Times New Roman',serif;fill:var(--ink);letter-spacing:-.02em}
+.watchDate{fill:#fff;stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:.4}
+.watchDateText{font:700 4.4px 'Nunito',sans-serif;fill:var(--ink)}
+.watchHand{fill:var(--accent);stroke:color-mix(in srgb,var(--accent) 60%,#000);stroke-width:.25}
+.watchSecond{stroke:color-mix(in srgb,var(--accent) 45%,#ff3b30);stroke-width:.45;stroke-linecap:round}
+.watchSecondDot{fill:color-mix(in srgb,var(--accent) 45%,#ff3b30)}
+.watchPin{fill:#fff}
+/* ---- Stats (1×1): today's ring in the middle, a flame at 100%; streak, best and perfect days under it. ---- */
+.statsCard{position:relative;width:100%;height:100%;box-sizing:border-box;padding:9cqmin 6cqmin 8cqmin;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
+.statsCore{position:relative;flex:none;width:58cqmin;height:58cqmin;display:grid;place-items:center}
+.statsRing{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.statsTrack{fill:none;stroke:color-mix(in srgb,var(--accent) 20%,transparent);stroke-width:10}
+.statsArc{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;transition:stroke-dasharray .6s cubic-bezier(.2,.8,.2,1)}
+.statsPct{position:relative;font:900 17cqmin/1 'Nunito',sans-serif;letter-spacing:-.04em;color:var(--ink)}
+.statsPct small{font-size:.46em;font-weight:850;margin-left:.04em}
+.statsFlame{width:86%;height:100%;overflow:visible;transform-origin:50% 92%;animation:statsFlicker 2.8s ease-in-out infinite}
+.statsFlame .sfOuter{fill:var(--accent)}
+.statsFlame .sfMid{fill:color-mix(in srgb,var(--accent) 45%,#FFD27A)}
+.statsFlame .sfCore{fill:#FFF6E6}
+.tile.completed .statsFlame .sfOuter{fill:#fff}
+.tile.completed .statsFlame .sfMid{fill:color-mix(in srgb,var(--accent) 30%,#FFE2B0)}
+.tile.completed .statsFlame .sfCore{fill:var(--accent)}
+@keyframes statsFlicker{0%,100%{transform:scale(1,1) skewX(0deg)}30%{transform:scale(.97,1.04) skewX(-1.5deg)}60%{transform:scale(1.02,.97) skewX(1deg)}}
+@media(prefers-reduced-motion:reduce){.statsFlame{animation:none}}
+.statsRow{flex:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;text-align:center}
+.statsItem{min-width:0}
+.statsItem b{display:block;font:900 11cqmin/1 'Nunito',sans-serif;letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.statsItem b i{font-style:normal;font-size:.56em;font-weight:850;opacity:.6}
+.statsItem small{display:block;margin-top:1.5cqmin;font:850 max(8.5px,5.4cqmin)/1 'Nunito',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);opacity:.62}
 </style>
 </head>
 <body>
@@ -3310,7 +3419,7 @@ const COL = {
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
-  matrix:   {p:"#FFF5C2", v:"#FFCC00", d:"#8A6A00"},
+  matrix:   {p:"#E3EEDD", v:"#2F5A45", d:"#1D3B2C"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -3318,7 +3427,7 @@ const COL = {
   world:    {p:"#E8F5DF", v:"#64B82E", d:"#3D7A16"},
   recall:   {p:"#ECECEE", v:"#8E8E93", d:"#3F3F45"},
   weekly:   {p:"#ECEEF2", v:"#7B8190", d:"#4B5260"},
-  note:     {p:"#E8F6D8", v:"#7ED43F", d:"#4C8319"},
+  note:     {p:"#FFF5C2", v:"#FFCC00", d:"#8A6A00"},
   birthdays:{p:"#FFE2ED", v:"#FF3F79", d:"#A81C4C"},
   timer:    {p:"#F1DBE0", v:"#7A1F35", d:"#5A1526"},
   breathing:{p:"#FFE5FA", v:"#F846D0", d:"#A02391"},
@@ -3331,6 +3440,8 @@ const COL = {
   people:   {p:"#DDF8F3", v:"#10C2A0", d:"#0C7A66"},
   shopping: {p:"#DDEFDC", v:"#3E9E5B", d:"#256B39"},
   health:   {p:"#E1F7EC", v:"#18B96E", d:"#0C7042"},
+  clock:    {p:"#E4E9F5", v:"#2D4BA0", d:"#1A2A55"},
+  stats:    {p:"#FFE6DA", v:"#FF5A1F", d:"#A3300A"},
 };
 /* Every dashboard tile shares the same reversible full-colour presentation.
    Whether a tile is completed by a task control or by tapping an informative
@@ -3610,11 +3721,11 @@ async function callClaude(system,user,opts={}){
   const models=opts.model?[opts.model]:GEN_MODELS;
   let failure=null;
   for(const model of models){
-    const body={ model, max_tokens:opts.max||600, system, messages:[{role:"user",content:user}] };
+    const body=claudeBody(model,opts.max||600,system,[{role:"user",content:user}],"medium");
     const res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
       headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
       body:JSON.stringify(body) });
-    if(res.ok){ const data=await res.json(); return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n"); }
+    if(res.ok){ const text=claudeReplyText(await res.json().catch(()=>null)); if(text) return text; failure=Object.assign(new Error("Claude returned an empty reply"),{dailyState:"service_error"}); continue; }
     failure=Object.assign(new Error("Claude returned HTTP "+res.status),{dailyState:[401,403].includes(res.status)?"invalid_key":res.status===429?"rate_limit":"service_error"});
     if(![400,403,404].includes(res.status)) throw failure;
   }
@@ -3891,6 +4002,32 @@ async function genBankReorg(bank){ const existing=[]; Object.entries((bank&&bank
    stronger model first; a model the key can't use (403/404, or a retired id: 400) gives way to
    the next one, and only a key Claude rejects outright (401) asks for a new key. */
 const PHILO_CHAT_MODELS=["claude-sonnet-5-5","claude-haiku-5-5","claude-haiku-4-5-20251001"];
+/* Current models think before they answer unless told otherwise, and that thinking counts toward
+   max_tokens: a short cap was used up before any text came out (an empty reply). Sonnet 5.5 is
+   asked not to think ("between_tools", its thinking-off setting); Haiku 5.5 thinks little (low
+   effort) and gets room for it on top of the answer; older models only think when asked. */
+function claudeBody(model,max,system,messages,effort){
+  if(model==="claude-sonnet-5-5") return {model,max_tokens:max,thinking:{type:"between_tools"},system,messages};
+  if(model==="claude-haiku-5-5") return {model,max_tokens:max+4096,output_config:{effort:effort||"low"},system,messages};
+  return {model,max_tokens:max,system,messages};
+}
+/* The answer is the text blocks only; a refusal or a reply cut off with no text is no answer. */
+function claudeReplyText(data){
+  if(!data||data.stop_reason==="refusal") return "";
+  return (data.content||[]).filter(b=>b&&b.type==="text").map(b=>b.text).join("\n").replace(/<\/?thinking>/g,"").trim();
+}
+/* What the conversation sends: empty turns (an earlier failed reply) are left out and two turns
+   in a row from the same side are joined, so every request alternates as the API requires. */
+function philoHistory(initial,messages){
+  const out=[];
+  [{role:"user",text:initial},...(messages||[])].forEach(m=>{
+    const text=String((m&&m.text)||"").trim(); if(!text) return;
+    const role=m.role==="assistant"?"assistant":"user", last=out[out.length-1];
+    if(last&&last.role===role) last.text+="\n\n"+text; else out.push({role,text});
+  });
+  while(out.length&&out[0].role!=="user") out.shift();
+  return out;
+}
 function philoSystemPrompt(question,philosopher){
   return philosopher
     ? `You are ${philosopher}, questioning a person who is thinking through today's question: "${question}". Your only job is to help them think for themselves. Reply with exactly ONE open question and nothing else. Never answer the question yourself, never state ${philosopher}'s doctrine, an argument, an explanation, an example answer or a summary of what they said, and never reason out loud. No praise, agreement or reassurance, no hedging, no lists, no markdown, no bold, no quotations, no source notes. Ask the kind of question ${philosopher} would ask: drawn from the concerns, distinctions and method found in ${philosopher}'s own texts, never invented. The question must be open (not answerable by yes, no or a fact), at most 30 words, plain and direct, and aimed at what their last message examined least. Do not steer them toward ${philosopher}'s conclusions or any other position, including moderate, consensus or "balanced" ones; never imply which answer is right or that one exists. If they ask you a question or ask what you think, do not answer: turn it into an open question for them.`
@@ -3919,15 +4056,17 @@ async function philoReplyWithKey(key,question,history,philosopher){
   const fail=(state,text)=>Object.assign(new Error("philosophy key: "+state),{dailyState:state,philoText:text});
   let lastErr=null;
   for(const model of PHILO_CHAT_MODELS){
-    const body={ model, max_tokens:200, system, messages:history.map(h=>({role:h.role,content:h.text})) };
+    const body=claudeBody(model,400,system,history.map(h=>({role:h.role,content:h.text})),"low");
     let res;
     try{ res=await fetch("https://api.anthropic.com/v1/messages",{ method:"POST",
       headers:{ "content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true" },
       body:JSON.stringify(body) }); }
     catch(e){ throw fail(navigator.onLine===false?"offline":"error","Couldn’t reach Claude. Check the connection and retry."); }
     if(res.ok){
-      const data=await res.json();
-      return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+      const reply=claudeReplyText(await res.json().catch(()=>null));
+      if(reply) return reply;
+      lastErr=fail("error","Claude sent back an empty reply. Retry in a moment.");
+      continue;
     }
     const detail=await res.json().then(d=>d&&d.error&&d.error.message).catch(()=>"");
     const said=detail?" (Claude said: “"+String(detail).slice(0,160)+"”)":"";
@@ -3946,7 +4085,7 @@ async function philoReplyFromServer(question,history,thinker){
   try{ res=await fetch(SHARED_URL+"/philo/reply",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+getAccountToken()},body:JSON.stringify({question,thinker,history}),signal:AbortSignal.timeout(50000)}); }
   catch(e){ throw fail(navigator.onLine===false?"offline":"error","Couldn’t reach the daily server. Check the connection and retry."); }
   const data=await res.json().catch(()=>({}));
-  if(res.ok&&data.reply) return data.reply;
+  if(res.ok&&String(data.reply||"").trim()) return String(data.reply).trim();
   if(res.status===404) throw fail("server_outdated","Your daily server doesn’t answer Philosophy yet. Paste the updated worker into Cloudflare once, or add your own Claude API key in Settings.");
   const code=["invalid_key","rate_limit","signin_required"].includes(data.code)?data.code:"error";
   throw fail(code,typeof data.error==="string"&&data.error?data.error.slice(0,220):"The daily server couldn’t answer (HTTP "+res.status+").");
@@ -4684,7 +4823,7 @@ const CURATED_TILE_LAYOUT={
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
   matrix:{desktop:[4,4],phone:[2,2],family:"large"},
   events:{desktop:[4,3],phone:[2,2],family:"large"},
-  note:{desktop:[4,2],phone:[2,1],family:"wide"},
+  note:{desktop:[2,4],phone:[2,2],family:"tall"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,4],phone:[2,2],family:"large"},
@@ -4702,7 +4841,9 @@ const CURATED_TILE_LAYOUT={
   brainflex:{desktop:[4,3],phone:[2,2],family:"wide"},
   academic:{desktop:[4,3],phone:[2,2],family:"large"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
-  people:{desktop:[4,2],phone:[2,1],family:"wide"}
+  people:{desktop:[4,2],phone:[2,1],family:"wide"},
+  clock:{desktop:[2,2],phone:[1,1],family:"small"},
+  stats:{desktop:[2,2],phone:[1,1],family:"small"}
 };
 const curatedTileSize=(id,availableCols)=>{
   const layout=CURATED_TILE_LAYOUT[id]||{desktop:[2,2],phone:[2,1],family:"wide"};
@@ -4741,6 +4882,8 @@ const LIBRARY_META={
   music:["life","song music classical recording listening"],
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
+  clock:["life","watch time clock hour date"],
+  stats:["life","stats streak best record perfect days progress percentage flame"],
   movie:["life","movies films watch-list cinema next movie"],
   matrix:["plan","priorities eisenhower matrix urgent important post-it sticky notes board pin to-do"],
   weekly:["life","stats statistics weekly history progress review"],
@@ -4753,7 +4896,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -4764,6 +4907,7 @@ const GERMAN_TILE_INTRODUCED=load("germanTileIntroduced",false);
 const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
 const SUSTAIN_TILE_INTRODUCED=load("sustainTileIntroduced",false);
 const MATRIX_TILE_INTRODUCED=load("matrixTileIntroduced",false);
+const WATCH_STATS_INTRODUCED=load("watchStatsIntroduced",false);
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
@@ -4771,6 +4915,7 @@ const placeHealthAfterBreathing=list=>{ const next=list.filter(id=>id!=="health"
 const placeGermanAfterSpanish=list=>{ const next=list.filter(id=>id!=="german"), at=next.indexOf("spanish"); next.splice(at<0?next.length:at+1,0,"german"); return next; };
 const placeMovieAfterEvents=list=>{ const next=list.filter(id=>id!=="movie"), at=next.indexOf("events"); next.splice(at<0?next.length:at+1,0,"movie"); return next; };
 const placeSustainAfterHabits=list=>{ const next=list.filter(id=>id!=="sustain"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"sustain"); return next; };
+const placeWatchStatsFirst=list=>["clock","stats",...list.filter(id=>id!=="clock"&&id!=="stats")];
 const placeMatrixAfterReminders=list=>{ const next=list.filter(id=>id!=="matrix"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"matrix"); return next; };
 
 // Dialogs share a stack so only the frontmost overlay handles focus and Escape.
@@ -5043,10 +5188,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); if(!MATRIX_TILE_INTRODUCED) placed=placeMatrixAfterReminders(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); if(!MATRIX_TILE_INTRODUCED) placed=placeMatrixAfterReminders(placed); if(!WATCH_STATS_INTRODUCED) placed=placeWatchStatsFirst(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(!MATRIX_TILE_INTRODUCED&&!next.includes("matrix")) next=[...next,"matrix"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); if(!MATRIX_TILE_INTRODUCED) save("matrixTileIntroduced",true); return next; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(!MATRIX_TILE_INTRODUCED&&!next.includes("matrix")) next=[...next,"matrix"]; if(!WATCH_STATS_INTRODUCED) next=[...next.filter(id=>id!=="clock"&&id!=="stats"),"clock","stats"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES,"clock","stats"]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); if(!MATRIX_TILE_INTRODUCED) save("matrixTileIntroduced",true); if(!WATCH_STATS_INTRODUCED) save("watchStatsIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -5441,7 +5586,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const persistPositiveEvents=v=>{ setPositiveEvents(v); save("positiveEvents",v); };
 
   /* philosophy chat (today's conversation only — the daily question itself lives in `daily.philo`) */
-  const [philoChat,setPhiloChat]=useState(()=>({initial:"",messages:[],mode:"standard",...load("philoChat:"+todayKey,{})}));
+  // a reply that came back empty (before the thinking fix) is dropped, so the chat can carry on
+  const [philoChat,setPhiloChat]=useState(()=>{ const c={initial:"",messages:[],mode:"standard",...load("philoChat:"+todayKey,{})}; return {...c,messages:(Array.isArray(c.messages)?c.messages:[]).filter(m=>m&&String(m.text||"").trim())}; });
   const persistPhiloChat=v=>{ setPhiloChat(v); save("philoChat:"+todayKey,v); };
   const [philoBusy,setPhiloBusy]=useState(false);
   const [philoError,setPhiloError]=useState("");
@@ -5545,9 +5691,34 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     setActiveTiles(ordered); save("activeTiles",ordered);
     const history={...tileSets,[todayKey]:ordered}; setTileSets(history); save("activeTileHistory",history);
   };
+  /* The menu is a dock hidden below the screen: the little arrow at the bottom brings it up,
+     and so does pushing past the end of the page (a scroll or a pull up from the bottom). It
+     goes away again once a page is chosen, on a tap elsewhere, on Escape or on scrolling up. */
+  const [navOpen,setNavOpen]=useState(false);
+  const dockRef=useRef(null),dockHandleRef=useRef(null);
+  useEffect(()=>{
+    let pull=0,startY=null;
+    const atBottom=()=>window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-2;
+    const busy=t=>!!(t&&t.closest&&t.closest(".tileFocusOverlay,.pinBoard,textarea,input,select,[contenteditable=true],.dashboardModal,.authGate"));
+    const onWheel=e=>{
+      if(busy(e.target)) return;
+      if(e.deltaY>0&&atBottom()){ pull+=e.deltaY; if(pull>160){ pull=0; setNavOpen(true); } }
+      else if(e.deltaY<-24){ pull=0; setNavOpen(false); }
+    };
+    const onTouchStart=e=>{ startY=!busy(e.target)&&atBottom()?e.touches[0].clientY:null; };
+    const onTouchMove=e=>{ if(startY!=null&&startY-e.touches[0].clientY>64){ startY=null; setNavOpen(true); } };
+    const onKey=e=>{ if(e.key==="Escape") setNavOpen(false); };
+    const onDown=e=>{ if(dockRef.current&&!dockRef.current.contains(e.target)&&!(dockHandleRef.current&&dockHandleRef.current.contains(e.target))) setNavOpen(false); };
+    window.addEventListener("wheel",onWheel,{passive:true});
+    window.addEventListener("touchstart",onTouchStart,{passive:true});
+    window.addEventListener("touchmove",onTouchMove,{passive:true});
+    document.addEventListener("keydown",onKey);
+    document.addEventListener("pointerdown",onDown);
+    return()=>{ window.removeEventListener("wheel",onWheel); window.removeEventListener("touchstart",onTouchStart); window.removeEventListener("touchmove",onTouchMove); document.removeEventListener("keydown",onKey); document.removeEventListener("pointerdown",onDown); };
+  },[]);
   const openPage=next=>{
     if(!DASHBOARD_ROUTES.includes(next))return;
-    setEdit(false);setPage(next);
+    setNavOpen(false);setEdit(false);setPage(next);
     if(location.hash!=="#/"+next)history.pushState(null,"","#/"+next);
     window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
   };
@@ -5799,7 +5970,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const philoSubmitInitial=async(text)=>{
     const q=daily && daily.philo && philoQuestionOf(daily.philo,todayKey); if(!q) return;
     const base={initial:text,messages:[],mode:philoChat.mode||"standard",question:q}; persistPhiloChat(base); setRitual("philo"); setPhiloError("");setPhiloBusy(true);
-    try{ const reply=await philoReply(q,[{role:"user",text}],base.mode); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
+    try{ const reply=String(await philoReply(q,[{role:"user",text}],base.mode)||"").trim(); if(!reply) throw Object.assign(new Error("empty reply"),{philoText:"Claude sent back an empty reply. Retry in a moment."}); persistPhiloChat({...base,messages:[{role:"assistant",text:reply}]}); }
     catch(e){setPhiloError("Your reflection is saved. "+philoMessage(e));showLoadProblems([philoProblem(e)]);}
     setPhiloBusy(false);
   };
@@ -5808,8 +5979,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const withUser=retry?philoChat:{...philoChat,messages:[...philoChat.messages,{role:"user",text}]};
     persistPhiloChat(withUser);setPhiloError("");setPhiloBusy(true);
     try{
-      const history=[{role:"user",text:philoChat.initial},...withUser.messages];
-      const reply=await philoReply(q,history,philoChat.mode||"standard");
+      const history=philoHistory(philoChat.initial,withUser.messages);
+      const reply=String(await philoReply(q,history,philoChat.mode||"standard")||"").trim();
+      if(!reply) throw Object.assign(new Error("empty reply"),{philoText:"Claude sent back an empty reply. Retry in a moment."});
       persistPhiloChat({...withUser,messages:[...withUser.messages,{role:"assistant",text:reply}]});
     }catch(e){setPhiloError("Your message is saved. "+philoMessage(e));showLoadProblems([philoProblem(e)]);}
     setPhiloBusy(false);
@@ -6063,6 +6235,12 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   /* strict streak: today may still be pending, but any earlier missed day resets to 0 */
   const strictStreak=done=>streakFrom(done,todayKey,addDays);
   const bestStreak=done=>{ let best=0,run=0; for(let d=365; d>=0; d--){ const k=addDays(todayKey,-d); if(k<firstDay){ continue; } if(done(k)){ run++; best=Math.max(best,run); } else run=0; } return best; };
+  /* Stats tile: the streak of kept days (flames and ices), the best run, and the perfect days
+     of the last 30 (or of every day since the start, when that is fewer). */
+  const statsSummary=(activeNow.has("stats")||page==="library")?(()=>{
+    let perfect=0,span=0; for(let d=0; d<30; d++){ const k=addDays(todayKey,-d); if(k<firstDay) break; span++; if(isPerfectDay(k)) perfect++; }
+    const current=strictStreak(streakDay); return {current,best:Math.max(current,bestStreak(streakDay)),perfect,span};
+  })():{current:0,best:0,perfect:0,span:0};
   const insightSections=page!=="insights"?[]:(()=>{
     const defs=[
       ["goals","Goals",k=>(goalsLog[k]||[]).length>0&&(goalsLog[k]||[]).every(g=>g.done)],
@@ -6204,6 +6382,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} onRename={renameMovie} />, ()=>toggleMovieWatched()),
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
+    clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>,()=>{}),
+    stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>,()=>openPage("insights")),
     matrix: T("matrix","Priorities",false,null,
       <MatrixCard notes={matrixNotes} onChange={saveMatrix} />),
     brain: T("brain","Memory",false,null,
@@ -6244,7 +6424,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         {authMode==="login"&&<button type="button" className="link" disabled={authBusy} onClick={()=>changeAuthMode("forgot")}>Forgot password?</button>}
         <button type="button" className="link" disabled={authBusy} onClick={()=>changeAuthMode(authMode==="login"?"signup":"login")}>{authMode==="forgot"?"Back to sign in":authMode==="login"?"Create an account":"Already have an account? Sign in"}</button>
       </DashboardModal>}
-      <nav className="topbar" aria-label="Primary navigation">
+      <button type="button" ref={dockHandleRef} className={"dockHandle"+(navOpen||edit?" open":"")} aria-expanded={navOpen||edit} aria-controls="app-dock" aria-label={navOpen||edit?"Hide the menu":"Show the menu"} title={navOpen||edit?"Hide the menu":"Menu"} onClick={()=>{ if(edit){ setEdit(false); setNavOpen(false); } else setNavOpen(v=>!v); }}><svg viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={navOpen||edit?"M5 3l7 6 7-6":"M5 9l7-6 7 6"}/></svg></button>
+      <nav ref={dockRef} id="app-dock" className={"topbar dock"+(navOpen||edit?" open":"")} aria-label="Primary navigation" inert={navOpen||edit?undefined:""}>
         <div className="topnav">
           <button className={"navbtn"+(page==="dashboard"?" active":"")} aria-current={page==="dashboard"?"page":undefined} onClick={()=>openPage("dashboard")}>Today</button>
           <button className={"navbtn"+(page==="insights"?" active":"")} aria-current={page==="insights"?"page":undefined} onClick={()=>openPage("insights")}>Insights</button>
@@ -6258,7 +6439,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       </nav>
 
       <main id="main-content" className="pageContent" tabIndex="-1">
-      <header className="dashboardHero">
+      {page!=="dashboard"&&<header className="dashboardHero">
         <div className="heroCopy">
           {page==="dashboard"&&<div className="heroEyebrow">{displayDateLabel}</div>}
           <h1>{page==="library"?"Library":page==="settings"?"Settings":page==="insights"?"Insights":`${greeting}, ${profileName}`}</h1>
@@ -6271,8 +6452,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           <div className="metric"><span className="metricValue">{page==="library"?ALL.length-activeTiles.length:page==="settings"?locationProfile.name:ice.perfect}</span><span className="metricLabel">{page==="library"?"Resting":page==="settings"?"Location":"Perfect days"}</span></div>
           <div className="metric"><span className="heroClock">{displayClock}</span><span className="metricLabel">{locationProfile.name}</span></div>
         </div>
-      </header>
-      {page==="dashboard"&&expectedGenKeys.length>0&&<div className={"dailyMeter"+(contentReady?" isComplete":"")} title="Saved content, answers and streaks stay put. Loading only fills gaps. New content arrives after 1am." aria-label={`Today’s content: ${readyGenCount} of ${expectedGenKeys.length} tiles in`}>
+      </header>}
+      {page==="dashboard"&&expectedGenKeys.length>0&&!contentReady&&<div className={"dailyMeter"+(contentReady?" isComplete":"")} title="Saved content, answers and streaks stay put. Loading only fills gaps. New content arrives after 1am." aria-label={`Today’s content: ${readyGenCount} of ${expectedGenKeys.length} tiles in`}>
         <span className="dailyMeterDots" aria-hidden="true">{expectedGenKeys.map(key=><span key={key} className={"dailyMeterDot"+(validDailyTile(key,view[key])?" on":"")} title={DAILY_TILE_LABELS[key]||key}/>)}</span>
         <span className="dailyMeterText">{contentReady?"All in":`${readyGenCount} of ${expectedGenKeys.length} in`}</span>
       </div>}
@@ -6741,16 +6922,89 @@ function nextBirthday(list){
 const MONTH_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 /* The next birthday as a wrapped present: the tile's own pink box, a gold ribbon and bow, and a
    paper gift tag on a string from the bow, counting the days. */
+/* Stats: today's completion is the ring in the middle, and on a 100% day the ring becomes a
+   flame. Under it, the current streak, the best one and the perfect days of the last 30.
+   Tapping the tile opens Insights. */
+function StatsCard({pct,current,best,perfect,span}){
+  const p=Math.max(0,Math.min(100,Math.round(Number(pct)||0))), full=p>=100, R=42, C=2*Math.PI*R;
+  return <div className="statsCard" role="img" aria-label={`Today ${p}%${full?", a perfect day":""}. Streak ${current} ${current===1?"day":"days"}, best ${best}, ${perfect} perfect ${perfect===1?"day":"days"} in the last ${span||30}.`}>
+    <div className={"statsCore"+(full?" lit":"")}>
+      {full
+        ?<svg className="statsFlame" viewBox="0 0 100 124" aria-hidden="true">
+          <path className="sfOuter" d="M50 3c15 22 36 39 36 72a36 36 0 0 1-72 0c0-16 7-27 16-36 1 12 9 19 9 19C38 39 43 23 50 3Z"/>
+          <path className="sfMid" d="M50 38c10 14 23 25 23 44a23 23 0 0 1-46 0c0-10 5-17 11-23 1 8 6 12 6 12C44 59 46 49 50 38Z"/>
+          <path className="sfCore" d="M50 72c5 7 11 12 11 21a11 11 0 0 1-22 0c0-5 2-8 5-11 .6 4 3 6 3 6 0-6 1-10 3-16Z"/>
+        </svg>
+        :<><svg className="statsRing" viewBox="0 0 100 100" aria-hidden="true"><circle className="statsTrack" cx="50" cy="50" r={R}/>{p>0&&<circle className="statsArc" cx="50" cy="50" r={R} style={{strokeDasharray:`${(C*p/100).toFixed(2)} ${C.toFixed(2)}`}}/>}</svg>
+          <span className="statsPct">{p}<small>%</small></span></>}
+    </div>
+    <div className="statsRow">
+      <span className="statsItem"><b>{current}</b><small>streak</small></span>
+      <span className="statsItem"><b>{best}</b><small>best</small></span>
+      <span className="statsItem"><b>{perfect}<i>/{span||30}</i></b><small>perfect</small></span>
+    </div>
+  </div>;
+}
+/* Watch: not a round clock face but a rectangular dress watch seen from above. A steel case
+   with a crown, a cream dial with a railway minute track and Roman numerals, blued hands, a
+   date window, and the leather strap running off the top and bottom of the tile. */
+const WATCH_HALF=[16.5,26.5];
+const watchEdge=a=>{ const dx=Math.sin(a), dy=-Math.cos(a); const t=Math.min(WATCH_HALF[0]/Math.max(Math.abs(dx),1e-6),WATCH_HALF[1]/Math.max(Math.abs(dy),1e-6)); return [dx,dy,t]; };
+const WATCH_TICKS=Array.from({length:60},(_,i)=>{ const [dx,dy,t]=watchEdge(i/60*2*Math.PI), len=i%5===0?2.6:1.3; return {i,x1:50+dx*t,y1:50+dy*t,x2:50+dx*(t-len),y2:50+dy*(t-len)}; });
+const WATCH_NUMERALS=[[0,"XII"],[3,"III"],[6,"VI"],[9,"IX"]].map(([h,label])=>{ const [dx,dy,t]=watchEdge(h/12*2*Math.PI); return {label,x:50+dx*(t-(h%6===0?6.2:5.6)),y:50+dy*(t-(h%6===0?6.2:5.6))}; });
+function WatchCard({timeZone}){
+  const [t,setT]=useState(()=>Date.now());
+  useEffect(()=>{ let id; const tick=()=>{ setT(Date.now()); id=setTimeout(tick,1010-(Date.now()%1000)); }; id=setTimeout(tick,1010-(Date.now()%1000)); return ()=>clearTimeout(id); },[]);
+  const date=new Date(t), z=zonedParts(date,timeZone), sec=date.getSeconds();
+  const hourA=((z.hour%12)+z.minute/60)*30, minA=(z.minute+sec/60)*6, secA=sec*6;
+  const label=new Intl.DateTimeFormat("en-US",{timeZone,hour:"numeric",minute:"2-digit",weekday:"long",month:"long",day:"numeric"}).format(date);
+  return <div className="watchCard" role="img" aria-label={label}>
+    <svg className="watchArt" viewBox="0 0 100 100" aria-hidden="true">
+      <path className="watchStrap" d="M34.5-6h31l1 22h-33Z"/><path className="watchStrap" d="M33.5 84h33l-1 22h-31Z"/>
+      <path className="watchStitch" d="M37-6v21.5M63-6v21.5M37 84.5V106M63 84.5V106"/>
+      <circle className="watchHole" cx="50" cy="93" r="1.3"/><circle className="watchHole" cx="50" cy="99.5" r="1.3"/>
+      <rect className="watchCrown" x="74" y="44.5" width="5" height="11" rx="1.6"/>
+      <path className="watchCrownGrip" d="M75.4 46.5v7M76.9 46.5v7M78.4 46.5v7"/>
+      <rect className="watchCase" x="24.5" y="14" width="51" height="72" rx="10"/>
+      <rect className="watchBezel" x="26.5" y="16" width="47" height="68" rx="8.5"/>
+      <rect className="watchDial" x="29.5" y="19" width="41" height="62" rx="5.5"/>
+      <rect className="watchTrack" x={50-WATCH_HALF[0]} y={50-WATCH_HALF[1]} width={WATCH_HALF[0]*2} height={WATCH_HALF[1]*2} rx="2.2"/>
+      {WATCH_TICKS.map(k=><line key={k.i} className={k.i%5===0?"watchTick major":"watchTick"} x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2}/>)}
+      {WATCH_NUMERALS.map(n=><text key={n.label} className="watchNumeral" x={n.x} y={n.y} textAnchor="middle" dominantBaseline="central">{n.label}</text>)}
+      <rect className="watchDate" x="45" y="61.5" width="10" height="6.6" rx="1"/>
+      <text className="watchDateText" x="50" y="65" textAnchor="middle" dominantBaseline="central">{z.day}</text>
+      <g transform={`rotate(${hourA} 50 50)`}><path className="watchHand" d="M50 36.5l1.9 6.5-1 10.5h-1.8l-1-10.5Z"/></g>
+      <g transform={`rotate(${minA} 50 50)`}><path className="watchHand" d="M50 27.5l1.3 9-.8 17h-1l-.8-17Z"/></g>
+      <g transform={`rotate(${secA} 50 50)`}><path className="watchSecond" d="M50 30.5V56"/><circle className="watchSecondDot" cx="50" cy="50" r="1.5"/></g>
+      <circle className="watchPin" cx="50" cy="50" r=".7"/>
+    </svg>
+  </div>;
+}
+/* The gift opens when the tile is tapped done: the lid with its bow flips up and confetti
+   comes out of the box. The tag hangs from the box, so it stays put. */
 function BirthdayGift({days}){
   return <svg className="bdayGiftArt" viewBox="0 0 120 112" aria-hidden="true">
-    <path d="M60 31C50 14 33 13 34 24c1 8 15 9 26 7Z" fill="#FFC94A"/><path d="M60 31c10-17 27-18 26-7-1 8-15 9-26 7Z" fill="#FFC94A"/>
-    <path d="M60 31C53 22 43 19 41 24" stroke="#E8A520" strokeWidth="1.6" fill="none" strokeLinecap="round"/><path d="M60 31c7-9 17-12 19-7" stroke="#E8A520" strokeWidth="1.6" fill="none" strokeLinecap="round"/>
-    <rect x="13" y="33" width="94" height="19" rx="6" fill="var(--accent)"/>
     <rect x="18" y="50" width="84" height="56" rx="8" fill="var(--accent)"/>
+    <rect className="bdayInside" x="21" y="49" width="78" height="7" rx="3" fill="#000" opacity=".2"/>
     <rect x="18" y="50" width="84" height="8" fill="#000" opacity=".1"/>
-    <rect x="53" y="33" width="14" height="73" fill="#FFC94A"/>
-    <circle cx="60" cy="31" r="5.5" fill="#F4B532"/>
-    <path className="bdayTagString" d="M62 33c9 6 14 16 14.5 27" fill="none" stroke="#E8A520" strokeWidth="1.4" strokeLinecap="round"/>
+    <rect x="53" y="50" width="14" height="56" fill="#FFC94A"/>
+    <g className="bdayLid">
+      <path d="M60 31C50 14 33 13 34 24c1 8 15 9 26 7Z" fill="#FFC94A"/><path d="M60 31c10-17 27-18 26-7-1 8-15 9-26 7Z" fill="#FFC94A"/>
+      <path d="M60 31C53 22 43 19 41 24" stroke="#E8A520" strokeWidth="1.6" fill="none" strokeLinecap="round"/><path d="M60 31c7-9 17-12 19-7" stroke="#E8A520" strokeWidth="1.6" fill="none" strokeLinecap="round"/>
+      <rect x="13" y="33" width="94" height="19" rx="6" fill="var(--accent)"/>
+      <rect x="53" y="33" width="14" height="19" fill="#FFC94A"/>
+      <circle cx="60" cy="31" r="5.5" fill="#F4B532"/>
+    </g>
+    <g className="bdayConfetti">
+      <rect x="66" y="22" width="5" height="10" rx="1.5" fill="#FFC94A" transform="rotate(-20 68 27)"/>
+      <circle cx="80" cy="12" r="3.4" fill="#fff"/>
+      <path d="M92 18q4 3 1 7t1 8" fill="none" stroke="#FFC94A" strokeWidth="2.4" strokeLinecap="round"/>
+      <rect x="76" y="32" width="5" height="10" rx="1.5" fill="var(--accentDark)" transform="rotate(28 78 37)"/>
+      <circle cx="102" cy="36" r="3" fill="#fff"/>
+      <rect x="56" y="6" width="5" height="10" rx="1.5" fill="#fff" transform="rotate(12 58 11)"/>
+      <circle cx="88" cy="42" r="2.4" fill="#FFC94A"/>
+    </g>
+    <path className="bdayTagString" d="M67 56c7 2 11 7 12.5 13" fill="none" stroke="#E8A520" strokeWidth="1.4" strokeLinecap="round"/>
     <g className="bdayTag" transform="translate(76 58) rotate(-10)">
       <path d="M0 9 8 1h29a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H8L0 25Z" fill="#FFFDF7" stroke="rgba(0,0,0,.08)" strokeWidth=".8"/>
       <circle cx="7.5" cy="17" r="2.2" fill="var(--accent)" opacity=".9"/>
@@ -7211,8 +7465,8 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
     if(monthOf(key)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
   };
   return (
-    <div ref={calRef} className={"miniCalendar"+(placing?" placing":"")} aria-label="Reminder calendar">
-      <div className="miniCalSpiral" aria-hidden="true"/>
+    <div ref={calRef} className={"miniCalendar miniCalSheet"+(placing?" placing":"")} aria-label="Reminder calendar">
+      <div className="miniCalBind" aria-hidden="true"/>
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
           <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
@@ -7222,7 +7476,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
         {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
         <button type="button" className="miniCalToday widgetIconButton" aria-label="Return to the current month" title="Current month" onClick={returnToday}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="2.5" /><path d="M6.5 3v3M13.5 3v3M3.5 8.5h13" /><circle cx="10" cy="12.5" r="1.3" fill="currentColor" stroke="none" /></svg></button>
       </div>
-      <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
+      <div className="miniCalWeek">{["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
         {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||"")));
           const f=!out&&lit(key), ic=!out&&iced(key), p=!out&&!f&&!ic&&tracked(key)?streak.dayCompletion(key):null;
@@ -7883,7 +8137,7 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
     const cs=getComputedStyle(el), lh=parseFloat(cs.lineHeight)||20;
     const multi=el.scrollHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0)>lh*1.5;
     let cap=Math.round(window.innerHeight*.4);
-    const tile=el.closest(".grid>.tile"), q=tile&&tile.querySelector(".philoQ,.philoBubble"), comp=el.closest(".philoComposer");
+    const tile=el.closest(".grid>.tile"), q=tile&&tile.querySelector(".philoQ"), comp=el.closest(".philoComposer");
     if(tile&&q&&comp){
       // in the tile: never past the padding edge, never over the question; whole lines only
       const limit=tile.getBoundingClientRect().bottom-(parseFloat(getComputedStyle(tile).paddingBottom)||0);
@@ -7911,11 +8165,9 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
   };
   return (
     <div className={"philoCard"+(lastReply?" hasReply":"")+(tall&&!expanded?" tall":"")}>
-      {/* in the tile, once someone has answered, their open question is what you reply to: it shows
-          as their chat bubble; the day's question stays at the top of the pop-up */}
-      {!expanded&&lastReply
-        ?<div className="philoBubble" data-fit-shrink=".8" role="button" tabIndex={0} aria-label="Open the conversation" onClick={e=>{ e.stopPropagation(); open(); }} onKeyDown={e=>{ if(e.key==="Enter"){ e.preventDefault(); open(); } }}><span className="philoBubbleText" data-fit-clamp="">{philoInline(lastReply.text)}</span></div>
-        :<p className="philoQ">{question}</p>}
+      {/* the day's question comes first, big; the last open question asked back sits under it
+          while there is room */}
+      <p className="philoQ">{question}</p>
       {expanded&&<div className="philoWho" role="group" aria-label="Who answers">
         {PHILO_MODES.slice(0,1).map(m=><button type="button" key={m.id} className={"philoThinker philoNone"+(m.id===mode?" on":"")} aria-pressed={m.id===mode} disabled={sending} onClick={()=>onModeChange(m.id)}>{m.label}</button>)}
         <div className="philoThinkers" ref={thinkersRef}>
@@ -7927,6 +8179,7 @@ function PhilosophyCard({philo,busy,chat,sending,error,haveKey,onSetup,onRetry,o
         {sending&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
         <div ref={endRef}/>
       </div>}
+      {!expanded&&lastReply&&!tall&&<p className="philoLast" data-fit-drop="5" role="button" tabIndex={0} aria-label="Open the conversation" onClick={e=>{ e.stopPropagation(); open(); }} onKeyDown={e=>{ if(e.key==="Enter"){ e.preventDefault(); open(); } }}>{philoInline(lastReply.text)}</p>}
       {!expanded&&sending&&!lastReply&&<div className="philoTyping" aria-label="Thinking"><i/><i/><i/></div>}
       {expanded&&error&&<p className="philoHint" role="alert">{error} <button type="button" className="link" onClick={onRetry} disabled={sending}>Retry</button></p>}
       <div className="philoComposer">

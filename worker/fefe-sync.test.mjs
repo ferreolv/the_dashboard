@@ -455,6 +455,25 @@ test("Philosophy replies run on the service key for signed-in accounts, with the
   assert.equal(rejected.data.code, "invalid_key");
 });
 
+test("Philosophy: a reply that is only thinking gives way to the next model, and empty turns are left out", async () => {
+  const { env } = environment(["word"]);
+  const bodies = [];
+  globalThis.fetch = async (url, init) => {
+    bodies.push(JSON.parse(init.body));
+    return bodies.length === 1
+      ? Response.json({ stop_reason: "max_tokens", content: [{ type: "thinking", thinking: "", signature: "s" }] })
+      : Response.json({ content: [{ type: "text", text: "Which word carries the weight?" }] });
+  };
+  const history = [{ role: "user", text: "Only if it can feel." }, { role: "assistant", text: "" }, { role: "user", text: "what?" }];
+  const reply = await request(env, "/philo/reply", { question: "Q?", history }, true);
+  assert.equal(reply.code, 200);
+  assert.equal(reply.data.reply, "Which word carries the weight?");
+  assert.deepEqual(bodies[0].thinking, { type: "between_tools" }, "Sonnet 5.5 is asked not to think");
+  assert.deepEqual(bodies[0].messages, [{ role: "user", content: "Only if it can feel.\n\nwhat?" }]);
+  assert.equal(bodies[1].model, "claude-haiku-5-5");
+  assert.ok(bodies[1].max_tokens > 4000);
+});
+
 test("a model the server's key can't use (403) gives way to the next one; only a 401 means a bad key", async () => {
   const { env } = environment(["word"]);
   const history = [{ role: "user", text: "Only if it can feel." }];

@@ -83,3 +83,31 @@ test('with no key and no sign-in, Philosophy asks to sign in without calling any
   await assert.rejects(p.reply('Q?', history), e => e.dailyState === 'signin_required');
   assert.equal(p.calls.length, 0);
 });
+
+// The empty-reply bug: current models think first, and the thinking used up a 200-token cap
+// before any text. Sonnet 5.5 is asked not to think; a reply with no text tries the next model.
+test('Sonnet 5.5 is asked not to think, and a reply that is only thinking gives way to the next model', async () => {
+  const onlyThinking = json(200, { stop_reason: 'max_tokens', content: [{ type: 'thinking', thinking: '', signature: 's' }] });
+  const p = page({ key: 'sk', routes: { claude: (body, n) => n === 1 ? onlyThinking : claudeText('What would change your mind?') } });
+  assert.equal(await p.reply('Q?', history), 'What would change your mind?');
+  const [first, second] = p.calls.map(c => c.body);
+  assert.equal(first.model, 'claude-sonnet-5-5');
+  assert.deepEqual(first.thinking, { type: 'between_tools' });
+  assert.ok(first.max_tokens >= 400, 'room for a full question');
+  assert.equal(second.model, 'claude-haiku-5-5');
+  assert.equal(second.output_config.effort, 'low');
+  assert.ok(second.max_tokens > 4000, 'room for thinking on top of the answer');
+});
+
+test('a refusal or an empty answer from every model is an error, never an empty bubble', async () => {
+  const p = page({ key: 'sk', routes: { claude: (body, n) => n === 1 ? json(200, { stop_reason: 'refusal', content: [] }) : claudeText('   ') } });
+  await assert.rejects(p.reply('Q?', history), e => e.dailyState === 'error' && /empty reply/.test(e.philoText));
+  assert.equal(p.calls.length, 3, 'all three models were tried');
+});
+
+test('the history sent leaves out empty replies and joins two turns from the same side', () => {
+  const context = vm.createContext({});
+  vm.runInContext(html.slice(start, end) + '\nthis.philoHistory = philoHistory;', context);
+  const sent = JSON.parse(JSON.stringify(context.philoHistory('First thought.', [{ role: 'assistant', text: '' }, { role: 'user', text: 'what?' }, { role: 'assistant', text: ' ' }, { role: 'user', text: 'still there?' }])));
+  assert.deepEqual(sent, [{ role: 'user', text: 'First thought.\n\nwhat?\n\nstill there?' }]);
+});

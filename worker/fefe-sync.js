@@ -234,18 +234,34 @@ function extractJSON(text) {
   if (a === -1 || b === -1) return null;
   try { return JSON.parse(t.slice(a, b + 1)); } catch { return null; }
 }
+/* Current models think before they answer unless told otherwise, and that thinking counts toward
+   max_tokens: a short cap was used up before any text came out (an empty reply). Sonnet 5.5 is
+   asked not to think ("between_tools", its thinking-off setting); Haiku 5.5 thinks at the given
+   effort with room for it on top of the answer; older models only think when asked. */
+function claudeBody(model, max, system, messages, effort) {
+  if (model === "claude-sonnet-5-5") return { model, max_tokens: max, thinking: { type: "between_tools" }, system, messages };
+  if (model === "claude-haiku-5-5") return { model, max_tokens: max + 4096, output_config: { effort: effort || "low" }, system, messages };
+  return { model, max_tokens: max, system, messages };
+}
+/* The answer is the text blocks only; a refusal or a reply cut off with no text is no answer. */
+function claudeReplyText(data) {
+  if (!data || data.stop_reason === "refusal") return "";
+  return (data.content || []).filter((b) => b && b.type === "text").map((b) => b.text).join("\n").replace(/<\/?thinking>/g, "").trim();
+}
 async function callClaude(env, system, user, max = 600) {
   let failure = null;
   for (const model of MODELS) {
-    const body = { model, max_tokens: max, system, messages: [{ role: "user", content: user }] };
+    const body = claudeBody(model, max, system, [{ role: "user", content: user }], "medium");
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
       body: JSON.stringify(body), signal: AbortSignal.timeout(45000)
     });
     if (res.ok) {
-      const data = await res.json();
-      return (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+      const text = claudeReplyText(await res.json().catch(() => null));
+      if (text) return text;
+      failure = new Error("API empty reply"); failure.status = 502;
+      continue;
     }
     failure = new Error("API " + res.status); failure.status = res.status;
     if (![400, 403, 404].includes(res.status)) throw failure;
@@ -275,7 +291,8 @@ async function philoReplyRoute(env, request) {
   const philosopher = /^[\p{L} .'’-]{2,48}$/u.test(thinker) ? thinker : "";
   const messages = (Array.isArray(body.history) ? body.history : []).slice(-30)
     .map((m) => ({ role: m && m.role === "assistant" ? "assistant" : "user", content: String((m && m.text) || "").trim().slice(0, 4000) }))
-    .filter((m) => m.content);
+    .filter((m) => m.content)
+    .reduce((out, m) => { const last = out[out.length - 1]; if (last && last.role === m.role) last.content += "\n\n" + m.content; else out.push(m); return out; }, []);
   const alternating = messages.every((m, i) => m.role === (i % 2 === 0 ? "user" : "assistant"));
   if (!question || !messages.length || !alternating || messages[messages.length - 1].role !== "user")
     return sharedJson({ error: "That conversation can't be sent.", code: "bad_request" }, 400);
@@ -290,14 +307,14 @@ async function philoReplyRoute(env, request) {
       res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-        body: JSON.stringify({ model, max_tokens: 200, system: philoSystem(question, philosopher), messages }), signal: AbortSignal.timeout(45000)
+        body: JSON.stringify(claudeBody(model, 400, philoSystem(question, philosopher), messages, "low")), signal: AbortSignal.timeout(45000)
       });
     } catch { last = 504; break; }
     if (res.ok) {
-      const data = await res.json().catch(() => ({}));
-      const reply = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("\n").trim();
+      // an empty answer (a refusal, or nothing but thinking) gives way to the next model
+      const reply = claudeReplyText(await res.json().catch(() => null));
       if (reply) return sharedJson({ reply });
-      last = 502; break;
+      last = 502; continue;
     }
     last = res.status;
     if (![400, 403, 404].includes(res.status)) break;

@@ -237,6 +237,9 @@ function philosophyHarness(chat = {initial: 'An existing reflection', messages: 
     dailyRequestFailure,
     philoReply: reply
   });
+  // the history the chat sends is built by philoHistory, which lives with the reply code
+  const hStart = html.indexOf('function philoHistory('), hEnd = html.indexOf('\n}\n', hStart) + 3;
+  vm.runInContext(html.slice(hStart, hEnd), context);
   vm.runInContext(html.slice(start, end) + '\nthis.chatActions = {philoSubmitInitial, philoSend};', context);
   return {...context.chatActions, saved, errors, busy, popups};
 }
