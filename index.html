@@ -2565,7 +2565,7 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 /* the add control sits level with the calendar header instead of taking its own line */
 .grid>.tile[data-tileid="agenda"] .agendaItems>button.taskAddLink{position:absolute;top:0;right:0;width:30px!important;height:30px!important;min-height:0!important;margin:0!important}
 .grid>.tile[data-tileid="agenda"] .agendaItems:has(.agendaForm){padding-top:0}
-.tile[data-tileid="agenda"] .agName{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13.5px!important;line-height:1.25!important}
+.tile[data-tileid="agenda"] .agName{display:block;white-space:normal;overflow-wrap:break-word;font-size:13.5px!important;line-height:1.25!important}
 .tile[data-tileid="agenda"] .agSub{font-size:11px!important;line-height:1.2!important;margin-top:1px}
 .tile[data-tileid="agenda"] .taskMain{min-width:0;flex:1}
 .tile[data-tileid="agenda"] .agWhen{flex:none;font-size:10.5px!important;font-weight:800;white-space:nowrap}
@@ -3111,54 +3111,23 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile[data-tileid="agenda"] .miniCalWeek span{padding:2px 0 4px!important}
 /* stacked pop-up (phone): the calendar header leaves room for the close button */
 @container (max-width:519.98px){.tile.tileFocusSurface[data-tileid="agenda"] .miniCalHead{padding-right:46px!important}}
-/* ---- Reminders: an old printed wall calendar. A cream paper sheet hangs from a crimped tin strip
-   with a nail hole; the month is printed big in a serif in the tile's red, the days sit in a ruled
-   table and Sundays are printed red, like the post-office calendars of the old days. The paper
-   stays paper when the tile is done, so its marks keep their colours. ---- */
-.tile[data-tileid="agenda"] .miniCalendar.miniCalSheet{--paper:color-mix(in srgb,#FFFDF7 90%,var(--accent));--print:#3A2A22;--rule:rgba(58,42,34,.16);position:relative;margin-top:6px;padding:12px 8px 6px!important;background:var(--paper)!important;border-radius:3px 3px 5px 5px!important;box-shadow:0 1px 0 rgba(0,0,0,.05),0 12px 18px -14px rgba(70,35,10,.55),inset 0 -14px 18px -16px rgba(70,35,10,.18)!important;color:var(--print)!important}
-.miniCalBind{position:absolute;left:-2px;right:-2px;top:-5px;height:11px;border-radius:2px;background:linear-gradient(180deg,color-mix(in srgb,var(--print,#3A2A22) 55%,#fff) 0,var(--print,#3A2A22) 45%,color-mix(in srgb,var(--print,#3A2A22) 80%,#000) 100%);box-shadow:0 2px 3px -1px rgba(0,0,0,.35)}
-.miniCalBind::after{content:"";position:absolute;left:50%;top:2.5px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#d9d3cc 0 35%,#8d8379 70%);box-shadow:inset 0 1px 1px rgba(0,0,0,.6)}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalHead{padding:2px 0 4px!important;color:var(--print)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle{display:flex;align-items:baseline;justify-content:center;gap:7px}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle b{font:700 clamp(17px,5.4cqi,26px)/1 Georgia,'Times New Roman',serif!important;letter-spacing:.09em;color:var(--accent)!important;text-shadow:.4px .4px 0 color-mix(in srgb,var(--accent) 60%,#000)}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalTitle small{font:italic 600 12px/1 Georgia,'Times New Roman',serif!important;letter-spacing:.02em;color:var(--print)!important;opacity:.8}
-.tile[data-tileid="agenda"] .miniCalSheet button:is(.miniCalNav,.miniCalToday){color:var(--print)!important;opacity:.7}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek{border-top:1.5px solid var(--print);border-bottom:3px double var(--print)}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek span{padding:3px 0 2px!important;font:700 9px/1.2 Georgia,'Times New Roman',serif!important;letter-spacing:.12em;text-transform:uppercase;color:var(--print)!important;opacity:.85!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalWeek span:last-child,.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:nth-child(7n):not(.out) .miniCalNum{color:var(--accent)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalGrid{gap:0!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay{border-radius:0!important;border-bottom:1px solid var(--rule)!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:not(:nth-child(7n+1)){border-left:1px solid var(--rule)!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay:hover{background:rgba(58,42,34,.05)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalNum{font:600 13px/1 Georgia,'Times New Roman',serif!important;color:var(--print)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.out{background:transparent!important;opacity:.32}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay:hover .miniCalNum{background:transparent!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.has .miniCalNum{background:color-mix(in srgb,var(--accent) 16%,transparent)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.today .miniCalNum{background:transparent!important;box-shadow:inset 0 0 0 2px var(--print)!important;color:var(--print)!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected{background:color-mix(in srgb,var(--accent) 10%,transparent)!important;box-shadow:none!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalNum{background:var(--accent)!important;color:#fff!important;box-shadow:none!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalTrack{stroke:color-mix(in srgb,var(--accent) 20%,transparent)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalArc{stroke:var(--accent)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDay.today .miniCalTrack{stroke:var(--print)!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalTrack{stroke:rgba(255,255,255,.45)!important}
-.tile[data-tileid="agenda"] .miniCalSheet button.miniCalDay.selected .miniCalArc{stroke:#fff!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalDot{background:var(--accent)!important}
-.tile[data-tileid="agenda"] .miniCalSheet .miniCalMore{color:var(--accent)!important}
-/* ---- Priorities: an old classroom chalkboard, dark green with eraser smudges; the matrix is
-   drawn on it in chalk, and the post-its pinned to it are the tile's pale green paper with its
-   dark green marker writing and pins. ---- */
-.tile[data-tileid="matrix"],.tile.completed[data-tileid="matrix"]{--board:radial-gradient(ellipse 55% 40% at 28% 30%,rgba(255,255,255,.075),transparent 70%),radial-gradient(ellipse 45% 35% at 78% 72%,rgba(255,255,255,.055),transparent 70%),radial-gradient(ellipse 70% 20% at 50% 96%,rgba(255,255,255,.06),transparent 75%),linear-gradient(165deg,#36604B,#2C5040 55%,#25463A);--glass-surface:var(--board);--chalk:rgba(246,244,234,.9)}
-.tile[data-tileid="matrix"]::after{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 30%)!important}
-.tileFocusSurface[data-tileid="matrix"]{background:var(--board)!important}
-.tile[data-tileid="matrix"] .tileExpand{color:var(--chalk)!important}
-.tile[data-tileid="matrix"] .pinBoard{--line:rgba(246,244,234,.62)}
-.tile[data-tileid="matrix"] .pbAxis{filter:drop-shadow(0 0 .6px rgba(255,255,255,.6))}
-.tile[data-tileid="matrix"] .pbLbl{color:var(--chalk)!important;text-shadow:0 0 1px rgba(255,255,255,.55),.5px .5px 0 rgba(255,255,255,.2);opacity:.9}
+/* ---- Reminders: a minimal wall calendar: the month in big capitals with the year small beside
+   it, quiet weekday letters, the days with no grid, and Sundays in the tile's colour. ---- */
+.tile[data-tileid="agenda"] .miniCalTitle b{font-size:clamp(18px,6.4cqi,26px)!important;font-weight:950!important;letter-spacing:.12em!important}
+.tile[data-tileid="agenda"] .miniCalWeek span:last-child{color:var(--accent)!important;opacity:.9!important}
+.tile[data-tileid="agenda"] button.miniCalDay:nth-child(7n):not(.out):not(.today):not(.selected) .miniCalNum{color:var(--accent)!important}
+.tile.completed[data-tileid="agenda"] .miniCalWeek span:last-child,.tile.completed[data-tileid="agenda"] button.miniCalDay:nth-child(7n):not(.out):not(.today):not(.selected) .miniCalNum{color:#fff!important}
+/* ---- Priorities: a board of pinned post-its on an Eisenhower matrix, in the tile's one colour, a
+   dark yellow: the tile's own liquid glass is the board, the post-its are its pale paper, the
+   axes, pins and marker writing are its ink. Tap an empty spot to add a note there; drag a note
+   anywhere (by its pin too); let it go off the board to take it off. ---- */
+.tile[data-tileid="matrix"],.tile.completed[data-tileid="matrix"]{--glass-surface:linear-gradient(140deg,rgba(var(--glass-rgb),.6),rgba(var(--glass-rgb),.46))}
+.tileFocusSurface[data-tileid="matrix"]{background:linear-gradient(160deg,rgba(var(--glass-rgb),.5),rgba(var(--glass-rgb),.36))!important}
 .grid>.tile[data-tileid="matrix"]>.tbody{display:flex!important;flex-direction:column}
 .grid>.tile[data-tileid="matrix"] .tileMount{flex:1 1 auto!important;display:flex}
 .grid>.tile[data-tileid="matrix"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
 .tile[data-tileid="matrix"] .content{padding:0!important}
-.pinBoard{--nw:clamp(62px,18cqmin,132px);--line:color-mix(in srgb,var(--ink) 40%,transparent);position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.pinBoard{--nw:clamp(72px,22cqmin,140px);--line:color-mix(in srgb,var(--ink) 40%,transparent);position:relative;flex:1 1 auto;width:100%;min-height:0;container-type:size;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .tileFocusSurface[data-tileid="matrix"] .pinBoard{height:min(72vh,680px)}
 .pbSize{position:absolute;width:var(--nw);height:0;visibility:hidden;pointer-events:none}
 .pbAxis{position:absolute;background:var(--line);border-radius:2px;pointer-events:none}
@@ -3179,6 +3148,7 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .tile .pbNote:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .pbNote.dragging{z-index:5;cursor:grabbing;transform:rotate(calc(var(--r) - 2deg)) scale(1.07);box-shadow:0 2px 3px rgba(0,0,0,.08),0 22px 26px -14px rgba(0,0,0,.42);transition:transform .14s ease,box-shadow .14s ease}
 .pbNote.editing{z-index:6;cursor:text;transform:rotate(0deg) scale(1.1)}
+.pbNote.leaving{opacity:.45;transform:rotate(calc(var(--r) + 8deg)) scale(.92)}
 .pbNote.falling{z-index:6;pointer-events:none;animation:pbFall .32s cubic-bezier(.5,0,.9,.6) .1s forwards}
 .pbNote.falling .pbPinHead{animation:pbPull .18s ease-out forwards}
 @keyframes pbPull{to{transform:translate(-25%,-160%) rotate(-30deg) scale(1.15);opacity:0}}
@@ -3349,31 +3319,21 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .dockHandle.open{bottom:calc(76px + env(safe-area-inset-bottom))}
 @media(prefers-reduced-motion:reduce){.wrap .topbar.dock,.wrap .topbar.dock.open,.dockHandle{transition:none}}
 .wrap{padding-top:clamp(12px,2vw,24px)!important;padding-bottom:calc(56px + env(safe-area-inset-bottom))!important}
-/* ---- Watch (1×1): a rectangular dress watch; the strap runs off the tile's top and bottom. ---- */
+/* ---- Watch (1×1): a minimal rectangular watch; the strap runs off the tile's top and bottom. ---- */
 .grid>.tile[data-tileid="clock"],.grid>.tile[data-tileid="stats"]{padding:0!important}
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"])>.tbody{display:flex!important;flex-direction:column;height:100%}
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile:is([data-tileid="clock"],[data-tileid="stats"]) .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0;padding:0!important}
 .watchCard{position:relative;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;cursor:default}
 .watchArt{width:100%;height:100%;overflow:visible}
-.watchStrap{fill:color-mix(in srgb,var(--accent) 55%,#0b1020)}
-.watchStitch{fill:none;stroke:color-mix(in srgb,var(--accent) 35%,#fff);stroke-width:.55;stroke-dasharray:1.6 1.2;opacity:.75}
-.watchHole{fill:rgba(0,0,0,.45)}
-.watchCase{fill:color-mix(in srgb,var(--accent) 10%,#eef0f4);stroke:color-mix(in srgb,var(--accent) 30%,#9aa1ad);stroke-width:.6;filter:drop-shadow(0 3px 3px rgba(20,30,60,.28))}
-.watchBezel{fill:none;stroke:rgba(255,255,255,.85);stroke-width:1}
-.watchCrown{fill:color-mix(in srgb,var(--accent) 12%,#dfe2e8);stroke:color-mix(in srgb,var(--accent) 30%,#9aa1ad);stroke-width:.5}
-.watchCrownGrip{stroke:rgba(0,0,0,.22);stroke-width:.5}
-.watchDial{fill:color-mix(in srgb,#FFFDF7 94%,var(--accent));stroke:rgba(0,0,0,.12);stroke-width:.4}
-.watchTrack{fill:none;stroke:color-mix(in srgb,var(--ink) 40%,transparent);stroke-width:.35}
-.watchTick{stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:.35}
-.watchTick.major{stroke:var(--ink);stroke-width:.7}
-.watchNumeral{font:700 5.6px Georgia,'Times New Roman',serif;fill:var(--ink);letter-spacing:-.02em}
-.watchDate{fill:#fff;stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:.4}
-.watchDateText{font:700 4.4px 'Nunito',sans-serif;fill:var(--ink)}
-.watchHand{fill:var(--accent);stroke:color-mix(in srgb,var(--accent) 60%,#000);stroke-width:.25}
-.watchSecond{stroke:color-mix(in srgb,var(--accent) 45%,#ff3b30);stroke-width:.45;stroke-linecap:round}
-.watchSecondDot{fill:color-mix(in srgb,var(--accent) 45%,#ff3b30)}
-.watchPin{fill:#fff}
+.watchStrap{fill:rgba(var(--glass-rgb),.32)}
+.watchCrown{fill:rgba(255,255,255,.8)}
+.watchCase{fill:rgba(255,255,255,.9);filter:drop-shadow(0 4px 6px rgba(var(--glass-depth),.18))}
+.watchMark{stroke:color-mix(in srgb,var(--ink) 35%,transparent);stroke-width:1.6;stroke-linecap:round}
+.watchHour{stroke:var(--ink);stroke-width:3.4;stroke-linecap:round}
+.watchMinute{stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.watchSecond{stroke:var(--accent);stroke-width:.8;stroke-linecap:round}
+.watchPin{fill:var(--accent)}
 /* ---- Stats (1×1): today's ring in the middle, a flame at 100%; streak, best and perfect days under it. ---- */
 .statsCard{position:relative;width:100%;height:100%;box-sizing:border-box;padding:9cqmin 6cqmin 8cqmin;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
 .statsCore{position:relative;flex:none;width:58cqmin;height:58cqmin;display:grid;place-items:center}
@@ -3419,7 +3379,7 @@ const COL = {
   german:   {p:"#EBE4FF", v:"#7C4DFF", d:"#4A28B4"},
   movie:    {p:"#FBE0E3", v:"#D62839", d:"#8C1623"},
   sustain:  {p:"#EDF3DE", v:"#86A83C", d:"#4C6418"},
-  matrix:   {p:"#E3EEDD", v:"#2F5A45", d:"#1D3B2C"},
+  matrix:   {p:"#FFF4CF", v:"#D9A10F", d:"#5E3F00"},
   music:    {p:"#E2EDFF", v:"#2F7BFF", d:"#2450BE"},
   habits:   {p:"#D6F7EA", v:"#0FC087", d:"#0A7B58"},
   pushups:  {p:"#DEE7FF", v:"#2749B8", d:"#16307A"},
@@ -6385,7 +6345,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>,()=>{}),
     stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>,()=>openPage("insights")),
     matrix: T("matrix","Priorities",false,null,
-      <MatrixCard notes={matrixNotes} onChange={saveMatrix} />),
+      <MatrixCard notes={matrixNotes} onChange={saveMatrix} />,()=>{}),
     brain: T("brain","Memory",false,null,
       <BrainBankCard bank={brainBank} busy={bankBusy} haveKey={haveKey} onSetup={()=>openDailySettings("claude-key")} onAdd={addBankEntry} onOpenBrowser={()=>setShowBankBrowser(true)} />),
     academic: T("academic","Study",!!rToday.academic,null,<>
@@ -6945,38 +6905,26 @@ function StatsCard({pct,current,best,perfect,span}){
     </div>
   </div>;
 }
-/* Watch: not a round clock face but a rectangular dress watch seen from above. A steel case
-   with a crown, a cream dial with a railway minute track and Roman numerals, blued hands, a
-   date window, and the leather strap running off the top and bottom of the tile. */
-const WATCH_HALF=[16.5,26.5];
-const watchEdge=a=>{ const dx=Math.sin(a), dy=-Math.cos(a); const t=Math.min(WATCH_HALF[0]/Math.max(Math.abs(dx),1e-6),WATCH_HALF[1]/Math.max(Math.abs(dy),1e-6)); return [dx,dy,t]; };
-const WATCH_TICKS=Array.from({length:60},(_,i)=>{ const [dx,dy,t]=watchEdge(i/60*2*Math.PI), len=i%5===0?2.6:1.3; return {i,x1:50+dx*t,y1:50+dy*t,x2:50+dx*(t-len),y2:50+dy*(t-len)}; });
-const WATCH_NUMERALS=[[0,"XII"],[3,"III"],[6,"VI"],[9,"IX"]].map(([h,label])=>{ const [dx,dy,t]=watchEdge(h/12*2*Math.PI); return {label,x:50+dx*(t-(h%6===0?6.2:5.6)),y:50+dy*(t-(h%6===0?6.2:5.6))}; });
+/* Watch: not a round clock face but a rectangular watch seen from above, kept minimal: a soft
+   white case with a small crown, the strap a band of the tile's glass running off the top and
+   bottom, four quiet markers and the hands. No numerals, no date. */
+const WATCH_MARKS=[[50,23.5,50,27.5],[69.5,50,65.5,50],[50,76.5,50,72.5],[30.5,50,34.5,50]];
 function WatchCard({timeZone}){
   const [t,setT]=useState(()=>Date.now());
   useEffect(()=>{ let id; const tick=()=>{ setT(Date.now()); id=setTimeout(tick,1010-(Date.now()%1000)); }; id=setTimeout(tick,1010-(Date.now()%1000)); return ()=>clearTimeout(id); },[]);
   const date=new Date(t), z=zonedParts(date,timeZone), sec=date.getSeconds();
   const hourA=((z.hour%12)+z.minute/60)*30, minA=(z.minute+sec/60)*6, secA=sec*6;
-  const label=new Intl.DateTimeFormat("en-US",{timeZone,hour:"numeric",minute:"2-digit",weekday:"long",month:"long",day:"numeric"}).format(date);
+  const label=new Intl.DateTimeFormat("en-US",{timeZone,hour:"numeric",minute:"2-digit"}).format(date);
   return <div className="watchCard" role="img" aria-label={label}>
     <svg className="watchArt" viewBox="0 0 100 100" aria-hidden="true">
-      <path className="watchStrap" d="M34.5-6h31l1 22h-33Z"/><path className="watchStrap" d="M33.5 84h33l-1 22h-31Z"/>
-      <path className="watchStitch" d="M37-6v21.5M63-6v21.5M37 84.5V106M63 84.5V106"/>
-      <circle className="watchHole" cx="50" cy="93" r="1.3"/><circle className="watchHole" cx="50" cy="99.5" r="1.3"/>
-      <rect className="watchCrown" x="74" y="44.5" width="5" height="11" rx="1.6"/>
-      <path className="watchCrownGrip" d="M75.4 46.5v7M76.9 46.5v7M78.4 46.5v7"/>
-      <rect className="watchCase" x="24.5" y="14" width="51" height="72" rx="10"/>
-      <rect className="watchBezel" x="26.5" y="16" width="47" height="68" rx="8.5"/>
-      <rect className="watchDial" x="29.5" y="19" width="41" height="62" rx="5.5"/>
-      <rect className="watchTrack" x={50-WATCH_HALF[0]} y={50-WATCH_HALF[1]} width={WATCH_HALF[0]*2} height={WATCH_HALF[1]*2} rx="2.2"/>
-      {WATCH_TICKS.map(k=><line key={k.i} className={k.i%5===0?"watchTick major":"watchTick"} x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2}/>)}
-      {WATCH_NUMERALS.map(n=><text key={n.label} className="watchNumeral" x={n.x} y={n.y} textAnchor="middle" dominantBaseline="central">{n.label}</text>)}
-      <rect className="watchDate" x="45" y="61.5" width="10" height="6.6" rx="1"/>
-      <text className="watchDateText" x="50" y="65" textAnchor="middle" dominantBaseline="central">{z.day}</text>
-      <g transform={`rotate(${hourA} 50 50)`}><path className="watchHand" d="M50 36.5l1.9 6.5-1 10.5h-1.8l-1-10.5Z"/></g>
-      <g transform={`rotate(${minA} 50 50)`}><path className="watchHand" d="M50 27.5l1.3 9-.8 17h-1l-.8-17Z"/></g>
-      <g transform={`rotate(${secA} 50 50)`}><path className="watchSecond" d="M50 30.5V56"/><circle className="watchSecondDot" cx="50" cy="50" r="1.5"/></g>
-      <circle className="watchPin" cx="50" cy="50" r=".7"/>
+      <rect className="watchStrap" x="36" y="-4" width="28" height="108" rx="6"/>
+      <rect className="watchCrown" x="72" y="45.5" width="4.5" height="9" rx="2"/>
+      <rect className="watchCase" x="27" y="17" width="46" height="66" rx="14"/>
+      {WATCH_MARKS.map((m,i)=><line key={i} className="watchMark" x1={m[0]} y1={m[1]} x2={m[2]} y2={m[3]}/>)}
+      <line className="watchHour" x1="50" y1="50" x2="50" y2="38" transform={`rotate(${hourA} 50 50)`}/>
+      <line className="watchMinute" x1="50" y1="50" x2="50" y2="29" transform={`rotate(${minA} 50 50)`}/>
+      <line className="watchSecond" x1="50" y1="54" x2="50" y2="27" transform={`rotate(${secA} 50 50)`}/>
+      <circle className="watchPin" cx="50" cy="50" r="1.6"/>
     </svg>
   </div>;
 }
@@ -7133,9 +7081,11 @@ function MatrixCard({notes,onChange}){
   const down=(e,n)=>{
     if(editing===n.id||(e.button!=null&&e.button!==0)) return;
     finishWriting(); e.preventDefault(); const el=e.currentTarget; el.setPointerCapture(e.pointerId);
-    const {b,nw}=geom();
-    dragRef.current={id:n.id,el,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,b,nw,ox:n.x,oy:n.y,x:n.x,y:n.y,offX:e.clientX-(b.left+n.x*(b.width-nw)),offY:e.clientY-(b.top+n.y*(b.height-nw)),moved:false,raf:0};
+    const {b,nw}=geom(), onPin=!!(e.target.closest&&e.target.closest(".pbPin"));
+    dragRef.current={id:n.id,note:n,el,onPin,pointer:e.pointerId,sx:e.clientX,sy:e.clientY,b,nw,ox:n.x,oy:n.y,x:n.x,y:n.y,offX:e.clientX-(b.left+n.x*(b.width-nw)),offY:e.clientY-(b.top+n.y*(b.height-nw)),moved:false,raf:0};
   };
+  // a note let go well outside the board comes off it
+  const offBoard=(cx,cy,d)=>{ const m=Math.max(18,d.nw*.35); return cx<d.b.left-m||cx>d.b.right+m||cy<d.b.top-m||cy>d.b.bottom+m; };
   const padDown=e=>{
     if(e.button!=null&&e.button!==0) return;
     finishWriting(); e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId);
@@ -7146,18 +7096,20 @@ function MatrixCard({notes,onChange}){
   const move=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
     if(!d.moved){ if(Math.hypot(e.clientX-d.sx,e.clientY-d.sy)<4) return; d.moved=true; if(d.el) d.el.classList.add("dragging"); }
     Object.assign(d,frac(e.clientX,e.clientY,d));
+    if(d.el&&!d.isNew) d.el.classList.toggle("leaving",offBoard(e.clientX,e.clientY,d));
     if(d.isNew&&!d.el){ if(pendingRef.current) d.el=pendingRef.current; else { setPending({x:d.x,y:d.y}); return; } }
     if(!d.raf) d.raf=requestAnimationFrame(()=>{ d.raf=0; if(d.el){ d.el.style.setProperty("--x",d.x); d.el.style.setProperty("--y",d.y); } }); };
   const up=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return;
     dragRef.current=null; if(d.raf) cancelAnimationFrame(d.raf);
     if(d.moved){ Object.assign(d,frac(e.clientX,e.clientY,d));
       if(d.isNew){ setPending(null); onChange(matrixAdd(latest.current,{x:d.x,y:d.y,id:d.id})); setEditing(d.id); return; }
+      if(offBoard(e.clientX,e.clientY,d)){ d.el.classList.remove("dragging","leaving"); d.el.style.setProperty("--x",d.x); d.el.style.setProperty("--y",d.y); unpin(d.note); return; }
       d.el.style.setProperty("--x",d.x); d.el.style.setProperty("--y",d.y); d.el.classList.remove("dragging");
       onChange(matrixMove(latest.current,d.id,d.x,d.y)); return; }
-    if(d.isNew) addAtCentre(); else setEditing(d.id);
+    if(d.isNew) addAtCentre(); else if(d.onPin) unpin(d.note); else setEditing(d.id);
   };
   const cancel=e=>{ const d=dragRef.current; if(!d||e.pointerId!==d.pointer) return; dragRef.current=null; if(d.raf) cancelAnimationFrame(d.raf);
-    if(d.isNew) setPending(null); else if(d.el){ d.el.classList.remove("dragging"); d.el.style.setProperty("--x",d.ox); d.el.style.setProperty("--y",d.oy); } };
+    if(d.isNew) setPending(null); else if(d.el){ d.el.classList.remove("dragging","leaving"); d.el.style.setProperty("--x",d.ox); d.el.style.setProperty("--y",d.oy); } };
   // pulling the pin: it comes out, then the note falls off the board
   const unpin=n=>{ finishWriting(); setFalling(n.id); setTimeout(()=>{ setFalling(null); onChange(matrixRemove(latest.current,n.id)); },440); };
   const keys=(e,n)=>{ if(editing===n.id||e.target!==e.currentTarget) return; const k=e.key, step=e.shiftKey?.12:.04;
@@ -7165,14 +7117,19 @@ function MatrixCard({notes,onChange}){
     else if(k==="Delete"||k==="Backspace"){ e.preventDefault(); onChange(matrixRemove(latest.current,n.id)); }
     else if(k.startsWith("Arrow")){ e.preventDefault(); const dx=k==="ArrowLeft"?-step:k==="ArrowRight"?step:0, dy=k==="ArrowUp"?-step:k==="ArrowDown"?step:0; onChange(matrixMove(latest.current,n.id,n.x+dx,n.y+dy,false)); } };
   const commit=(id,text)=>{ setEditing(null); onChange(matrixText(latest.current,id,text)); };
-  return <div className={"pinBoard"+(expanded?" big":"")} ref={boardRef} role="group" aria-label="Priorities: post-its on an urgent and important matrix">
+  const wasWriting=useRef(false);
+  const boardDown=e=>{ const a=document.activeElement; wasWriting.current=!!(a&&a.classList&&a.classList.contains("pbInput")); };
+  const boardTap=e=>{ e.stopPropagation(); if(e.target.closest(".pbNote,.pbPad")||wasWriting.current||!e.detail) return;
+    const {b,nw}=geom(), id=matrixNewId();
+    onChange(matrixAdd(latest.current,{id,x:matrixClamp((e.clientX-nw/2-b.left)/Math.max(1,b.width-nw),0,1),y:matrixClamp((e.clientY-nw*.3-b.top)/Math.max(1,b.height-nw),0,1)})); setEditing(id); };
+  return <div className={"pinBoard"+(expanded?" big":"")} ref={boardRef} role="group" aria-label="Priorities: post-its on an urgent and important matrix. Tap an empty spot to add one." onPointerDownCapture={boardDown} onClick={boardTap}>
     <span className="pbSize" ref={sizeRef} aria-hidden="true"/>
     <span className="pbAxis v" aria-hidden="true"/><span className="pbAxis h" aria-hidden="true"/>
     <span className="pbLbl imp" aria-hidden="true">Important</span><span className="pbLbl urg" aria-hidden="true">Urgent</span>
     {list.map(n=><div key={n.id} className={"pbNote"+(falling===n.id?" falling":"")+(editing===n.id?" editing":"")} style={{"--x":n.x,"--y":n.y,"--r":n.r+"deg"}}
-        tabIndex={0} aria-roledescription="post-it" aria-label={`${n.text||"Empty note"}. ${matrixQuadrant(n.x,n.y)}. Drag to move, tap to write, pull the pin to remove.`}
+        tabIndex={0} aria-roledescription="post-it" aria-label={`${n.text||"Empty note"}. ${matrixQuadrant(n.x,n.y)}. Drag to move, tap to write, drag it off the board or tap its pin to remove it.`}
         onPointerDown={e=>down(e,n)} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel} onKeyDown={e=>keys(e,n)} onClick={e=>e.stopPropagation()}>
-      <button type="button" className="pbPin" aria-label={`Unpin “${n.text||"note"}”`} onPointerDown={e=>e.stopPropagation()} onClick={e=>{ e.stopPropagation(); unpin(n); }}><span className="pbPinHead"/></button>
+      <button type="button" className="pbPin" aria-label={`Unpin “${n.text||"note"}”`} onClick={e=>{ e.stopPropagation(); if(e.detail===0) unpin(n); }}><span className="pbPinHead"/></button>
       {editing===n.id
         ?<textarea className="pbInput" autoFocus rows={3} maxLength={MATRIX_MAX} defaultValue={n.text} aria-label="Write on the post-it"
             onPointerDown={e=>e.stopPropagation()} onClick={e=>e.stopPropagation()}
@@ -7465,8 +7422,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
     if(monthOf(key)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
   };
   return (
-    <div ref={calRef} className={"miniCalendar miniCalSheet"+(placing?" placing":"")} aria-label="Reminder calendar">
-      <div className="miniCalBind" aria-hidden="true"/>
+    <div ref={calRef} className={"miniCalendar"+(placing?" placing":"")} aria-label="Reminder calendar">
       <div className="miniCalHead">
         <div className="miniCalNavGroup">
           <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
@@ -7476,7 +7432,7 @@ function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak})
         {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
         <button type="button" className="miniCalToday widgetIconButton" aria-label="Return to the current month" title="Current month" onClick={returnToday}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="2.5" /><path d="M6.5 3v3M13.5 3v3M3.5 8.5h13" /><circle cx="10" cy="12.5" r="1.3" fill="currentColor" stroke="none" /></svg></button>
       </div>
-      <div className="miniCalWeek">{["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((d,i)=><span key={i}>{d}</span>)}</div>
+      <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
       <div className="miniCalGrid">
         {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||"")));
           const f=!out&&lit(key), ic=!out&&iced(key), p=!out&&!f&&!ic&&tracked(key)?streak.dayCompletion(key):null;
