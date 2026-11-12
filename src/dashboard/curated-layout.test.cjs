@@ -57,7 +57,7 @@ test('legacy arbitrary dimensions neither drive rendering nor mutate saved data'
   const legacy={events:{c:1,r:6},philo:{c:6,r:1}},before=JSON.stringify(legacy);
   const curated=api.clampTileSizes(legacy,6);
   assert.equal(JSON.stringify(legacy),before);
-  assert.deepEqual(plain(curated.events),{c:4,r:3,family:'large'});
+  assert.deepEqual(plain(curated.events),{c:2,r:4,family:'tall'});
   assert.deepEqual(plain(curated.philo),{c:4,r:2,family:'wide'});
   assert.match(html,/const sz=id=>curatedTileSize\(id,cols\)/);
   const initializer=html.slice(html.indexOf('const [sizes,setSizes]'),html.indexOf('const [activeTiles,setActiveTiles]'));
@@ -75,4 +75,14 @@ test('curated grid keeps fixed module spans and keeps modal content outside its 
   assert.match(css,/body\[data-display="roomy"\]/);
   assert.doesNotMatch(css,/(?:^|[;{])\s*(?:zoom|transform):/,'browser zoom must not be counteracted');
   assert.doesNotMatch(css,/\.tileFocus/,'expanded content must not inherit grid dimensions');
+});
+
+test('no tile is ever a half square: desktop sizes are whole squares (even units)',()=>{
+  for(const [id,layout] of Object.entries(api.CURATED_TILE_LAYOUT)){
+    const [c,r]=layout.desktop;
+    assert.ok(c%2===0&&r%2===0,id+' is '+c+'×'+r+' units, a half square');
+  }
+  assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.brainflex.desktop),[2,4],'Brainflex is one square wide, two tall');
+  assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.events.desktop),[2,4],'Events is one square wide, two tall');
+  assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.recall.desktop),[4,4],'Recall is two squares by two');
 });
