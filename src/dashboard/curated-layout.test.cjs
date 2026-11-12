@@ -82,7 +82,7 @@ test('no tile is ever a half square: desktop sizes are whole squares (even units
     const [c,r]=layout.desktop;
     assert.ok(c%2===0&&r%2===0,id+' is '+c+'×'+r+' units, a half square');
   }
-  assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.brainflex.desktop),[2,4],'Brainflex is one square wide, two tall');
+  assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.brainflex.desktop),[4,2],'Brainflex is two squares wide, one tall');
   assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.events.desktop),[2,4],'Events is one square wide, two tall');
   assert.deepEqual(plain(api.CURATED_TILE_LAYOUT.recall.desktop),[4,4],'Recall is two squares by two');
 });
