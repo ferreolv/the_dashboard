@@ -3486,6 +3486,98 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tile .recallDeck .recallGradeName{font-size:8.5px!important}
 .recallDeck .recallRatings.idle{visibility:hidden;animation:none!important}
 .tileFocusSurface .deList{max-width:640px}
+/* ---- Reminders: a minimal wall calendar (see AgendaCard). Hairline boxes, the date in each box's
+   corner, past days filled from the bottom by how much of them was done, today in a filled
+   circle; the next reminders under it, one line each. ---- */
+.grid>.tile[data-tileid="agenda"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="agenda"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="agenda"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid] .wcal{--wcCell:32px;--wcLine:color-mix(in srgb,var(--ink) 13%,transparent);--wcFillTone:color-mix(in srgb,var(--accent) 24%,transparent);display:flex;flex-direction:column;gap:10px;width:100%;min-width:0;color:var(--ink)}
+.tile[data-tileid] .wcal button{min-height:0!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transform:none!important;color:inherit!important;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tile[data-tileid] .wcal button:focus-visible{outline:2px solid var(--accent)!important;outline-offset:2px}
+.tile[data-tileid] .wcal button:disabled{cursor:default}
+/* header: the month in big spaced capitals, the year small; arrows (and the ice, when there is one) on the right */
+.tile[data-tileid] .wcHead{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:30px}
+.grid>.tile[data-tileid="agenda"] .wcHead{padding-right:26px}
+.tile[data-tileid] .wcal button.wcMonth{display:flex;align-items:baseline;gap:7px;min-width:0;white-space:nowrap}
+.tile[data-tileid] .wcMonth b{font:900 clamp(18px,5.6cqi,24px)/1 'Nunito',sans-serif;letter-spacing:.12em;color:var(--ink)}
+.tile[data-tileid] .wcMonth span{font:800 12px/1 'Nunito',sans-serif;letter-spacing:.04em;color:var(--dim)}
+.tile[data-tileid] .wcNav{display:flex;align-items:center;gap:2px;flex:none}
+.tile[data-tileid] .wcal button.wcArrow{display:grid;place-items:center;width:28px;height:28px;border-radius:50%!important;color:var(--dim)!important}
+.tile[data-tileid] .wcal button.wcArrow:hover{background:rgba(255,255,255,.45)!important;color:var(--ink)!important}
+.tile[data-tileid] .wcArrow svg{width:16px;height:16px}
+.tile[data-tileid] .wcal button.wcIce{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 8px 0 4px!important;margin-right:4px!important;border-radius:999px!important;background:#E6F6FF!important;color:#0E6E9A!important;font:850 12px/1 'Nunito',sans-serif}
+.tile[data-tileid] .wcal button.wcIce.on{background:#BFE8FF!important;box-shadow:inset 0 0 0 1.5px #38BDF8!important}
+.tile[data-tileid] .wcIce .insDayGlyph{width:16px;height:16px}
+/* weekday letters and the grid of boxes */
+.tile[data-tileid] .wcWeek{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:0 0 4px}
+.tile[data-tileid] .wcWeek span{padding-left:5px;font:800 9.5px/1 'Nunito',sans-serif;letter-spacing:.06em;color:var(--dim)}
+.tile[data-tileid] .wcWeek span:last-child{color:var(--accent)}
+.tile[data-tileid] .wcGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--wcLine)}
+.tile[data-tileid] .wcal button.wcDay{position:relative;display:block;height:var(--wcCell);border-bottom:1px solid var(--wcLine)!important;text-align:left;overflow:hidden}
+.tile[data-tileid] .wcal button.wcDay:not(:nth-child(7n)){border-right:1px solid var(--wcLine)!important}
+.tile[data-tileid] .wcal button.wcDay.tracked{background:linear-gradient(to top,var(--wcFillTone) calc(var(--fill) * 100%),transparent calc(var(--fill) * 100%))!important}
+.tile[data-tileid] .wcal button.wcDay.lit{--wcFillTone:color-mix(in srgb,var(--accent) 34%,transparent)}
+.tile[data-tileid] .wcal button.wcDay:hover{box-shadow:inset 0 0 0 100px rgba(255,255,255,.28)!important}
+.tile[data-tileid] .wcal button.wcDay.sel{box-shadow:inset 0 0 0 1.5px var(--accent)!important}
+.tile[data-tileid] .wcNum{position:absolute;top:4px;left:5px;display:grid;place-items:center;min-width:18px;height:18px;margin:-1px 0 0 -2px;border-radius:999px;font:800 11.5px/1 'Nunito',sans-serif;color:var(--ink)}
+.tile[data-tileid] .wcDay:nth-child(7n) .wcNum{color:var(--accent)}
+.tile[data-tileid] .wcDay.out .wcNum{opacity:.28}
+.tile[data-tileid] .wcDay.today .wcNum{background:var(--accent);color:#fff!important;font-weight:900;padding:0 4px}
+.tile[data-tileid] .wcGlyph{position:absolute;top:3px;right:3px;line-height:0}
+.tile[data-tileid] .wcGlyph .insDayGlyph{width:13px;height:13px}
+.tile[data-tileid] .wcDay.pop .wcGlyph{animation:miniIcePop .32s ease-out}
+.tile[data-tileid] .wcMarks{position:absolute;left:6px;bottom:4px;display:flex;gap:2px}
+.tile[data-tileid] .wcMarks i{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.tile[data-tileid] .wcMarks i.done{opacity:.35}
+.tile[data-tileid] .wcal.placing .wcDay:not(.target):not(.out){opacity:.45}
+.tile[data-tileid] .wcal button.wcDay.target{box-shadow:inset 0 0 0 1.5px #38BDF8!important}
+/* the list: what is next, or the chosen day with its field */
+.tile[data-tileid] .wcList{display:flex;flex-direction:column;min-width:0;min-height:0}
+.tile[data-tileid] .wcCaption{padding:0 0 6px;font:850 11px/1.2 'Nunito',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.tile[data-tileid] .wcItem{display:flex;align-items:center;gap:8px;min-width:0;padding:6px 0}
+.tile[data-tileid] .wcItem[data-fit-dropped]{display:none!important}
+.tile[data-tileid] .wcItem~.wcItem{border-top:1px solid var(--wcLine)}
+.tile[data-tileid] .wcal button.wcCheck{flex:none;width:16px;height:16px;border-radius:50%!important;background:rgba(255,255,255,.75)!important;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--ink) 18%,transparent)!important}
+.tile[data-tileid] .wcal .wcItem.due button.wcCheck{box-shadow:inset 0 0 0 1.5px var(--accent)!important}
+.tile[data-tileid] .wcal button.wcCheck:disabled{opacity:.45}
+.tile[data-tileid] .wcal .wcItem.done button.wcCheck{background:var(--ink)!important;box-shadow:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4.5 8.3 2.3 2.2 4.7-4.9' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-size:100% 100%!important}
+.tile[data-tileid] .wcItemName{flex:1 1 auto;min-width:0;font:750 13.5px/1.3 'Nunito',sans-serif;color:var(--ink);overflow-wrap:anywhere}
+.tile[data-tileid] .wcRepeatMark{font-weight:700;opacity:.5}
+.tile[data-tileid] .wcItem.done .wcItemName{text-decoration:line-through;opacity:.5}
+.tile[data-tileid] .wcItemWhen{flex:none;font:800 11.5px/1 'Nunito',sans-serif;color:var(--dim);white-space:nowrap}
+.tile[data-tileid] .wcItem.due .wcItemWhen{color:var(--accent)}
+.tile[data-tileid] .wcal button.wcDel{flex:none;width:18px;height:18px;border-radius:50%!important;font:700 15px/1 'Nunito',sans-serif;color:var(--dim)!important;opacity:.55}
+.tile[data-tileid] .wcal button.wcDel:hover{opacity:1;color:var(--ink)!important}
+@media (hover:hover) and (pointer:fine){.tile[data-tileid] .wcal .wcItem:not(:hover):not(:focus-within) button.wcDel{opacity:0}}
+.tile[data-tileid] .wcEmpty{padding:4px 0;font:650 12.5px/1.3 'Nunito',sans-serif;color:var(--dim)}
+/* the field: one line, a hint of how it was read, the repeats in the pop-up */
+.tile[data-tileid] .wcAdd{display:flex;flex-direction:column;gap:5px;padding-bottom:6px}
+.tile[data-tileid] .wcAddRow{display:flex;align-items:center;gap:6px}
+.tile[data-tileid] .wcal input.wcAddInput{flex:1;min-width:0;height:32px;min-height:0!important;margin:0;padding:0 12px!important;border:0!important;border-radius:10px!important;background:rgba(255,255,255,.62)!important;box-shadow:inset 0 0 0 1px var(--wcLine)!important;font:650 13.5px/1 'Nunito',sans-serif!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;outline:none}
+.tile[data-tileid] .wcal input.wcAddInput:focus{box-shadow:inset 0 0 0 1.5px var(--accent)!important;background:rgba(255,255,255,.85)!important}
+.tile[data-tileid] .wcal button.wcAddGo{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px!important;background:var(--accent)!important;color:#fff!important}
+.tile[data-tileid] .wcAddGo svg{width:16px;height:16px}
+.tile[data-tileid] .wcAddHint{padding-left:2px;font:750 11px/1.2 'Nunito',sans-serif;color:var(--dim)}
+.tile[data-tileid] .wcRepeat{display:flex;flex-wrap:wrap;gap:5px}
+.tile[data-tileid] .wcal button.wcChip{padding:5px 10px!important;border-radius:999px!important;background:rgba(255,255,255,.5)!important;font:800 11.5px/1 'Nunito',sans-serif;color:var(--dim)!important}
+.tile[data-tileid] .wcal button.wcChip.on{background:var(--accent)!important;color:#fff!important}
+/* the pop-up: a larger calendar beside its list */
+.tile[data-tileid] .wcal.big{--wcCell:52px;gap:20px}
+.tile[data-tileid] .wcal.big .wcNum{font-size:13px;min-width:20px;height:20px}
+@container (min-width:640px){.tile[data-tileid] .wcal.big{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start;gap:28px}}
+.tileFocusSurface[data-tileid="agenda"] .wcHead{padding-right:44px}
+@container (min-width:640px){.tileFocusSurface[data-tileid="agenda"] .wcHead{padding-right:0}.tileFocusSurface[data-tileid="agenda"] .wcList{padding-top:46px}}
+/* when the tile is done (full colour) */
+.tile.completed .wcal{--wcLine:rgba(255,255,255,.35);--wcFillTone:rgba(255,255,255,.3)}
+.tile.completed .wcDay.today .wcNum{background:#fff;color:var(--accentDark)!important}
+.tile.completed .wcWeek span:last-child,.tile.completed .wcDay:nth-child(7n) .wcNum,.tile.completed .wcItem.due .wcItemWhen{color:#fff}
+.tile.completed .wcMarks i{background:#fff}
+@media(prefers-reduced-motion:reduce){.tile[data-tileid] .wcDay.pop .wcGlyph{animation:none}}
+.tile[data-tileid] .wcal.big .wcWeek{padding-top:6px}
+.tile.completed .wcal button.wcDay.lit{--wcFillTone:rgba(255,255,255,.45)}
+.grid>.tile[data-tileid="brainflex"][data-rows="1"] .fivePreview .fiveCell{width:15px!important;height:15px!important;border-radius:4px!important}
+.grid>.tile[data-tileid="brainflex"][data-rows="1"] .sudokuPreview .sudokuGrid{width:118px!important}
 </style>
 </head>
 <body>
@@ -7535,92 +7627,6 @@ function MusicCard({music,done}){
   </div>;
 }
 
-function MiniAgendaCalendar({recurring,events,selectedDate,onSelectDate,streak}){
-  const [baseY,baseM]=todayKey.split("-").map(Number);
-  const [viewMonth,setViewMonth]=useState(()=>new Date(baseY,baseM-1,1));
-  const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1;
-  const first=new Date(y,m-1,1);
-  const monthLabel=new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(first);
-  const monthName=new Intl.DateTimeFormat("en-US",{month:"long"}).format(first).toUpperCase();
-  const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
-  const monthKey=`${y}-${pad(m)}`;
-  const monthOf=key=>String(key||"").slice(0,7);
-  const itemsByDay={};
-  const addItem=(key,item)=>{ if(!key||monthOf(key)!==monthKey) return; (itemsByDay[key]=itemsByDay[key]||[]).push(item); };
-  (events||[]).forEach(e=>{
-    if(e.doneDate&&e.doneDate<todayKey) return;
-    const d=daysBetween(todayKey,e.date);
-    addItem(e.date,{label:e.label,time:e.time||"",due:d<=0&&!e.doneDate,done:e.doneDate===todayKey});
-  });
-  (recurring||[]).forEach(r=>{
-    let due=recurDue(r);
-    if(due<todayKey) due=todayKey;
-    const d=daysBetween(todayKey,due);
-    addItem(due,{label:r.label,time:"",due:d<=0&&r.lastDone!==todayKey,done:r.lastDone===todayKey});
-  });
-  const daysInMonth=new Date(y,m,0).getDate(), lead=(first.getDay()+6)%7, weeks=Math.ceil((lead+daysInMonth)/7);
-  const days=Array.from({length:weeks*7},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
-  const moveMonth=delta=>setViewMonth(current=>new Date(current.getFullYear(),current.getMonth()+delta,1));
-  const returnToday=()=>setViewMonth(new Date(baseY,baseM-1,1));
-  /* The day's completion rides on the calendar: each tracked past day carries its ring
-     (today's ring is the today marker itself), a 100% day is a flame and a day kept by an
-     ice shows the ice. The little ice in the header is picked up, and the next tap puts it
-     on a missed day of the month (or takes a placed one back). */
-  const [placing,setPlacing]=useState(false);
-  const [popped,setPopped]=useState("");
-  const calRef=useRef(null);
-  const tracked=k=>!!streak&&k>=streak.firstDay&&k<=todayKey;
-  const lit=k=>tracked(k)&&streak.isPerfectDay(k);
-  const iced=k=>tracked(k)&&!lit(k)&&(streak.dayIces||[]).includes(k);
-  const iceLeft=streak?Math.max(0,Number(streak.iceAvailable)||0):0;
-  const canIce=k=>iceLeft>0&&!!streak&&canPlaceIce(k,{today:todayKey,firstDay:streak.firstDay,lit:lit(k),iced:iced(k)});
-  useEffect(()=>{ if(placing&&iceLeft<=0) setPlacing(false); },[placing,iceLeft]);
-  useEffect(()=>{ if(!placing) return;
-    const away=e=>{ if(calRef.current&&!calRef.current.contains(e.target)) setPlacing(false); };
-    const esc=e=>{ if(e.key==="Escape") setPlacing(false); };
-    document.addEventListener("pointerdown",away); document.addEventListener("keydown",esc);
-    return ()=>{ document.removeEventListener("pointerdown",away); document.removeEventListener("keydown",esc); }; },[placing]);
-  useEffect(()=>{ if(!popped) return; const t=setTimeout(()=>setPopped(""),700); return ()=>clearTimeout(t); },[popped]);
-  const R=15.7, C=2*Math.PI*R;
-  const chooseDay=key=>{
-    if(placing){ setPlacing(false);
-      if(monthOf(key)===monthKey&&(canIce(key)||iced(key))){ if(!iced(key)) setPopped(key); streak.onToggleIce(key); }
-      return; }
-    onSelectDate(key===selectedDate?"":key);
-    if(monthOf(key)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
-  };
-  return (
-    <div ref={calRef} className={"miniCalendar"+(placing?" placing":"")} aria-label="Reminder calendar">
-      <div className="miniCalHead">
-        <div className="miniCalNavGroup">
-          <button type="button" className="miniCalNav" aria-label="Previous month" title="Previous month" onClick={()=>moveMonth(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5" /></svg></button>
-          {monthKey===todayKey.slice(0,7)
-            ?<span className="miniCalTitle" aria-live="polite" aria-label={monthLabel}><b>{monthName}</b><small>{y}</small></span>
-            :<button type="button" className="miniCalTitle miniCalBack" aria-live="polite" aria-label={monthLabel+". Back to this month"} title="Back to this month" onClick={returnToday}><b>{monthName}</b><small>{y}</small></button>}
-          <button type="button" className="miniCalNav" aria-label="Next month" title="Next month" onClick={()=>moveMonth(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5" /></svg></button>
-        </div>
-        {iceLeft>0&&<button type="button" className={"miniCalIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
-      </div>
-      <div className="miniCalWeek">{["M","T","W","T","F","S","S"].map((d,i)=><span key={i}>{d}</span>)}</div>
-      <div className="miniCalGrid">
-        {days.map(key=>{ const day=Number(key.split("-")[2]), out=monthOf(key)!==monthKey, items=(itemsByDay[key]||[]).sort((a,b)=>String(a.time||"").localeCompare(String(b.time||"")));
-          const f=!out&&lit(key), ic=!out&&iced(key), p=!out&&!f&&!ic&&tracked(key)?streak.dayCompletion(key):null;
-          const target=placing&&!out&&(canIce(key)||ic), ring=!out&&!f&&!ic&&(p!=null||target);
-          const state=f?"100%, a flame":ic?"kept by an ice":p!=null?Math.round(p*100)+"% done":"";
-          const label=`${formatDateKey(key)}${state?" · "+state:""}${items.length?` · ${items.map(item=>(item.time?item.time+" ":"")+item.label).join(", ")}`:""}${target?(ic?" · take the ice back":" · place the ice here"):""}`;
-          return (
-          <button key={key} className={"miniCalDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===selectedDate?" selected":"")+(items.length?" has":"")+(ring?" ringed":"")+(f?" flame":"")+(ic?" iced":"")+(target?" target":"")+(ic&&key===popped?" pop":"")} aria-label={label} title={label} aria-current={key===todayKey?"date":undefined} aria-pressed={key===selectedDate} onClick={()=>chooseDay(key)}>
-            <div className="miniCalNum">{ring&&<svg className="miniCalRing" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r={R} className="miniCalTrack"/>{p>0&&<circle cx="18" cy="18" r={R} className="miniCalArc" style={{strokeDasharray:`${(C*p).toFixed(2)} ${C.toFixed(2)}`}}/>}</svg>}{f?<DayFlame/>:ic?<DayIce/>:day}</div>
-            <div className="miniCalEvents" aria-hidden="true">
-              {items.slice(0,4).map((item,i)=><span key={i} className={"miniCalDot"+(item.due?" due":"")+(item.done?" done":"")} />)}
-              {items.length>4&&<span className="miniCalMore">+</span>}
-            </div>
-          </button>
-        ); })}
-      </div>
-    </div>
-  );
-}
 /* ================= Insights page =================
    Records, a month of completion rings, a habit + tile history table and per-section
    streak cards. Every section keeps its tile colour. */
@@ -7774,91 +7780,148 @@ function InsightsPage({sustain,overall,sections,habits,habitLog,freezes,ice,ices
   </div>;
 }
 
-function AgendaCard({recurring,events,noDueToday,emptyDone,onToggleEmpty,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,streak}){
-  const [showAdd,setShowAdd]=useState(false);
-  const [selectedDate,setSelectedDate]=useState("");
-  const {expanded,open}=useTilePresentation();
-  useEffect(()=>{ setShowAdd(false); },[selectedDate]);
-  /* the form wants more room than the grid tile has under its calendar, so + opens the pop-up with it */
-  const startAdd=()=>{ setShowAdd(true); if(!expanded) open(); };
-  const rows=[];
-  recurring.forEach(r=>{
-    const done=r.lastDone===todayKey, due=recurDue(r), d=daysBetween(todayKey,due);
-    rows.push({ id:r.id, kind:"Recurring", label:r.label, days:d, calendarDate:done?todayKey:(due<todayKey?todayKey:due), done, repeat:recurLabel(r), dateLabel:shortDate(done?todayKey:(due<todayKey?todayKey:due)), sub:done?"Completed today":recurLabel(r), canToggle:done||d<=0, onCheck:()=>onMarkDone(r.id), onRemove:()=>onRemoveRecurring(r.id) });
-  });
-  events.forEach(e=>{
-    if(e.doneDate&&e.doneDate<todayKey) return;
-    const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey;
-    const time=String(e.time||"").trim();
-    rows.push({ id:e.id, kind:"One-off", label:e.label, days:d, calendarDate:e.date, time, dateLabel:shortDate(e.date)+(time&&d!==0?" "+time:""), timeSort:time?Number(time.replace(":","")):9999, done, sub:done?"Completed today":selectedDate?(time||"All day"):shortDate(e.date)+(time?` · ${time}`:""), canToggle:d<=0||done, onCheck:()=>onToggleEventDone(e.id), onRemove:()=>onRemoveEvent(e.id) });
-  });
-  const rowRank=r=>r.done?1:r.days<=0?0:2;
-  rows.sort((a,b)=>rowRank(a)-rowRank(b)||a.days-b.days||(a.timeSort||9999)-(b.timeSort||9999));
-  /* by default the soonest items; a tapped day shows just that day */
-  const shown=selectedDate?rows.filter(r=>r.calendarDate===selectedDate):rows;
-  return (
-    <div className="taskAgenda">
-      <MiniAgendaCalendar recurring={recurring} events={events} selectedDate={selectedDate} onSelectDate={setSelectedDate} streak={streak} />
-      <div className="agendaItems">
-      {!selectedDate && shown.length===0 && !noDueToday && <PlainEmpty>No tasks on the radar.</PlainEmpty>}
-      {shown.map(r=>{ const state=r.done?" done":r.days<=0?" dueNow":" later";
-        const rel=r.done?"done":r.days<-1?`${-r.days} days late`:r.days===-1?"a day late":r.days===0?(r.time||"today"):r.days===1?"tomorrow":`in ${r.days} days`;
-        return (
-        <div key={r.id} data-fit-drop="1" className={"agRow taskRow agLine"+state}>
-          <button className="taskMain" disabled={!r.canToggle} aria-label={(r.done?(r.canToggle?"Undo ":"Completed "):"Complete ")+r.label} aria-pressed={!!r.done} onClick={r.onCheck}>
-            <span className="agName">{r.label}{r.repeat&&<span className="agRepeat" title={r.repeat} aria-label={r.repeat}> ↻</span>}</span>
-          </button>
-          <span className="agMeta"><span className="agSep" aria-hidden="true">·</span><span className="agDate">{r.dateLabel}</span><span className="agSep" aria-hidden="true">·</span><span className="agWhen">{rel}</span></span>
-          {r.onRemove && <button className="del" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>}
-        </div>
-      );})}
-      {!selectedDate && noDueToday && shown.length===0 && <button className="agendaClearSpace" aria-label={emptyDone?"Mark Reminders incomplete":"Mark Reminders complete for today"} aria-pressed={emptyDone} onClick={onToggleEmpty} />}
-      {/* booking happens on a chosen day: the + only appears once today or a later day is selected */}
-      {selectedDate&&selectedDate>=todayKey&&(!showAdd ? (
-        <button type="button" className="widgetIconButton taskAddLink" aria-label={"Add a reminder on "+positiveEventDate(selectedDate)} title="Add a reminder on this day" onClick={startAdd}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg></button>
-      ) : (
-        <AgendaAddForm date={selectedDate} onAddRecurring={onAddRecurring} onAddEvent={onAddEvent} onClose={()=>setShowAdd(false)} />
-      ))}
-      </div>
-    </div>
-  );
+/* QUICK_REMINDER_START */
+/* One field plans a reminder: the words are the reminder, and a time ("9:30", "9h30", "6pm",
+   "at 18h") or a day ("today", "tomorrow", "on fri", "friday", "in 3 days", "nov 20", "20 nov")
+   written anywhere in it is taken out of the words and used. Without a day it goes on the day
+   picked in the calendar (or today). */
+const QR_WEEKDAYS={sunday:0,monday:1,tuesday:2,wednesday:3,thursday:4,friday:5,saturday:6,sun:0,mon:1,tue:2,tues:2,wed:3,thu:4,thur:4,thurs:4,fri:5,sat:6};
+const QR_MONTHS=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+function parseQuickReminder(text,base,today){
+  let s=" "+String(text||"").replace(/\s+/g," ").trim()+" ", date=base||today, time="";
+  const two=n=>String(n).padStart(2,"0");
+  const take=re=>{ const m=s.match(re); if(m) s=s.slice(0,m.index)+" "+s.slice(m.index+m[0].length); return m; };
+  let m;
+  if((m=take(/\s(?:at\s)?(\d{1,2})[:h.](\d{2})\s?(am|pm)?(?=\s)/i))){ let h=+m[1]; const mi=+m[2]; if(m[3]) h=h%12+(m[3].toLowerCase()==="pm"?12:0); if(h<24&&mi<60) time=two(h)+":"+two(mi); }
+  else if((m=take(/\s(?:at\s)?(\d{1,2})\s?(am|pm)(?=\s)/i))){ const h=+m[1]; if(h>=1&&h<=12) time=two(h%12+(m[2].toLowerCase()==="pm"?12:0))+":00"; }
+  else if((m=take(/\s(?:at\s)?(\d{1,2})h(?=\s)/i))){ const h=+m[1]; if(h<24) time=two(h)+":00"; }
+  const dow=key=>{ const [y,mo,d]=key.split("-").map(Number); return new Date(y,mo-1,d).getDay(); };
+  if(take(/\s(?:on\s)?today(?=\s)/i)) date=today;
+  else if(take(/\s(?:on\s)?tomorrow(?=\s)/i)) date=addDays(today,1);
+  else if((m=take(/\sin\s(\d{1,3})\s(days?|weeks?)(?=\s)/i))) date=addDays(today,+m[1]*(/^w/i.test(m[2])?7:1));
+  else if((m=take(/\s(?:on|next)\s(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tues|tue|wed|thurs|thur|thu|fri|sat)(?=\s)/i))||(m=take(/\s(sunday|monday|tuesday|wednesday|thursday|friday|saturday)(?=\s)/i))){
+    const want=QR_WEEKDAYS[m[1].toLowerCase()]; date=addDays(today,((want-dow(today))+7)%7||7); }
+  else if((m=take(/\s(?:on\s)?(\d{1,2})\s(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?(?=\s)/i))||(m=take(/\s(?:on\s)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s(\d{1,2})(?=\s)/i))){
+    const month=QR_MONTHS.indexOf((isNaN(+m[1])?m[1]:m[2]).slice(0,3).toLowerCase()), day=+(isNaN(+m[1])?m[2]:m[1]);
+    let y=+today.slice(0,4); const key=y2=>`${y2}-${two(month+1)}-${two(day)}`;
+    if(day>=1&&day<=31){ if(key(y)<today) y++; date=key(y); } }
+  const label=s.replace(/\s+/g," ").trim().replace(/^(?:on|at)\s+/i,"").replace(/\s+(?:on|at)$/i,"").trim();
+  return {label,date,time};
 }
-/* The day is already chosen in the calendar, so the form asks only for the words, an optional
-   time, and how it repeats: a row of chips, with an "every N" stepper once it repeats. A
-   repeating reminder starts on the chosen day. */
-const AGENDA_REPEATS=[["once","Once"],["day","Daily"],["week","Weekly"],["month","Monthly"],["year","Yearly"]];
-function AgendaAddForm({date,onAddRecurring,onAddEvent,onClose}){
-  const [label,setLabel]=useState(""); const [time,setTime]=useState(""); const [unit,setUnit]=useState("once"); const [n,setN]=useState(1);
-  /* a form left empty goes away: a press anywhere outside it, or Escape, closes it */
-  const formRef=useRef(null), emptyRef=useRef(true); emptyRef.current=!label.trim();
-  useEffect(()=>{
-    const away=e=>{ if(formRef.current&&!formRef.current.contains(e.target)&&emptyRef.current) onClose(); };
-    const esc=e=>{ if(e.key==="Escape"&&emptyRef.current){ e.stopPropagation(); onClose(); } };
-    const t=setTimeout(()=>{ document.addEventListener("pointerdown",away,true); document.addEventListener("keydown",esc,true); },0);
-    return()=>{ clearTimeout(t); document.removeEventListener("pointerdown",away,true); document.removeEventListener("keydown",esc,true); };
-  },[]);
-  const submit=()=>{ const t=label.trim(); if(!t||!date) return;
-    if(unit==="once") onAddEvent(t,date,time); else onAddRecurring(t,Math.max(1,Math.round(n)),unit,date);
-    onClose(); };
+/* QUICK_REMINDER_END */
+
+/* Reminders as a wall calendar, realistic and minimal: the month in big capitals, a hairline
+   grid with the date in the corner of each box, today's date in a filled circle. Each past day
+   fills from the bottom with how much of it was done (a flame on a perfect day, the ice on a
+   day an ice kept), so the month reads at a glance. Under it, the next reminders, one line each
+   (a round check, the name, when, the ×). Tap a day to plan: one field takes the words, and a
+   time or another day written in them. The pop-up adds how it repeats. */
+const WC_WEEKDAYS=["M","T","W","T","F","S","S"];
+const wcRel=(d,time)=>d<-1?`${-d} days late`:d===-1?"yesterday":d===0?(time||"today"):d===1?"tomorrow":`in ${d} days`;
+const wcDayLabel=key=>{ const [y,m,d]=key.split("-").map(Number); return new Intl.DateTimeFormat("en-US",{weekday:"short",month:"short",day:"numeric"}).format(new Date(y,m-1,d)); };
+const WC_REPEATS=[["once","Once"],["day","Daily"],["week","Weekly"],["month","Monthly"],["year","Yearly"]];
+function WallAdd({date,full,onAddEvent,onAddRecurring}){
+  const [text,setText]=useState(""),[unit,setUnit]=useState("once");
+  const p=parseQuickReminder(text,date,todayKey);
+  const submit=()=>{ if(!p.label) return;
+    if(unit==="once") onAddEvent(p.label,p.date,p.time); else onAddRecurring(p.label,1,unit,p.date);
+    setText(""); setUnit("once"); };
+  const hint=p.label?[wcDayLabel(p.date),p.time,unit!=="once"?WC_REPEATS.find(r=>r[0]===unit)[1].toLowerCase():""].filter(Boolean).join(" · "):"";
+  return <div className="wcAdd">
+    <div className="wcAddRow">
+      <input className="wcAddInput" value={text} enterKeyHint="done" aria-label={"Add a reminder on "+wcDayLabel(date)}
+        placeholder={`Add to ${wcDayLabel(date)}…`} onChange={e=>setText(e.target.value)}
+        onKeyDown={e=>{ if(e.key==="Enter"){ e.preventDefault(); submit(); } else if(e.key==="Escape"&&text){ e.stopPropagation(); setText(""); } }}/>
+      {p.label&&<button type="button" className="wcAddGo" aria-label={"Add "+p.label} onClick={submit}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M10 4.5v11M4.5 10h11"/></svg></button>}
+    </div>
+    {hint&&<div className="wcAddHint" aria-live="polite">{hint}</div>}
+    {full&&text.trim()&&<div className="wcRepeat" role="radiogroup" aria-label="Repeats">{WC_REPEATS.map(([u,l])=><button type="button" key={u} role="radio" aria-checked={unit===u} className={"wcChip"+(unit===u?" on":"")} onClick={()=>setUnit(u)}>{l}</button>)}</div>}
+  </div>;
+}
+function WallItem({r,withDate}){
+  const due=!r.done&&r.days<=0;
+  return <div className={"wcItem"+(r.done?" done":"")+(due?" due":"")} data-fit-drop="1">
+    <button type="button" className="wcCheck" disabled={!r.canToggle} aria-pressed={!!r.done} aria-label={(r.done?"Undo ":"Complete ")+r.label} onClick={r.onCheck}/>
+    <span className="wcItemName">{r.label}{r.repeat&&<span className="wcRepeatMark" title={r.repeat} aria-label={", "+r.repeat}> ↻</span>}</span>
+    <span className="wcItemWhen">{r.done?"done":[withDate&&r.days>1?wcDayLabel(r.calendarDate).replace(/^\w+, /,""):"",r.time&&r.days!==0?r.time:"",wcRel(r.days,r.time)].filter(Boolean).join(" · ")}</span>
+    <button type="button" className="wcDel" aria-label={"Delete "+r.label} onClick={r.onRemove}>×</button>
+  </div>;
+}
+function AgendaCard({recurring,events,onMarkDone,onAddRecurring,onRemoveRecurring,onAddEvent,onRemoveEvent,onToggleEventDone,streak}){
+  const {expanded}=useTilePresentation();
+  const [baseY,baseM]=todayKey.split("-").map(Number);
+  const [viewMonth,setViewMonth]=useState(()=>new Date(baseY,baseM-1,1));
+  const [selected,setSelected]=useState("");
+  const [placing,setPlacing]=useState(false),[popped,setPopped]=useState("");
+  const rootRef=useRef(null);
+  const y=viewMonth.getFullYear(),m=viewMonth.getMonth()+1, monthKey=`${y}-${pad(m)}`, onThisMonth=monthKey===todayKey.slice(0,7);
+  const first=new Date(y,m-1,1), lead=(first.getDay()+6)%7, weeks=Math.ceil((lead+new Date(y,m,0).getDate())/7);
+  const start=new Date(first); start.setDate(1-lead);
+  const days=Array.from({length:weeks*7},(_,i)=>{ const dt=new Date(start); dt.setDate(start.getDate()+i); return dateKey(dt); });
+  const monthName=new Intl.DateTimeFormat("en-US",{month:"long"}).format(first).toUpperCase();
+  /* every reminder as a row: recurring ones on their next due day, one-offs on their date */
+  const rows=[];
+  recurring.forEach(r=>{ const done=r.lastDone===todayKey, due=recurDue(r), d=daysBetween(todayKey,due), at=done?todayKey:(due<todayKey?todayKey:due);
+    rows.push({id:r.id,label:r.label,days:done?0:d,calendarDate:at,done,repeat:recurLabel(r),canToggle:done||d<=0,onCheck:()=>onMarkDone(r.id),onRemove:()=>onRemoveRecurring(r.id)}); });
+  events.forEach(e=>{ if(e.doneDate&&e.doneDate<todayKey) return; const d=daysBetween(todayKey,e.date), done=e.doneDate===todayKey, time=String(e.time||"").trim();
+    rows.push({id:e.id,label:e.label,days:d,calendarDate:e.date,time,done,canToggle:d<=0||done,onCheck:()=>onToggleEventDone(e.id),onRemove:()=>onRemoveEvent(e.id)}); });
+  const rank=r=>r.done?2:r.days<=0?0:1;
+  rows.sort((a,b)=>rank(a)-rank(b)||a.days-b.days||String(a.time||"99").localeCompare(String(b.time||"99")));
+  const byDay={}; rows.forEach(r=>{ (byDay[r.calendarDate]=byDay[r.calendarDate]||[]).push(r); });
+  /* completion per day */
+  const tracked=k=>!!streak&&k>=streak.firstDay&&k<=todayKey;
+  const lit=k=>tracked(k)&&streak.isPerfectDay(k);
+  const iced=k=>tracked(k)&&!lit(k)&&(streak.dayIces||[]).includes(k);
+  const iceLeft=streak?Math.max(0,Number(streak.iceAvailable)||0):0;
+  const canIce=k=>iceLeft>0&&!!streak&&canPlaceIce(k,{today:todayKey,firstDay:streak.firstDay,lit:lit(k),iced:iced(k)});
+  useEffect(()=>{ if(placing&&iceLeft<=0) setPlacing(false); },[placing,iceLeft]);
+  useEffect(()=>{ if(!popped) return; const t=setTimeout(()=>setPopped(""),700); return ()=>clearTimeout(t); },[popped]);
+  useEffect(()=>{ if(!placing) return; const away=e=>{ if(rootRef.current&&!rootRef.current.contains(e.target)) setPlacing(false); };
+    document.addEventListener("pointerdown",away); return ()=>document.removeEventListener("pointerdown",away); },[placing]);
+  const move=delta=>setViewMonth(c=>new Date(c.getFullYear(),c.getMonth()+delta,1));
+  const pick=key=>{
+    if(placing){ setPlacing(false); if(key.slice(0,7)===monthKey&&(canIce(key)||iced(key))){ if(!iced(key)) setPopped(key); streak.onToggleIce(key); } return; }
+    setSelected(s=>s===key?"":key);
+    if(key.slice(0,7)!==monthKey){ const [ny,nm]=key.split("-").map(Number); setViewMonth(new Date(ny,nm-1,1)); }
+  };
+  const sel=selected, selRows=sel?(byDay[sel]||[]):[], canPlan=!!sel&&sel>=todayKey;
+  const selPct=sel&&tracked(sel)?streak.dayCompletion(sel):null;
+  const caption=sel?[wcDayLabel(sel),sel===todayKey?"today":sel===addDays(todayKey,1)?"tomorrow":"",lit(sel)?"all done":iced(sel)?"kept by an ice":selPct!=null&&sel<todayKey?Math.round(selPct*100)+"% done":""].filter(Boolean).join(" · "):"";
   return (
-    <div className="taskAddForm agendaForm" ref={formRef}>
-      <div className="agendaFormRow">
-        <input className="addinput agendaField" placeholder={unit==="once"?"Renew passport":"Water the plants"} value={label} onChange={e=>setLabel(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} autoFocus />
-        {unit==="once"&&<input className="addinput agendaField agendaTime" type="time" aria-label="Time (optional)" value={time} onChange={e=>setTime(e.target.value)} />}
+    <div ref={rootRef} className={"wcal"+(expanded?" big":"")+(placing?" placing":"")}
+      onClick={e=>{ if(e.target.closest(".wcItem,.wcAdd,.wcCaption,.wcCal")) e.stopPropagation(); }}
+      onKeyDown={e=>{ if(e.key==="Escape"){ if(placing) setPlacing(false); else if(sel){ e.stopPropagation(); setSelected(""); } } }}>
+      <div className="wcCal">
+        <div className="wcHead">
+          <button type="button" className="wcMonth" disabled={onThisMonth} title={onThisMonth?undefined:"Back to this month"} aria-label={`${monthName} ${y}${onThisMonth?"":". Back to this month"}`}
+            onClick={()=>setViewMonth(new Date(baseY,baseM-1,1))}><b>{monthName}</b><span>{y}</span></button>
+          <div className="wcNav">
+            {iceLeft>0&&<button type="button" className={"wcIce"+(placing?" on":"")} aria-pressed={placing} aria-label={placing?"Keep the ice":`Place an ice on a missed day · ${iceLeft} left`} title={placing?"Tap a missed day":"Place an ice on a missed day"} onClick={()=>setPlacing(v=>!v)}><DayIce/><b>{iceLeft}</b></button>}
+            <button type="button" className="wcArrow" aria-label="Previous month" onClick={()=>move(-1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 5-5 5 5 5"/></svg></button>
+            <button type="button" className="wcArrow" aria-label="Next month" onClick={()=>move(1)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
+          </div>
+        </div>
+        <div className="wcWeek" aria-hidden="true">{WC_WEEKDAYS.map((d,i)=><span key={i}>{d}</span>)}</div>
+        <div className="wcGrid" role="group" aria-label={`${monthName} ${y}`}>
+          {days.map(key=>{ const day=Number(key.slice(8)), out=key.slice(0,7)!==monthKey, items=byDay[key]||[];
+            const f=!out&&lit(key), ic=!out&&iced(key), p=!out&&tracked(key)&&!f&&!ic?streak.dayCompletion(key):null;
+            const target=placing&&!out&&(canIce(key)||ic);
+            const state=f?"all done":ic?"kept by an ice":p!=null?Math.round(p*100)+"% done":"";
+            const label=`${formatDateKey(key)}${state?" · "+state:""}${items.length?" · "+items.map(i=>(i.time?i.time+" ":"")+i.label).join(", "):""}${target?(ic?" · take the ice back":" · place the ice here"):""}`;
+            return <button type="button" key={key} className={"wcDay"+(out?" out":"")+(key===todayKey?" today":"")+(key===sel?" sel":"")+(p!=null||f?" tracked":"")+(f?" lit":"")+(ic?" iced":"")+(target?" target":"")+(ic&&key===popped?" pop":"")}
+              style={p!=null||f?{"--fill":f?1:Math.max(0,Math.min(1,p))}:undefined} aria-label={label} title={label} aria-pressed={key===sel} aria-current={key===todayKey?"date":undefined} onClick={()=>pick(key)}>
+              <span className="wcNum">{day}</span>
+              {(f||ic)&&<span className="wcGlyph">{f?<DayFlame/>:<DayIce/>}</span>}
+              {items.length>0&&!out&&<span className="wcMarks">{items.slice(0,3).map((it,i)=><i key={i} className={it.done?"done":it.days<=0?"due":""}/>)}</span>}
+            </button>; })}
+        </div>
       </div>
-      <div className="agendaRepeat" role="radiogroup" aria-label="Repeats">
-        {AGENDA_REPEATS.map(([u,l])=><button type="button" key={u} role="radio" aria-checked={unit===u} className={"agendaChip"+(unit===u?" on":"")} onClick={()=>setUnit(u)}>{l}</button>)}
-      </div>
-      {unit!=="once"&&<div className="agendaEveryRow">
-        <span className="agendaEvery">every</span>
-        <button type="button" className="agendaStep" aria-label="Less often" disabled={n<=1} onClick={()=>setN(v=>Math.max(1,v-1))}>−</button>
-        <b className="agendaN" aria-live="polite">{n}</b>
-        <button type="button" className="agendaStep" aria-label="More often" onClick={()=>setN(v=>Math.min(99,v+1))}>+</button>
-        <span className="agendaEvery">{n===1?unit:unit+"s"} · from {shortDate(date)}</span>
-      </div>}
-      <div className="agendaFormRow">
-        <button type="button" className="agendaBtn ghost" onClick={onClose}>Cancel</button>
-        <button type="button" className="agendaBtn" onClick={submit}>Add</button>
+      <div className="wcList">
+        {sel&&<div className="wcCaption">{caption}</div>}
+        {(canPlan||(expanded&&!sel))&&<WallAdd key={sel||"today"} date={sel||todayKey} full={expanded} onAddEvent={onAddEvent} onAddRecurring={onAddRecurring}/>}
+        {(sel?selRows:rows).map(r=><WallItem key={r.id} r={r} withDate={!sel}/>)}
+        {sel&&!selRows.length&&!canPlan&&<div className="wcEmpty">Nothing planned</div>}
+        {!sel&&!rows.length&&<div className="wcEmpty">{expanded?"Nothing planned yet":"Nothing planned · tap a day to add"}</div>}
       </div>
     </div>
   );
