@@ -2310,10 +2310,8 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .deWords{display:flex;flex-direction:column;gap:1px}
 .deTerm{font-weight:800;font-size:14px;color:var(--accentDark)}
 .deFr{font-size:12.5px;color:var(--dim)}
-.dePron{font-size:11px;font-style:italic;color:color-mix(in srgb,var(--accent) 70%,var(--dim))}
 .tile.completed .deTerm{color:#fff}
 .tile.completed .deFr{color:rgba(255,255,255,.78)}
-.tile.completed .dePron{color:rgba(255,255,255,.62)}
 
 /* --- Movies: a strip of film running diagonally across the whole tile --- */
 .movieCard{display:flex;flex-direction:column;flex:1;min-height:0;gap:10px}
@@ -2371,15 +2369,24 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile.completed .ticketStub{background:rgba(255,255,255,.16);border-right-color:rgba(255,255,255,.6)}
 .tile.completed .ticketStub strong{color:#fff}
 .tile.completed .ticketStub span{color:rgba(255,255,255,.75)}
-/* In the tall Events tile (one square wide, two high) a ticket stands upright: the day count on
-   a stub across the top, the perforation under it, the plan below. */
-.grid>.tile[data-tileid="events"] .eventHero.eventTicket{flex-direction:column;
-  -webkit-mask:radial-gradient(circle 7px at 0 54px,transparent 96%,#000 100%),radial-gradient(circle 7px at 100% 54px,transparent 96%,#000 100%);
-  -webkit-mask-composite:source-in;mask:radial-gradient(circle 7px at 0 54px,transparent 96%,#000 100%),radial-gradient(circle 7px at 100% 54px,transparent 96%,#000 100%);mask-composite:intersect}
-.grid>.tile[data-tileid="events"] .ticketStub{width:auto;height:54px;box-sizing:border-box;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:6px;padding:10px 30px 8px 12px;border-right:0;border-bottom:2px dashed color-mix(in srgb,var(--accent) 45%,#fff)}
-.grid>.tile[data-tileid="events"] .ticketStub strong{font-size:30px}
-.grid>.tile[data-tileid="events"] .ticketBody{padding:9px 12px 11px}
-.grid>.tile.completed[data-tileid="events"] .ticketStub{border-bottom-color:rgba(255,255,255,.6)}
+/* The Events tile is as wide as Philosophy: each plan is a landscape ticket, the day count on a
+   stub at the left, the perforation, the plan on the right. Tickets that do not fit hide whole. */
+.tileFocusSurface[data-tileid="events"] .positiveEvents{padding-top:40px}
+.grid>.tile[data-tileid="events"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="events"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="events"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.grid>.tile[data-tileid="events"] .positiveEvents{flex:1 1 auto;display:flex;flex-direction:column;justify-content:safe center;min-height:0}
+.grid>.tile[data-tileid="events"] .eventHero.eventTicket{--stub:84px;flex:none;
+  -webkit-mask:radial-gradient(circle 7px at var(--stub) 0,transparent 96%,#000 100%),radial-gradient(circle 7px at var(--stub) 100%,transparent 96%,#000 100%);
+  -webkit-mask-composite:source-in;mask:radial-gradient(circle 7px at var(--stub) 0,transparent 96%,#000 100%),radial-gradient(circle 7px at var(--stub) 100%,transparent 96%,#000 100%);mask-composite:intersect}
+.grid>.tile[data-tileid="events"] .ticketStub{width:var(--stub);box-sizing:border-box;padding:10px 6px;gap:2px}
+.grid>.tile[data-tileid="events"] .ticketStub strong{font-size:32px}
+.grid>.tile[data-tileid="events"] .ticketStub span{font-size:9px}
+.grid>.tile[data-tileid="events"] .ticketBody{justify-content:center;gap:3px;padding:10px 34px 10px 14px}
+.grid>.tile[data-tileid="events"] .eventTicket .eventTitle{font-size:15px}
+.grid>.tile[data-tileid="events"] .eventTicket .eventType,.grid>.tile[data-tileid="events"] .ticketDel{display:none!important}
+.grid>.tile[data-tileid="events"] .ticketBody{padding-right:30px}
+.grid>.tile[data-tileid="events"] .tileFoot{z-index:7}
 
 /* --- Note as ruled paper: faint lines, a red margin, writing straight on it. --- */
 .tile[data-tileid="note"] .notearea{
@@ -2533,6 +2540,13 @@ button.plate:focus-visible{outline:2px solid var(--accentDark);outline-offset:3p
 .newsColumns .newsItem:nth-child(n+3){padding-top:9px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}
 .tileFocusSurface .newsColumns{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:9px}
 .tile[data-tileid="world"] .content{container-type:inline-size}
+.newsLeadBody{text-align:left!important;hyphens:manual!important;-webkit-hyphens:manual!important}
+.newsBriefs{list-style:none;margin:0;padding:0}
+.newsBrief{padding:7px 0;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent);font-size:14px;font-weight:700;line-height:1.25;letter-spacing:-.005em;text-wrap:balance}
+.newsBrief:first-child{border-top:0;padding-top:0}
+.newsBrief[data-fit-dropped]{display:none!important}
+/* a narrow pop-up (a phone) reads as one column: stories ruled between, no column rules */
+@container (max-width:430px){.tileFocusSurface .newsColumns .newsItem{padding:9px 0 6px!important;border-left:0!important;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)!important}.tileFocusSurface .newsColumns .newsItem:first-child{border-top:0!important;padding-top:0!important}}
 /* --- Goals: minimal add field, round checks, no counters --- */
 .goalInputMinimal{position:relative;display:flex;align-items:center;margin-top:4px}
 .tile input.goalInputField,.tile.completed input.goalInputField{flex:1;min-width:0;height:30px;padding:2px 26px 2px 2px!important;border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:13.5px!important;transform:none!important}
@@ -3409,10 +3423,9 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 .deList .deWordRow~.deWordRow{border-top:1px solid var(--hair)}
 .deList dt{display:flex;flex-direction:column;min-width:0;margin:0}
 .deList .deTerm{font-size:15px;font-weight:800;line-height:1.25;color:var(--accentDark);overflow-wrap:anywhere}
-.deList .dePron{font-size:11px;font-style:italic;line-height:1.3;color:var(--dim)}
 .deList dd.deFr{margin:0;text-align:right;font-size:13.5px;font-weight:650;line-height:1.3;color:var(--ink);overflow-wrap:anywhere}
 .tile.completed .deList .deTerm,.tile.completed .deList .deTheme,.tile.completed .deList dd.deFr{color:#fff!important}
-.tile.completed .deList .dePoint,.tile.completed .deList .dePron{color:rgba(255,255,255,.8)!important}
+.tile.completed .deList .dePoint{color:rgba(255,255,255,.8)!important}
 .tileFocusSurface .deList .deTheme{font-size:22px!important}
 /* Completion circles show only what is done: no white track under the arc (calendar and Insights).
    Today's dark ring and the ice target keep theirs. */
@@ -3582,6 +3595,19 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tile.completed .wcal button.wcDay.lit{--wcFillTone:rgba(255,255,255,.45)}
 .grid>.tile[data-tileid="brainflex"][data-rows="1"] .fivePreview .fiveCell{width:15px!important;height:15px!important;border-radius:4px!important}
 .grid>.tile[data-tileid="brainflex"][data-rows="1"] .sudokuPreview .sudokuGrid{width:118px!important}
+/* On a phone Brainflex is a full square: the day's board fills it, centred. */
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .brainGames{flex:1 1 auto;height:auto;min-height:0}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] button.brainBoard{gap:20px}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .digitsPreview .digitsTarget{font-size:clamp(64px,24cqi,92px)}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .digitsPreview .digitsChips{display:grid;grid-template-columns:repeat(3,auto);gap:12px 14px}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .digitsPreview .digitsChip{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;font-size:21px!important}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .fivePreview .fiveGrid,.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .fivePreview .fiveRow{gap:6px}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .fivePreview .fiveCell{width:38px!important;height:38px!important;border-radius:9px!important;font-size:19px}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .sudokuPreview .sudokuGrid{width:min(240px,100%)!important}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .sudokuPreview .sudokuCell{font-size:20px!important}
 </style>
 </head>
 <body>
@@ -5001,15 +5027,15 @@ function WeatherCard({data,busy,onGenerate,onRefresh}){
 const columnsForWidth=width=>width>=1200?12:width>=960?8:width>=640?4:width>=360?2:1;
 const CURATED_TILE_LAYOUT={
   goals:{desktop:[4,4],phone:[2,2],family:"large"},
-  habits:{desktop:[4,2],phone:[2,2],family:"large"},
+  habits:{desktop:[4,2],phone:[2,1],family:"large"},
   sustain:{desktop:[2,2],phone:[1,1],family:"small"},
   breathing:{desktop:[2,2],phone:[1,1],family:"small"},
   health:{desktop:[4,2],phone:[2,2],family:"large"},
-  shopping:{desktop:[2,4],phone:[2,2],family:"tall"},
+  shopping:{desktop:[2,4],phone:[1,2],family:"tall"},
   agenda:{desktop:[4,4],phone:[2,2],family:"large"},
   matrix:{desktop:[4,4],phone:[2,2],family:"large"},
-  events:{desktop:[2,4],phone:[1,2],family:"tall"},
-  note:{desktop:[2,4],phone:[2,2],family:"tall"},
+  events:{desktop:[4,2],phone:[2,1],family:"wide"},
+  note:{desktop:[4,2],phone:[2,1],family:"wide"},
   weather:{desktop:[4,2],phone:[2,1],family:"wide"},
   timer:{desktop:[2,2],phone:[1,1],family:"small"},
   worth:{desktop:[4,4],phone:[2,2],family:"large"},
@@ -5024,7 +5050,7 @@ const CURATED_TILE_LAYOUT={
   weekly:{desktop:[4,4],phone:[2,2],family:"large"},
   birthdays:{desktop:[2,2],phone:[1,1],family:"small"},
   brain:{desktop:[4,2],phone:[2,2],family:"large"},
-  brainflex:{desktop:[4,2],phone:[2,1],family:"wide"},
+  brainflex:{desktop:[4,2],phone:[2,2],family:"wide"},
   academic:{desktop:[4,4],phone:[2,2],family:"large"},
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"},
@@ -5166,7 +5192,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -6974,8 +7000,8 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
       <div className="deHead"><span className="langFlag deFlag" role="img" aria-label="Germany"/><div className="cardContentTitle langTitle deTheme">{de.thema}</div></div>
       {de.punkt && <p className="dePoint" lang="fr" data-fit-drop="9">{de.punkt}</p>}
       {(de.vocab||[]).length>0 && <dl className="deWordsList">
-        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=4} className="deWordRow" data-fit-drop={!expanded&&i>0?"2":undefined}>
-          <dt><span className="deTerm" lang="de">{v.de}</span>{v.pron&&<span className="dePron">{v.pron}</span>}</dt>
+        {(de.vocab||[]).map((v,i)=>(<div key={i} hidden={!expanded&&i>=6} className="deWordRow" data-fit-drop={!expanded&&i>0?"2":undefined}>
+          <dt><span className="deTerm" lang="de">{v.de}</span></dt>
           <dd className="deFr" lang="fr">{v.fr}</dd>
         </div>))}
       </dl>}
@@ -7264,8 +7290,10 @@ function NewsPage({items,dateLabel}){
   const [lead,...rest]=items;
   return <article className="newsPage">
     <header className="newsMast"><span className="newsMastTitle">The World</span><span className="newsDateline">{dateLabel}</span></header>
-    <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className="newsBody worldSummary">{clean(lead.summary)}</p></section>
-    {rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} hidden={!expanded&&i>=4} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
+    <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className={"newsBody"+(expanded?" worldSummary":" newsLeadBody")} data-fit-clamp={expanded?undefined:""}>{clean(lead.summary)}</p></section>
+    {/* the tile: the lead story in full across the page, the others as headlines that leave whole when there is no room */}
+    {!expanded&&rest.length>0&&<ul className="newsBriefs">{rest.map((n,i)=><li key={i} className="newsBrief" data-fit-drop="1">{clean(n.headline)}</li>)}</ul>}
+    {expanded&&rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
   </article>;
 }
 function MovieAdd({onAdd,autoFocus}){
