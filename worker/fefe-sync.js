@@ -358,12 +358,12 @@ var HISTORY_PERIODS = [
 function historyPeriod(year) { const row = HISTORY_PERIODS.find(([from, to]) => year >= from && year <= to); return row ? row[2] : "Contemporary"; }
 function historyYearLabel(year) { return year < 0 ? `${-year} BC` : String(year); }
 const historyClean = t => String(t || "").replace(/\s+/g, " ").trim();
-/* Wikipedia's events for a date, dated to a year and at most ~3000 years old, one per text. */
+/* Wikipedia's events for a date that carry a year, one per text (no age limit: the dated ones are the candidates). */
 function historyCandidates(feed, nowYear) {
   const seen = new Set(), out = [];
   const add = (e, selected) => {
     const year = Number(e && e.year), text = historyClean(e && e.text);
-    if (!Number.isInteger(year) || year === 0 || year < nowYear - 3000 || year > nowYear || !text) return;
+    if (!Number.isInteger(year) || year === 0 || year > nowYear || !text) return;
     const key = year + "|" + text.toLowerCase().slice(0, 80);
     if (seen.has(key)) { if (selected) { const prior = out.find(c => c.key === key); if (prior) prior.selected = true; } return; }
     seen.add(key);

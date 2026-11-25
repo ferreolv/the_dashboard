@@ -539,10 +539,10 @@ test("History: every year has one fixed period, and the server keeps Wikipedia's
   const feed = {
     selected: [{ year: 1969, text: "Apollo 12 lands on the Moon.", pages: [{ normalizedtitle: "Apollo 12", extract: "Apollo 12 was the sixth crewed flight.", thumbnail: { source: "https://upload.example/a.jpg" }, content_urls: { desktop: { page: "https://en.wikipedia.org/wiki/Apollo_12" } } }] },
       { year: 1491, text: "Treaty of Granada is signed.", pages: [] }],
-    events: [{ year: 1969, text: "Apollo 12 lands on the Moon.", pages: [] }, { year: -2500, text: "Too old to be dated.", pages: [] }, { year: 1120, text: "The White Ship sinks.", pages: [] }]
+    events: [{ year: 1969, text: "Apollo 12 lands on the Moon.", pages: [] }, { year: -2500, text: "An ancient event with a known year.", pages: [] }, { year: 1120, text: "The White Ship sinks.", pages: [] }]
   };
   const candidates = core.historyCandidates(feed, 2026);
-  assert.deepEqual(JSON.parse(JSON.stringify(candidates.map(c => [c.year, c.selected]))), [[1969, true], [1491, true], [1120, false]], "deduplicated, dated, at most 3000 years old");
+  assert.deepEqual(JSON.parse(JSON.stringify(candidates.map(c => [c.year, c.selected]))), [[1969, true], [1491, true], [-2500, false], [1120, false]], "deduplicated and dated, with no age limit");
   assert.equal(core.historyFallbackIndex(candidates, ["Cold War", "Cold War"]), 1, "without the model, the selection avoids a period just used");
 
   const { env } = environment(["history"]);
@@ -550,7 +550,7 @@ test("History: every year has one fixed period, and the server keeps Wikipedia's
   globalThis.fetch = async (url, init) => {
     if (String(url).includes("onthisday")) return Response.json(feed);
     sent.push(JSON.parse(init.body));
-    return Response.json({ content: [{ type: "text", text: JSON.stringify({ index: 2, title: "Sinking of the White Ship" }) }] });
+    return Response.json({ content: [{ type: "text", text: JSON.stringify({ index: 3, title: "Sinking of the White Ship" }) }] });
   };
   const result = await request(env, "/shared");
   const h = result.data.content.history;
