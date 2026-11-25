@@ -500,3 +500,28 @@ test("a model the server's key can't use (403) gives way to the next one; only a
   assert.equal(daily.data.content.word.term_en, "lucid");
   assert.equal(calls.length, 2);
 });
+
+test("Knowledge is written by the larger model thinking first, asks for substance and nuance, and falls back when it is unavailable", async () => {
+  const { env } = environment(["worth"]);
+  const lesson = { title: "How cholera was traced to water", category: "Medicine", story: "a\n\nb\n\nc", insight: "Cholera spreads through contaminated water.", quiz: [{ prompt: "Q?", options: ["a", "b", "c"], answer: 0, explain: "x" }] };
+  const sent = [];
+  globalThis.fetch = async (url, init) => {
+    const body = JSON.parse(init.body); sent.push(body);
+    if (body.model === "claude-sonnet-5-5" && sent.length === 1) return new Response(JSON.stringify({ type: "error", error: { message: "overloaded" } }), { status: 404 });
+    return Response.json({ content: [{ type: "text", text: JSON.stringify(lesson) }] });
+  };
+  const result = await request(env, "/shared");
+  assert.equal(result.code, 200);
+  assert.equal(result.data.content.worth.title, lesson.title);
+  const first = sent[0];
+  assert.equal(first.model, "claude-sonnet-5-5");
+  assert.deepEqual(first.thinking, { type: "adaptive" });
+  assert.ok(first.max_tokens >= 8000, "room to think and still write the lesson");
+  assert.match(first.system, /check each one and drop any you are unsure about/);
+  assert.match(first.system, /never invent names, labels or catchy terms/);
+  const prompt = first.messages[0].content;
+  assert.match(prompt, /if the point fits in one sentence/);
+  assert.match(prompt, /3 short paragraphs, 170–230 words/);
+  assert.match(prompt, /what is still debated, a common misconception corrected/);
+  assert.equal(sent[1].model, "claude-haiku-5-5", "an unavailable larger model gives way to the usual one");
+});
