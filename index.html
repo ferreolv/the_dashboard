@@ -2340,6 +2340,8 @@ button.breathOrb:focus-visible{outline:2px solid var(--accentDark);outline-offse
 .tile button.movieRowBtn{flex:none;width:28px!important;height:28px!important;min-height:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:var(--dim)!important;font-size:16px;line-height:1;opacity:.6;transform:none!important}
 .tile button.movieRowBtn:hover{opacity:1;background:rgba(255,255,255,.6)!important}
 .tile.completed .movieStrip{background:rgba(20,8,10,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.movieStrip[role=button]{cursor:pointer}
+.movieStrip[role=button]:focus-visible{outline:2px solid #fff;outline-offset:-4px}
 .tileFocusSurface .movieStrip{margin:40px -28px 12px;border-radius:0}
 
 /* ================= tile identity pass, round 2 ================= */
@@ -2974,12 +2976,14 @@ button.insCalDay:focus-visible{outline:2px solid var(--c);outline-offset:-2px;bo
 [data-fit-dropped]{display:none!important}
 .grid>.tile[data-tileid="word"] .dictHeadline{padding-right:24px}
 .grid>.tile[data-tileid="word"] .dictWord{white-space:nowrap}
-/* --- Music: a big record sliding out of the tile's left edge (cropped top, bottom and left; the label and ♫ stay in view) --- */
+/* --- Music: a whole record beside the liner notes; the record is the link, its label carries a play mark --- */
 .grid>.tile[data-tileid="music"]>.tbody{display:flex!important;flex-direction:column;min-height:0!important}
 .grid>.tile[data-tileid="music"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile[data-tileid="music"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;flex-direction:column;min-height:0;padding-bottom:0!important}
 .grid>.tile[data-tileid="music"] .musicCard{flex:1 1 auto;height:100%;grid-template-rows:minmax(0,1fr)}
-.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(172px,60cqi,246px);max-width:none!important;margin:0 4px 0 calc(-12cqi - var(--dashboard-pad,18px));align-self:center}
+.grid>.tile[data-tileid="music"] a.musicDisc{width:clamp(108px,34cqi,148px);max-width:none!important;margin:0;align-self:center}
+.grid>.tile[data-tileid="music"] .musicCard{gap:18px}
+.grid>.tile[data-tileid="music"] .vinyl{filter:drop-shadow(0 6px 12px rgba(10,8,6,.22))}
 /* --- Library: the +/x corner sits outside the tile, so the tile can't clip; its body is a
    full-bleed clipping layer instead (rounded like the tile), so film strips, records, cogs
    and any long content stop at the tile's edge there too --- */
@@ -3961,7 +3965,7 @@ const genMusic=(avoid)=>callClaude("You output ONLY valid minified JSON, no mark
 const genLesson=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown. Select intrinsically useful material whose importance follows naturally from accurate explanation, never from a forced analogy or post-hoc connection. Quiz questions should require a small inference using only material taught in the lesson; do not introduce a new fact or concept.",
   `Write a short daily LESSON in story format. Goal: over many days, make the reader knowledgeable about EVERYTHING — rotate freely across ALL domains (hard sciences, mathematics, medicine, economics, finance, geopolitics, geography, world history, philosophy, psychology, art, architecture, music theory, literature, linguistics, law, technology, engineering, astronomy, ecology, anthropology…). CALIBRATE DIFFICULTY: assume a smart, curious 24-year-old business student who reads the news — skip what such a person already knows (no famous facts everyone learned at school), but stay broadly useful, never niche trivia. The sweet spot: important mechanisms, events, and concepts an educated adult plausibly hasn't mastered. Choose a domain clearly different from these recent lessons: ${(avoid||[]).join(" | ")||"none"}. Exactly 2 short paragraphs (~110 words total) separated by \\n\\n, vivid and concrete. Then a one-line memorable insight and a 2-question quiz. Shape:{"title":"","category":"","story":"","insight":"","quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]},{"prompt":"","options":["","",""],"answer":0,"explain":"","alt_prompts":["",""]}]}. Quiz rules: make each question genuinely difficult through close conceptual distinctions or a small inference using only the lesson. Every prompt is at most 18 words. Every option is a parallel phrase of 2–5 words and at most 28 characters. Wrong options must be plausible and closely related, never absurd or off-topic. Each "explain" one sentence; "answer" is the correct option index. "alt_prompts" are 2 alternative rewordings of the same question, used later for spaced recall.`, {max:1050}).then(extractJSON);
 const genSpanish=(avoid)=>callClaude("You output ONLY valid minified JSON, no markdown.",
-  `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 2–3 frases simples con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), un "dialogo" de 4 réplicas cortas entre dos personas (A, B, A, B; 5–12 palabras cada una, español natural y hablado) que use NATURALMENTE las 3 palabras del "vocab" y el "punto", cada réplica con su traducción al inglés "en", y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"dialogo":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain" es una frase sencilla en español.`, {max:820}).then(extractJSON);
+  `Crea UN ejercicio diario ESCRITO de español (nada de hablar en voz alta) para un estudiante de nivel intermedio-alto (B1–B2, NO bilingüe): debe construir vocabulario y gramática útiles para conversar. TODO en español, con frases claras y sencillas. Varía el tema cada día; evita estos temas recientes: ${(avoid||[]).join(" | ")||"none"}. Contenido: un "punto" de gramática o de uso explicado en 1–2 frases cortas con un ejemplo, 3 palabras/expresiones de "vocab" útiles en conversación (con traducción corta al inglés), un "dialogo" de 4 réplicas cortas entre dos personas (A, B, A, B; 5–12 palabras cada una, español natural y hablado) que use NATURALMENTE las 3 palabras del "vocab" y el "punto", cada réplica con su traducción al inglés "en", y un "quiz" de 2 preguntas en español. IMPORTANTE: cada pregunta del quiz debe ser una frase que use NATURALMENTE al menos una de las 3 palabras/expresiones de "vocab" en su propio contexto (no solo preguntar su significado aislado) — por ejemplo completar la frase, elegir el tiempo verbal correcto, o el sinónimo adecuado, siempre dentro de una oración que contenga el vocab enseñado, así el estudiante ve cómo se usa de verdad. Shape:{"tema":"","punto":"","vocab":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"dialogo":[{"es":"","en":""},{"es":"","en":""},{"es":"","en":""},{"es":"","en":""}],"quiz":[{"prompt":"","options":["","",""],"answer":0,"explain":""},{"prompt":"","options":["","",""],"answer":0,"explain":""}]}. Cada "explain": como máximo 12 palabras, solo la regla clave; no repitas la respuesta ni la pregunta, y nada de explicaciones obvias.`, {max:820}).then(extractJSON);
 
 /* German mirrors the Spanish principle one level down (A2–B1): a French native
    can't guess German the way they guess Spanish, so everything is taught explicitly —
@@ -4257,7 +4261,9 @@ async function philoReply(question,history,mode="standard"){
   catch(e){
     if(!serverErr) throw e;
     // both failed: say what each one needs; the key's state decides the recovery offered
-    const server=serverErr.dailyState==="server_outdated"?"The daily server can’t answer Philosophy until the updated worker is in Cloudflare."
+    if(e.dailyState==="invalid_key"&&serverErr.dailyState==="server_outdated")
+      throw Object.assign(new Error("philosophy: server and key both failed"),{dailyState:"invalid_key",philoText:"No reply yet: the Claude key in Settings is invalid, and the server update isn’t deployed."});
+    const server=serverErr.dailyState==="server_outdated"?"The server update isn’t deployed yet."
       :serverErr.dailyState==="signin_required"?"The daily server needs you to sign in again."
       :serverErr.dailyState==="rate_limit"&&serverErr.philoText?serverErr.philoText:"The daily server couldn’t answer either.";
     throw Object.assign(new Error("philosophy: server and key both failed"),{dailyState:e.dailyState||"error",philoText:(e.philoText||"Your Claude key couldn’t answer.")+" "+server});
@@ -4282,7 +4288,7 @@ async function philoReplyWithKey(key,question,history,philosopher){
     }
     const detail=await res.json().then(d=>d&&d.error&&d.error.message).catch(()=>"");
     const said=detail?" (Claude said: “"+String(detail).slice(0,160)+"”)":"";
-    if(res.status===401) throw fail("invalid_key","Claude rejected the API key saved in Settings"+said+". Update it there, or remove it.");
+    if(res.status===401) throw fail("invalid_key","Claude rejected the API key in Settings. Update or remove it.");
     if(res.status===402) throw fail("error","Your Anthropic account has a billing problem"+said+". Check its credit in the Claude Console.");
     if(res.status===429) throw fail("rate_limit","Claude is rate limiting your key. Try again in a minute.");
     lastErr=fail("error",res.status===403?"Your key isn’t allowed to use the Philosophy models"+said+".":"Claude couldn’t answer (HTTP "+res.status+")"+said+".");
@@ -4344,14 +4350,43 @@ const musicOverlap=(a,b)=>{
 /* Without an exact catalog match, search for the main artist only: a long "title + every credit"
    query rarely matches anything, while the artist always lands on a real page. */
 const musicPrimaryArtist=a=>String(a||"").split(/\s+(?:with|feat\.?|featuring|ft\.?)\s+|\s*\/\s*/i)[0].trim();
+/* MUSIC_LINK_START */
 const appleMusicSearchUrl=m=>`https://music.apple.com/fr/search?term=${encodeURIComponent(musicPrimaryArtist(m.artist)||m.composer||m.title||"")}`;
-/* On a Mac the music:// scheme opens the Music app instead of the web player (iPhone and iPad
-   already hand music.apple.com links to the app). */
-const IS_MAC_DESKTOP=typeof navigator!=="undefined"&&/Mac/.test(navigator.platform||navigator.userAgent||"")&&!(navigator.maxTouchPoints>1);
-const musicAppHref=url=>IS_MAC_DESKTOP?String(url).replace(/^https:\/\/(?:geo\.)?music\.apple\.com\//,"music://music.apple.com/"):url;
-/* geo.music.apple.com redirects to the listener's own storefront, so a matched track
-   opens the exact song in-app instead of dead-ending on a foreign-country page. */
-const appleGeoUrl=url=>String(url||"").replace(/^https:\/\/music\.apple\.com\//,"https://geo.music.apple.com/");
+/* On Apple devices (Mac, iPhone, iPad) the music:// scheme hands the link straight to the Music
+   app: an https link from a home-screen web app opens a browser page instead, which leads
+   nowhere. Elsewhere (Android, Windows) the plain https link opens the app or the web player. */
+const MUSIC_UA=typeof navigator!=="undefined"?navigator:{userAgent:"",platform:"",maxTouchPoints:0};
+const IS_MAC_DESKTOP=/Mac/.test(MUSIC_UA.platform||MUSIC_UA.userAgent||"")&&!(MUSIC_UA.maxTouchPoints>1);
+const IS_APPLE_TOUCH=/iPhone|iPad|iPod/.test(MUSIC_UA.userAgent||"")||(/Mac/.test(MUSIC_UA.platform||"")&&MUSIC_UA.maxTouchPoints>1);
+const OPENS_MUSIC_APP=IS_MAC_DESKTOP||IS_APPLE_TOUCH;
+/* a catalog link without the redirecting geo host or tracking parameters (the ?i= song id stays) */
+const appleMusicUrl=url=>{ const u=String(url||"").replace(/^https?:\/\/(?:geo\.)?(?:music|itunes)\.apple\.com\//,"https://music.apple.com/"); return u.replace(/([?&])(?:uo|app|ls)=[^&]*&?/g,"$1").replace(/[?&]$/,""); };
+const musicAppHref=(url,appleDevice=OPENS_MUSIC_APP)=>{ const clean=appleMusicUrl(url); return appleDevice?clean.replace(/^https:\/\/music\.apple\.com\//,"music://music.apple.com/"):clean; };
+/* MUSIC_LINK_END */
+/* The iTunes Search API does not always answer browsers with CORS headers: fall back to JSONP. */
+let itunesJsonpSeq=0;
+function itunesJson(url){
+  return fetch(url).then(r=>{ if(!r.ok) throw new Error("itunes "+r.status); return r.json(); }).catch(()=>new Promise(resolve=>{
+    const name="__fefeItunes"+(++itunesJsonpSeq), script=document.createElement("script");
+    const done=data=>{ clearTimeout(timer); try{ delete window[name]; }catch(e){ window[name]=undefined; } script.remove(); resolve(data||{results:[]}); };
+    const timer=setTimeout(()=>done(null),8000);
+    window[name]=done; script.onerror=()=>done(null);
+    script.src=url+(url.includes("?")?"&":"?")+"callback="+name; document.head.appendChild(script);
+  }));
+}
+/* Without a song match, the artist's own page (a real page in the app) beats a search. */
+async function resolveMusicArtist(m){
+  const name=musicPrimaryArtist(m&&m.artist)||String(m&&m.composer||"").trim();
+  if(!name) return null;
+  const key="artist|"+musicNorm(name), cached=load("musicMatches",{});
+  if(cached[key]&&cached[key].url) return cached[key];
+  const data=await itunesJson(`https://itunes.apple.com/search?term=${encodeURIComponent(name)}&country=fr&media=music&entity=musicArtist&limit=10`);
+  const found=(data.results||[]).find(a=>musicNorm(a.artistName)===musicNorm(name))||(data.results||[]).find(a=>musicOverlap(a.artistName,name)>=.6);
+  if(!found||!found.artistLinkUrl) return null;
+  const match={url:appleMusicUrl(found.artistLinkUrl),artistOnly:true};
+  save("musicMatches",Object.fromEntries(Object.entries({...cached,[key]:match}).slice(-80)));
+  return match;
+}
 async function resolveMusicTrack(m){
   const title=String(m&&m.title||"").trim(), artist=String(m&&m.artist||"").trim(), composer=String(m&&m.composer||"").trim();
   if(!title) return null;
@@ -4362,9 +4397,7 @@ async function resolveMusicTrack(m){
   const candidates=new Map();
   for(const q of queries){
     try{
-      const api=`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=fr&media=music&entity=song&limit=25`;
-      const response=await fetch(api); if(!response.ok) continue;
-      const data=await response.json();
+      const data=await itunesJson(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=fr&media=music&entity=song&limit=25`);
       (data.results||[]).forEach(track=>{ if(track.trackViewUrl) candidates.set(String(track.trackId||track.trackViewUrl),track); });
     }catch(e){}
   }
@@ -4382,7 +4415,7 @@ async function resolveMusicTrack(m){
   const best=scored[0];
   if(!best||best.titleScore<70||best.creditScore<10) return null;
   const match={
-    url:appleGeoUrl(best.track.trackViewUrl),
+    url:appleMusicUrl(best.track.trackViewUrl),
     trackId:best.track.trackId||"",
     catalogTitle:best.track.trackName||title,
     catalogArtist:best.track.artistName||artist,
@@ -4426,7 +4459,7 @@ async function genWorld(avoid){
   if(!items || items.length===0) return null;
   const raw=items.slice(0,16).map((it,i)=>`${i+1}. ${it.title} — ${it.desc}`).join("\n");
   const out=await callClaude("You output ONLY a valid JSON array, no markdown.",
-    `Here are today's raw news headlines from several wire services (may include near-duplicates covering the same event):\n${raw}\n\nPick the 5 most important DISTINCT stories — if two items describe the same event, count that as one. Avoid re-covering stories already picked recently: ${(avoid||[]).join(" | ")||"none"}. For each pick write a "headline" (max 9 words, your own words) and a "summary" (2-3 sentences) covering what happened AND why it matters, using only the information given above. Do not end the summary with a generic closing line that just restates the obvious (e.g. "this shows/highlights/underscores…") — add a closing thought only if it's genuinely non-obvious insight; otherwise stop after the facts. Plain prose only — NO markdown, NO citation numbers, NO URLs, NO special symbols. JSON array of {"headline":"","summary":""}.`, {max:950});
+    `Here are today's raw news headlines from several wire services (may include near-duplicates covering the same event):\n${raw}\n\nPick the 5 most important DISTINCT stories — if two items describe the same event, count that as one. Avoid re-covering stories already picked recently: ${(avoid||[]).join(" | ")||"none"}. For each pick write a "headline" (max 9 words, your own words) and a "summary" of 1-2 factual sentences: what happened, with the concrete details that matter (who, numbers, where, what changes next), using only the information given above. Every sentence must carry a new fact. Never end with commentary or a closing line about significance, implications or what it "highlights/underscores/signals/marks/raises" — stop after the last fact. Plain prose only — NO markdown, NO citation numbers, NO URLs, NO special symbols. JSON array of {"headline":"","summary":""}.`, {max:950});
   const arr=extractJSON(out); return Array.isArray(arr)?arr:null;
 }
 
@@ -6074,18 +6107,20 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     if(!sp || recallList.some(x=>x.type==="spanish"&&x.addedOn===todayKey)) return;
     const additions=[];
     (sp.quiz||[]).forEach(q=>{ if(!q) return; additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Español · "+sp.tema, quiz:{ prompts:[q.prompt], options:q.options, answer:q.answer, explain:q.explain } })); });
+    /* vocab cards ask for the Spanish: the day's dialogue line with the word blanked out (its
+       English as the hint), or the English alone; the back is just the word, nothing restated */
     const vocab=sp.vocab||[];
     vocab.forEach((v,i)=>{
-      const decoys=vocab.filter((_,j)=>j!==i).map(x=>x.en);
-      const base=[v.en,...decoys].slice(0,3); while(base.length<3) base.push("—");
+      const decoys=vocab.filter((_,j)=>j!==i).map(x=>x.es);
+      const base=[v.es,...decoys].slice(0,3); while(base.length<3) base.push("—");
       const order=[0,1,2].sort(()=>Math.random()-0.5);
       const options=order.map(idx=>base[idx]); const answer=order.indexOf(0);
-      additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Vocab · "+sp.tema, quiz:{ prompts:[`¿Qué significa “${v.es}”?`], options, answer, explain:`“${v.es}” = ${v.en}.` } }));
+      additions.push(newRecallItem({ id:uid(), type:"spanish", addedOn:todayKey, title:"Vocab · "+sp.tema, quiz:{ prompts:[langVocabPrompt(v.es,v.en,sp.dialogo)], options, answer, explain:"" } }));
     });
     if(additions.length) appendDailyRecall("spanish",additions);
   };
-  /* German feeds recall the same way as Spanish — quiz questions plus every vocab word,
-     each keeping its pronunciation in the answer so the respelling is rehearsed too. */
+  /* German feeds recall from its quiz questions plus every vocab word (the answer is the
+     translation alone). */
   const learnGerman=de=>{
     setRitual("german");
     if(!de || recallList.some(x=>x.type==="german"&&x.addedOn===todayKey)) return;
@@ -6097,7 +6132,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       const base=[v.fr,...decoys].slice(0,3); while(base.length<3) base.push("—");
       const order=[0,1,2].sort(()=>Math.random()-0.5);
       const options=order.map(idx=>base[idx]); const answer=order.indexOf(0);
-      additions.push(newRecallItem({ id:uid(), type:"german", addedOn:todayKey, title:"Vokabel · "+de.thema, quiz:{ prompts:[`Que veut dire « ${v.de} » ?`], options, answer, explain:`« ${v.de} » = ${v.fr}${v.pron?` (prononcé ${v.pron})`:""}.` } }));
+      additions.push(newRecallItem({ id:uid(), type:"german", addedOn:todayKey, title:"Vokabel · "+de.thema, quiz:{ prompts:[`Que veut dire « ${v.de} » ?`], options, answer, explain:"" } }));
     });
     if(additions.length) appendDailyRecall("german",additions);
   };
@@ -6617,11 +6652,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     events: T("events","Events",false,null,
       <PositiveEventsCard events={positiveEvents} onAdd={addPositiveEvent} onRemove={removePositiveEvent} />),
     movie: T("movie","Movies",movies.some(m=>m.watchedOn===todayKey),null,
-      <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} onRename={renameMovie} />, ()=>toggleMovieWatched()),
+      <MovieCard movies={movies} onAdd={addMovie} onRemove={removeMovie} onBump={bumpMovie} onRename={renameMovie} onSeen={toggleMovieWatched} />, ()=>{}),
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
-    stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary} onOpen={()=>openPage("insights")}/>,()=>openPage("insights")),
+    stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>),
     matrix: T("matrix","Priorities",false,null,
       <MatrixCard notes={matrixNotes} onChange={saveMatrix} />,()=>{}),
     brain: T("brain","Memory",false,null,
@@ -6772,7 +6807,6 @@ function App({forceSignIn=false,initialAuthMode="login"}){
         </div>
       )}
 
-      {page==="dashboard" && edit && <div className="edithint">Drag a tile by its handle and drop it where you want it; the others make room.</div>}
 
       {page==="settings"||page==="insights" ? null : page==="library" ? (
         <div className="libraryShelves">
@@ -6792,11 +6826,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
           <div id="library-results" className="libraryResults">
             {libraryIds.length===0 ? <div className="libraryShelfEmpty libraryNoResults"><p>No widgets match. Try another name or category.</p><button className="ghostbtn" onClick={resetLibraryFilters}>Reset filters</button></div> : <>
               {(!libraryFiltered||libraryResting.length>0)&&<section className="libraryShelf">
-                <div className="libraryShelfHead"><div><h2>Not on Today</h2><p>Find a widget, then tap + to add it.</p></div><span className="libraryShelfCount">{libraryResting.length} widget{libraryResting.length===1?"":"s"}</span></div>
+                <div className="libraryShelfHead"><div><h2>Not on Today</h2></div><span className="libraryShelfCount">{libraryResting.length} widget{libraryResting.length===1?"":"s"}</span></div>
                 {libraryResting.length ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{libraryResting.map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Every widget is currently on Today.</div>}
               </section>}
               {(!libraryFiltered||libraryActive.length>0)&&<section className="libraryShelf">
-                <div className="libraryShelfHead"><div><h2>On Today</h2><p>Your daily set. Tap × to move a widget off Today.</p></div><span className="libraryShelfCount">{libraryActive.length} widget{libraryActive.length===1?"":"s"}</span></div>
+                <div className="libraryShelfHead"><div><h2>On Today</h2></div><span className="libraryShelfCount">{libraryActive.length} widget{libraryActive.length===1?"":"s"}</span></div>
                 {libraryActive.length ? <div className="grid libraryGrid" style={{gridTemplateColumns:`repeat(${cols},1fr)`}}>{libraryActive.map(id=>widgets[id])}</div> : <div className="libraryShelfEmpty">Add widgets from the shelf above to build your day.</div>}
               </section>}
             </>}
@@ -6979,7 +7013,7 @@ function SpanishCard({sp,busy,done,onLearned,onUnlearned,onGenerate}){
         <div className="langTitle">{sp.tema}</div>
         {sp.punto && !told && <div className="langLede" lang="es">{sp.punto}</div>}
         {(sp.vocab||[]).length>0 && !told && <div className="langVocab">{(sp.vocab||[]).map((v,i)=><div key={i} className="langWord"><span className="langTerm">{v.es}</span><span className="langGloss">{v.en}</span></div>)}</div>}
-        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}
+        {qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={langTerseExplain(q.explain,(q.options||[])[q.answer])} onDone={mark(i)} onUndo={()=>undo(i)} />)}
       </div>
     </div>
   );
@@ -7005,15 +7039,38 @@ function GermanCard({de,busy,done,onLearned,onUnlearned,onGenerate}){
           <dd className="deFr" lang="fr">{v.fr}</dd>
         </div>))}
       </dl>}
-      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={q.explain} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
+      <div hidden={!expanded} className="cardExpandedDetails">{qs.map((q,i)=><Quiz key={i} prompt={q.prompt} options={q.options} answer={q.answer} explain={langTerseExplain(q.explain,(q.options||[])[q.answer])} onDone={mark(i)} onUndo={()=>undo(i)} />)}</div>
     </div>
   );
 }
 
+/* LANG_CARD_START */
+/* Language cards stay terse: one short line at most, and none when it only restates the
+   answer (older vocab cards carried "“x” = y." or a pronunciation). */
+const langNorm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const langTerseExplain=(explain,answer)=>{
+  const text=String(explain||"").trim(); if(!text) return "";
+  if(/^[“"«].{1,60}[”"»]\s*=\s*/.test(text)) return "";
+  const first=(text.match(/^[\s\S]*?[.!?…](?=\s|$)/)||[text])[0].trim();
+  if(first.length>120) return "";
+  const rest=langNorm(first).replace(langNorm(answer),"").replace(/[^a-z]+/g," ").trim();
+  return rest.split(" ").filter(Boolean).length<3?"":first;
+};
+/* the day's dialogue line holding the word, with the word blanked out and its meaning as a hint */
+const langVocabPrompt=(word,meaning,dialogue)=>{
+  const w=String(word||"").trim(), hint=String(meaning||"").trim();
+  const lines=(Array.isArray(dialogue)?dialogue:[]).map(l=>String(l&&l.es||"").trim()).filter(Boolean);
+  const fold=t=>String(t||"").split("").map(c=>c.normalize("NFD").charAt(0).toLowerCase()).join(""); // keeps every index in place
+  const at=line=>fold(line).indexOf(fold(w));
+  const line=w&&lines.find(l=>at(l)>=0);
+  if(line){ const i=at(line); return `${line.slice(0,i)}___${line.slice(i+w.length)} (${hint})`; }
+  return hint?`¿Cómo se dice “${hint}”?`:w;
+};
+/* LANG_CARD_END */
 const recallAnswerFor=item=>{
   const q=item&&item.quiz?item.quiz:{};
   const option=Array.isArray(q.options)?q.options[Number(q.answer)||0]:"";
-  const explain=q.explain||"";
+  const explain=item&&(item.type==="spanish"||item.type==="german")?langTerseExplain(q.explain,option):(q.explain||"");
   // The translation (item.meta) belongs on the answer face itself, not in a footnote.
   const detail=[explain,item.meta].filter(Boolean).join(" — ");
   if(option) return {short:option, detail};
@@ -7168,12 +7225,12 @@ const MONTH_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","N
    and it flickers. Under it: the current streak, the best one and the perfect days of the last
    30. Tapping the tile opens Insights. */
 const STATS_FLAME="M50 4c14 20 34 37 34 68a34 34 0 0 1-68 0c0-15 7-26 15-34 1 11 9 18 9 18C37 37 42 22 50 4Z";
-function StatsCard({pct,current,best,perfect,span,onOpen}){
+/* Tapping the tile only marks it done, like any other tile; Insights opens from the menu. */
+function StatsCard({pct,current,best,perfect,span}){
   const id=React.useId().replace(/:/g,"");
   const p=Math.max(0,Math.min(100,Math.round(Number(pct)||0))), full=p>=100;
   const level=103-(p/100)*99; // the liquid's surface, from the flame's foot (106) to its tip (4)
-  const go=e=>{ e.stopPropagation(); if(onOpen) onOpen(); };
-  return <div className={"statsCard"+(full?" lit":"")} role="link" tabIndex={0} onClick={go} onKeyDown={e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(e); } }} aria-label={`Today ${p}%${full?", a perfect day":""}. Streak ${current} ${current===1?"day":"days"}, best ${best}, ${perfect} perfect ${perfect===1?"day":"days"} in the last ${span||30}. Open Insights.`}>
+  return <div className={"statsCard"+(full?" lit":"")} role="group" aria-label={`Today ${p}%${full?", a perfect day":""}. Streak ${current} ${current===1?"day":"days"}, best ${best}, ${perfect} perfect ${perfect===1?"day":"days"} in the last ${span||30}.`}>
     <div className="statsCore">
       <svg className="statsFlame" viewBox="0 0 100 124" aria-hidden="true">
         <defs><clipPath id={id+"f"}><path d={STATS_FLAME}/></clipPath></defs>
@@ -7285,15 +7342,28 @@ function BirthdaysCard({birthdays,today,onAdd,onRemove}){
 
 /* World news set as a small newspaper page: masthead between double rules, a dateline,
    the lead story across the top, the rest in ruled columns. */
+/* NEWS_TRIM_START */
+/* A summary that ends on a line of commentary ("This highlights…", "It remains to be seen…")
+   loses that line: the facts end the story. A closing sentence with a number is kept. */
+const NEWS_FILLER=/\b(remains? to be seen|raising questions|raises (?:questions|concerns)|underscor\w*|highlight(?:s|ing)? (?:the|a|how|growing)|signal(?:s|ing)? (?:a|the)|marks? (?:a|an|the) (?:significant|major|new|turning|key|pivotal)|significant step|reminder|is a sign|far-reaching|implications|broader (?:debate|trend|concerns?|context)|amid growing|could (?:have|reshape|shape|affect|impact)|is likely to (?:shape|affect|impact|influence)|time will tell|only time)\b/i;
+const NEWS_OPENER=/^(?:this|these|that|such|it)\s+(?:highlights?|underscores?|signals?|marks?|shows?|reflects?|demonstrates?|illustrates?|suggests?|comes?|adds?|raises?|represents?|could|may|might|points?|serves?|sends?|is (?:seen|expected|likely|part|another)|will likely)\b/i;
+const newsSummary=text=>{
+  const t=String(text||"").trim(); const parts=t.match(/[^.!?…]+(?:[.!?…]+["”’)]?|$)\s*/g)||[t];
+  if(parts.length<2) return t;
+  const last=parts[parts.length-1].trim();
+  if(/\d/.test(last)||!(NEWS_FILLER.test(last)||NEWS_OPENER.test(last))) return t;
+  return parts.slice(0,-1).join("").trim();
+};
+/* NEWS_TRIM_END */
 function NewsPage({items,dateLabel}){
   const {expanded}=useTilePresentation();
   const [lead,...rest]=items;
   return <article className="newsPage">
     <header className="newsMast"><span className="newsMastTitle">The World</span><span className="newsDateline">{dateLabel}</span></header>
-    <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className={"newsBody"+(expanded?" worldSummary":" newsLeadBody")} data-fit-clamp={expanded?undefined:""}>{clean(lead.summary)}</p></section>
+    <section className="newsLead"><h3 className="newsHeadline">{clean(lead.headline)}</h3><p className={"newsBody"+(expanded?" worldSummary":" newsLeadBody")} data-fit-clamp={expanded?undefined:""}>{newsSummary(clean(lead.summary))}</p></section>
     {/* the tile: the lead story in full across the page, the others as headlines that leave whole when there is no room */}
     {!expanded&&rest.length>0&&<ul className="newsBriefs">{rest.map((n,i)=><li key={i} className="newsBrief" data-fit-drop="1">{clean(n.headline)}</li>)}</ul>}
-    {expanded&&rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{clean(n.summary)}</p></section>)}</div>}
+    {expanded&&rest.length>0&&<div className="newsColumns">{rest.map((n,i)=><section key={i} className="newsItem"><h4 className="newsHeadline small">{clean(n.headline)}</h4><p className="newsBody worldSummary">{newsSummary(clean(n.summary))}</p></section>)}</div>}
   </article>;
 }
 function MovieAdd({onAdd,autoFocus}){
@@ -7486,17 +7556,21 @@ function MovieTitle({movie,onRename}){
     onBlur={e=>{ setEditing(false); const t=e.currentTarget.value.trim(); if(t!==movie.title) onRename(movie.id,t); }}/>;
   return <button type="button" className="movieNowTitle" title="Change the film" aria-label={`${movie.title}: change the film`} onClick={e=>{ e.stopPropagation(); setEditing(true); }}>{movie.title}</button>;
 }
-function MovieCard({movies,onAdd,onRemove,onBump,onRename}){
+/* Movies never count towards the day. Only the film strip marks the film seen (tap again to
+   undo); the rest of the tile does nothing. The pop-up also lets you rename the film. */
+function MovieCard({movies,onAdd,onRemove,onBump,onRename,onSeen}){
   const {expanded}=useTilePresentation();
   const queue=movies.filter(m=>!m.watchedOn);
   const seen=movies.filter(m=>m.watchedOn).sort((a,b)=>String(b.watchedOn).localeCompare(String(a.watchedOn)));
   const watchedToday=movies.find(m=>m.watchedOn===todayKey);
   const feature=watchedToday||queue[0];
+  const toggleSeen=e=>{ e.stopPropagation(); if(feature&&onSeen) onSeen(); };
   return (<div className="movieCard">
-    <div className="movieStrip">
+    <div className={"movieStrip"+(watchedToday?" seen":"")} {...(feature?{role:"button",tabIndex:0,"aria-pressed":!!watchedToday,"aria-label":`${feature.title}: ${watchedToday?"seen today, tap to undo":"mark as seen"}`,
+      onClick:toggleSeen,onKeyDown:e=>{ if(e.target===e.currentTarget&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); toggleSeen(e); } }}:{})}>
       <span className="movieSprockets" aria-hidden="true"/>
       <div className="movieFrame">
-        {feature ? <MovieTitle key={feature.id} movie={feature} onRename={onRename}/> : <MovieAdd onAdd={onAdd}/>}
+        {feature ? (expanded?<MovieTitle key={feature.id} movie={feature} onRename={onRename}/>:<span className="movieNowTitle">{feature.title}</span>) : <MovieAdd onAdd={onAdd}/>}
       </div>
       <span className="movieSprockets" aria-hidden="true"/>
     </div>
@@ -7617,16 +7691,20 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
 
 /* A vinyl record: grooved black disc, tile-coloured label. It spins
    slowly, faster while the exact recording is still being matched. */
-function VinylDisc({matching}){
+function VinylDisc(){
+  const sheen="M50 50 L32 4.4 A49 49 0 0 1 68 4.4 Z";
   return <svg className="vinyl" viewBox="0 0 100 100" aria-hidden="true">
-    <circle cx="50" cy="50" r="49" fill="#1b1713"/>
+    <circle cx="50" cy="50" r="49" fill="#17161a"/>
     <g className="vinylSpin">
-      {[45,41,37,33,29].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.09)" strokeWidth=".9"/>)}
-      <circle className="vinylLabel" cx="50" cy="50" r="25" fill="var(--accent)"/>
-      <circle cx="50" cy="50" r="25" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth=".8"/>
-      <circle cx="50" cy="29.5" r="1.9" fill="rgba(255,255,255,.55)"/>
+      {[46,43.2,40.4,37.6,34.8,32,29.2,26.4,23.6].map(r=><circle key={r} cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,.075)" strokeWidth=".55"/>)}
     </g>
-    <text className="vinylGlyph" x="50" y="50" textAnchor="middle" dominantBaseline="central" fontFamily="Georgia,serif" fontWeight="900" fontSize="23" fill="rgba(255,255,255,.95)">♫</text>
+    <path d={sheen} fill="rgba(255,255,255,.07)"/>
+    <path d={sheen} fill="rgba(255,255,255,.07)" transform="rotate(180 50 50)"/>
+    <g className="vinylSpin">
+      <circle className="vinylLabel" cx="50" cy="50" r="18" fill="var(--accent)"/>
+      <circle cx="50" cy="37" r="1.1" fill="rgba(255,255,255,.6)"/>
+    </g>
+    <path className="vinylGlyph" d="M46.6 44.2 L55.4 50 L46.6 55.8 Z" fill="#fff" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round"/>
   </svg>;
 }
 function MusicCard({music,done}){
@@ -7641,14 +7719,15 @@ function MusicCard({music,done}){
     const ready=catalogMatch();
     if(ready){ setMatch(ready); setMatching(false); return ()=>{ live=false; }; }
     setMatch(null); setMatching(true);
-    resolveMusicTrack(music).then(found=>{ if(live){ setMatch(found); setMatching(false); } }).catch(()=>{ if(live){ setMatch(null); setMatching(false); } });
+    resolveMusicTrack(music).then(found=>found||resolveMusicArtist(music)).then(found=>{ if(live){ setMatch(found); setMatching(false); } }).catch(()=>{ if(live){ setMatch(null); setMatching(false); } });
     return ()=>{ live=false; };
   },[music.title,music.artist,music.composer,music.url,music.catalogMatched]);
-  const href=musicAppHref(match&&match.url?appleGeoUrl(match.url):appleMusicSearchUrl(music));
+  const song=!!(match&&match.url&&!match.artistOnly);
+  const href=musicAppHref(match&&match.url?match.url:appleMusicSearchUrl(music));
   /* The record IS the tile's identity and its only control: tapping it opens the exact
      song in Apple Music. Tapping anywhere else on the tile marks the song heard. */
   return <div className="musicCard">
-    <a className={"musicDisc"+(matching?" matching":"")} href={href} target={IS_MAC_DESKTOP?undefined:"_blank"} rel="noreferrer" aria-label={(match?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={match?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
+    <a className={"musicDisc"+(matching?" matching":"")} href={href} target={OPENS_MUSIC_APP?undefined:"_blank"} rel="noreferrer" aria-label={(song?"Play ":"Find ")+music.title+" by "+music.artist+" in Apple Music"} title={song?"Play in Apple Music":"Find in Apple Music"} aria-busy={matching} onClick={e=>e.stopPropagation()}><VinylDisc matching={matching}/></a>
     <div className="musicMeta">
       {music.genre&&<span className="musicGenre">{music.genre}</span>}
       <div className="musicTitle">{music.title}</div>
@@ -7706,7 +7785,6 @@ function CompletionCalendar({dayCompletion,firstDay,isPerfectDay,dayIces,iceAvai
   const iced=k=>!lit(k)&&(dayIces||[]).includes(k);
   const runs=calendarRuns(days,k=>lit(k)||iced(k));
   const eligible=k=>canPlaceIce(k,{today:todayKey,firstDay,lit:lit(k),iced:iced(k)});
-  const anyEligible=days.some(k=>inMonth(k)&&eligible(k));
   const tap=k=>{
     if(iced(k)){ onToggleIce(k); setNote("Ice taken back."); return; }
     if(iceAvailable<=0) return;
@@ -7737,7 +7815,7 @@ function CompletionCalendar({dayCompletion,firstDay,isPerfectDay,dayIces,iceAvai
           : <div key={k} className={cls} title={label} role="img" aria-label={label}>{inner}</div>;
       })}
     </div>
-    <p className="insCalNote" role="status">{note||(anyEligible&&iceAvailable>0?"Tap a missed day to place an ice.":"")}</p>
+    <p className="insCalNote" role="status">{note||""}</p>
   </section>;
 }
 
@@ -7956,8 +8034,6 @@ function AgendaCard({recurring,events,onMarkDone,onAddRecurring,onRemoveRecurrin
         {sel&&<div className="wcCaption">{caption}</div>}
         {(canPlan||(expanded&&!sel))&&<WallAdd key={sel||"today"} date={sel||todayKey} full={expanded} onAddEvent={onAddEvent} onAddRecurring={onAddRecurring}/>}
         {(sel?selRows:shown).map(r=><WallItem key={r.id} r={r} withDate={!sel}/>)}
-        {sel&&!selRows.length&&!canPlan&&<div className="wcEmpty">Nothing planned</div>}
-        {!sel&&!shown.length&&<div className="wcEmpty">{expanded?"Nothing planned yet":"Nothing planned · tap a day to add"}</div>}
       </div>
     </div>
   );
@@ -8000,7 +8076,7 @@ function PositiveEventsCard({events,onAdd,onRemove}){
   const typeFor=event=>POSITIVE_EVENT_TYPES[event.type]||POSITIVE_EVENT_TYPES.other;
   return (
     <div className="positiveEvents">
-      {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b><span>Add a plan to count down to.</span></div>}
+      {shown.length===0 && <div className="eventEmpty"><span className="eventEmptyGlyph">✨</span><b>No upcoming events</b></div>}
       {shown.length>0 && <div className="eventList eventComposition">{shown.map((event,i)=><div className={"eventHero eventTicket"+(i%2?" tiltB":" tiltA")} key={event.id} data-fit-drop={i>0?"1":undefined}>
         <div className="ticketStub" aria-hidden="true"><strong>{event.days===0?"NOW":event.days}</strong><span>{event.days===0?"it’s here":event.days===1?"day":"days"}</span></div>
         <div className="ticketBody">

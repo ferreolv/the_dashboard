@@ -60,13 +60,13 @@ test('a model the key cannot use (403) gives way to the next model instead of ca
   assert.notEqual(models[0], models[1]);
 });
 
-test('only a key Claude rejects (401) asks for a new key, in Claude’s words, and says what the server needs', async () => {
+test('only a key Claude rejects (401) asks for a new key and, in one short line, says what the server needs', async () => {
   const p = page({ key: 'sk-old-secret', token: 't', routes: { server: () => json(404, {}), claude: () => json(401, { type: 'error', error: { type: 'authentication_error', message: 'invalid x-api-key' } }) } });
   await assert.rejects(p.reply('Q?', history), e => {
     assert.equal(e.dailyState, 'invalid_key');
-    assert.match(e.philoText, /rejected the API key saved in Settings/);
-    assert.match(e.philoText, /invalid x-api-key/);
-    assert.match(e.philoText, /updated worker/);
+    assert.match(e.philoText, /Claude key in Settings is invalid/);
+    assert.match(e.philoText, /server update isn’t deployed/);
+    assert.ok(e.philoText.length < 110, 'the message stays one short line');
     assert.doesNotMatch(e.philoText, /sk-old-secret|Error:/);
     return true;
   });
