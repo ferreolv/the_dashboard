@@ -67,3 +67,20 @@ test('when a search form is not honoured (non public-domain hits) or fails, the 
 test('nothing reachable gives nothing, not an error', async () => {
   assert.equal(await fetchArtOfDay('2026-11-25', () => Promise.reject(new Error('offline'))), null);
 });
+
+test('the name shown after the guess gives the century of the work', () => {
+  const start = html.indexOf('/* "1884–86" → 19th century'), end = html.indexOf('/* The tile is a small game of looking');
+  assert.ok(start > 0 && end > start, 'artCentury must be extractable');
+  const ctx = vm.createContext({});
+  vm.runInContext(html.slice(start, end) + ';this.c=artCentury;', ctx);
+  assert.equal(ctx.c('1884–86'), '19th century');
+  assert.equal(ctx.c('c. 1665'), '17th century');
+  assert.equal(ctx.c('1906'), '20th century');
+  assert.equal(ctx.c('1900'), '19th century');
+  assert.equal(ctx.c('1501'), '16th century');
+  assert.equal(ctx.c('17th century'), '17th century');
+  assert.equal(ctx.c('c. 1st century BCE'), '1st century BCE');
+  assert.equal(ctx.c('50 BCE'), '1st century BC');
+  assert.equal(ctx.c('1211'), '13th century');
+  assert.equal(ctx.c(''), '');
+});

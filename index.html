@@ -3448,7 +3448,7 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 /* In the wide, one-square-high Brainflex tile the boards are sized to its height. */
 .grid>.tile[data-tileid="brainflex"] .fivePreview .fiveGrid,.grid>.tile[data-tileid="brainflex"] .fivePreview .fiveRow{gap:3px!important}
 .grid>.tile[data-tileid="brainflex"] .fivePreview .fiveCell{width:18px!important;height:18px!important;border-radius:5px!important}
-.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuGrid{width:132px!important;border-radius:7px}
+.grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuGrid{width:126px!important;border-radius:7px}
 .grid>.tile[data-tileid="brainflex"] .sudokuPreview .sudokuCell{font-size:12px!important}
 /* ---- Reminders: a wall calendar of squares. Each day of the month is a soft square, today a
    filled square with a bigger number; the weeks shown are only the month's own (4 to 6 rows), so
@@ -3631,6 +3631,17 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tile[data-tileid] a.artSource{margin-top:8px;font:800 12px/1 'Nunito',sans-serif;color:var(--accentDark);text-decoration:none}
 .tile[data-tileid] button.artRetry{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)!important;min-height:0!important;width:40px;height:40px;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.85)!important;color:var(--accentDark)!important;font:800 18px/1 'Nunito',sans-serif}
 .tile[data-tileid] .artWaiting{position:relative}
+/* the tile: the work fills the tile edge to edge (a close-up detail first) */
+.grid>.tile[data-tileid="art"]>.tbody{position:static!important}
+.grid>.tile[data-tileid="art"] .artStage{position:absolute;inset:0;z-index:1;cursor:pointer;background-color:color-mix(in srgb,var(--accent) 22%,#ddd);background-repeat:no-repeat;transition:background-size .5s var(--ease,ease),background-position .5s var(--ease,ease)}
+.grid>.tile[data-tileid="art"] .artStage:focus-visible{outline:3px solid #fff;outline-offset:-6px}
+.grid>.tile[data-tileid="art"] .artProbe{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.grid>.tile[data-tileid="art"] .artName{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:3px;padding:44px 18px 16px;background:linear-gradient(to top,rgba(12,8,4,.78),rgba(12,8,4,.42) 60%,transparent);color:#fff;animation:artNameIn .35s ease-out}
+.grid>.tile[data-tileid="art"] .artName .artNameTitle{font:italic 650 18px/1.2 Georgia,'Iowan Old Style','Times New Roman',serif;color:#fff;text-wrap:balance}
+.grid>.tile[data-tileid="art"] .artName .artNameBy{font:800 12px/1.3 'Nunito',sans-serif;letter-spacing:.03em;color:rgba(255,255,255,.86)}
+.grid>.tile[data-tileid="art"] .tileFoot{z-index:7}
+@keyframes artNameIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.grid>.tile[data-tileid="art"] .artStage{transition:none}.grid>.tile[data-tileid="art"] .artName{animation:none}}
 /* the pop-up: the work large, the label and a few lines about it beneath */
 .tileFocusSurface .artCard.big{gap:18px;padding-top:40px}
 .tileFocusSurface .artCard.big .artWall{flex:none;width:100%;height:min(62vh,640px)}
@@ -3648,7 +3659,8 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tile[data-tileid] .histCard{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0;min-height:0}
 .tile[data-tileid] .histCard .histHead{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding-right:28px}
 .tile[data-tileid] .histCard .histYear{font:900 clamp(40px,13cqi,56px)/.9 'Nunito',sans-serif;font-size:calc(clamp(40px,13cqi,56px) * var(--histScale,1));letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--accentDark)}
-.tile[data-tileid] .histCard .histDay{color:var(--accentDark)}
+.tile[data-tileid] .histCard .histYearRow{display:flex;align-items:center;gap:14px;min-width:0}
+.tile[data-tileid] .histCard .histDay{flex:none;padding-left:14px;border-left:1.5px solid color-mix(in srgb,var(--ink) 20%,transparent);font:800 11px/1.5 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 .tile[data-tileid] .histCard .histPeriod{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .tile[data-tileid] .histCard .histEvent{margin:0;font:750 clamp(16px,4.6cqi,20px)/1.3 'Nunito',sans-serif;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty;overflow-wrap:anywhere}
 .tile[data-tileid] .histCard .histMore{display:flex;gap:16px;align-items:flex-start;margin-top:10px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--ink) 14%,transparent)}
@@ -3667,8 +3679,33 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tileFocusSurface .histCard.big .histYear{font-size:calc(clamp(56px,10cqi,84px) * var(--histScale,1))}
 .tileFocusSurface .histCard.big .histEvent{font-size:clamp(20px,3.4cqi,26px)}
 @container (max-width:460px){.tile[data-tileid] .histCard .histMore{flex-direction:column}.tile[data-tileid] .histCard .histImg{width:100%;max-height:180px}}
-.tile.completed[data-tileid] .histCard :is(.histYear,.histDay,.histMoreTitle,a.histLink,.histOthers li b){color:#fff}
+.tile.completed[data-tileid] .histCard :is(.histYear,.histMoreTitle,a.histLink,.histOthers li b){color:#fff}
+.tile.completed[data-tileid] .histCard .histDay{color:rgba(255,255,255,.82);border-left-color:rgba(255,255,255,.45)}
 .tile.completed[data-tileid] .histCard .histPeriod{color:rgba(255,255,255,.82)}
+/* ---- Brainflex chess: a board in the tile's colours, the side to move at the bottom ---- */
+.tile[data-tileid] .chessBoard{display:grid;grid-template-columns:repeat(8,1fr);width:min(100%,var(--chessSize,160px));aspect-ratio:1;border-radius:8px;overflow:hidden;box-shadow:0 8px 20px -12px rgba(60,30,0,.5),0 0 0 1.5px color-mix(in srgb,var(--accentDark) 35%,transparent)}
+.tile[data-tileid] .chessBoard.big{--chessSize:min(440px,82vw)}
+.tile[data-tileid] .chessSq{position:relative;display:grid!important;place-items:center;aspect-ratio:1;min-width:0!important;min-height:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;transform:none!important;font:inherit}
+.tile[data-tileid] .chessSq.light{background:#FFF4E6!important}
+.tile[data-tileid] .chessSq.dark{background:color-mix(in srgb,var(--accent) 52%,#FFF4E6)!important}
+.tile[data-tileid] .chessSq.last{box-shadow:inset 0 0 0 100px rgba(255,214,90,.42)!important}
+.tile[data-tileid] .chessSq.on{box-shadow:inset 0 0 0 3px var(--accentDark)!important}
+.tile[data-tileid] .chessSq.hint{box-shadow:inset 0 0 0 3px #2f9e5b!important}
+.tile[data-tileid] .chessSq.target::after{content:"";position:absolute;width:26%;height:26%;border-radius:50%;background:color-mix(in srgb,var(--accentDark) 45%,transparent)}
+.tile[data-tileid] .chessSq.wrong{animation:brainShake .36s;box-shadow:inset 0 0 0 100px rgba(214,40,57,.35)!important}
+.tile[data-tileid] .chessPiece{font:400 calc(var(--chessSize,160px) / 8 * .78)/1 'Segoe UI Symbol','Noto Sans Symbols 2','DejaVu Sans',serif;pointer-events:none}
+.tile[data-tileid] .chessBoard.big .chessPiece{font-size:calc(min(440px,82vw) / 8 * .8)}
+.tile[data-tileid] .chessPiece.w{color:#fff;text-shadow:0 0 1px #2a1a08,0 0 1px #2a1a08,0 1px 1px #2a1a08}
+.tile[data-tileid] .chessPiece.b{color:#22160a}
+.tile[data-tileid] .chessSide{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accentDark)}
+.tile[data-tileid] .chessSide.big{font-size:13px}
+.tile[data-tileid] .chessMeta{margin:0;font:650 11.5px/1.3 'Nunito',sans-serif;color:var(--dim)}
+.tile[data-tileid] .chessLoading{display:grid;place-items:center;min-height:80px}
+.grid>.tile[data-tileid="brainflex"] button.chessPreview{gap:8px}
+.grid>.tile[data-tileid="brainflex"] .chessPreview .chessBoard{--chessSize:118px}
+.grid>.tile[data-tileid="brainflex"]:not([data-cols="2"][data-rows="2"]) button.chessPreview{flex-direction:row;gap:18px}
+.grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .chessPreview .chessBoard{--chessSize:236px}
+.tile.completed[data-tileid] .chessSide{color:#fff}
 </style>
 </head>
 <body>
@@ -4091,8 +4128,8 @@ function brainRandom(seedText){
 }
 const brainShuffle=(list,rnd)=>{ const a=list.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const brainDayNumber=key=>{ const [y,m,d]=String(key).split("-").map(Number); return Math.floor(Date.UTC(y,m-1,d)/86400000); };
-const BRAIN_GAMES={digits:"Digits",five:"Five letters",sudoku:"Mini sudoku"};
-const brainGameFor=key=>Object.keys(BRAIN_GAMES)[((brainDayNumber(key)%3)+3)%3];
+const BRAIN_GAMES={digits:"Digits",five:"Five letters",sudoku:"Mini sudoku",chess:"Chess puzzle"};
+const brainGameFor=key=>{ const games=Object.keys(BRAIN_GAMES); return games[((brainDayNumber(key)%games.length)+games.length)%games.length]; };
 /* Digits: combine six numbers with + − × ÷ to hit the target. The target is built by
    folding a random chain of those numbers, so at least one solution always exists. */
 function applyBrainOp(a,op,b){
@@ -6749,7 +6786,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
-    art: T("art","Art",false,null,<ArtCard/>),
+    art: T("art","Art",false,null,<ArtCard onNamed={()=>{ if(!manualTileDone.art) toggleManualTile("art"); }}/>,()=>{}),
     history: T("history","History",!!rToday.history,null,<>
       <HistoryCard h={view.history} busy={genBusy} onGenerate={()=>regenerateOne("history")}/>
       <RetryNote tileKey="history"/></>, ()=>{ if(rToday.history) unlearnHistory(view.history); else learnHistory(view.history); }),
@@ -7897,8 +7934,11 @@ function HistoryCard({h,busy,onGenerate}){
   const day=historyMonthDay(h.date), short=historyShortDay(h.date);
   return <div className={"histCard"+(expanded?" big":"")}>
     <div className="histHead">
-      <span className="histYear" style={font?{fontFamily:`'${font[0]}', ${font[2]}`,fontWeight:font[1],letterSpacing:0,"--histScale":font[3]}:undefined}>{h.yearLabel}</span>
-      <span className="histPeriod">{short&&<><span className="histDay">{short}</span> · </>}{h.period}</span>
+      <div className="histYearRow">
+        <span className="histYear" style={font?{fontFamily:`'${font[0]}', ${font[2]}`,fontWeight:font[1],letterSpacing:0,"--histScale":font[3]}:undefined}>{h.yearLabel}</span>
+        {short&&<span className="histDay">{short}</span>}
+      </div>
+      <span className="histPeriod">{h.period}</span>
     </div>
     <p className="histEvent" data-fit-shrink=".72" data-fit-clamp="">{h.event}</p>
     {expanded&&<>
@@ -7967,7 +8007,20 @@ async function fetchArtOfDay(day,get=url=>fetch(url).then(r=>{ if(!r.ok) throw n
   return null;
 }
 /* ART_DAY_END */
-function ArtCard(){
+/* "1884–86" → 19th century, "c. 1665" → 17th century, "1st century BCE" stays as written */
+const artCentury=date=>{
+  const t=String(date||"").trim(); if(!t) return "";
+  if(/century|centuries/i.test(t)) return t.replace(/^(?:c\.|ca\.|about)\s*/i,"");
+  const m=t.match(/\d{1,4}/); if(!m) return "";
+  const y=Number(m[0]), bc=/\bB\.?C\.?(?:E\.?)?\b/i.test(t.slice(0,t.indexOf(m[0])+m[0].length+8));
+  const c=Math.floor((Math.max(1,y)-1)/100)+1, n=c%100, sfx=n>=11&&n<=13?"th":({1:"st",2:"nd",3:"rd"})[c%10]||"th";
+  return `${c}${sfx} century${bc?" BC":""}`;
+};
+/* The tile is a small game of looking: first a close-up detail to guess, a tap shows the whole
+   work edge to edge, another tap names it (title, artist, century) and marks the tile done;
+   after that a tap hides or shows the name again. The stage is kept for the day. */
+const ART_STAGES=["detail","full","named"];
+function ArtCard({onNamed}){
   const {expanded}=useTilePresentation();
   const cached=()=>{ const c=load("artOfDay",null); return c&&c.date===todayKey&&c.art&&c.art.image?c.art:null; };
   const [art,setArt]=useState(cached);
@@ -7978,12 +8031,26 @@ function ArtCard(){
     fetchArtOfDay(todayKey).then(found=>{ if(!live) return; if(found){ save("artOfDay",{date:todayKey,art:found}); setArt(found); } else setFailed(true); });
     return ()=>{ live=false; };
   },[art,attempt]);
+  const [stage,setStage]=useState(()=>{ const c=load("artStage",null); return c&&c.date===todayKey&&ART_STAGES.includes(c.stage)?c.stage:"detail"; });
+  const advance=e=>{ e.stopPropagation(); const next=stage==="detail"?"full":stage==="full"?"named":"full"; setStage(next); save("artStage",{date:todayKey,stage:next}); if(next==="named"&&onNamed) onNamed(); };
   if(!art) return <div className="artCard artWaiting">
     <div className="artWall"><span className={"artFrame artPlaceholder"+(failed?" off":"")}/></div>
     {failed&&<button type="button" className="artRetry" aria-label="Load today’s artwork again" onClick={e=>{ e.stopPropagation(); setAttempt(n=>n+1); }}>↻</button>}
   </div>;
-  const by=expanded?(art.artistLine||art.artist):[art.artist,art.date].filter(Boolean).join(", ");
-  const src=expanded&&big?art.imageLarge:art.image;
+  if(!expanded){
+    const r=art.ratio||1, cover=Math.max(100,100*r), zoom=2.6, h=artHash(artDayNumber(todayKey)+art.id);
+    const fx=35+h%31, fy=35+(h>>>8)%31, photo=big?art.imageLarge:art.image, century=artCentury(art.date);
+    const layer={backgroundImage:`url("${photo}")${art.lqip?`, url("${art.lqip}")`:""}`};
+    const style=stage==="detail"?{...layer,backgroundSize:`${cover*zoom}% auto`,backgroundPosition:`${fx}% ${fy}%`}:{...layer,backgroundSize:"cover",backgroundPosition:"center"};
+    return <div className={"artStage "+stage} role="button" tabIndex={0} style={style}
+      aria-label={stage==="detail"?"A detail of today’s artwork. Show the whole work":stage==="full"?"Today’s artwork. Show its name":`${art.title}, ${art.artist}${century?", "+century:""}. Hide the name`}
+      onClick={advance} onKeyDown={e=>{ if(e.target===e.currentTarget&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); advance(e); } }}>
+      <img src={photo} alt="" aria-hidden="true" className="artProbe" onError={()=>{ if(big) setBig(false); }}/>
+      {stage==="named"&&<div className="artName"><span className="artNameTitle">{art.title}</span><span className="artNameBy">{[art.artist,century].filter(Boolean).join(" · ")}</span></div>}
+    </div>;
+  }
+  const by=art.artistLine||art.artist;
+  const src=big?art.imageLarge:art.image;
   return <figure className={"artCard"+(expanded?" big":"")}>
     <div className="artWall" style={expanded&&art.ratio?{aspectRatio:String(art.ratio)}:undefined}>
       <img className="artFrame" src={src} alt={art.alt||`${art.title}${art.artist?" by "+art.artist:""}`} decoding="async"
@@ -8717,14 +8784,109 @@ function SudokuGame({onFinish,expanded,open}){
     {state.finished?<p className="brainOutcome">Solved.</p>:<div className="sudokuPad">{[1,2,3,4,5,6].map(v=><button type="button" key={v} className="digitsOp" onClick={()=>put(v)}>{v}</button>)}<button type="button" className="digitsOp" onClick={()=>put(0)} aria-label="Erase">⌫</button></div>}
   </div>;
 }
+/* ================= Chess puzzle (Brainflex): Lichess's daily puzzle =================
+   Free public API, no key. The position is rebuilt from the game's moves with chess.js (loaded
+   from the same CDN as React, only on chess days). You play the solution's moves; the replies
+   play themselves. Without the puzzle (offline, API change) the day falls back to Digits. */
+/* CHESS_CORE_START */
+const CHESS_GLYPH={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}};
+const chessUci=u=>{ const m=/^([a-h][1-8])([a-h][1-8])([qrbn])?$/.exec(String(u||"").trim().toLowerCase()); return m?{from:m[1],to:m[2],promotion:m[3]||undefined}:null; };
+const chessSameMove=(a,b)=>!!a&&!!b&&a.from===b.from&&a.to===b.to&&(a.promotion||"q")===(b.promotion||"q");
+/* the game's moves as SAN tokens, without move numbers, results or comments */
+const chessPgnMoves=pgn=>String(pgn||"").replace(/\{[^}]*\}/g," ").replace(/\([^)]*\)/g," ").split(/\s+/).map(t=>t.replace(/^\d+\.(\.\.)?/,"")).filter(t=>t&&!/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t)&&!/^\d+\.+$/.test(t));
+/* squares from the side to move's point of view, top-left first */
+const chessSquares=bottom=>{ const files="abcdefgh".split(""), ranks=[8,7,6,5,4,3,2,1]; const f=bottom==="b"?files.slice().reverse():files, r=bottom==="b"?ranks.slice().reverse():ranks; return r.flatMap(rank=>f.map(file=>file+rank)); };
+/* CHESS_CORE_END */
+let chessLibPromise=null;
+const loadChessLib=()=>{ if(window.Chess) return Promise.resolve(window.Chess);
+  if(!chessLibPromise) chessLibPromise=new Promise((resolve,reject)=>{ const s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"; s.onload=()=>window.Chess?resolve(window.Chess):reject(new Error("chess.js")); s.onerror=()=>{ chessLibPromise=null; reject(new Error("chess.js")); }; document.head.appendChild(s); });
+  return chessLibPromise; };
+async function loadDailyChess(){
+  const c=load("chessDaily",null); if(c&&c.date===todayKey&&c.puzzle) return c.puzzle;
+  const r=await fetch("https://lichess.org/api/puzzle/daily",{headers:{accept:"application/json"}}); if(!r.ok) throw new Error("lichess "+r.status);
+  const d=await r.json(), p=d&&d.puzzle, g=d&&d.game;
+  if(!p||!g||!Array.isArray(p.solution)||!p.solution.length||!g.pgn) throw new Error("lichess shape");
+  const puzzle={id:String(p.id||""),rating:Number(p.rating)||null,themes:Array.isArray(p.themes)?p.themes.slice(0,4):[],solution:p.solution.map(String),initialPly:Number.isInteger(p.initialPly)?p.initialPly:null,pgn:String(g.pgn)};
+  save("chessDaily",{date:todayKey,puzzle}); return puzzle;
+}
+/* the puzzle's starting position: the game replayed up to the move before the first solution
+   move (tries the documented ply first, then its neighbours, then the whole game) */
+const chessStart=(Chess,puzzle)=>{
+  const moves=chessPgnMoves(puzzle.pgn), first=chessUci(puzzle.solution[0]);
+  const counts=[puzzle.initialPly!=null?puzzle.initialPly+1:null,puzzle.initialPly,puzzle.initialPly!=null?puzzle.initialPly+2:null,moves.length].filter((n,i,a)=>Number.isInteger(n)&&n>=0&&n<=moves.length&&a.indexOf(n)===i);
+  for(const n of counts){
+    const game=new Chess(); let ok=true;
+    for(let i=0;i<n;i++){ if(!game.move(moves[i],{sloppy:true})){ ok=false; break; } }
+    if(!ok) continue;
+    const legal=game.moves({verbose:true}).some(m=>chessSameMove({from:m.from,to:m.to,promotion:m.promotion},first));
+    if(legal) return game.fen();
+  }
+  return null;
+};
+function ChessGame({onFinish,expanded,open,onUnavailable}){
+  const [puzzle,setPuzzle]=useState(()=>{ const c=load("chessDaily",null); return c&&c.date===todayKey?c.puzzle:null; });
+  const [lib,setLib]=useState(()=>window.Chess||null);
+  const [state,setState]=useBrainState("chess",()=>({step:0,finished:false,helped:false}));
+  const [pick,setPick]=useState(null),[wrong,setWrong]=useState(null),[hint,setHint]=useState(false);
+  useEffect(()=>{ let live=true;
+    Promise.all([puzzle?Promise.resolve(puzzle):loadDailyChess(),loadChessLib()])
+      .then(([p,Chess])=>{ if(!live) return; if(!chessStart(Chess,p)) throw new Error("position"); setPuzzle(p); setLib(()=>Chess); })
+      .catch(()=>{ if(live&&onUnavailable) onUnavailable(); });
+    return ()=>{ live=false; }; },[]);
+  const start=React.useMemo(()=>lib&&puzzle?chessStart(lib,puzzle):null,[lib,puzzle]);
+  const game=React.useMemo(()=>{ if(!start) return null; const g=new lib(start); puzzle.solution.slice(0,state.step).forEach(u=>g.move(chessUci(u))); return g; },[start,state.step]);
+  /* the reply plays itself a moment after your move (also after a reload between the two) */
+  useEffect(()=>{
+    if(!game||state.finished||game.turn()===new lib(start).turn()) return;
+    const t=setTimeout(()=>setState(s=>{ const after=s.step+1; return after>=puzzle.solution.length?{...s,step:after,finished:true}:{...s,step:after}; }),450);
+    return ()=>clearTimeout(t);
+  },[game,state.finished]);
+  if(!game) return <div className="brainBoard chessLoading" aria-busy="true"><span className="genSpin" aria-hidden="true"/></div>;
+  const me=new lib(start).turn(), toMove=game.turn(), sol=puzzle.solution, nextMove=chessUci(sol[state.step]);
+  const last=state.step>0?chessUci(sol[state.step-1]):null;
+  const finish=(next,helped)=>{ setState({step:next,finished:true,helped}); setPick(null); setHint(false); onFinish(); };
+  const playMine=(mv,helped)=>{
+    const next=state.step+1;
+    if(next>=sol.length){ finish(next,helped||state.helped); return; }
+    setState({...state,step:next,helped:helped||state.helped}); setPick(null); setHint(false);
+  };
+  const tap=sq=>{
+    if(state.finished||toMove!==me) return;
+    const piece=game.get(sq);
+    if(!pick){ if(piece&&piece.color===me) setPick(sq); return; }
+    if(sq===pick){ setPick(null); return; }
+    if(piece&&piece.color===me){ setPick(sq); return; }
+    const tried={from:pick,to:sq,promotion:nextMove&&nextMove.promotion};
+    if(chessSameMove(tried,nextMove)){ playMine(tried,false); return; }
+    setWrong(sq); setTimeout(()=>setWrong(null),420); setPick(null);
+  };
+  const showMove=()=>{ if(state.finished||toMove!==me||!nextMove) return; if(!hint){ setHint(true); setPick(nextMove.from); return; } playMine(nextMove,true); };
+  const squares=chessSquares(me), targets=pick?game.moves({square:pick,verbose:true}).map(m=>m.to):[];
+  const board=<div className={"chessBoard"+(expanded?" big":"")} role="grid" aria-label={`Chess puzzle, ${me==="w"?"White":"Black"} to play`}>
+    {squares.map(sq=>{ const p=game.get(sq), dark=("abcdefgh".indexOf(sq[0])+Number(sq[1]))%2===0;
+      const cls="chessSq"+(dark?" dark":" light")+(last&&(last.from===sq||last.to===sq)?" last":"")+(pick===sq?" on":"")+(targets.includes(sq)?" target":"")+(wrong===sq?" wrong":"")+(hint&&nextMove&&nextMove.from===sq?" hint":"");
+      const glyph=p?CHESS_GLYPH[p.color][p.type]+"︎":"";
+      return expanded?<button type="button" key={sq} className={cls} onClick={()=>tap(sq)} aria-label={sq+(p?" "+(p.color==="w"?"white ":"black ")+({k:"king",q:"queen",r:"rook",b:"bishop",n:"knight",p:"pawn"})[p.type]:"")}><span className={"chessPiece "+(p?p.color:"")}>{glyph}</span></button>
+        :<span key={sq} className={cls}><span className={"chessPiece "+(p?p.color:"")}>{glyph}</span></span>; })}
+  </div>;
+  const side=me==="w"?"White to play":"Black to play";
+  if(!expanded) return <button type="button" className="brainBoard chessPreview" onClick={open} aria-label={`Chess puzzle: ${side}. Open to play`}>{board}<span className="chessSide">{state.finished?"Solved":side}</span></button>;
+  return <div className="brainPlay chessPlay">
+    {board}
+    <div className="chessSide big" aria-live="polite">{state.finished?(state.helped?"Done.":"Solved."):toMove===me?side:"…"}</div>
+    {!state.finished&&<div className="brainActions"><button type="button" className="brainLink" onClick={showMove} disabled={toMove!==me}>{hint?"Play it":"Show the move"}</button></div>}
+    {puzzle.rating&&<p className="chessMeta">Lichess daily puzzle · rated {puzzle.rating}</p>}
+  </div>;
+}
 function BrainGameCard({done,onFinish}){
   const {expanded,open}=useTilePresentation();
-  const game=brainGameFor(todayKey);
-  const Game={digits:DigitsGame,five:FiveGame,sudoku:SudokuGame}[game];
+  const [unavailable,setUnavailable]=useState(false);
+  const today=brainGameFor(todayKey), game=today==="chess"&&unavailable?"digits":today;
+  const Game={digits:DigitsGame,five:FiveGame,sudoku:SudokuGame,chess:ChessGame}[game];
   return <div className={"brainFlexCard brainGames"+(expanded?" isExpanded":"")}>
     <BrainGearArt/>
     <span className="brainFormat">{BRAIN_GAMES[game]}</span>
-    <Game onFinish={()=>{ if(!done)onFinish(); }} expanded={expanded} open={open}/>
+    <Game onFinish={()=>{ if(!done)onFinish(); }} expanded={expanded} open={open} onUnavailable={()=>setUnavailable(true)}/>
   </div>;
 }
 
