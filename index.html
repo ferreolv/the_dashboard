@@ -3641,6 +3641,33 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 /* done: the wall turns the tile's colour, the label white */
 .tile.completed[data-tileid] .artCard .artTitle{color:#fff}
 .tile.completed[data-tileid] .artCard :is(.artBy,.artMeta){color:rgba(255,255,255,.82)}
+/* ---- History: the year big and bold, the period small beside it, the event large under them ---- */
+.grid>.tile[data-tileid="history"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="history"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="history"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid] .histCard{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0;min-height:0}
+.tile[data-tileid] .histCard .histHead{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;padding-right:28px}
+.tile[data-tileid] .histCard .histYear{font:900 clamp(40px,13cqi,56px)/.9 'Nunito',sans-serif;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--accentDark)}
+.tile[data-tileid] .histCard .histPeriod{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.tile[data-tileid] .histCard .histEvent{margin:0;font:750 clamp(16px,4.6cqi,20px)/1.3 'Nunito',sans-serif;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty;overflow-wrap:anywhere}
+.tile[data-tileid] .histCard .histMore{display:flex;gap:16px;align-items:flex-start;margin-top:10px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--ink) 14%,transparent)}
+.tile[data-tileid] .histCard .histImg{flex:none;width:112px;max-height:140px;object-fit:cover;border-radius:10px;box-shadow:0 8px 18px -12px rgba(0,0,0,.5)}
+.tile[data-tileid] .histCard .histMoreText{min-width:0}
+.tile[data-tileid] .histCard .histMoreTitle{font:850 11px/1.2 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--accentDark)}
+.tile[data-tileid] .histCard .histMoreText p{margin:6px 0 0;font:500 14.5px/1.55 Georgia,'Iowan Old Style',serif;color:var(--ink)}
+.tile[data-tileid] .histCard a.histLink{display:inline-block;margin-top:8px;font:800 12px/1 'Nunito',sans-serif;color:var(--accentDark);text-decoration:none}
+.tile[data-tileid] .histCard .histOthers{margin-top:6px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--ink) 14%,transparent)}
+.tile[data-tileid] .histCard .histOthersHead{font:850 11px/1.2 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tile[data-tileid] .histCard .histOthers ol{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.tile[data-tileid] .histCard .histOthers li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;align-items:baseline}
+.tile[data-tileid] .histCard .histOthers li b{font:900 15px/1.2 'Nunito',sans-serif;font-variant-numeric:tabular-nums;color:var(--accentDark)}
+.tile[data-tileid] .histCard .histOthers li span{font:600 13.5px/1.4 'Nunito',sans-serif;color:var(--ink)}
+.tileFocusSurface .histCard.big{justify-content:flex-start;gap:10px;padding-top:6px}
+.tileFocusSurface .histCard.big .histYear{font-size:clamp(56px,10cqi,84px)}
+.tileFocusSurface .histCard.big .histEvent{font-size:clamp(20px,3.4cqi,26px)}
+@container (max-width:460px){.tile[data-tileid] .histCard .histMore{flex-direction:column}.tile[data-tileid] .histCard .histImg{width:100%;max-height:180px}}
+.tile.completed[data-tileid] .histCard :is(.histYear,.histMoreTitle,a.histLink,.histOthers li b){color:#fff}
+.tile.completed[data-tileid] .histCard .histPeriod{color:rgba(255,255,255,.82)}
 </style>
 </head>
 <body>
@@ -3688,6 +3715,7 @@ const COL = {
   clock:    {p:"#E4E9F5", v:"#2D4BA0", d:"#1A2A55"},
   stats:    {p:"#FFE6DA", v:"#FF5A1F", d:"#A3300A"},
   art:      {p:"#F4EAE1", v:"#A0522D", d:"#6B3418"},
+  history:  {p:"#E7EBF1", v:"#3E5675", d:"#22324A"},
 };
 /* Every dashboard tile shares the same reversible full-colour presentation.
    Whether a tile is completed by a task control or by tapping an informative
@@ -3732,7 +3760,7 @@ const SYNC_URL="https://fefe-sync.fefedashboard.workers.dev";
    These tiles then need no personal API key. Set to "" to disable and fall back to per-user
    generation. Weather, academic, and philosophy chat stay per-user. */
 const SHARED_URL="https://fefe-sync.fefedashboard.workers.dev";
-const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","philo"]);
+const SHARED_KEYS=new Set(["word","worth","spanish","german","music","world","philo","history"]);
 /* Garmin (and any scripted health source) push daily summaries to this token-keyed
    store; the dashboard pulls them in on load and merges into the local health log.
    Its own little Worker — separate from sync so a script write can never clobber the
@@ -3862,6 +3890,7 @@ function validDailyTile(key,value){
     case "weather": return !!value.tomorrow&&[value.temp,value.code,value.hi,value.lo,value.tomorrow.hi,value.tomorrow.lo,value.tomorrow.code].every(v=>typeof v==="number"&&Number.isFinite(v))&&dailyText(value.place);
     case "brainflex": return dailyText(value.format)&&dailyText(value.prompt)&&dailyText(value.solution);
     case "philo": return dailyText(value.theme)&&dailyText(value.question);
+    case "history": return Number.isInteger(value.year)&&dailyText(value.yearLabel)&&dailyText(value.period)&&dailyText(value.title)&&dailyText(value.event);
     case "academic": return dailyText(value.concept)&&dailyText(value.explain)&&Array.isArray(value.quiz)&&value.quiz.length>0&&value.quiz.every(dailyQuiz);
     default: return false;
   }
@@ -3872,10 +3901,10 @@ function mergeDailyContent(existing,incoming){
   return next;
 }
 const dailyRequestKeys=(keys,content)=>[...new Set(keys)].filter(key=>!validDailyTile(key,(content||{})[key]));
-const DAILY_CONTENT_KEYS=["word","worth","spanish","german","music","world","weather","philo","academic"];
+const DAILY_CONTENT_KEYS=["word","worth","spanish","german","music","world","weather","philo","academic","history"];
 /* DAILY_CONTENT_CONTRACT_END */
 /* DAILY_UX_CONTRACT_START */
-const DAILY_TILE_LABELS={word:"Word",worth:"Knowledge",spanish:"Español",german:"Deutsch",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
+const DAILY_TILE_LABELS={history:"History",word:"Word",worth:"Knowledge",spanish:"Español",german:"Deutsch",music:"Song",world:"World news",weather:"Weather",brainflex:"Brainflex",philo:"Philosophy",academic:"Study",account:"Account",settings:"Daily content",brain:"Memory",answers:"Quiz answers"};
 const DAILY_SETUP_STATES=new Set(["disabled","personal_key","missing_key","invalid_key","missing_course","server_unconfigured","service_update","browser_lock_unavailable","signin_required"]);
 function dailyIssueInfo(key,state,message="",personalOverride=false){
   const personal=key==="academic"||personalOverride;
@@ -4350,6 +4379,7 @@ const ALL_GEN_KEYS=[...DAILY_CONTENT_KEYS];
 const GEN_TASKS={
   word:    ()=>genWord(load("wordHistory",[]).slice(-12)),
   worth:   ()=>genLesson(load("lessonHistory",[]).slice(-15)),
+  history: ()=>genHistory(),
   spanish: ()=>genSpanish(load("spanishHistory",[]).slice(-15)),
   german:  ()=>genGerman(load("germanHistory",[]).slice(-15)),
   music:   ()=>genMusic(load("musicHistory",[]).slice(-30)),
@@ -4756,6 +4786,7 @@ const upgradeWordCard=(item,dayWord)=>{
 const RECALL_SOURCES=[
   {key:"word",tile:"word",types:["word"],label:"Word"},
   {key:"lesson",tile:"worth",types:["lesson"],label:"Knowledge"},
+  {key:"history",tile:"history",types:["history"],label:"History"},
   {key:"spanish",tile:"spanish",types:["spanish"],label:"Español"},
   {key:"german",tile:"german",types:["german"],label:"Deutsch"},
   {key:"academic",tile:"academic",types:["academic"],label:"Study"},
@@ -5122,7 +5153,8 @@ const CURATED_TILE_LAYOUT={
   people:{desktop:[4,2],phone:[2,1],family:"wide"},
   clock:{desktop:[2,2],phone:[1,1],family:"small"},
   stats:{desktop:[2,2],phone:[1,1],family:"small"},
-  art:{desktop:[4,4],phone:[2,2],family:"large"}
+  art:{desktop:[4,4],phone:[2,2],family:"large"},
+  history:{desktop:[4,2],phone:[2,1],family:"wide"}
 };
 const curatedTileSize=(id,availableCols)=>{
   const layout=CURATED_TILE_LAYOUT[id]||{desktop:[2,2],phone:[2,1],family:"wide"};
@@ -5160,6 +5192,7 @@ const LIBRARY_META={
   weather:["life","weather forecast temperature city tomorrow"],
   music:["life","song music classical recording listening"],
   art:["discover","art painting artwork museum picture of the day Art Institute of Chicago"],
+  history:["discover","history on this day event year period wikipedia past"],
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
   clock:["life","watch time clock hour date"],
@@ -5176,7 +5209,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","art","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","history","word","music","art","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -5190,7 +5223,8 @@ const MATRIX_TILE_INTRODUCED=load("matrixTileIntroduced",false);
 const WATCH_STATS_INTRODUCED=load("watchStatsIntroduced",false);
 const placeArtAfterMusic=list=>{ const next=list.filter(id=>id!=="art"), at=next.indexOf("music"); next.splice(at<0?next.length:at+1,0,"art"); return next; };
 /* tiles added to Today once, after the account sync (see the effect beside setTileActive) */
-const LATE_TILES=[["art",placeArtAfterMusic]];
+const placeHistoryAfterKnowledge=list=>{ const next=list.filter(id=>id!=="history"), at=next.indexOf("worth"); next.splice(at<0?next.length:at+1,0,"history"); return next; };
+const LATE_TILES=[["art",placeArtAfterMusic],["history",placeHistoryAfterKnowledge]];
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
@@ -5263,7 +5297,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world","art"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world","art","history"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -5568,7 +5602,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   /* Daily AI content: which shared server-generated tiles to actually produce
      each day. null = all (default). Untick a tile → the worker stops spending
      tokens on it. Persisted to the worker (shared_config) so its cron obeys. */
-  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["philo","Philosophy"]];
+  const SHARED_AI_TILES=[["word","Word"],["worth","Knowledge"],["history","History"],["spanish","Español"],["german","Deutsch"],["music","Song"],["world","World news"],["philo","Philosophy"]];
   const [genPrefs,setGenPrefs]=useState(()=>{
     const stored=load("genPrefs",null);
     if(!Array.isArray(stored))return null;
@@ -6005,6 +6039,8 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     const history={...tileSets,[todayKey]:next}; setTileSets(history); save("activeTileHistory",history);
     let placed=order.filter(x=>ALL.includes(x)); fresh.forEach(([,place])=>{ placed=place(placed); }); setOrder(placed); save("widgetOrder",placed);
     save("introducedTiles",[...(Array.isArray(seen)?seen:[]),...fresh.map(([id])=>id)]);
+    // a new daily tile also gets its daily generation switched on, or it would wait in "off"
+    fresh.filter(([id])=>SHARED_KEYS.has(id)).forEach(([id])=>{ Promise.resolve(enableDailyTile(id)).catch(()=>{}); });
   },[syncChecked]);
   /* The menu is a dock hidden below the screen: the little arrow at the bottom brings it up,
      and so does pushing past the end of the page (a scroll or a pull up from the bottom). It
@@ -6149,6 +6185,11 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const learnWord=w=>{ setRitual("word"); if(w&&w.quiz && !recallList.some(x=>x.type==="word"&&x.addedOn===todayKey)) appendDailyRecall("word",[newRecallItem({ id:uid(), type:"word", addedOn:todayKey, title:"Word · "+w.term_en, term:w.term_en, meta:`En français : ${w.term_fr}`, word:wordCardOf(w), cloze:clozeSentences(w.cloze,w.term_en), quiz:{ prompts:[`Closest word to “${w.term_en}”?`, ...(w.quiz.alt_prompts||[])].filter(Boolean), options:w.quiz.options, answer:w.quiz.answer, explain:`“${w.term_en}” — ${w.def_en}.` } })]); };
   const unlearnWord=w=>{ unsetRitual("word"); persistRecall(previous=>previous.filter(x=>!(x.type==="word"&&x.addedOn===todayKey&&x.term===(w&&w.term_en)))); };
   const learnLesson=l=>{ setRitual("worth"); if(l&&l.quiz&&l.quiz[0] && !recallList.some(x=>x.type==="lesson"&&x.addedOn===todayKey)){ const q=l.quiz[0]; appendDailyRecall("lesson",[newRecallItem({ id:uid(), type:"lesson", addedOn:todayKey, title:l.title, quiz:{ prompts:[q.prompt, ...(q.alt_prompts||[])].filter(Boolean), options:q.options, answer:q.answer, explain:q.explain } })]); } };
+  /* History: the tile is done once read; its event becomes a year card in Recall. */
+  const learnHistory=h=>{ setRitual("history"); if(h&&!recallList.some(x=>x.type==="history"&&x.addedOn===todayKey)){
+    const options=historyYearOptions(h.year,todayKey), answer=options.indexOf(h.yearLabel);
+    appendDailyRecall("history",[newRecallItem({ id:uid(), type:"history", addedOn:todayKey, title:h.title, quiz:{ prompts:[`${h.title}: which year?`,`In which year: ${h.event}`], options, answer, explain:`${h.period} · ${historyMonthDay(h.date)}` } })]); } };
+  const unlearnHistory=h=>{ unsetRitual("history"); persistRecall(previous=>previous.filter(x=>!(x.type==="history"&&x.addedOn===todayKey))); };
   const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(previous=>previous.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
   /* Spanish feeds recall harder than the others on purpose — both quiz questions AND each
      vocab word (using the day's other vocab as natural decoys) — so a day of Spanish doesn't
@@ -6440,7 +6481,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","spanish","german","music","world","breathing","note","recall","brainflex","philo","sustain"];
+  const ritualScoreIds=["word","worth","history","spanish","german","music","world","breathing","note","recall","brainflex","philo","sustain"];
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. a lesson done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
@@ -6708,6 +6749,9 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
     art: T("art","Art",false,null,<ArtCard/>),
+    history: T("history","History",!!rToday.history,null,<>
+      <HistoryCard h={view.history} busy={genBusy} onGenerate={()=>regenerateOne("history")}/>
+      <RetryNote tileKey="history"/></>, ()=>{ if(rToday.history) unlearnHistory(view.history); else learnHistory(view.history); }),
     stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>),
     matrix: T("matrix","Priorities",false,null,
       <MatrixCard notes={matrixNotes} onChange={saveMatrix} />,()=>{}),
@@ -7129,7 +7173,7 @@ const recallAnswerFor=item=>{
   if(detail) return {short:"Answer", detail};
   return {short:item.term||item.title||"Answer", detail:""};
 };
-const RECALL_TYPE_TAG={word:"Word",lesson:"Knowledge",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
+const RECALL_TYPE_TAG={history:"History",word:"Word",lesson:"Knowledge",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
 const isClozeCard=item=>!!(item&&item.type==="word"&&item.word&&item.word.term);
 /* Front: only the cue, never the title or meta (they can give the answer away).
    Word cards show a sentence with a blank; without a sentence yet, the definition. */
@@ -7743,6 +7787,110 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
 
 /* A vinyl record: grooved black disc, tile-coloured label. It spins
    slowly, faster while the exact recording is still being matched. */
+/* ================= History: the most important event of today's date =================
+   The server reads English Wikipedia's events for the date and the larger model picks the most
+   important one (importance first; a period seen less lately and a round anniversary only break
+   ties). The text shown is Wikipedia's own. The same core (periods, candidates, fallback) runs here
+   for the personal fallback; tests keep both copies identical. */
+/* HISTORY_CORE_START */
+/* Fixed periods: every year falls in exactly one. */
+const HISTORY_PERIODS = [
+  [-1e9, -501, "Ancient world"], [-500, 476, "Classical antiquity"], [477, 999, "Early Middle Ages"],
+  [1000, 1491, "High & late Middle Ages"], [1492, 1647, "Renaissance & Reformation"], [1648, 1788, "Enlightenment"],
+  [1789, 1848, "Age of revolutions"], [1849, 1913, "Industrial & imperial age"], [1914, 1945, "World wars"],
+  [1946, 1991, "Cold War"], [1992, 1e9, "Contemporary"]
+];
+function historyPeriod(year) { const row = HISTORY_PERIODS.find(([from, to]) => year >= from && year <= to); return row ? row[2] : "Contemporary"; }
+function historyYearLabel(year) { return year < 0 ? `${-year} BC` : String(year); }
+const historyClean = t => String(t || "").replace(/\s+/g, " ").trim();
+/* Wikipedia's events for a date, dated to a year and at most ~3000 years old, one per text. */
+function historyCandidates(feed, nowYear) {
+  const seen = new Set(), out = [];
+  const add = (e, selected) => {
+    const year = Number(e && e.year), text = historyClean(e && e.text);
+    if (!Number.isInteger(year) || year === 0 || year < nowYear - 3000 || year > nowYear || !text) return;
+    const key = year + "|" + text.toLowerCase().slice(0, 80);
+    if (seen.has(key)) { if (selected) { const prior = out.find(c => c.key === key); if (prior) prior.selected = true; } return; }
+    seen.add(key);
+    out.push({ key, year, text, selected, pages: Array.isArray(e.pages) ? e.pages : [] });
+  };
+  (feed && Array.isArray(feed.selected) ? feed.selected : []).forEach(e => add(e, true));
+  (feed && Array.isArray(feed.events) ? feed.events : []).forEach(e => add(e, false));
+  return out.slice(0, 180);
+}
+/* Periods of recent picks, newest last, from the history labels "year · period · title". */
+function historyRecentPeriods(avoid) { return (avoid || []).map(l => String(l).split(" · ")[1]).filter(Boolean); }
+/* Without the model: Wikipedia's own selection first, avoiding the last two days' periods when it can. */
+function historyFallbackIndex(candidates, recent) {
+  const last = recent.slice(-2), pool = candidates.map((c, i) => ({ c, i }));
+  const fresh = pool.filter(({ c }) => c.selected && !last.includes(historyPeriod(c.year)));
+  const pick = fresh[0] || pool.find(({ c }) => c.selected) || pool[0];
+  return pick ? pick.i : -1;
+}
+function historyRecord(date, candidates, index, title, nowYear) {
+  const c = candidates[index]; if (!c) return null;
+  const page = c.pages.find(p => p && p.extract) || c.pages[0] || {};
+  const others = candidates.filter((x, i) => i !== index && x.selected).slice(0, 8).sort((a, b) => a.year - b.year)
+    .map(x => ({ year: x.year, yearLabel: historyYearLabel(x.year), text: x.text }));
+  return {
+    date: date.slice(5), year: c.year, yearLabel: historyYearLabel(c.year), yearsAgo: nowYear - c.year, period: historyPeriod(c.year),
+    title: historyClean(title) || historyClean(page.normalizedtitle || page.title).replace(/_/g, " ") || c.text.split(/[,.;:]/)[0],
+    event: c.text,
+    page: page && (page.title || page.normalizedtitle) ? {
+      title: historyClean(page.normalizedtitle || page.title).replace(/_/g, " "),
+      extract: historyClean(page.extract).slice(0, 900),
+      image: page.thumbnail && page.thumbnail.source || "",
+      url: page.content_urls && page.content_urls.desktop && page.content_urls.desktop.page || ""
+    } : null,
+    others
+  };
+}
+/* HISTORY_CORE_END */
+const historyMonthDay=mmdd=>{ const [m,d]=String(mmdd||"").split("-").map(Number); return m&&d?new Intl.DateTimeFormat("en-US",{month:"long",day:"numeric",timeZone:"UTC"}).format(new Date(Date.UTC(2000,m-1,d))):""; };
+/* three years for the Recall card: the answer and two near misses, in order */
+const historyYearOptions=(year,seed)=>{
+  let n=7; for(const c of String(seed)) n=(Math.imul(n,31)+c.charCodeAt(0))>>>0;
+  const nowYear=Number(String(seed).slice(0,4))||new Date().getFullYear();
+  const span=Math.abs(year)<1000?60:year<1800?40:year<1950?15:7, d1=1+n%span, d2=1+((n>>>8)%span);
+  let a=year-d1, b=year+d2; if(b>nowYear) b=year-d1-d2; if(a===0) a=-1; if(b===0) b=-1;
+  return [...new Set([year,a,b])].sort((x,y)=>x-y).map(historyYearLabel);
+};
+/* personal fallback: Wikipedia directly, Wikipedia's own selection, recent periods avoided */
+const genHistory=async()=>{
+  const [y,m,d]=todayKey.split("-"); let feed=null;
+  for(const url of [`https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/${m}/${d}`,`https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${m}/${d}`]){
+    try{ const r=await fetch(url); if(r.ok){ feed=await r.json(); break; } }catch(e){}
+  }
+  const nowYear=Number(y), candidates=historyCandidates(feed,nowYear); if(!candidates.length) return null;
+  const recent=[]; for(let i=7;i>=1;i--){ const h=(load("daily:"+addDays(todayKey,-i),{})||{}).history; if(h&&h.period) recent.push(h.period); }
+  return historyRecord(todayKey,candidates,historyFallbackIndex(candidates,recent),"",nowYear);
+};
+function HistoryCard({h,busy,onGenerate}){
+  const {expanded}=useTilePresentation();
+  if(!h) return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
+  const day=historyMonthDay(h.date);
+  return <div className={"histCard"+(expanded?" big":"")}>
+    <div className="histHead">
+      <span className="histYear">{h.yearLabel}</span>
+      <span className="histPeriod">{h.period}</span>
+    </div>
+    <p className="histEvent" data-fit-shrink=".72" data-fit-clamp="">{h.event}</p>
+    {expanded&&<>
+      {h.page&&(h.page.extract||h.page.url)&&<div className="histMore">
+        {h.page.image&&<img className="histImg" src={h.page.image} alt="" loading="lazy" decoding="async"/>}
+        <div className="histMoreText">
+          {h.page.title&&<div className="histMoreTitle">{h.page.title}</div>}
+          {h.page.extract&&<p>{h.page.extract}</p>}
+          {h.page.url&&<a className="histLink" href={h.page.url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}>Read on Wikipedia ↗</a>}
+        </div>
+      </div>}
+      {Array.isArray(h.others)&&h.others.length>0&&<div className="histOthers">
+        <div className="histOthersHead">Also on {day}</div>
+        <ol>{h.others.map((o,i)=><li key={i}><b>{o.yearLabel}</b><span>{o.text}</span></li>)}</ol>
+      </div>}
+    </>}
+  </div>;
+}
 /* ================= Art: a work from the Art Institute of Chicago each day =================
    Free public API, no key and no server. Every device picks the same work for a date (a hash
    of the day over the museum's public-domain highlights that have an image), then keeps it

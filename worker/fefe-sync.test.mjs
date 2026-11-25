@@ -399,8 +399,10 @@ test("backend and frontend accept exactly the same daily shapes, including malfo
     { tema: "Tema", punto: "Punto", vocab: [null], quiz: [quiz] }, { tema: "Tema", punto: "Punto", vocab: [{ es: "Uno", en: "One" }], quiz: [quiz] },
     [{ headline: "Headline", summary: "Summary" }], { place: "Sydney", temp: 20, code: 0 },
     { place: "Sydney", temp: 20, code: 0, hi: 23, lo: 15, tomorrow: { hi: 24, lo: 16, code: 1 } },
-    { title: "Music", artist: "Artist", why: "Listen" }, { format: "Logic", prompt: "Challenge", solution: "Answer" }];
-  for (const key of ["word", "worth", "spanish", "music", "world", "weather", "brainflex", "philo", "academic"]) {
+    { title: "Music", artist: "Artist", why: "Listen" }, { format: "Logic", prompt: "Challenge", solution: "Answer" },
+    { year: 1453, yearLabel: "1453", period: "High & late Middle Ages", title: "Fall of Constantinople", event: "Ottoman forces capture Constantinople." },
+    { year: "1453", yearLabel: "1453", period: "High & late Middle Ages", title: "Fall", event: "Text" }, { year: 1453, yearLabel: "1453", period: "", title: "Fall", event: "Text" }];
+  for (const key of ["word", "worth", "spanish", "music", "world", "weather", "brainflex", "philo", "academic", "history"]) {
     for (const sample of samples) assert.equal(Boolean(serverValid(key, sample)), Boolean(clientValid(key, sample)), key + ": " + JSON.stringify(sample));
   }
 });
@@ -524,4 +526,51 @@ test("Knowledge is written by the larger model thinking first, asks for substanc
   assert.match(prompt, /3 short paragraphs, 170–230 words/);
   assert.match(prompt, /what is still debated, a common misconception corrected/);
   assert.equal(sent[1].model, "claude-haiku-5-5", "an unavailable larger model gives way to the usual one");
+});
+
+test("History: every year has one fixed period, and the server keeps Wikipedia's text while the model only chooses", async () => {
+  const core = runInNewContext(source.slice(source.indexOf("/* HISTORY_CORE_START */"), source.indexOf("/* HISTORY_CORE_END */")) + ";({historyPeriod,historyCandidates,historyFallbackIndex,historyYearLabel})");
+  for (let y = -1100; y <= 2026; y += 7) if (y !== 0) assert.ok(core.historyPeriod(y), "a period for " + y);
+  assert.equal(core.historyPeriod(-44), "Classical antiquity");
+  assert.equal(core.historyPeriod(1453), "High & late Middle Ages");
+  assert.equal(core.historyPeriod(1789), "Age of revolutions");
+  assert.equal(core.historyPeriod(2001), "Contemporary");
+  assert.equal(core.historyYearLabel(-44), "44 BC");
+  const feed = {
+    selected: [{ year: 1969, text: "Apollo 12 lands on the Moon.", pages: [{ normalizedtitle: "Apollo 12", extract: "Apollo 12 was the sixth crewed flight.", thumbnail: { source: "https://upload.example/a.jpg" }, content_urls: { desktop: { page: "https://en.wikipedia.org/wiki/Apollo_12" } } }] },
+      { year: 1491, text: "Treaty of Granada is signed.", pages: [] }],
+    events: [{ year: 1969, text: "Apollo 12 lands on the Moon.", pages: [] }, { year: -2500, text: "Too old to be dated.", pages: [] }, { year: 1120, text: "The White Ship sinks.", pages: [] }]
+  };
+  const candidates = core.historyCandidates(feed, 2026);
+  assert.deepEqual(JSON.parse(JSON.stringify(candidates.map(c => [c.year, c.selected]))), [[1969, true], [1491, true], [1120, false]], "deduplicated, dated, at most 3000 years old");
+  assert.equal(core.historyFallbackIndex(candidates, ["Cold War", "Cold War"]), 1, "without the model, the selection avoids a period just used");
+
+  const { env } = environment(["history"]);
+  const sent = [];
+  globalThis.fetch = async (url, init) => {
+    if (String(url).includes("onthisday")) return Response.json(feed);
+    sent.push(JSON.parse(init.body));
+    return Response.json({ content: [{ type: "text", text: JSON.stringify({ index: 2, title: "Sinking of the White Ship" }) }] });
+  };
+  const result = await request(env, "/shared");
+  const h = result.data.content.history;
+  assert.equal(h.year, 1120);
+  assert.equal(h.event, "The White Ship sinks.", "the event is Wikipedia's own sentence");
+  assert.equal(h.period, "High & late Middle Ages");
+  assert.equal(h.title, "Sinking of the White Ship");
+  assert.equal(sent[0].model, "claude-sonnet-5-5");
+  const prompt = sent[0].messages[0].content;
+  assert.match(prompt, /Importance decides/);
+  assert.match(prompt, /never pass over a clearly more important event/);
+  assert.match(prompt, /0\. 1969 \[Cold War\] ★ Apollo 12 lands on the Moon\./);
+});
+
+test("History still arrives when the model fails: Wikipedia's selection is used", async () => {
+  const { env } = environment(["history"]);
+  globalThis.fetch = async url => String(url).includes("onthisday")
+    ? Response.json({ selected: [{ year: 1863, text: "Gettysburg Address is delivered.", pages: [] }], events: [] })
+    : new Response("{}", { status: 500 });
+  const result = await request(env, "/shared");
+  assert.equal(result.data.content.history.year, 1863);
+  assert.equal(result.data.content.history.period, "Industrial & imperial age");
 });

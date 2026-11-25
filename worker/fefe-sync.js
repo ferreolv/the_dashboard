@@ -10,7 +10,7 @@
 // namespaced `shared:*` so they never collide with the `dashboard:<code>` sync blobs.
 
 /* ---------------- shared-content config ---------------- */
-var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo"];
+var SHARED_KEYS = ["word", "worth", "spanish", "german", "music", "world", "brainflex", "philo", "history"];
 /* Newest first: a model the API no longer serves (400/404) gives way to the next one, so the
    server outlives model retirements without an update. */
 var MODELS = ["claude-haiku-5-5", "claude-haiku-4-5-20251001"];
@@ -346,6 +346,72 @@ function brainflexKindFor(chosen) {
   return pool[Math.abs((day * 2654435761) % 2147483647) % pool.length];
 }
 
+/* ---------------- history: the most important event of this date ---------------- */
+/* HISTORY_CORE_START */
+/* Fixed periods: every year falls in exactly one. */
+var HISTORY_PERIODS = [
+  [-1e9, -501, "Ancient world"], [-500, 476, "Classical antiquity"], [477, 999, "Early Middle Ages"],
+  [1000, 1491, "High & late Middle Ages"], [1492, 1647, "Renaissance & Reformation"], [1648, 1788, "Enlightenment"],
+  [1789, 1848, "Age of revolutions"], [1849, 1913, "Industrial & imperial age"], [1914, 1945, "World wars"],
+  [1946, 1991, "Cold War"], [1992, 1e9, "Contemporary"]
+];
+function historyPeriod(year) { const row = HISTORY_PERIODS.find(([from, to]) => year >= from && year <= to); return row ? row[2] : "Contemporary"; }
+function historyYearLabel(year) { return year < 0 ? `${-year} BC` : String(year); }
+const historyClean = t => String(t || "").replace(/\s+/g, " ").trim();
+/* Wikipedia's events for a date, dated to a year and at most ~3000 years old, one per text. */
+function historyCandidates(feed, nowYear) {
+  const seen = new Set(), out = [];
+  const add = (e, selected) => {
+    const year = Number(e && e.year), text = historyClean(e && e.text);
+    if (!Number.isInteger(year) || year === 0 || year < nowYear - 3000 || year > nowYear || !text) return;
+    const key = year + "|" + text.toLowerCase().slice(0, 80);
+    if (seen.has(key)) { if (selected) { const prior = out.find(c => c.key === key); if (prior) prior.selected = true; } return; }
+    seen.add(key);
+    out.push({ key, year, text, selected, pages: Array.isArray(e.pages) ? e.pages : [] });
+  };
+  (feed && Array.isArray(feed.selected) ? feed.selected : []).forEach(e => add(e, true));
+  (feed && Array.isArray(feed.events) ? feed.events : []).forEach(e => add(e, false));
+  return out.slice(0, 180);
+}
+/* Periods of recent picks, newest last, from the history labels "year · period · title". */
+function historyRecentPeriods(avoid) { return (avoid || []).map(l => String(l).split(" · ")[1]).filter(Boolean); }
+/* Without the model: Wikipedia's own selection first, avoiding the last two days' periods when it can. */
+function historyFallbackIndex(candidates, recent) {
+  const last = recent.slice(-2), pool = candidates.map((c, i) => ({ c, i }));
+  const fresh = pool.filter(({ c }) => c.selected && !last.includes(historyPeriod(c.year)));
+  const pick = fresh[0] || pool.find(({ c }) => c.selected) || pool[0];
+  return pick ? pick.i : -1;
+}
+function historyRecord(date, candidates, index, title, nowYear) {
+  const c = candidates[index]; if (!c) return null;
+  const page = c.pages.find(p => p && p.extract) || c.pages[0] || {};
+  const others = candidates.filter((x, i) => i !== index && x.selected).slice(0, 8).sort((a, b) => a.year - b.year)
+    .map(x => ({ year: x.year, yearLabel: historyYearLabel(x.year), text: x.text }));
+  return {
+    date: date.slice(5), year: c.year, yearLabel: historyYearLabel(c.year), yearsAgo: nowYear - c.year, period: historyPeriod(c.year),
+    title: historyClean(title) || historyClean(page.normalizedtitle || page.title).replace(/_/g, " ") || c.text.split(/[,.;:]/)[0],
+    event: c.text,
+    page: page && (page.title || page.normalizedtitle) ? {
+      title: historyClean(page.normalizedtitle || page.title).replace(/_/g, " "),
+      extract: historyClean(page.extract).slice(0, 900),
+      image: page.thumbnail && page.thumbnail.source || "",
+      url: page.content_urls && page.content_urls.desktop && page.content_urls.desktop.page || ""
+    } : null,
+    others
+  };
+}
+/* HISTORY_CORE_END */
+async function fetchHistoryFeed(date) {
+  const [, mm, dd] = date.split("-");
+  for (const url of [`https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/${mm}/${dd}`, `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${mm}/${dd}`]) {
+    try {
+      const r = await fetch(url, { headers: { "user-agent": "fefe-dashboard/1.0 (personal daily dashboard)", accept: "application/json" }, signal: AbortSignal.timeout(15000) });
+      if (r.ok) return await r.json();
+    } catch {}
+  }
+  return null;
+}
+
 /* ---------------- per-key generators (prompts mirror the client) ---------------- */
 var sharedGen = {
   word: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
@@ -387,6 +453,31 @@ var sharedGen = {
       `Create ONE self-contained challenge for a smart 24-year-old business student, solvable mentally in 2-5 minutes. Today's format is ${BRAINFLEX_KINDS[kind]}. Vary the topic from these recent ones: ${(avoid || []).join(" | ") || "none"}. The prompt is at most 45 words and contains every fact needed and nothing that isn't. Make it feel fresh and specific: anchor it in a concrete, unexpected real-world setting (a night market, a cargo port, a vintage arcade, an alpine refuge…) that genuinely changes day to day, never a generic textbook setup — while keeping every detail load-bearing. Shape:{"format":"2-4 word name of the format","prompt":"the complete challenge","solution":"the answer in the first few words, then the decisive reasoning in 1-2 short sentences"}.`, 500).then(extractJSON);
   },
 
+  /* History: Wikipedia supplies the real events of the date; the larger model only chooses. */
+  history: async (env, avoid, date) => {
+    const day = validDate(date) ? date : new Date().toISOString().slice(0, 10), nowYear = Number(day.slice(0, 4));
+    const feed = await fetchHistoryFeed(day);
+    const candidates = historyCandidates(feed, nowYear);
+    if (!candidates.length) throw dailyFailure("feed_unavailable");
+    const recent = historyRecentPeriods(avoid);
+    const counts = recent.slice(-14).reduce((m, p) => ({ ...m, [p]: (m[p] || 0) + 1 }), {});
+    const monthDay = new Date(day + "T12:00:00Z").toLocaleDateString("en-US", { month: "long", day: "numeric", timeZone: "UTC" });
+    const list = candidates.map((c, i) => {
+      const ago = nowYear - c.year, round = ago > 0 && ago % 25 === 0;
+      return `${i}. ${historyYearLabel(c.year)} [${historyPeriod(c.year)}${round ? `, ${ago} years ago` : ""}]${c.selected ? " ★" : ""} ${c.text}`;
+    }).join("\n");
+    let index = -1, title = "";
+    try {
+      const out = extractJSON(await callClaude(env,
+        "You output ONLY valid minified JSON, no markdown. You are a careful historian choosing what an educated person should know.",
+        `Events that happened on ${monthDay}, from English Wikipedia (★ = in Wikipedia's own selection for the day):\n${list}\n\nPick the ONE event of greatest historical importance: the largest and most lasting consequences for the most people, the event a well-educated person should know about this date. Importance decides. Two softer preferences apply ONLY between events of comparable importance: (1) favour a period that has appeared less in recent days (recent picks, newest last: ${recent.slice(-7).join(" | ") || "none"}; counts over the last two weeks: ${JSON.stringify(counts)}); never pass over a clearly more important event for this; (2) a round anniversary (marked "N years ago") counts slightly in favour. Also give the event's usual short name in 2–6 words (e.g. "Fall of Constantinople", "Storming of the Bastille"). Shape:{"index":0,"title":""}.`,
+        300, CAREFUL_MODELS, true));
+      if (out && Number.isInteger(out.index) && candidates[out.index]) { index = out.index; title = out.title; }
+    } catch {}
+    if (index < 0) index = historyFallbackIndex(candidates, recent);
+    return historyRecord(day, candidates, index, title, nowYear);
+  },
+
   philo: (env, avoid) => callClaude(env, "You output ONLY valid minified JSON, no markdown.",
     `Pick ONE deep contested philosophical question beyond introductory level. Assume solid basics and some primary-text familiarity. Vary among mind, epistemology, meta-ethics, freedom, politics, language, aesthetics and science. Avoid: ${(avoid || []).join(" | ") || "none"}. Shape:{"theme":"2-4 word tag","question":"ONE short question, at most 12 words, no preamble or setup — depth comes from the idea, not the length"}.`, 220).then(extractJSON)
 };
@@ -399,7 +490,8 @@ var sharedHistLabel = {
   music: (v) => v && `${v.title} — ${v.artist} [${v.genre || "?"}]`,
   world: (v) => Array.isArray(v) ? v.map((x) => x.headline) : null,
   brainflex: (v) => v && v.format,
-  philo: (v) => v && v.theme
+  philo: (v) => v && v.theme,
+  history: (v) => v && `${v.yearLabel} · ${v.period} · ${v.title}`
 };
 
 /* ---------------- news (server-side RSS, no CORS) ---------------- */
@@ -496,6 +588,7 @@ function validDailyContent(key, value) {
     case "world": return Array.isArray(value) && value.length > 0 && value.every(v => v && textPresent(v.headline) && textPresent(v.summary));
     case "brainflex": return textPresent(value.format) && textPresent(value.prompt) && textPresent(value.solution);
     case "philo": return textPresent(value.theme) && textPresent(value.question);
+    case "history": return Number.isInteger(value.year) && textPresent(value.yearLabel) && textPresent(value.period) && textPresent(value.title) && textPresent(value.event);
     case "academic": return textPresent(value.concept) && textPresent(value.explain) && Array.isArray(value.quiz) && value.quiz.length > 0 && value.quiz.every(validQuiz);
     case "weather": return !!value.tomorrow && [value.temp, value.code, value.hi, value.lo, value.tomorrow.hi, value.tomorrow.lo, value.tomorrow.code].every(v => typeof v === "number" && Number.isFinite(v)) && textPresent(value.place);
     default: return false;
@@ -629,7 +722,7 @@ class DailyCoordinator {
     const outcomes = await Promise.allSettled((env.ANTHROPIC_API_KEY ? pending : []).map(async key => {
       let value, problem;
       try {
-        value = await sharedGen[key](env, (Array.isArray(history[key]) ? history[key] : []).slice(-20));
+        value = await sharedGen[key](env, (Array.isArray(history[key]) ? history[key] : []).slice(-20), date);
         if (!validDailyContent(key, value)) throw dailyFailure("invalid_content");
       } catch (error) { problem = generationError(error); }
       await commit(async () => {
