@@ -3706,6 +3706,41 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .grid>.tile[data-tileid="brainflex"]:not([data-cols="2"][data-rows="2"]) button.chessPreview{flex-direction:row;gap:18px}
 .grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .chessPreview .chessBoard{--chessSize:236px}
 .tile.completed[data-tileid] .chessSide{color:#fff}
+/* ---- Country of the day: the silhouette to guess, then its name, flag and figures beside it ---- */
+.grid>.tile[data-tileid="country"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="country"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="country"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid] .countryCard{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:18px;min-width:0;min-height:0;cursor:pointer}
+.tile[data-tileid] .countryCard:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:12px}
+.tile[data-tileid] .countryShapeWrap{position:relative;flex:1 1 auto;align-self:stretch;display:grid;place-items:center;min-width:0;min-height:0}
+.tile[data-tileid] .countryCard.named .countryShapeWrap{flex:0 0 40%}
+.tile[data-tileid] .countryShape{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tile[data-tileid] .countryShape path{fill:var(--accent);fill-rule:evenodd;stroke:var(--accent);stroke-width:1.6px;vector-effect:non-scaling-stroke;stroke-linejoin:round;filter:drop-shadow(0 4px 6px rgba(10,40,55,.22))}
+.tile[data-tileid] .countryBlob{width:52%;aspect-ratio:1.4;border-radius:42% 58% 46% 54%;background:color-mix(in srgb,var(--accent) 30%,transparent)}
+.tile[data-tileid] .countryShapeWrap.pulse .countryBlob{animation:countryPulse 1.4s ease-in-out infinite}
+@keyframes countryPulse{50%{opacity:.45}}
+@media(prefers-reduced-motion:reduce){.tile[data-tileid] .countryShapeWrap.pulse .countryBlob{animation:none}}
+.tile[data-tileid] .countryInfo{flex:1 1 60%;display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;padding-right:24px;animation:artNameIn .3s ease-out}
+.tile[data-tileid] .countryNameRow{display:flex;align-items:center;gap:9px;min-width:0}
+.tile[data-tileid] .countryFlag{flex:none;height:22px;width:auto;max-width:40px;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.tile[data-tileid] .countryName{font:900 clamp(19px,5.6cqi,24px)/1.1 'Nunito',sans-serif;letter-spacing:-.015em;color:var(--ink);overflow-wrap:anywhere}
+.tile[data-tileid] .countryLine{font:650 13px/1.35 'Nunito',sans-serif;color:var(--ink)}
+.tile[data-tileid] .countryLine b{font-weight:850}
+.tile[data-tileid] .countryRegion{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tile[data-tileid] .countryCard.big{flex-direction:column;align-items:stretch;gap:18px;cursor:default;padding-top:6px}
+.tile[data-tileid] .countryCard.big .countryShapeWrap{flex:none;height:min(38vh,300px)}
+.tile[data-tileid] .countryCard.big .countryInfo{padding-right:0}
+.tile[data-tileid] .countryCard.big .countryFlag{height:30px;max-width:54px}
+.tile[data-tileid] .countryCard.big .countryName{font-size:clamp(26px,4.4cqi,34px)}
+.tile[data-tileid] .countryOfficial{font:650 13px/1.3 'Nunito',sans-serif;color:var(--dim)}
+.tile[data-tileid] .countryFacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 18px;width:100%;margin:10px 0 0}
+.tile[data-tileid] .countryFacts dt{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tile[data-tileid] .countryFacts dd{margin:3px 0 0;font:700 14.5px/1.35 'Nunito',sans-serif;color:var(--ink)}
+.tile[data-tileid] .countryAbout{margin:12px 0 0;font:500 14.5px/1.55 Georgia,'Iowan Old Style',serif;color:var(--ink)}
+.tile[data-tileid] a.countryLink{margin-top:8px;font:800 12px/1 'Nunito',sans-serif;color:var(--accentDark);text-decoration:none}
+.tile.completed[data-tileid] .countryShape path{fill:#fff;stroke:#fff}
+.tile.completed[data-tileid] :is(.countryName,.countryLine){color:#fff}
+.tile.completed[data-tileid] .countryRegion{color:rgba(255,255,255,.8)}
 </style>
 </head>
 <body>
@@ -3754,6 +3789,7 @@ const COL = {
   stats:    {p:"#FFE6DA", v:"#FF5A1F", d:"#A3300A"},
   art:      {p:"#F4EAE1", v:"#A0522D", d:"#6B3418"},
   history:  {p:"#E7EBF1", v:"#3E5675", d:"#22324A"},
+  country:  {p:"#DFEEF3", v:"#2B7A99", d:"#164A5E"},
 };
 /* Every dashboard tile shares the same reversible full-colour presentation.
    Whether a tile is completed by a task control or by tapping an informative
@@ -4825,6 +4861,7 @@ const RECALL_SOURCES=[
   {key:"word",tile:"word",types:["word"],label:"Word"},
   {key:"lesson",tile:"worth",types:["lesson"],label:"Knowledge"},
   {key:"history",tile:"history",types:["history"],label:"History"},
+  {key:"country",tile:"country",types:["country"],label:"Countries"},
   {key:"spanish",tile:"spanish",types:["spanish"],label:"Español"},
   {key:"german",tile:"german",types:["german"],label:"Deutsch"},
   {key:"academic",tile:"academic",types:["academic"],label:"Study"},
@@ -5192,7 +5229,8 @@ const CURATED_TILE_LAYOUT={
   clock:{desktop:[2,2],phone:[1,1],family:"small"},
   stats:{desktop:[2,2],phone:[1,1],family:"small"},
   art:{desktop:[4,4],phone:[2,2],family:"large"},
-  history:{desktop:[4,2],phone:[2,1],family:"wide"}
+  history:{desktop:[4,2],phone:[2,1],family:"wide"},
+  country:{desktop:[4,2],phone:[2,1],family:"wide"}
 };
 const curatedTileSize=(id,availableCols)=>{
   const layout=CURATED_TILE_LAYOUT[id]||{desktop:[2,2],phone:[2,1],family:"wide"};
@@ -5231,6 +5269,7 @@ const LIBRARY_META={
   music:["life","song music classical recording listening"],
   art:["discover","art painting artwork museum picture of the day Art Institute of Chicago"],
   history:["discover","history on this day event year period wikipedia past"],
+  country:["discover","country of the day geography map silhouette capital flag atlas world"],
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
   clock:["life","watch time clock hour date"],
@@ -5247,7 +5286,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","history","word","music","art","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","history","country","word","music","art","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -5262,7 +5301,8 @@ const WATCH_STATS_INTRODUCED=load("watchStatsIntroduced",false);
 const placeArtAfterMusic=list=>{ const next=list.filter(id=>id!=="art"), at=next.indexOf("music"); next.splice(at<0?next.length:at+1,0,"art"); return next; };
 /* tiles added to Today once, after the account sync (see the effect beside setTileActive) */
 const placeHistoryAfterKnowledge=list=>{ const next=list.filter(id=>id!=="history"), at=next.indexOf("worth"); next.splice(at<0?next.length:at+1,0,"history"); return next; };
-const LATE_TILES=[["art",placeArtAfterMusic],["history",placeHistoryAfterKnowledge]];
+const placeCountryAfterHistory=list=>{ const next=list.filter(id=>id!=="country"), at=next.indexOf("history"); next.splice(at<0?next.length:at+1,0,"country"); return next; };
+const LATE_TILES=[["art",placeArtAfterMusic],["history",placeHistoryAfterKnowledge],["country",placeCountryAfterHistory]];
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
@@ -5335,7 +5375,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world","art","history"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world","art","history","country"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -6227,6 +6267,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const learnHistory=h=>{ setRitual("history"); if(h&&!recallList.some(x=>x.type==="history"&&x.addedOn===todayKey)){
     const options=historyYearOptions(h.year,todayKey), answer=options.indexOf(h.yearLabel);
     appendDailyRecall("history",[newRecallItem({ id:uid(), type:"history", addedOn:todayKey, title:h.title, quiz:{ prompts:[`${h.title}: which year?`,`In which year: ${h.event}`], options, answer, explain:`${h.period} · ${historyMonthDay(h.date)}` } })]); } };
+  /* Country: naming it marks the tile done and adds a capital card to Recall (once a day) */
+  const learnCountry=c=>{ setRitual("country"); if(c&&!recallList.some(x=>x.type==="country"&&x.addedOn===todayKey)){
+    const options=countryCapitalOptions(c,todayKey);
+    appendDailyRecall("country",[newRecallItem({ id:uid(), type:"country", addedOn:todayKey, title:c.name, quiz:{ prompts:[`Capital of ${c.name}?`], options, answer:options.indexOf(c.capital), explain:c.region } })]); } };
   const unlearnHistory=h=>{ unsetRitual("history"); persistRecall(previous=>previous.filter(x=>!(x.type==="history"&&x.addedOn===todayKey))); };
   const unlearnLesson=l=>{ unsetRitual("worth"); persistRecall(previous=>previous.filter(x=>!(x.type==="lesson"&&x.addedOn===todayKey&&x.title===(l&&l.title)))); };
   /* Spanish feeds recall harder than the others on purpose — both quiz questions AND each
@@ -6519,7 +6563,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     r.readAsText(file); };
 
   /* ---- gamification: perfect days, flame streaks (with ice freezes), ice spending ---- */
-  const ritualScoreIds=["word","worth","history","spanish","german","music","world","breathing","note","recall","brainflex","philo","sustain"];
+  const ritualScoreIds=["word","worth","history","country","spanish","german","music","world","breathing","note","recall","brainflex","philo","sustain"];
   /* A scored tile counts as done if it was completed naturally (rToday) OR simply
      clicked to full colour (manualTileDone) — e.g. a lesson done outside the app. */
   const manualDoneFor=k=>k===todayKey?manualTileDone:load("manualTileDone:"+k,{});
@@ -6787,6 +6831,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
     art: T("art","Art",false,null,<ArtCard onNamed={()=>{ if(!manualTileDone.art) toggleManualTile("art"); }}/>,()=>{}),
+    country: T("country","Country",!!rToday.country,null,<CountryCard onNamed={learnCountry}/>,()=>{}),
     history: T("history","History",!!rToday.history,null,<>
       <HistoryCard h={view.history} busy={genBusy} onGenerate={()=>regenerateOne("history")}/>
       <RetryNote tileKey="history"/></>, ()=>{ if(rToday.history) unlearnHistory(view.history); else learnHistory(view.history); }),
@@ -7211,7 +7256,7 @@ const recallAnswerFor=item=>{
   if(detail) return {short:"Answer", detail};
   return {short:item.term||item.title||"Answer", detail:""};
 };
-const RECALL_TYPE_TAG={history:"History",word:"Word",lesson:"Knowledge",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
+const RECALL_TYPE_TAG={country:"Countries",history:"History",word:"Word",lesson:"Knowledge",spanish:"Español",german:"Deutsch",academic:"Study","brain-bank":"Memory"};
 const isClozeCard=item=>!!(item&&item.type==="word"&&item.word&&item.word.term);
 /* Front: only the cue, never the title or meta (they can give the answer away).
    Word cards show a sentence with a blank; without a sentence yet, the definition. */
@@ -7955,6 +8000,203 @@ function HistoryCard({h,busy,onGenerate}){
         <ol>{h.others.map((o,i)=><li key={i}><b>{o.yearLabel}</b><span>{o.text}</span></li>)}</ol>
       </div>}
     </>}
+  </div>;
+}
+/* ================= Country of the day =================
+   Free data, no key and no server: the 193 UN members plus the Holy See and Palestine (from the
+   world-countries dataset) in a fixed shuffled order, so every country comes once per 195 days.
+   The tile is a guess: the silhouette first, a tap names it (flag, capital, people, size) and
+   marks it done; the pop-up adds neighbours, languages, currencies and Wikipedia's introduction.
+   Outlines come from Natural Earth (world-atlas 110m, then 50m, then the country's own file). */
+/* COUNTRY_CORE_START */
+const COUNTRY_LIST=[
+  ["AFG","004","Afghanistan","Kabul","Asia"],["AGO","024","Angola","Luanda","Africa"],["ALB","008","Albania","Tirana","Europe"],
+  ["AND","020","Andorra","Andorra la Vella","Europe"],["ARE","784","United Arab Emirates","Abu Dhabi","Asia"],
+  ["ARG","032","Argentina","Buenos Aires","Americas"],["ARM","051","Armenia","Yerevan","Asia"],
+  ["ATG","028","Antigua and Barbuda","Saint John's","Americas"],["AUS","036","Australia","Canberra","Oceania"],["AUT","040","Austria","Vienna","Europe"],
+  ["AZE","031","Azerbaijan","Baku","Asia"],["BDI","108","Burundi","Gitega","Africa"],["BEL","056","Belgium","Brussels","Europe"],
+  ["BEN","204","Benin","Porto-Novo","Africa"],["BFA","854","Burkina Faso","Ouagadougou","Africa"],["BGD","050","Bangladesh","Dhaka","Asia"],
+  ["BGR","100","Bulgaria","Sofia","Europe"],["BHR","048","Bahrain","Manama","Asia"],["BHS","044","Bahamas","Nassau","Americas"],
+  ["BIH","070","Bosnia and Herzegovina","Sarajevo","Europe"],["BLR","112","Belarus","Minsk","Europe"],["BLZ","084","Belize","Belmopan","Americas"],
+  ["BOL","068","Bolivia","Sucre","Americas"],["BRA","076","Brazil","Brasília","Americas"],["BRB","052","Barbados","Bridgetown","Americas"],
+  ["BRN","096","Brunei","Bandar Seri Begawan","Asia"],["BTN","064","Bhutan","Thimphu","Asia"],["BWA","072","Botswana","Gaborone","Africa"],
+  ["CAF","140","Central African Republic","Bangui","Africa"],["CAN","124","Canada","Ottawa","Americas"],["CHE","756","Switzerland","Bern","Europe"],
+  ["CHL","152","Chile","Santiago","Americas"],["CHN","156","China","Beijing","Asia"],["CIV","384","Ivory Coast","Yamoussoukro","Africa"],
+  ["CMR","120","Cameroon","Yaoundé","Africa"],["COD","180","DR Congo","Kinshasa","Africa"],["COG","178","Republic of the Congo","Brazzaville","Africa"],
+  ["COL","170","Colombia","Bogotá","Americas"],["COM","174","Comoros","Moroni","Africa"],["CPV","132","Cape Verde","Praia","Africa"],
+  ["CRI","188","Costa Rica","San José","Americas"],["CUB","192","Cuba","Havana","Americas"],["CYP","196","Cyprus","Nicosia","Europe"],
+  ["CZE","203","Czechia","Prague","Europe"],["DEU","276","Germany","Berlin","Europe"],["DJI","262","Djibouti","Djibouti","Africa"],
+  ["DMA","212","Dominica","Roseau","Americas"],["DNK","208","Denmark","Copenhagen","Europe"],
+  ["DOM","214","Dominican Republic","Santo Domingo","Americas"],["DZA","012","Algeria","Algiers","Africa"],["ECU","218","Ecuador","Quito","Americas"],
+  ["EGY","818","Egypt","Cairo","Africa"],["ERI","232","Eritrea","Asmara","Africa"],["ESP","724","Spain","Madrid","Europe"],
+  ["EST","233","Estonia","Tallinn","Europe"],["ETH","231","Ethiopia","Addis Ababa","Africa"],["FIN","246","Finland","Helsinki","Europe"],
+  ["FJI","242","Fiji","Suva","Oceania"],["FRA","250","France","Paris","Europe"],["FSM","583","Micronesia","Palikir","Oceania"],
+  ["GAB","266","Gabon","Libreville","Africa"],["GBR","826","United Kingdom","London","Europe"],["GEO","268","Georgia","Tbilisi","Asia"],
+  ["GHA","288","Ghana","Accra","Africa"],["GIN","324","Guinea","Conakry","Africa"],["GMB","270","Gambia","Banjul","Africa"],
+  ["GNB","624","Guinea-Bissau","Bissau","Africa"],["GNQ","226","Equatorial Guinea","Malabo","Africa"],["GRC","300","Greece","Athens","Europe"],
+  ["GRD","308","Grenada","St. George's","Americas"],["GTM","320","Guatemala","Guatemala City","Americas"],["GUY","328","Guyana","Georgetown","Americas"],
+  ["HND","340","Honduras","Tegucigalpa","Americas"],["HRV","191","Croatia","Zagreb","Europe"],["HTI","332","Haiti","Port-au-Prince","Americas"],
+  ["HUN","348","Hungary","Budapest","Europe"],["IDN","360","Indonesia","Jakarta","Asia"],["IND","356","India","New Delhi","Asia"],
+  ["IRL","372","Ireland","Dublin","Europe"],["IRN","364","Iran","Tehran","Asia"],["IRQ","368","Iraq","Baghdad","Asia"],
+  ["ISL","352","Iceland","Reykjavik","Europe"],["ISR","376","Israel","Jerusalem","Asia"],["ITA","380","Italy","Rome","Europe"],
+  ["JAM","388","Jamaica","Kingston","Americas"],["JOR","400","Jordan","Amman","Asia"],["JPN","392","Japan","Tokyo","Asia"],
+  ["KAZ","398","Kazakhstan","Astana","Asia"],["KEN","404","Kenya","Nairobi","Africa"],["KGZ","417","Kyrgyzstan","Bishkek","Asia"],
+  ["KHM","116","Cambodia","Phnom Penh","Asia"],["KIR","296","Kiribati","South Tarawa","Oceania"],
+  ["KNA","659","Saint Kitts and Nevis","Basseterre","Americas"],["KOR","410","South Korea","Seoul","Asia"],["KWT","414","Kuwait","Kuwait City","Asia"],
+  ["LAO","418","Laos","Vientiane","Asia"],["LBN","422","Lebanon","Beirut","Asia"],["LBR","430","Liberia","Monrovia","Africa"],
+  ["LBY","434","Libya","Tripoli","Africa"],["LCA","662","Saint Lucia","Castries","Americas"],["LIE","438","Liechtenstein","Vaduz","Europe"],
+  ["LKA","144","Sri Lanka","Colombo","Asia"],["LSO","426","Lesotho","Maseru","Africa"],["LTU","440","Lithuania","Vilnius","Europe"],
+  ["LUX","442","Luxembourg","Luxembourg","Europe"],["LVA","428","Latvia","Riga","Europe"],["MAR","504","Morocco","Rabat","Africa"],
+  ["MCO","492","Monaco","Monaco","Europe"],["MDA","498","Moldova","Chișinău","Europe"],["MDG","450","Madagascar","Antananarivo","Africa"],
+  ["MDV","462","Maldives","Malé","Asia"],["MEX","484","Mexico","Mexico City","Americas"],["MHL","584","Marshall Islands","Majuro","Oceania"],
+  ["MKD","807","North Macedonia","Skopje","Europe"],["MLI","466","Mali","Bamako","Africa"],["MLT","470","Malta","Valletta","Europe"],
+  ["MMR","104","Myanmar","Naypyidaw","Asia"],["MNE","499","Montenegro","Podgorica","Europe"],["MNG","496","Mongolia","Ulan Bator","Asia"],
+  ["MOZ","508","Mozambique","Maputo","Africa"],["MRT","478","Mauritania","Nouakchott","Africa"],["MUS","480","Mauritius","Port Louis","Africa"],
+  ["MWI","454","Malawi","Lilongwe","Africa"],["MYS","458","Malaysia","Kuala Lumpur","Asia"],["NAM","516","Namibia","Windhoek","Africa"],
+  ["NER","562","Niger","Niamey","Africa"],["NGA","566","Nigeria","Abuja","Africa"],["NIC","558","Nicaragua","Managua","Americas"],
+  ["NLD","528","Netherlands","Amsterdam","Europe"],["NOR","578","Norway","Oslo","Europe"],["NPL","524","Nepal","Kathmandu","Asia"],
+  ["NRU","520","Nauru","Yaren","Oceania"],["NZL","554","New Zealand","Wellington","Oceania"],["OMN","512","Oman","Muscat","Asia"],
+  ["PAK","586","Pakistan","Islamabad","Asia"],["PAN","591","Panama","Panama City","Americas"],["PER","604","Peru","Lima","Americas"],
+  ["PHL","608","Philippines","Manila","Asia"],["PLW","585","Palau","Ngerulmud","Oceania"],["PNG","598","Papua New Guinea","Port Moresby","Oceania"],
+  ["POL","616","Poland","Warsaw","Europe"],["PRK","408","North Korea","Pyongyang","Asia"],["PRT","620","Portugal","Lisbon","Europe"],
+  ["PRY","600","Paraguay","Asunción","Americas"],["PSE","275","Palestine","Ramallah","Asia"],["QAT","634","Qatar","Doha","Asia"],
+  ["ROU","642","Romania","Bucharest","Europe"],["RUS","643","Russia","Moscow","Europe"],["RWA","646","Rwanda","Kigali","Africa"],
+  ["SAU","682","Saudi Arabia","Riyadh","Asia"],["SDN","729","Sudan","Khartoum","Africa"],["SEN","686","Senegal","Dakar","Africa"],
+  ["SGP","702","Singapore","Singapore","Asia"],["SLB","090","Solomon Islands","Honiara","Oceania"],["SLE","694","Sierra Leone","Freetown","Africa"],
+  ["SLV","222","El Salvador","San Salvador","Americas"],["SMR","674","San Marino","City of San Marino","Europe"],
+  ["SOM","706","Somalia","Mogadishu","Africa"],["SRB","688","Serbia","Belgrade","Europe"],["SSD","728","South Sudan","Juba","Africa"],
+  ["STP","678","São Tomé and Príncipe","São Tomé","Africa"],["SUR","740","Suriname","Paramaribo","Americas"],
+  ["SVK","703","Slovakia","Bratislava","Europe"],["SVN","705","Slovenia","Ljubljana","Europe"],["SWE","752","Sweden","Stockholm","Europe"],
+  ["SWZ","748","Eswatini","Mbabane","Africa"],["SYC","690","Seychelles","Victoria","Africa"],["SYR","760","Syria","Damascus","Asia"],
+  ["TCD","148","Chad","N'Djamena","Africa"],["TGO","768","Togo","Lomé","Africa"],["THA","764","Thailand","Bangkok","Asia"],
+  ["TJK","762","Tajikistan","Dushanbe","Asia"],["TKM","795","Turkmenistan","Ashgabat","Asia"],["TLS","626","Timor-Leste","Dili","Asia"],
+  ["TON","776","Tonga","Nuku'alofa","Oceania"],["TTO","780","Trinidad and Tobago","Port of Spain","Americas"],["TUN","788","Tunisia","Tunis","Africa"],
+  ["TUR","792","Türkiye","Ankara","Asia"],["TUV","798","Tuvalu","Funafuti","Oceania"],["TZA","834","Tanzania","Dodoma","Africa"],
+  ["UGA","800","Uganda","Kampala","Africa"],["UKR","804","Ukraine","Kyiv","Europe"],["URY","858","Uruguay","Montevideo","Americas"],
+  ["USA","840","United States","Washington D.C.","Americas"],["UZB","860","Uzbekistan","Tashkent","Asia"],
+  ["VAT","336","Vatican City","Vatican City","Europe"],["VCT","670","Saint Vincent and the Grenadines","Kingstown","Americas"],
+  ["VEN","862","Venezuela","Caracas","Americas"],["VNM","704","Vietnam","Hanoi","Asia"],["VUT","548","Vanuatu","Port Vila","Oceania"],
+  ["WSM","882","Samoa","Apia","Oceania"],["YEM","887","Yemen","Sana'a","Asia"],["ZAF","710","South Africa","Pretoria","Africa"],
+  ["ZMB","894","Zambia","Lusaka","Africa"],["ZWE","716","Zimbabwe","Harare","Africa"]
+];
+const COUNTRY_WIKI={GEO:"Georgia (country)",IRL:"Republic of Ireland",COD:"Democratic Republic of the Congo",COG:"Republic of the Congo",FSM:"Federated States of Micronesia",PSE:"State of Palestine"};
+const countryDayNumber=key=>{ const [y,m,d]=String(key).split("-").map(Number); return Math.floor(Date.UTC(y,m-1,d)/864e5); };
+/* one fixed shuffle (seeded), walked one country a day */
+const COUNTRY_ORDER=(()=>{ const idx=COUNTRY_LIST.map((_,i)=>i); let seed=20261126; const rnd=()=>{ seed=(Math.imul(seed,1103515245)+12345)>>>0; return seed/4294967296; }; for(let i=idx.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; } return idx; })();
+const countryFor=key=>{ const n=COUNTRY_ORDER.length, i=((countryDayNumber(key)%n)+n)%n; const [code,num,name,capital,region]=COUNTRY_LIST[COUNTRY_ORDER[i]]; return {code,num,name,capital,region}; };
+/* the capital card: the right one and two from the same region, in a fixed order for the day */
+const countryCapitalOptions=(c,key)=>{
+  const same=COUNTRY_LIST.filter(r=>r[4]===c.region&&r[0]!==c.code).map(r=>r[3]);
+  let n=countryDayNumber(key)>>>0; const pick=()=>{ n=(Math.imul(n,2654435761)+7)>>>0; return same.splice(n%same.length,1)[0]; };
+  const options=[c.capital,pick(),pick()].filter(Boolean);
+  return options.sort((a,b)=>((a.length*7+a.charCodeAt(0))%5)-((b.length*7+b.charCodeAt(0))%5)||a.localeCompare(b));
+};
+/* TopoJSON (quantized or not) → polygons of [lon,lat] rings for one feature id */
+const topoPolygons=(topo,id)=>{
+  const obj=topo&&topo.objects&&(topo.objects.countries||Object.values(topo.objects)[0]); if(!obj) return null;
+  const g=(obj.geometries||[]).find(x=>String(x.id)===String(id)); if(!g||!g.arcs) return null;
+  const t=topo.transform;
+  const arcs=topo.arcs.map(arc=>{ if(!t) return arc; let x=0,y=0; return arc.map(([dx,dy])=>{ x+=dx; y+=dy; return [x*t.scale[0]+t.translate[0],y*t.scale[1]+t.translate[1]]; }); });
+  const ring=ids=>{ const pts=[]; ids.forEach((i,k)=>{ const a=i<0?arcs[~i].slice().reverse():arcs[i]; a.forEach((p,j)=>{ if(k>0&&j===0) return; pts.push(p); }); }); return pts; };
+  return g.type==="Polygon"?[g.arcs.map(ring)]:g.type==="MultiPolygon"?g.arcs.map(poly=>poly.map(ring)):null;
+};
+const geojsonPolygons=gj=>{ const f=gj&&gj.type==="FeatureCollection"?gj.features[0]:gj; const g=f&&(f.geometry||f); return !g?null:g.type==="Polygon"?[g.coordinates]:g.type==="MultiPolygon"?g.coordinates:null; };
+/* polygons → one SVG path in a 100×100 box: across the date line the west moves east, far-off
+   small territories are left out (the main body and what is near it or large stay), and the
+   map is drawn with a standard parallel at the country's own latitude */
+const countryShapePath=polys=>{
+  if(!Array.isArray(polys)||!polys.length) return "";
+  const lons=polys.flat(2).map(p=>p[0]);
+  if(Math.max(...lons)-Math.min(...lons)>180) polys=polys.map(poly=>poly.map(r=>r.map(([x,y])=>[x<0?x+360:x,y])));
+  const area=r=>{ let a=0; for(let i=0,j=r.length-1;i<r.length;j=i++) a+=(r[j][0]+r[i][0])*(r[j][1]-r[i][1]); return Math.abs(a/2); };
+  const info=polys.map(p=>{ const xs=p[0].map(q=>q[0]), ys=p[0].map(q=>q[1]); return {p,a:area(p[0]),x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)}; });
+  const main=info.reduce((m,i)=>i.a>m.a?i:m);
+  const reach=Math.hypot(main.x1-main.x0,main.y1-main.y0)/2*1.2+4, cx=(main.x0+main.x1)/2, cy=(main.y0+main.y1)/2;
+  const kept=info.filter(i=>i===main||i.a>main.a*.15||Math.hypot((i.x0+i.x1)/2-cx,(i.y0+i.y1)/2-cy)<reach);
+  const lat0=kept.reduce((s,i)=>s+(i.y0+i.y1)/2*i.a,0)/kept.reduce((s,i)=>s+i.a,0)||0, k=Math.cos(lat0*Math.PI/180);
+  const rings=kept.flatMap(i=>i.p).map(r=>r.map(([x,y])=>[x*k,-y]));
+  const X=rings.flat().map(p=>p[0]), Y=rings.flat().map(p=>p[1]);
+  const minX=Math.min(...X), minY=Math.min(...Y), w=Math.max(...X)-minX||1, h=Math.max(...Y)-minY||1, sc=96/Math.max(w,h);
+  const ox=2+(96-w*sc)/2, oy=2+(96-h*sc)/2;
+  return rings.map(r=>{ let last=""; const pts=[]; r.forEach(([x,y])=>{ const q=`${(ox+(x-minX)*sc).toFixed(1)} ${(oy+(y-minY)*sc).toFixed(1)}`; if(q!==last){ pts.push(q); last=q; } }); return pts.length>=3?"M"+pts.join("L")+"Z":""; }).join("");
+};
+/* COUNTRY_CORE_END */
+const COUNTRY_ATLAS=["https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json","https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json"];
+/* the coarse world map first; a country drawn with few points (a small one) takes the finer map */
+async function countryShape(c){
+  let best="",bestPoints=0;
+  for(const url of COUNTRY_ATLAS){ try{ const r=await fetch(url); if(!r.ok) continue; const polys=topoPolygons(await r.json(),c.num); if(!polys) continue;
+    const path=countryShapePath(polys), points=polys.flat(2).length; if(path&&points>=80) return path; if(path&&points>bestPoints){ best=path; bestPoints=points; } }catch(e){} }
+  /* the smallest countries (and Tuvalu, missing from both maps) take their own detailed outline */
+  if(bestPoints<40){ try{ const r=await fetch(`https://cdn.jsdelivr.net/npm/world-countries@5.1.0/data/${c.code.toLowerCase()}.geo.json`); if(r.ok){ const path=countryShapePath(geojsonPolygons(await r.json())); if(path) return path; } }catch(e){} }
+  return best;
+}
+async function countryFacts(c){
+  const facts={};
+  try{
+    const r=await fetch(`https://restcountries.com/v3.1/alpha/${c.code}?fields=name,population,area,subregion,languages,currencies,borders,landlocked`);
+    if(r.ok){ const d0=await r.json(), d=Array.isArray(d0)?d0[0]:d0;
+      if(d){ facts.official=d.name&&d.name.official||""; facts.population=Number(d.population)||null; facts.area=Number(d.area)||null; facts.subregion=d.subregion||"";
+        facts.languages=Object.values(d.languages||{}).slice(0,4); facts.currencies=Object.values(d.currencies||{}).map(x=>x&&x.name).filter(Boolean).slice(0,3);
+        facts.borders=(d.borders||[]).map(b=>(COUNTRY_LIST.find(r=>r[0]===b)||[])[2]).filter(Boolean); facts.landlocked=!!d.landlocked; } }
+  }catch(e){}
+  try{
+    const title=COUNTRY_WIKI[c.code]||c.name;
+    const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g,"_"))}`);
+    if(r.ok){ const d=await r.json(); facts.extract=String(d.extract||"").slice(0,700); facts.url=d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page||""; }
+  }catch(e){}
+  return facts;
+}
+const countryNumber=n=>!n?"":n>=1e9?(n/1e9).toFixed(n>=1e10?0:1)+" billion":n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+" million":n>=1e3?Math.round(n/1e3)+" thousand":String(n);
+const countryArea=a=>!a?"":a>=1e6?(a/1e6).toFixed(2).replace(/\.?0+$/,"")+" million km²":a>=1e3?Math.round(a).toLocaleString("en-US")+" km²":Math.round(a*10)/10+" km²";
+function CountryCard({onNamed}){
+  const {expanded}=useTilePresentation();
+  const c=React.useMemo(()=>countryFor(todayKey),[]);
+  const cached=()=>{ const d=load("countryDaily",null); return d&&d.date===todayKey&&d.code===c.code?d:null; };
+  const [day,setDay]=useState(cached);
+  const [failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
+  const [named,setNamed]=useState(()=>{ const st=load("countryStage",null); return !!(st&&st.date===todayKey&&st.named); });
+  useEffect(()=>{
+    if(day&&day.path) return; let live=true; setFailed(false);
+    Promise.all([countryShape(c),countryFacts(c)]).then(([path,facts])=>{ if(!live) return; if(!path){ setFailed(true); return; } const next={date:todayKey,code:c.code,path,facts}; save("countryDaily",next); setDay(next); });
+    return ()=>{ live=false; };
+  },[attempt]);
+  const flag=`https://cdn.jsdelivr.net/npm/world-countries@5.1.0/data/${c.code.toLowerCase()}.svg`;
+  const f=(day&&day.facts)||{};
+  const toggle=e=>{ e.stopPropagation(); const next=!named; setNamed(next); save("countryStage",{date:todayKey,named:next}); if(next&&onNamed) onNamed(c); };
+  const shape=<svg className="countryShape" viewBox="0 0 100 100" aria-hidden="true"><path d={day&&day.path||""}/></svg>;
+  if(!day) return <div className="countryCard waiting">
+    <div className={"countryShapeWrap"+(failed?"":" pulse")}>{failed?<button type="button" className="artRetry countryRetry" aria-label="Load today’s country again" onClick={e=>{ e.stopPropagation(); setAttempt(n=>n+1); }}>↻</button>:<span className="countryBlob"/>}</div>
+  </div>;
+  const facts=[f.population?countryNumber(f.population)+" people":"",f.area?countryArea(f.area):""].filter(Boolean).join(" · ");
+  if(!expanded) return <div className={"countryCard"+(named?" named":"")} role="button" tabIndex={0}
+      aria-label={named?`${c.name}, capital ${c.capital}. Hide the name`:"Today’s country, as a silhouette. Show its name"}
+      onClick={toggle} onKeyDown={e=>{ if(e.target===e.currentTarget&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); toggle(e); } }}>
+    <div className="countryShapeWrap">{shape}</div>
+    {named&&<div className="countryInfo">
+      <div className="countryNameRow"><img className="countryFlag" src={flag} alt="" loading="lazy"/><span className="countryName">{c.name}</span></div>
+      <span className="countryLine">Capital · <b>{c.capital}</b></span>
+      {facts&&<span className="countryLine">{facts}</span>}
+      <span className="countryRegion">{f.subregion||c.region}</span>
+    </div>}
+  </div>;
+  return <div className="countryCard big">
+    <div className="countryShapeWrap">{shape}</div>
+    <div className="countryInfo">
+      <div className="countryNameRow"><img className="countryFlag" src={flag} alt={`Flag of ${c.name}`} loading="lazy"/><span className="countryName">{c.name}</span></div>
+      {f.official&&f.official!==c.name&&<span className="countryOfficial">{f.official}</span>}
+      <dl className="countryFacts">
+        <div><dt>Capital</dt><dd>{c.capital}</dd></div>
+        {f.population?<div><dt>People</dt><dd>{countryNumber(f.population)}</dd></div>:null}
+        {f.area?<div><dt>Area</dt><dd>{countryArea(f.area)}</dd></div>:null}
+        <div><dt>Region</dt><dd>{f.subregion||c.region}</dd></div>
+        {f.languages&&f.languages.length?<div><dt>Languages</dt><dd>{f.languages.join(", ")}</dd></div>:null}
+        {f.currencies&&f.currencies.length?<div><dt>Currency</dt><dd>{f.currencies.join(", ")}</dd></div>:null}
+        {f.borders&&f.borders.length?<div><dt>Neighbours</dt><dd>{f.borders.join(", ")}</dd></div>:f.landlocked===false&&f.borders?<div><dt>Neighbours</dt><dd>None by land</dd></div>:null}
+      </dl>
+      {f.extract&&<p className="countryAbout">{f.extract}</p>}
+      {f.url&&<a className="countryLink" href={f.url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}>Read on Wikipedia ↗</a>}
+    </div>
   </div>;
 }
 /* ================= Art: a work from the Art Institute of Chicago each day =================
