@@ -1,0 +1,47 @@
+name: Deploy the dashboard server
+
+# Publishes worker/fefe-sync.js to the live fefe-sync Worker on Cloudflare whenever it
+# changes on main, and on demand (Actions -> Deploy the dashboard server -> Run workflow).
+#
+# Required repository secret (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN  a Cloudflare API token made from the "Edit Cloudflare Workers"
+#                         template, for the account named in worker/wrangler.toml
+#
+# Without the secret the run stops at the first step and deploys nothing. The Worker's
+# own secrets (ANTHROPIC_API_KEY…) and dashboard variables stay as they are in Cloudflare.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worker/fefe-sync.js"
+      - "worker/wrangler.toml"
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the Cloudflare token
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Add the CLOUDFLARE_API_TOKEN repository secret to deploy the Worker."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test the Worker
+        run: node --test worker/fefe-sync.test.mjs
+      - name: Deploy
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx --yes wrangler@4 deploy

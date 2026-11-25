@@ -45,6 +45,12 @@ location-specific; Philosophy conversations still use the personal key separatel
    returns `server_unconfigured` for missing tiles and does not call the provider.
    This avoids claiming that KV's eventually consistent lock is safe.
 
+   **Or let GitHub deploy it.** Add a repository secret `CLOUDFLARE_API_TOKEN` (a
+   Cloudflare API token made from the "Edit Cloudflare Workers" template) under
+   Settings → Secrets and variables → Actions. The `Deploy the dashboard server`
+   workflow then tests and deploys the Worker every time `worker/fefe-sync.js` or
+   `worker/wrangler.toml` changes on `main`, and on demand from the Actions tab.
+
 2b. **Which tiles get generated** — by default this build is **token-frugal**:
    with nothing configured it generates only **`word` + `gmat` + `german`**, so a
    fresh deploy never spends API calls on tiles nobody asked for. To change the
