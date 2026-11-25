@@ -3646,8 +3646,9 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .grid>.tile[data-tileid="history"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
 .grid>.tile[data-tileid="history"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
 .tile[data-tileid] .histCard{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0;min-height:0}
-.tile[data-tileid] .histCard .histHead{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px;padding-right:28px}
-.tile[data-tileid] .histCard .histYear{font:900 clamp(40px,13cqi,56px)/.9 'Nunito',sans-serif;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--accentDark)}
+.tile[data-tileid] .histCard .histHead{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding-right:28px}
+.tile[data-tileid] .histCard .histYear{font:900 clamp(40px,13cqi,56px)/.9 'Nunito',sans-serif;font-size:calc(clamp(40px,13cqi,56px) * var(--histScale,1));letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--accentDark)}
+.tile[data-tileid] .histCard .histDay{color:var(--accentDark)}
 .tile[data-tileid] .histCard .histPeriod{font:850 10.5px/1.2 'Nunito',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .tile[data-tileid] .histCard .histEvent{margin:0;font:750 clamp(16px,4.6cqi,20px)/1.3 'Nunito',sans-serif;letter-spacing:-.01em;color:var(--ink);text-wrap:pretty;overflow-wrap:anywhere}
 .tile[data-tileid] .histCard .histMore{display:flex;gap:16px;align-items:flex-start;margin-top:10px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--ink) 14%,transparent)}
@@ -3663,10 +3664,10 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .tile[data-tileid] .histCard .histOthers li b{font:900 15px/1.2 'Nunito',sans-serif;font-variant-numeric:tabular-nums;color:var(--accentDark)}
 .tile[data-tileid] .histCard .histOthers li span{font:600 13.5px/1.4 'Nunito',sans-serif;color:var(--ink)}
 .tileFocusSurface .histCard.big{justify-content:flex-start;gap:10px;padding-top:6px}
-.tileFocusSurface .histCard.big .histYear{font-size:clamp(56px,10cqi,84px)}
+.tileFocusSurface .histCard.big .histYear{font-size:calc(clamp(56px,10cqi,84px) * var(--histScale,1))}
 .tileFocusSurface .histCard.big .histEvent{font-size:clamp(20px,3.4cqi,26px)}
 @container (max-width:460px){.tile[data-tileid] .histCard .histMore{flex-direction:column}.tile[data-tileid] .histCard .histImg{width:100%;max-height:180px}}
-.tile.completed[data-tileid] .histCard :is(.histYear,.histMoreTitle,a.histLink,.histOthers li b){color:#fff}
+.tile.completed[data-tileid] .histCard :is(.histYear,.histDay,.histMoreTitle,a.histLink,.histOthers li b){color:#fff}
 .tile.completed[data-tileid] .histCard .histPeriod{color:rgba(255,255,255,.82)}
 </style>
 </head>
@@ -7803,12 +7804,12 @@ const HISTORY_PERIODS = [
 function historyPeriod(year) { const row = HISTORY_PERIODS.find(([from, to]) => year >= from && year <= to); return row ? row[2] : "Contemporary"; }
 function historyYearLabel(year) { return year < 0 ? `${-year} BC` : String(year); }
 const historyClean = t => String(t || "").replace(/\s+/g, " ").trim();
-/* Wikipedia's events for a date, dated to a year and at most ~3000 years old, one per text. */
+/* Wikipedia's events for a date that carry a year, one per text (no age limit: the dated ones are the candidates). */
 function historyCandidates(feed, nowYear) {
   const seen = new Set(), out = [];
   const add = (e, selected) => {
     const year = Number(e && e.year), text = historyClean(e && e.text);
-    if (!Number.isInteger(year) || year === 0 || year < nowYear - 3000 || year > nowYear || !text) return;
+    if (!Number.isInteger(year) || year === 0 || year > nowYear || !text) return;
     const key = year + "|" + text.toLowerCase().slice(0, 80);
     if (seen.has(key)) { if (selected) { const prior = out.find(c => c.key === key); if (prior) prior.selected = true; } return; }
     seen.add(key);
@@ -7846,6 +7847,24 @@ function historyRecord(date, candidates, index, title, nowYear) {
   };
 }
 /* HISTORY_CORE_END */
+/* The year is set in a typeface of its period: Roman capitals, uncial, blackletter, Garamond,
+   Baskerville, Bodoni, a Victorian slab, a wartime stencil, a Cold War typewriter, a modern sans.
+   Each loads only when shown, cut down to the digits and "BC". [family, weight, fallback, scale] */
+const HISTORY_FONTS={
+  "Ancient world":["Cinzel Decorative",900,"serif",.84],
+  "Classical antiquity":["Cinzel",800,"serif",.9],
+  "Early Middle Ages":["Uncial Antiqua",400,"serif",.92],
+  "High & late Middle Ages":["UnifrakturMaguntia",400,"serif",1.04],
+  "Renaissance & Reformation":["EB Garamond",700,"serif",1.08],
+  "Enlightenment":["Libre Baskerville",700,"serif",.9],
+  "Age of revolutions":["Bodoni Moda",800,"serif",1.02],
+  "Industrial & imperial age":["Alfa Slab One",400,"serif",.9],
+  "World wars":["Stardos Stencil",700,"sans-serif",1.02],
+  "Cold War":["Special Elite",400,"monospace",.94],
+  "Contemporary":["Inter",800,"sans-serif",.98]
+};
+const historyFontHref=([family,weight])=>`https://fonts.googleapis.com/css2?family=${String(family).replace(/ /g,"+")}:wght@${weight}&text=${encodeURIComponent("0123456789 BC")}&display=swap`;
+const historyShortDay=mmdd=>{ const [m,d]=String(mmdd||"").split("-").map(Number); return m&&d?new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",timeZone:"UTC"}).format(new Date(Date.UTC(2000,m-1,d))):""; };
 const historyMonthDay=mmdd=>{ const [m,d]=String(mmdd||"").split("-").map(Number); return m&&d?new Intl.DateTimeFormat("en-US",{month:"long",day:"numeric",timeZone:"UTC"}).format(new Date(Date.UTC(2000,m-1,d))):""; };
 /* three years for the Recall card: the answer and two near misses, in order */
 const historyYearOptions=(year,seed)=>{
@@ -7867,12 +7886,19 @@ const genHistory=async()=>{
 };
 function HistoryCard({h,busy,onGenerate}){
   const {expanded}=useTilePresentation();
+  const font=h&&HISTORY_FONTS[h.period];
+  useEffect(()=>{
+    if(!font) return;
+    const id="histfont-"+font[0].replace(/\W+/g,"");
+    if(document.getElementById(id)) return;
+    const link=document.createElement("link"); link.id=id; link.rel="stylesheet"; link.href=historyFontHref(font); document.head.appendChild(link);
+  },[font&&font[0]]);
   if(!h) return <GenerateEmpty busy={busy} onGenerate={onGenerate}/>;
-  const day=historyMonthDay(h.date);
+  const day=historyMonthDay(h.date), short=historyShortDay(h.date);
   return <div className={"histCard"+(expanded?" big":"")}>
     <div className="histHead">
-      <span className="histYear">{h.yearLabel}</span>
-      <span className="histPeriod">{h.period}</span>
+      <span className="histYear" style={font?{fontFamily:`'${font[0]}', ${font[2]}`,fontWeight:font[1],letterSpacing:0,"--histScale":font[3]}:undefined}>{h.yearLabel}</span>
+      <span className="histPeriod">{short&&<><span className="histDay">{short}</span> · </>}{h.period}</span>
     </div>
     <p className="histEvent" data-fit-shrink=".72" data-fit-clamp="">{h.event}</p>
     {expanded&&<>
