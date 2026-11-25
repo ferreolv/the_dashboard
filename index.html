@@ -3612,6 +3612,35 @@ button.insCalDay.canIce:hover .insCalTrack,button.insCalDay.canIce:focus-visible
 .grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .fivePreview .fiveCell{width:38px!important;height:38px!important;border-radius:9px!important;font-size:19px}
 .grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .sudokuPreview .sudokuGrid{width:min(240px,100%)!important}
 .grid>.tile[data-tileid="brainflex"][data-cols="2"][data-rows="2"] .sudokuPreview .sudokuCell{font-size:20px!important}
+/* ---- Art: the day's work hangs on the tile like a print in a white mat, with a museum label under it ---- */
+.grid>.tile[data-tileid="art"]>.tbody{display:flex!important;flex-direction:column}
+.grid>.tile[data-tileid="art"] .tileMount{flex:1 1 auto!important;display:flex;min-height:0}
+.grid>.tile[data-tileid="art"] .tileMount>.content{flex:1 1 auto!important;display:flex!important;min-height:0}
+.tile[data-tileid] .artCard{flex:1 1 auto;display:flex;flex-direction:column;gap:12px;width:100%;min-width:0;min-height:0;margin:0}
+.tile[data-tileid] .artWall{position:relative;flex:1 1 auto;min-height:72px}
+.tile[data-tileid] .artFrame{position:absolute;inset:0;margin:auto;display:block;box-sizing:border-box;width:auto;height:auto;max-width:100%;max-height:100%;padding:7px;background:#fff center/cover no-repeat;background-origin:content-box;border-radius:2px;box-shadow:0 14px 26px -14px rgba(40,22,10,.55),0 2px 6px -2px rgba(40,22,10,.25),0 0 0 1px rgba(40,22,10,.06)}
+.tile[data-tileid] .artPlaceholder{width:62%;height:78%;background:linear-gradient(110deg,rgba(255,255,255,.75) 30%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.75) 70%) 0 0/250% 100%;animation:artShimmer 1.6s linear infinite}
+.tile[data-tileid] .artPlaceholder.off{animation:none;opacity:.6}
+@keyframes artShimmer{to{background-position:-150% 0}}
+@media(prefers-reduced-motion:reduce){.tile[data-tileid] .artPlaceholder{animation:none}}
+.tile[data-tileid] .artLabel{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;text-align:center}
+.tile[data-tileid] .artCard .artTitle{font:italic 600 15px/1.25 Georgia,'Iowan Old Style','Times New Roman',serif;color:var(--ink);overflow-wrap:anywhere;text-wrap:balance}
+.tile[data-tileid] .artCard .artBy{font:750 11.5px/1.3 'Nunito',sans-serif;letter-spacing:.02em;color:var(--dim)}
+.tile[data-tileid] .artCard .artMeta{font:650 12px/1.35 'Nunito',sans-serif;color:var(--dim)}
+.tile[data-tileid] .artCard .artAbout{margin:8px 0 0;max-width:62ch;font:500 13.5px/1.55 Georgia,'Iowan Old Style',serif;color:var(--ink);text-align:left}
+.tile[data-tileid] a.artSource{margin-top:8px;font:800 12px/1 'Nunito',sans-serif;color:var(--accentDark);text-decoration:none}
+.tile[data-tileid] button.artRetry{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)!important;min-height:0!important;width:40px;height:40px;padding:0!important;border:0!important;border-radius:50%!important;background:rgba(255,255,255,.85)!important;color:var(--accentDark)!important;font:800 18px/1 'Nunito',sans-serif}
+.tile[data-tileid] .artWaiting{position:relative}
+/* the pop-up: the work large, the label and a few lines about it beneath */
+.tileFocusSurface .artCard.big{gap:18px;padding-top:40px}
+.tileFocusSurface .artCard.big .artWall{flex:none;width:100%;height:min(62vh,640px)}
+.tileFocusSurface .artCard.big .artWall[style]{height:auto;max-height:min(62vh,640px)}
+.tileFocusSurface .artCard.big .artFrame{padding:10px}
+.tileFocusSurface .artCard.big .artTitle{font-size:21px}
+.tileFocusSurface .artCard.big .artBy{font-size:13px}
+/* done: the wall turns the tile's colour, the label white */
+.tile.completed[data-tileid] .artCard .artTitle{color:#fff}
+.tile.completed[data-tileid] .artCard :is(.artBy,.artMeta){color:rgba(255,255,255,.82)}
 </style>
 </head>
 <body>
@@ -3658,6 +3687,7 @@ const COL = {
   health:   {p:"#E1F7EC", v:"#18B96E", d:"#0C7042"},
   clock:    {p:"#E4E9F5", v:"#2D4BA0", d:"#1A2A55"},
   stats:    {p:"#FFE6DA", v:"#FF5A1F", d:"#A3300A"},
+  art:      {p:"#F4EAE1", v:"#A0522D", d:"#6B3418"},
 };
 /* Every dashboard tile shares the same reversible full-colour presentation.
    Whether a tile is completed by a task control or by tapping an informative
@@ -5088,7 +5118,8 @@ const CURATED_TILE_LAYOUT={
   philo:{desktop:[4,2],phone:[2,1],family:"wide"},
   people:{desktop:[4,2],phone:[2,1],family:"wide"},
   clock:{desktop:[2,2],phone:[1,1],family:"small"},
-  stats:{desktop:[2,2],phone:[1,1],family:"small"}
+  stats:{desktop:[2,2],phone:[1,1],family:"small"},
+  art:{desktop:[4,4],phone:[2,2],family:"large"}
 };
 const curatedTileSize=(id,availableCols)=>{
   const layout=CURATED_TILE_LAYOUT[id]||{desktop:[2,2],phone:[2,1],family:"wide"};
@@ -5125,6 +5156,7 @@ const LIBRARY_META={
   pushups:["wellbeing","push-ups pushups fitness exercise workout"],
   weather:["life","weather forecast temperature city tomorrow"],
   music:["life","song music classical recording listening"],
+  art:["discover","art painting artwork museum picture of the day Art Institute of Chicago"],
   birthdays:["life","birthdays birthday contacts cake"],
   people:["life","people met names connections places"],
   clock:["life","watch time clock hour date"],
@@ -5141,7 +5173,7 @@ const matchesLibraryWidget=(id,label,query,category)=>{
 };
 const DEFAULT_TODAY_TILES=["goals","habits","weather","word","world"];
 const DEFAULT_TODAY_LAYOUT_VERSION=6;
-const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
+const V2_ORDER=["clock","stats","goals","habits","sustain","breathing","health","shopping","agenda","matrix","events","movie","note","weather","timer","worth","word","music","art","spanish","german","world","recall","pushups","weekly","birthdays","brain","brainflex","academic","philo","people"];
 const NEED_V2_LAYOUT=load("designVersion",0)<2;
 let GEN_PREFS_MIGRATED=false;
 const EVENTS_TILE_INTRODUCED=load("eventsTileIntroduced",false);
@@ -5153,6 +5185,8 @@ const MOVIE_TILE_INTRODUCED=load("movieTileIntroduced",false);
 const SUSTAIN_TILE_INTRODUCED=load("sustainTileIntroduced",false);
 const MATRIX_TILE_INTRODUCED=load("matrixTileIntroduced",false);
 const WATCH_STATS_INTRODUCED=load("watchStatsIntroduced",false);
+const ART_TILE_INTRODUCED=load("artTileIntroduced",false);
+const placeArtAfterMusic=list=>{ const next=list.filter(id=>id!=="art"), at=next.indexOf("music"); next.splice(at<0?next.length:at+1,0,"art"); return next; };
 const placeEventsAfterReminders=list=>{ const next=list.filter(id=>id!=="events"), at=next.indexOf("agenda"); next.splice(at<0?next.length:at+1,0,"events"); return next; };
 const placeBreathingAfterHabits=list=>{ const next=list.filter(id=>id!=="breathing"), at=next.indexOf("habits"); next.splice(at<0?next.length:at+1,0,"breathing"); return next; };
 const placeShoppingAfterBreathing=list=>{ const next=list.filter(id=>id!=="shopping"), at=next.indexOf("breathing"); next.splice(at<0?next.length:at+1,0,"shopping"); return next; };
@@ -5225,7 +5259,7 @@ const dashboardPageFromHash=()=>{const route=location.hash.replace(/^#\/?/,"");r
 
 /* TILE_INTERACTION_CONTRACT_START */
 const tileRowSpan=(height,unit,gap,preferred)=>Math.max(preferred,Math.ceil((height+gap)/(unit+gap)));
-const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world"]);
+const TILE_ALWAYS_EXPAND=new Set(["recall","brainflex","philo","sustain","note","weather","matrix","birthdays","world","art"]);
 /* True when a tile preview hides real content: an element hidden in preview that
    carries text or a control, or a text box clipped by a line clamp / overflow. */
 function previewHidesContent(root){
@@ -5452,10 +5486,10 @@ function App({forceSignIn=false,initialAuthMode="login"}){
   const librarySearchRef=useRef(null);
   const [page,setPage]=useState(dashboardPageFromHash);
   const [cols,setCols]=useState(()=>columnsForWidth(window.innerWidth));
-  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); if(!MATRIX_TILE_INTRODUCED) placed=placeMatrixAfterReminders(placed); if(!WATCH_STATS_INTRODUCED) placed=placeWatchStatsFirst(placed); save("widgetOrder",placed); return placed; });
+  const [order,setOrder]=useState(()=>{ if(NEED_V2_LAYOUT){ save("widgetOrder",V2_ORDER); return V2_ORDER; } const o=load("widgetOrder",V2_ORDER); const s=Array.isArray(o)?o.filter(x=>ALL.includes(x)):[]; let placed=[...s,...ALL.filter(x=>!s.includes(x))]; if(!EVENTS_TILE_INTRODUCED) placed=placeEventsAfterReminders(placed); if(!BREATHING_TILE_INTRODUCED) placed=placeBreathingAfterHabits(placed); if(!HEALTH_TILE_INTRODUCED) placed=placeHealthAfterBreathing(placed); if(!SHOPPING_TILE_INTRODUCED) placed=placeShoppingAfterBreathing(placed); if(!GERMAN_TILE_INTRODUCED) placed=placeGermanAfterSpanish(placed); if(!MOVIE_TILE_INTRODUCED) placed=placeMovieAfterEvents(placed); if(!SUSTAIN_TILE_INTRODUCED) placed=placeSustainAfterHabits(placed); if(!MATRIX_TILE_INTRODUCED) placed=placeMatrixAfterReminders(placed); if(!WATCH_STATS_INTRODUCED) placed=placeWatchStatsFirst(placed); if(!ART_TILE_INTRODUCED) placed=placeArtAfterMusic(placed); save("widgetOrder",placed); return placed; });
   // Legacy dimensions remain in storage for backup compatibility; curated sizes drive rendering.
   const [sizes,setSizes]=useState(()=>load("sizes",{}));
-  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(!MATRIX_TILE_INTRODUCED&&!next.includes("matrix")) next=[...next,"matrix"]; if(!WATCH_STATS_INTRODUCED) next=[...next.filter(id=>id!=="clock"&&id!=="stats"),"clock","stats"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES,"clock","stats"]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); if(!MATRIX_TILE_INTRODUCED) save("matrixTileIntroduced",true); if(!WATCH_STATS_INTRODUCED) save("watchStatsIntroduced",true); return next; });
+  const [activeTiles,setActiveTiles]=useState(()=>{ const stored=load("activeTiles",null); const firstRun=!Array.isArray(stored); const legacyDefault=Array.isArray(stored)&&stored.length===ALL.length&&ALL.every(id=>stored.includes(id)); const migrateDefault=(firstRun||legacyDefault)&&load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION; let next=Array.isArray(stored)?ALL.filter(id=>stored.includes(id)):ALL; if(!EVENTS_TILE_INTRODUCED&&!next.includes("events")) next=[...next,"events"]; if(!BREATHING_TILE_INTRODUCED&&!next.includes("breathing")) next=[...next,"breathing"]; if(!HEALTH_TILE_INTRODUCED&&!next.includes("health")) next=[...next,"health"]; if(!SHOPPING_TILE_INTRODUCED&&!next.includes("shopping")) next=[...next,"shopping"]; if(!GERMAN_TILE_INTRODUCED&&!next.includes("german")) next=[...next,"german"]; if(!MOVIE_TILE_INTRODUCED&&!next.includes("movie")) next=[...next,"movie"]; if(!SUSTAIN_TILE_INTRODUCED&&!next.includes("sustain")) next=[...next,"sustain"]; if(!MATRIX_TILE_INTRODUCED&&!next.includes("matrix")) next=[...next,"matrix"]; if(!WATCH_STATS_INTRODUCED) next=[...next.filter(id=>id!=="clock"&&id!=="stats"),"clock","stats"]; if(!ART_TILE_INTRODUCED&&!next.includes("art")) next=[...next,"art"]; if(migrateDefault) next=[...DEFAULT_TODAY_TILES,"clock","stats"]; save("activeTiles",next); if(load("designVersion",0)<DEFAULT_TODAY_LAYOUT_VERSION) save("designVersion",DEFAULT_TODAY_LAYOUT_VERSION); if(!EVENTS_TILE_INTRODUCED) save("eventsTileIntroduced",true); if(!BREATHING_TILE_INTRODUCED) save("breathingTileIntroduced",true); if(!HEALTH_TILE_INTRODUCED) save("healthTileIntroduced",true); if(!SHOPPING_TILE_INTRODUCED) save("shoppingTileIntroduced",true); if(!GERMAN_TILE_INTRODUCED) save("germanTileIntroduced",true); if(!MOVIE_TILE_INTRODUCED) save("movieTileIntroduced",true); if(!SUSTAIN_TILE_INTRODUCED) save("sustainTileIntroduced",true); if(!MATRIX_TILE_INTRODUCED) save("matrixTileIntroduced",true); if(!WATCH_STATS_INTRODUCED) save("watchStatsIntroduced",true); if(!ART_TILE_INTRODUCED) save("artTileIntroduced",true); return next; });
   const [tileSets,setTileSets]=useState(()=>{ let history=load("activeTileHistory",{}); if(!BREATHING_TILE_INTRODUCED||!HEALTH_TILE_INTRODUCED||!SHOPPING_TILE_INTRODUCED){ if(Object.keys(history).length===0) history={...history,"1970-01-01":activeTiles.filter(id=>(BREATHING_TILE_INTRODUCED||id!=="breathing")&&(HEALTH_TILE_INTRODUCED||id!=="health")&&(SHOPPING_TILE_INTRODUCED||id!=="shopping"))}; history={...history,[todayKey]:activeTiles}; save("activeTileHistory",history); } return history; });
   const [lifted,setLifted]=useState(null);
 
@@ -6656,6 +6690,7 @@ function App({forceSignIn=false,initialAuthMode="login"}){
     sustain: T("sustain","Sustainability",sustainIsDone(sustainOut),null,
       <SustainCard out={sustainOut} onToggle={setSustainThrown} />),
     clock: T("clock","Watch",false,null,<WatchCard timeZone={locationProfile.timezone}/>),
+    art: T("art","Art",false,null,<ArtCard/>),
     stats: T("stats","Streak",pctLit>=100,null,<StatsCard pct={pctLit} {...statsSummary}/>),
     matrix: T("matrix","Priorities",false,null,
       <MatrixCard notes={matrixNotes} onChange={saveMatrix} />,()=>{}),
@@ -7691,6 +7726,89 @@ function TimerCard({duration,end,remaining,fired,now,onSetDuration,onStart,onPau
 
 /* A vinyl record: grooved black disc, tile-coloured label. It spins
    slowly, faster while the exact recording is still being matched. */
+/* ================= Art: a work from the Art Institute of Chicago each day =================
+   Free public API, no key and no server. Every device picks the same work for a date (a hash
+   of the day over the museum's public-domain highlights that have an image), then keeps it
+   for the day. Images come from the museum's IIIF server. */
+/* ART_DAY_START */
+const ART_API="https://api.artic.edu/api/v1/artworks/search";
+const ART_IIIF="https://www.artic.edu/iiif/2";
+const ART_FIELDS="id,title,artist_display,artist_title,date_display,image_id,thumbnail,medium_display,place_of_origin,short_description,description,dimensions,is_public_domain";
+const ART_MAX=1000; // only the first thousand results of a search can be paged to
+const artDayNumber=key=>{ const [y,m,d]=String(key).split("-").map(Number); return Math.floor(Date.UTC(y,m-1,d)/864e5); };
+const artHash=n=>{ let x=Math.imul(n>>>0,2654435761)>>>0; x^=x>>>15; x=Math.imul(x,2246822519)>>>0; x^=x>>>13; return x>>>0; };
+const ART_FILTERS=[{term:{is_public_domain:true}},{term:{is_boosted:true}},{exists:{field:"image_id"}}];
+/* three ways to ask for the same set, from the documented JSON form to the plainest one */
+const ART_SEARCHES=[
+  page=>`${ART_API}?params=${encodeURIComponent(JSON.stringify({query:{bool:{filter:ART_FILTERS}}}))}&fields=${ART_FIELDS}&limit=1&page=${page}`,
+  page=>`${ART_API}?query[bool][filter][0][term][is_public_domain]=true&query[bool][filter][1][term][is_boosted]=true&query[bool][filter][2][exists][field]=image_id&fields=${ART_FIELDS}&limit=1&page=${page}`,
+  page=>`${ART_API}?query[term][is_public_domain]=true&fields=${ART_FIELDS}&limit=1&page=${page}`
+];
+const artText=html=>String(html||"").replace(/<br\s*\/?>/gi," ").replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/&quot;/g,"\"").replace(/&#0?39;|&rsquo;/g,"’").replace(/&lsquo;/g,"‘").replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”").replace(/&mdash;/g,"—").replace(/&ndash;/g,"–").replace(/\s+/g," ").trim();
+const artFirstSentences=(text,n)=>{ const parts=String(text||"").match(/[^.!?]+[.!?]+["”’)]?\s*/g); return parts?parts.slice(0,n).join("").trim():String(text||"").trim(); };
+/* a search hit becomes what the tile needs; anything not public domain or without an image is refused */
+const artFromHit=(a,config)=>{
+  if(!a||!a.image_id||a.is_public_domain===false||!String(a.title||"").trim()) return null;
+  const iiif=String(config&&config.iiif_url||ART_IIIF).replace(/\/$/,""), t=a.thumbnail||{};
+  const lines=String(a.artist_display||"").split("\n").map(x=>x.trim()).filter(Boolean);
+  return {
+    id:a.id, title:String(a.title).trim(), artist:String(a.artist_title||lines[0]||"").trim(), artistLine:lines.join(" · "),
+    date:String(a.date_display||"").trim(), medium:String(a.medium_display||"").trim(), place:String(a.place_of_origin||"").trim(),
+    dimensions:String(a.dimensions||"").split("\n")[0].trim(),
+    about:artFirstSentences(artText(a.short_description)||artText(a.description),3),
+    image:`${iiif}/${a.image_id}/full/843,/0/default.jpg`, imageLarge:`${iiif}/${a.image_id}/full/1686,/0/default.jpg`,
+    ratio:t.width&&t.height?Math.round(t.width/t.height*1000)/1000:null, lqip:typeof t.lqip==="string"&&t.lqip.startsWith("data:image/")?t.lqip:"", alt:String(t.alt_text||"").trim(),
+    url:`https://www.artic.edu/artworks/${a.id}`
+  };
+};
+async function fetchArtOfDay(day,get=url=>fetch(url).then(r=>{ if(!r.ok) throw new Error("art "+r.status); return r.json(); })){
+  for(const search of ART_SEARCHES){
+    try{
+      const first=await get(search(1));
+      const total=Math.min(Number(first&&first.pagination&&first.pagination.total)||0,ART_MAX);
+      if(!total) continue;
+      const index=artHash(artDayNumber(day))%total;
+      const data=index===0?first:await get(search(index+1));
+      const art=artFromHit((data&&data.data||[])[0],data&&data.config);
+      if(art) return art;
+    }catch(e){}
+  }
+  return null;
+}
+/* ART_DAY_END */
+function ArtCard(){
+  const {expanded}=useTilePresentation();
+  const cached=()=>{ const c=load("artOfDay",null); return c&&c.date===todayKey&&c.art&&c.art.image?c.art:null; };
+  const [art,setArt]=useState(cached);
+  const [failed,setFailed]=useState(false),[attempt,setAttempt]=useState(0);
+  const [big,setBig]=useState(true);
+  useEffect(()=>{
+    if(art) return; let live=true; setFailed(false);
+    fetchArtOfDay(todayKey).then(found=>{ if(!live) return; if(found){ save("artOfDay",{date:todayKey,art:found}); setArt(found); } else setFailed(true); });
+    return ()=>{ live=false; };
+  },[art,attempt]);
+  if(!art) return <div className="artCard artWaiting">
+    <div className="artWall"><span className={"artFrame artPlaceholder"+(failed?" off":"")}/></div>
+    {failed&&<button type="button" className="artRetry" aria-label="Load today’s artwork again" onClick={e=>{ e.stopPropagation(); setAttempt(n=>n+1); }}>↻</button>}
+  </div>;
+  const by=expanded?(art.artistLine||art.artist):[art.artist,art.date].filter(Boolean).join(", ");
+  const src=expanded&&big?art.imageLarge:art.image;
+  return <figure className={"artCard"+(expanded?" big":"")}>
+    <div className="artWall" style={expanded&&art.ratio?{aspectRatio:String(art.ratio)}:undefined}>
+      <img className="artFrame" src={src} alt={art.alt||`${art.title}${art.artist?" by "+art.artist:""}`} decoding="async"
+        style={art.lqip?{backgroundImage:`url("${art.lqip}")`}:undefined} onError={()=>{ if(src===art.imageLarge) setBig(false); }}/>
+    </div>
+    <figcaption className="artLabel">
+      <span className="artTitle">{art.title}</span>
+      {by&&<span className="artBy">{by}</span>}
+      {expanded&&<>
+        {[art.date,art.medium,art.dimensions].filter(Boolean).length>0&&<span className="artMeta">{[art.date,art.medium,art.dimensions].filter(Boolean).join(" · ")}</span>}
+        {art.about&&<p className="artAbout">{art.about}</p>}
+        <a className="artSource" href={art.url} target="_blank" rel="noreferrer" onClick={e=>e.stopPropagation()}>Art Institute of Chicago ↗</a>
+      </>}
+    </figcaption>
+  </figure>;
+}
 function VinylDisc(){
   const sheen="M50 50 L32 4.4 A49 49 0 0 1 68 4.4 Z";
   return <svg className="vinyl" viewBox="0 0 100 100" aria-hidden="true">
